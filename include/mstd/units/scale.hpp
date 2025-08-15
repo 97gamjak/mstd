@@ -66,24 +66,37 @@ namespace mstd
         using kind = Kind;
     };
 
-    template <typename Dim, typename Pack>
-    struct dim_scale;
-
-    template <int L, int M, int T, int K, int N, int I, int Cd, typename Pack>
-    struct dim_scale<dimension<L, M, T, K, N, I, Cd>, Pack>
+    namespace units::details
     {
-        using type = ratio_mul_t<
-            ratio_pow_t<typename Pack::L::ratio, L>,
-            ratio_pow_t<typename Pack::M::ratio, M>,
-            ratio_pow_t<typename Pack::T::ratio, T>,
-            ratio_pow_t<typename Pack::K::ratio, K>,
-            ratio_pow_t<typename Pack::N::ratio, N>,
-            ratio_pow_t<typename Pack::I::ratio, I>,
-            ratio_pow_t<typename Pack::Cd::ratio, Cd>>;
-    };
 
-    template <typename Dim, typename Pack>
-    using dim_scale_t = typename dim_scale<Dim, Pack>::type;
+        template <typename Dim, typename Pack>
+        struct dim_scale;
+
+        template <
+            int L,
+            int M,
+            int T,
+            int K,
+            int N,
+            int I,
+            int Cd,
+            typename Pack>
+        struct dim_scale<dimension<L, M, T, K, N, I, Cd>, Pack>
+        {
+            using type = ratio_mul_t<
+                ratio_pow_t<typename Pack::L::ratio, L>,
+                ratio_pow_t<typename Pack::M::ratio, M>,
+                ratio_pow_t<typename Pack::T::ratio, T>,
+                ratio_pow_t<typename Pack::K::ratio, K>,
+                ratio_pow_t<typename Pack::N::ratio, N>,
+                ratio_pow_t<typename Pack::I::ratio, I>,
+                ratio_pow_t<typename Pack::Cd::ratio, Cd>>;
+        };
+
+        template <typename Dim, typename Pack>
+        using dim_scale_t = typename dim_scale<Dim, Pack>::type;
+
+    }   // namespace units::details
 
 }   // namespace mstd
 

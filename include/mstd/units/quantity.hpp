@@ -25,7 +25,7 @@ namespace mstd
         using value_type = T;
         using dim_type   = Dim;
         using pack_type  = Pack;
-        using eff_scale  = dim_scale_t<Dim, Pack>;
+        using eff_scale  = units::details::dim_scale_t<Dim, Pack>;
 
         constexpr Quantity() = default;
 
@@ -176,7 +176,7 @@ namespace mstd
         const Quantity<T, Dim2, Pack2>& rhs
     )
     {
-        using D = Dimension_add<Dim1, Dim2>;
+        using D = units::details::Dimension_add<Dim1, Dim2>;
         return Quantity<T, Dim1, Pack1>::from_si(lhs.si() * rhs.si());
     }
 
@@ -203,7 +203,7 @@ namespace mstd
         const Quantity<T, Dim2, Pack2>& rhs
     )
     {
-        using D = Dimension_sub<Dim1, Dim2>;
+        using D = units::details::Dimension_sub<Dim1, Dim2>;
         return Quantity<T, Dim1, Pack1>::from_si(lhs.si() / rhs.si());
     }
 
