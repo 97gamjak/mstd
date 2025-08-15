@@ -7,44 +7,34 @@
 
 namespace mstd
 {
-    template <units::details::LengthTag LTag, units::details::TimeTag TTag>
-    using VelPack = ScalePack<
-        LTag,
-        M<std::ratio<1>>,
-        TTag,
-        K<std::ratio<1>>,
-        N<std::ratio<1>>,
-        I<std::ratio<1>>,
-        Cd<std::ratio<1>>>;
-
     template <typename... Args>
     struct Velocity_;
 
-    template <units::details::VelocityPack Pack>
+    template <typename Pack>
+    concept VelPack = units::details::pack_is_v<Pack, pack_velocity_t>;
+
+    template <VelPack Pack>
     struct Velocity_<Pack>
     {
         using type = Quantity<double, D_Velocity, Pack>;
     };
 
-    template <units::details::LengthTag LTag, units::details::TimeTag TTag>
+    template <LengthTag LTag, TimeTag TTag>
     struct Velocity_<LTag, TTag>
     {
-        using type = Quantity<double, D_Velocity, VelPack<LTag, TTag>>;
+        using type = Quantity<double, D_Velocity, VelocityPack<LTag, TTag>>;
     };
 
-    template <units::details::ValueType T, units::details::VelocityPack Pack>
+    template <units::details::ValueType T, VelPack Pack>
     struct Velocity_<T, Pack>
     {
         using type = Quantity<T, D_Velocity, Pack>;
     };
 
-    template <
-        units::details::ValueType T,
-        units::details::LengthTag LTag,
-        units::details::TimeTag   TTag>
+    template <units::details::ValueType T, LengthTag LTag, TimeTag TTag>
     struct Velocity_<T, LTag, TTag>
     {
-        using type = Quantity<T, D_Velocity, VelPack<LTag, TTag>>;
+        using type = Quantity<T, D_Velocity, VelocityPack<LTag, TTag>>;
     };
 
     template <typename... Args>

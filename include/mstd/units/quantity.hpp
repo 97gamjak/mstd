@@ -1,8 +1,11 @@
 #ifndef __MSTD_UNITS_QUANTITY_HPP__
 #define __MSTD_UNITS_QUANTITY_HPP__
 
+#include <string>
+
 #include "dimension.hpp"
 #include "scale.hpp"
+#include "unit_strings.hpp"
 
 namespace mstd
 {
@@ -48,6 +51,8 @@ namespace mstd
         ) const;
 
         static constexpr Quantity from_si(const T si);
+
+        static constexpr std::string get_unit();
 
        private:
         T _si;
@@ -151,6 +156,20 @@ namespace mstd
         Quantity<T, Dim, Pack> q;
         q._si = si;
         return q;
+    }
+
+    /**
+     * @brief Returns the unit of the Quantity.
+     *
+     * @tparam T
+     * @tparam Dim
+     * @tparam Pack
+     * @return constexpr std::string
+     */
+    template <typename T, typename Dim, typename Pack>
+    constexpr std::string Quantity<T, Dim, Pack>::get_unit()
+    {
+        return get_unit_name<Dim, Pack>();
     }
 
     /**
