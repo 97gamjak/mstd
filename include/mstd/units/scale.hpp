@@ -45,6 +45,18 @@ namespace mstd
 
 namespace mstd
 {
+    /**
+     * @brief ScalePack class
+     *
+     * @tparam Ls
+     * @tparam Ms
+     * @tparam Ts
+     * @tparam Ks
+     * @tparam Ns
+     * @tparam Is
+     * @tparam Cds
+     * @tparam Kind
+     */
     template <
         typename Ls   = L<std::ratio<1>>,
         typename Ms   = M<std::ratio<1>>,
@@ -69,9 +81,27 @@ namespace mstd
     namespace units::details
     {
 
+        /**
+         * @brief Implements dimension scaling.
+         *
+         * @tparam Dim
+         * @tparam Pack
+         */
         template <typename Dim, typename Pack>
         struct dim_scale;
 
+        /**
+         * @brief template specialization for dim_scale
+         *
+         * @tparam L
+         * @tparam M
+         * @tparam T
+         * @tparam K
+         * @tparam N
+         * @tparam I
+         * @tparam Cd
+         * @tparam Pack
+         */
         template <
             int L,
             int M,
@@ -93,6 +123,12 @@ namespace mstd
                 ratio_pow_t<typename Pack::Cd::ratio, Cd>>;
         };
 
+        /**
+         * @brief type alias for dim_scale
+         *
+         * @tparam Dim
+         * @tparam Pack
+         */
         template <typename Dim, typename Pack>
         using dim_scale_t = typename dim_scale<Dim, Pack>::type;
 

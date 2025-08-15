@@ -8,8 +8,8 @@ TEST_CASE("mstd::units::scale_tags", "[units][scale_tags]")
 
     SECTION("random")
     {
-        REQUIRE(is_L_v<L<std::ratio<1>>>);
-        REQUIRE(is_T_v<T<std::ratio<1>>>);
+        REQUIRE(units::details::is_L_v<L<std::ratio<1>>>);
+        REQUIRE(units::details::is_T_v<T<std::ratio<1>>>);
         REQUIRE(Velocity<m, s>(1.0).value() == 1.0);
         REQUIRE(Velocity<km, h>(1.0).value() == 1.0);
         REQUIRE(Velocity<km, h>(1.0).si() == 1 / 3.6);

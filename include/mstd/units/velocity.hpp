@@ -7,7 +7,7 @@
 
 namespace mstd
 {
-    template <LengthTag LTag, TimeTag TTag>
+    template <units::details::LengthTag LTag, units::details::TimeTag TTag>
     using VelPack = ScalePack<
         LTag,
         M<std::ratio<1>>,
@@ -20,25 +20,28 @@ namespace mstd
     template <typename... Args>
     struct Velocity_;
 
-    template <VelocityPack Pack>
+    template <units::details::VelocityPack Pack>
     struct Velocity_<Pack>
     {
         using type = Quantity<double, D_Velocity, Pack>;
     };
 
-    template <LengthTag LTag, TimeTag TTag>
+    template <units::details::LengthTag LTag, units::details::TimeTag TTag>
     struct Velocity_<LTag, TTag>
     {
         using type = Quantity<double, D_Velocity, VelPack<LTag, TTag>>;
     };
 
-    template <ValueType T, VelocityPack Pack>
+    template <units::details::ValueType T, units::details::VelocityPack Pack>
     struct Velocity_<T, Pack>
     {
         using type = Quantity<T, D_Velocity, Pack>;
     };
 
-    template <ValueType T, LengthTag LTag, TimeTag TTag>
+    template <
+        units::details::ValueType T,
+        units::details::LengthTag LTag,
+        units::details::TimeTag   TTag>
     struct Velocity_<T, LTag, TTag>
     {
         using type = Quantity<T, D_Velocity, VelPack<LTag, TTag>>;
