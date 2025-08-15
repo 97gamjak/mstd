@@ -1,7 +1,6 @@
 #ifndef __MSTD_UNITS_ALIASES_HPP__
 #define __MSTD_UNITS_ALIASES_HPP__
 
-#include "dimension_aliases.hpp"
 #include "quantity.hpp"
 #include "scale.hpp"
 #include "traits.hpp"

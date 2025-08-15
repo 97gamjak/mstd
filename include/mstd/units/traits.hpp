@@ -3,7 +3,7 @@
 
 #include <type_traits>
 
-#include "scale_tags.hpp"
+#include "scale.hpp"
 
 namespace mstd
 {

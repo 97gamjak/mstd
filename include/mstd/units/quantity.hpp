@@ -2,48 +2,10 @@
 #define __MSTD_UNITS_QUANTITY_HPP__
 
 #include "dimension.hpp"
-#include "ratio.hpp"
+#include "scale.hpp"
 
 namespace mstd
 {
-
-    template <typename... Ratios>
-    struct ratio_mul;
-
-    template <>
-    struct ratio_mul<>
-    {
-        using type = std::ratio<1>;
-    };
-
-    template <typename R1, typename... Ratios>
-    struct ratio_mul<R1, Ratios...>
-    {
-        using type =
-            std::ratio_multiply<R1, typename ratio_mul<Ratios...>::type>;
-    };
-
-    template <typename... Ratios>
-    using ratio_mul_t = typename ratio_mul<Ratios...>::type;
-
-    template <typename Dim, typename Pack>
-    struct dim_scale;
-
-    template <int L, int M, int T, int K, int N, int I, int Cd, typename Pack>
-    struct dim_scale<dimension<L, M, T, K, N, I, Cd>, Pack>
-    {
-        using type = ratio_mul_t<
-            ratio_pow_t<typename Pack::L::ratio, L>,
-            ratio_pow_t<typename Pack::M::ratio, M>,
-            ratio_pow_t<typename Pack::T::ratio, T>,
-            ratio_pow_t<typename Pack::K::ratio, K>,
-            ratio_pow_t<typename Pack::N::ratio, N>,
-            ratio_pow_t<typename Pack::I::ratio, I>,
-            ratio_pow_t<typename Pack::Cd::ratio, Cd> >;
-    };
-
-    template <typename Dim, typename Pack>
-    using dim_scale_t = typename dim_scale<Dim, Pack>::type;
 
     template <typename T, typename Dim, typename Pack>
     class Quantity

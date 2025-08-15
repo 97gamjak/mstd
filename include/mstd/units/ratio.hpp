@@ -33,6 +33,25 @@ namespace mstd
     template <class R, int N>
     using ratio_pow_t = typename ratio_pow<R, N>::type;
 
+    template <typename... Ratios>
+    struct ratio_mul;
+
+    template <>
+    struct ratio_mul<>
+    {
+        using type = std::ratio<1>;
+    };
+
+    template <typename R1, typename... Ratios>
+    struct ratio_mul<R1, Ratios...>
+    {
+        using type =
+            std::ratio_multiply<R1, typename ratio_mul<Ratios...>::type>;
+    };
+
+    template <typename... Ratios>
+    using ratio_mul_t = typename ratio_mul<Ratios...>::type;
+
 }   // namespace mstd
 
 #endif   // __MSTD_UNITS_RATIO_HPP__
