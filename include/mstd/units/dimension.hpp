@@ -44,11 +44,20 @@ namespace mstd
      * @tparam I
      * @tparam Cd
      */
-    template <int L, int M, int T, int Th, int N, int I, int Cd>
+    template <int Ls, int Ms, int Ts, int Temps, int Ns, int Is, int Cds>
     struct dimension
     {
-        static constexpr std::size_t           rank = 7;
-        static constexpr std::array<int, rank> exponents{L, M, T, Th, N, I, Cd};
+        static constexpr int L    = Ls;
+        static constexpr int M    = Ms;
+        static constexpr int T    = Ts;
+        static constexpr int Temp = Temps;
+        static constexpr int N    = Ns;
+        static constexpr int I    = Is;
+        static constexpr int Cd   = Cds;
+
+        static constexpr std::size_t rank = 7;
+        static constexpr std::array<int, rank>
+            exponents{L, M, T, Temp, N, I, Cd};
 
         static constexpr std::size_t length_index() { return 0; }
         static constexpr std::size_t mass_index() { return 1; }
@@ -131,6 +140,21 @@ namespace mstd
 
     using D_Velocity     = units::details::Dimension_sub<D_Length, D_Time>;
     using D_Acceleration = units::details::Dimension_sub<D_Velocity, D_Time>;
+
+    template <typename Dim>
+    concept HasLength = Dim::L != 0;
+    template <typename Dim>
+    concept HasMass = Dim::M != 0;
+    template <typename Dim>
+    concept HasTime = Dim::T != 0;
+    template <typename Dim>
+    concept HasTemp = Dim::Temp != 0;
+    template <typename Dim>
+    concept HasAmount = Dim::N != 0;
+    template <typename Dim>
+    concept HasCurrent = Dim::I != 0;
+    template <typename Dim>
+    concept HasLuminousIntensity = Dim::Cd != 0;
 
 }   // namespace mstd
 

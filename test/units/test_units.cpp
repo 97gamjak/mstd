@@ -36,7 +36,26 @@ TEST_CASE("mstd::units::scale_tags", "[units][scale_tags]")
         REQUIRE(Velocity<km, h>(1.0).value() == 1.0);
         REQUIRE(Velocity<km, h>(1.0).si() == 1 / 3.6);
 
-        REQUIRE(Velocity<m, s>(1.0).get_unit() == "ms^-1");
-        REQUIRE(Quantity<double, D_Mass, MassPack<mg>>::get_unit() == "mg");
+        REQUIRE(Velocity<m, s>(1.0).get_unit_string() == "ms^-1");
+        REQUIRE(Velocity<km, h>(100.0).get_unit_string() == "kmh^-1");
+        REQUIRE(
+            Quantity<double, D_Mass, MassPack<mg>>::get_unit_string() == "mg"
+        );
+        REQUIRE(
+            Quantity<double, D_Time, TimePack<ms>>::get_unit_string() == "ms"
+        );
+        REQUIRE(
+            Quantity<double, D_Time, TimePack<min>>(1333).get_unit_string() ==
+            "min"
+        );
+
+        REQUIRE(
+            Quantity<double, D_Time, TimePack<yr>>(1333).to_string() ==
+            "1333.000000"
+        );
+        REQUIRE(
+            Quantity<double, D_Time, TimePack<yr>>(1333.0).to_unit_string(3) ==
+            "1333.000 yr"
+        );
     }
 }

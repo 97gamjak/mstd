@@ -24,51 +24,17 @@
 #define __MSTD_UNITS_STRINGS_HPP__
 
 #include <optional>
-#include <ratio>
 #include <string>
 
 #include "../base.hpp"
-#include "../scale_tags.hpp"
 #include "base_string.hpp"
 #include "prefix.hpp"
+#include "special_cases.hpp"
 
 namespace mstd
 {
     namespace units::strings
     {
-
-        template <typename Dim, typename Ratio, BaseUnitEnum enumValue>
-        constexpr void get_special_unit_cases(
-            std::optional<std::string>& prefix,
-            std::optional<std::string>& base_unit,
-            std::optional<std::string>& exponent_str
-        )
-        {
-            constexpr auto id       = static_cast<std::size_t>(enumValue);
-            constexpr auto exponent = Dim::exponents[id];
-
-            if (id == Dim::mass_index())
-            {
-                prefix = get_prefix<std::ratio_multiply<Ratio, std::kilo>>();
-                return;
-            }
-
-            if (id == Dim::length_index())
-            {
-                if (std::same_as<Ratio, Ang::ratio>)
-                {
-                    prefix    = "";
-                    base_unit = "Ang";
-                }
-
-                if (std::same_as<Ratio, dm::ratio> && exponent == 3)
-                {
-                    prefix       = "";
-                    base_unit    = "l";
-                    exponent_str = "";
-                }
-            }
-        }
 
         template <typename Dim, typename Pack, BaseUnitEnum enumValue>
         constexpr std::string get_sub_unit()

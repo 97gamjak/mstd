@@ -23,6 +23,8 @@
 #ifndef __MSTD_UNITS_QUANTITY_HPP__
 #define __MSTD_UNITS_QUANTITY_HPP__
 
+#include <iomanip>
+#include <iostream>
 #include <string>
 
 #include "dimension.hpp"
@@ -72,7 +74,14 @@ namespace mstd
 
         static constexpr Quantity from_si(const T si);
 
-        static constexpr std::string get_unit();
+        static constexpr std::string get_unit_string();
+
+        std::string to_string() const;
+        std::string to_string(const size_t prec) const;
+        std::string to_string(const size_t prec, const size_t width) const;
+        std::string to_unit_string() const;
+        std::string to_unit_string(const size_t prec) const;
+        std::string to_unit_string(const size_t prec, const size_t width) const;
 
        private:
         T _si;
@@ -187,9 +196,65 @@ namespace mstd
      * @return constexpr std::string
      */
     template <typename T, typename Dim, typename Pack>
-    constexpr std::string Quantity<T, Dim, Pack>::get_unit()
+    constexpr std::string Quantity<T, Dim, Pack>::get_unit_string()
     {
         return units::strings::get_unit_name<Dim, Pack>();
+    }
+
+    template <typename T, typename Dim, typename Pack>
+    std::string Quantity<T, Dim, Pack>::to_string(
+        const size_t precision,
+        const size_t width
+    ) const
+    {
+        std::ostringstream oss;
+
+        oss << std::setw(width) << std::fixed << std::setprecision(precision)
+            << value();
+
+        return oss.str();
+    }
+
+    template <typename T, typename Dim, typename Pack>
+    std::string Quantity<T, Dim, Pack>::to_string(const size_t precision) const
+    {
+        std::ostringstream oss;
+
+        oss << std::fixed << std::setprecision(precision) << value();
+
+        return oss.str();
+    }
+
+    template <typename T, typename Dim, typename Pack>
+    std::string Quantity<T, Dim, Pack>::to_string() const
+    {
+        if constexpr (std::same_as<T, double> || std::same_as<T, float>)
+            return to_string(6);
+        else
+            return std::to_string(value());
+    }
+
+    template <typename T, typename Dim, typename Pack>
+    std::string Quantity<T, Dim, Pack>::to_unit_string(
+        const size_t precision,
+        const size_t width
+    ) const
+    {
+        return to_string(precision, width) + " " + get_unit_string();
+    }
+
+    template <typename T, typename Dim, typename Pack>
+    std::string Quantity<T, Dim, Pack>::to_unit_string(
+        const size_t precision
+    ) const
+    {
+        return to_string(precision) + " " + get_unit_string();
+    }
+
+    template <typename T, typename Dim, typename Pack>
+    std::string Quantity<T, Dim, Pack>::to_unit_string() const
+    {
+        return to_string() + " " + get_unit_string();
     }
 
     /**
