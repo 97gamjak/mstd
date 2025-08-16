@@ -1,3 +1,25 @@
+/*****************************************************************************
+<GPL_HEADER>
+
+    mstd library
+    Copyright (C) 2025-now  Jakob Gamper
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+<GPL_HEADER>
+******************************************************************************/
+
 #ifndef __MSTD_UNITS_QUANTITY_HPP__
 #define __MSTD_UNITS_QUANTITY_HPP__
 
@@ -5,7 +27,7 @@
 
 #include "dimension.hpp"
 #include "scale.hpp"
-#include "unit_strings.hpp"
+#include "string/unit_strings.hpp"
 
 namespace mstd
 {
@@ -41,13 +63,11 @@ namespace mstd
         constexpr T si() const { return _si; }
 
         template <typename OtherPack>
-        constexpr Quantity operator+(
-            const Quantity<T, Dim, OtherPack>& other
+        constexpr Quantity operator+(const Quantity<T, Dim, OtherPack>& other
         ) const;
 
         template <typename OtherPack>
-        constexpr Quantity operator-(
-            const Quantity<T, Dim, OtherPack>& other
+        constexpr Quantity operator-(const Quantity<T, Dim, OtherPack>& other
         ) const;
 
         static constexpr Quantity from_si(const T si);
@@ -169,7 +189,7 @@ namespace mstd
     template <typename T, typename Dim, typename Pack>
     constexpr std::string Quantity<T, Dim, Pack>::get_unit()
     {
-        return get_unit_name<Dim, Pack>();
+        return units::strings::get_unit_name<Dim, Pack>();
     }
 
     /**
@@ -196,7 +216,7 @@ namespace mstd
     )
     {
         using D = units::details::Dimension_add<Dim1, Dim2>;
-        return Quantity<T, Dim1, Pack1>::from_si(lhs.si() * rhs.si());
+        return Quantity<T, D, Pack1>::from_si(lhs.si() * rhs.si());
     }
 
     /**
@@ -223,7 +243,7 @@ namespace mstd
     )
     {
         using D = units::details::Dimension_sub<Dim1, Dim2>;
-        return Quantity<T, Dim1, Pack1>::from_si(lhs.si() / rhs.si());
+        return Quantity<T, D, Pack1>::from_si(lhs.si() / rhs.si());
     }
 
 }   // namespace mstd

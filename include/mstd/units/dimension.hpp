@@ -1,3 +1,25 @@
+/*****************************************************************************
+<GPL_HEADER>
+
+    mstd library
+    Copyright (C) 2025-now  Jakob Gamper
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+<GPL_HEADER>
+******************************************************************************/
+
 #ifndef __MSTD_UNITS_DIMENSION_HPP__
 #define __MSTD_UNITS_DIMENSION_HPP__
 
@@ -27,6 +49,14 @@ namespace mstd
     {
         static constexpr std::size_t           rank = 7;
         static constexpr std::array<int, rank> exponents{L, M, T, Th, N, I, Cd};
+
+        static constexpr std::size_t length_index() { return 0; }
+        static constexpr std::size_t mass_index() { return 1; }
+        static constexpr std::size_t time_index() { return 2; }
+        static constexpr std::size_t temp_index() { return 3; }
+        static constexpr std::size_t amount_index() { return 4; }
+        static constexpr std::size_t current_index() { return 5; }
+        static constexpr std::size_t luminous_intensity_index() { return 6; }
     };
 
     namespace units::details

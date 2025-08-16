@@ -20,12 +20,23 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_UNITS_HPP__
-#define __MSTD_UNITS_HPP__
+#ifndef __MSTD_UNITS_BASE_HPP__
+#define __MSTD_UNITS_BASE_HPP__
 
-#include "units/dimension.hpp"   // IWYU pragma: export
-#include "units/quantity.hpp"    // IWYU pragma: export
-#include "units/scale.hpp"       // IWYU pragma: export
-#include "units/velocity.hpp"    // IWYU pragma: export
+#include <cstddef>
 
-#endif   // __MSTD_UNITS_HPP__
+namespace mstd
+{
+    enum class BaseUnitEnum : size_t
+    {
+        Length,
+        Mass,
+        Time,
+        Temperature,
+        AmountOfSubstance,
+        Current,
+        LuminousIntensity,
+    };
+}   // namespace mstd
+
+#endif   // __MSTD_UNITS_BASE_HPP__
