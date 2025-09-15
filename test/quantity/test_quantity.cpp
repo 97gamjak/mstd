@@ -20,12 +20,28 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_UNITS_HPP__
-#define __MSTD_UNITS_HPP__
+#include <catch2/catch_test_macros.hpp>
 
-#include "units/dimension.hpp"   // IWYU pragma: export
-#include "units/quantity.hpp"    // IWYU pragma: export
-#include "units/scale.hpp"       // IWYU pragma: export
-#include "units/velocity.hpp"    // IWYU pragma: export
+#include "mstd/quantity.hpp"
 
-#endif   // __MSTD_UNITS_HPP__
+TEST_CASE("quantity", "[units]")
+{
+    using namespace mstd::units;
+    using namespace mstd::units::literals;
+    const auto length = Length<m>{1};
+    REQUIRE(length.value() == 1);
+    REQUIRE(length.baseValue() == 1);
+    const auto length_cm = Length<cm>{100};
+    REQUIRE(length_cm.baseValue() == 1);
+    REQUIRE(length_cm.value() == 100);
+    REQUIRE(same_dimension_v<cm, m>);
+    REQUIRE(length_cm == length);
+    REQUIRE(length_cm + length == Length<m>{2.00});
+    const auto new_length = length + length_cm;
+    REQUIRE(new_length.value() == 200);
+    REQUIRE(new_length.baseValue() == 2.00);
+    REQUIRE(to<m>(new_length).value() == 2.0);
+    const auto mass = Mass<kg>{2};
+    REQUIRE(mass.value() == 2);
+    // const auto c_velocity = Velocity<c>{1};
+}

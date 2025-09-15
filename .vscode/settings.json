@@ -1,11 +1,23 @@
 {
     "cSpell.words": [
         "centi",
+        "cppcoreguidelines",
+        "EXTRADIMID",
         "femto",
         "giga",
+        "mmol",
         "MSTD",
+        "nmol",
+        "nullconstopt",
         "pico",
+        "pmol",
+        "SIDIMID",
         "tera",
-        "tparam"
-    ]
+        "tparam",
+        "umol"
+    ],
+    "C_Cpp.default.compileCommands": "${workspaceFolder}/.build/compile_commands.json",
+    "c-cpp-flylint.clang.includePaths": [
+        "${workspaceFolder}/include",
+    ],
 }

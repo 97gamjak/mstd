@@ -20,23 +20,9 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_UNITS_BASE_HPP__
-#define __MSTD_UNITS_BASE_HPP__
+#ifndef __MSTD_MATH_HPP__
+#define __MSTD_MATH_HPP__
 
-#include <cstddef>
+#include "math/power.hpp"   // IWYU pragma: export
 
-namespace mstd
-{
-    enum class BaseUnitEnum : size_t
-    {
-        Length,
-        Mass,
-        Time,
-        Temperature,
-        AmountOfSubstance,
-        Current,
-        LuminousIntensity,
-    };
-}   // namespace mstd
-
-#endif   // __MSTD_UNITS_BASE_HPP__
+#endif   // __MSTD_MATH_HPP__
