@@ -39,8 +39,10 @@ namespace mstd::units
         static_assert(std::false_type::value, "unit must be specialized");
     };
 
-    template <class Dim, class RatioDim, ratio::StdRatio GlobalRatio>
-    requires(is_dim_ratio_v<RatioDim>)
+    template <
+        class Dim,
+        details::DimRatio RatioDim,
+        ratio::StdRatio   GlobalRatio>
     struct unit<Dim, RatioDim, GlobalRatio>
     {
         using dim    = Dim;
@@ -48,10 +50,7 @@ namespace mstd::units
         using global = GlobalRatio;
     };
 
-    template <
-        SimpleBaseDim   Dim,
-        ratio::StdRatio Ratio,
-        ratio::StdRatio GlobalRatio>
+    template <SimpleDim Dim, ratio::StdRatio Ratio, ratio::StdRatio GlobalRatio>
     struct unit<Dim, Ratio, GlobalRatio>
     {
         using dim    = Dim;
@@ -68,9 +67,9 @@ namespace mstd::units
     };
 
     template <
-        class Dim,
+        typename Dim,
         long double F,
-        class DimRatioOrRatio,
+        typename DimRatioOrRatio,
         ratio::StdRatio GlobalRatio = std::ratio<1>>
     struct real_unit : unit<Dim, DimRatioOrRatio, GlobalRatio>
     {

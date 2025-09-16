@@ -1,94 +1,143 @@
-#ifndef __MSTD_RATIO_HPP__
-#define __MSTD_RATIO_HPP__
+#ifndef __MSTD_DIM_RATIO_HPP__
+#define __MSTD_DIM_RATIO_HPP__
 
-#include "dimension.hpp"
+#include "dim_ratio_details.hpp"
 #include "enums.hpp"
 #include "mstd/pack.hpp"
 
 namespace mstd::units
 {
+    /***********************
+     *                     *
+     * Default ratio packs *
+     *                     *
+     ***********************/
+
+    /**
+     * @brief default_si_ratio_pack, which is a ratio_pack of all SI dimensions
+     */
     using default_si_ratio_pack =
         pack::make_default_ratio_pack_t<SIDimIdMeta::size>;
 
+    /**
+     * @brief default_extra_ratio_pack, which is a ratio_pack of all Extra
+     * dimensions
+     */
     using default_extra_ratio_pack =
         pack::make_default_ratio_pack_t<ExtraDimIdMeta::size>;
 
+    /***********************
+     *                     *
+     * The dim_ratio class *
+     *                     *
+     ***********************/
+
+    /**
+     * @brief The dim_ratio class
+     *
+     * This class is used to store the ratio for each dimension
+     * of a quantity. It contains two compile time lists of ratios.
+     * The first list is for the SI dimensions and the second list is for the
+     * Extra dimensions.
+     * @tparam SiRatioPack    A `pack::ratio_pack` representing the SI
+     * dimension ratios.
+     * @tparam ExtraRatioPack A `pack::ratio_pack` representing the Extra
+     * dimension ratios.
+     *
+     */
     template <
         pack::RatioPack SiRatioPack    = default_si_ratio_pack,
         pack::RatioPack ExtraRatioPack = default_extra_ratio_pack>
     struct dim_ratio
     {
+        // putting static asserts instead of requires to make forward
+        // declaration easier to handle and modify
+        static_assert(
+            SiRatioPack::size == SIDimIdMeta::size,
+            "dim_ratio SiRatioPack size mismatch"
+        );
+        static_assert(
+            ExtraRatioPack::size == ExtraDimIdMeta::size,
+            "dim_ratio ExtraRatioPack size mismatch"
+        );
+
         using si = SiRatioPack;
         using ex = ExtraRatioPack;
 
+        /**
+         * @brief get the ratio for a specific dimension
+         *
+         * @tparam ID The dimension ID for example SIDimId::Length
+         */
         template <SIDimId ID>
         using si_ratio =
             typename SiRatioPack::template type_at<static_cast<size_t>(ID)>;
 
+        /**
+         * @brief get the ratio for a specific dimension
+         *
+         * @tparam ID The dimension ID for example ExtraDimId::Currency
+         */
         template <ExtraDimId ID>
         using ex_ratio =
             typename ExtraRatioPack::template type_at<static_cast<size_t>(ID)>;
     };
 
-    template <class R1, class R2>
+    /*****************************
+     *                           *
+     * dim_ratio type operations *
+     *                           *
+     *****************************/
+
+    /**
+     * @brief dim_ratio multiplication
+     *
+     * @tparam Ratio1
+     * @tparam Ratio2
+     */
+    template <details::DimRatio Ratio1, details::DimRatio Ratio2>
     using dim_ratio_mul_t = dim_ratio<
-        pack::ratio_pack_mul_t<typename R1::si, typename R2::si>,
-        pack::ratio_pack_mul_t<typename R1::ex, typename R2::ex>>;
+        pack::ratio_pack_mul_t<typename Ratio1::si, typename Ratio2::si>,
+        pack::ratio_pack_mul_t<typename Ratio1::ex, typename Ratio2::ex>>;
 
-    template <class R1, class R2>
+    /**
+     * @brief dim_ratio division
+     *
+     * @tparam R1
+     * @tparam R2
+     */
+    template <details::DimRatio Ratio1, details::DimRatio Ratio2>
     using dim_ratio_div_t = dim_ratio<
-        pack::ratio_pack_div_t<typename R1::si, typename R2::si>,
-        pack::ratio_pack_div_t<typename R1::ex, typename R2::ex>>;
+        pack::ratio_pack_div_t<typename Ratio1::si, typename Ratio2::si>,
+        pack::ratio_pack_div_t<typename Ratio1::ex, typename Ratio2::ex>>;
 
-    template <class R, int K>
+    /**
+     * @brief dim_ratio power
+     *
+     * @tparam DimRatio
+     * @tparam Exp
+     */
+    template <details::DimRatio Ratio, int Exp>
     using dim_ratio_pow_t = dim_ratio<
-        pack::ratio_pack_pow_t<typename R::si, K>,
-        pack::ratio_pack_pow_t<typename R::ex, K>>;
+        pack::ratio_pack_pow_t<typename Ratio::si, Exp>,
+        pack::ratio_pack_pow_t<typename Ratio::ex, Exp>>;
 
-    namespace details
-    {
-        template <SimpleBaseDim D, class R>
-        struct make_dim_ratio_single
-        {
-            using siRatio =
-                std::conditional_t<has_si_dim<D>(), R, std::ratio<1>>;
-            using exRatio =
-                std::conditional_t<has_ex_dim<D>(), R, std::ratio<1>>;
+    /***************************************
+     *                                     *
+     * Build ratio_dim from a single ratio *
+     *                                     *
+     ***************************************/
 
-            static constexpr auto siIndex = D::si::non_zero_index();
-            static constexpr auto exIndex = D::ex::non_zero_index();
-
-            using si = std::conditional_t<
-                (siIndex < D::si::size),
-                pack::make_ratio_pack_single_t<siRatio, siIndex, D::si::size>,
-                pack::make_default_ratio_pack_t<D::si::size>>;
-
-            using ex = std::conditional_t<
-                (exIndex < D::ex::size),
-                pack::make_ratio_pack_single_t<exRatio, exIndex, D::ex::size>,
-                pack::make_default_ratio_pack_t<D::ex::size>>;
-
-            using type = dim_ratio<si, ex>;
-        };
-
-    }   // namespace details
-
-    template <class D, class R>
+    /**
+     * @brief make a dim_ratio from a dimension and a single ratio
+     *
+     * @tparam D
+     * @tparam R
+     */
+    template <SimpleDim Dim, ratio::StdRatio Ratio>
     using make_dim_ratio_single_t =
-        typename details::make_dim_ratio_single<D, R>::type;
-
-    template <class>
-    struct is_dim_ratio : std::false_type
-    {
-    };
-    template <class Si, class Ex>
-    struct is_dim_ratio<dim_ratio<Si, Ex>> : std::true_type
-    {
-    };
-
-    template <class T>
-    inline constexpr bool is_dim_ratio_v = is_dim_ratio<T>::value;
+        typename details::make_dim_ratio_single<Dim, Ratio>::type;
 
 }   // namespace mstd::units
 
-#endif   // __MSTD_RATIO_HPP__
+#endif   // __MSTD_DIM_RATIO_HPP__

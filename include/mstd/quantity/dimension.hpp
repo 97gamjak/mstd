@@ -59,6 +59,9 @@ namespace mstd::units
         using si = SIDimPack;
         using ex = ExtraDimPack;
 
+        static constexpr size_t si_size = SIDimPack::size;
+        static constexpr size_t ex_size = ExtraDimPack::size;
+
         template <SIDimId ID>
         static constexpr int si_exp = SIDimPack::template get<ID>();
 
@@ -144,7 +147,7 @@ namespace mstd::units
     }
 
     template <class Dim>
-    concept SimpleBaseDim = is_simple_base_dim<Dim>();
+    concept SimpleDim = is_simple_base_dim<Dim>();
 
     template <class Dim>
     concept ZeroDim = is_dimensionless_v<Dim>;
