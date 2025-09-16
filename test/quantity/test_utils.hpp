@@ -20,29 +20,14 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_MATH_POWER_HPP__
-#define __MSTD_MATH_POWER_HPP__
+#ifndef __MSTD_TEST_UTILS_HPP__
+#define __MSTD_TEST_UTILS_HPP__
 
-namespace mstd::math
-{
+#include <catch2/catch_test_macros.hpp>
 
-    template <typename T>
-    T power(T base, int exponent)
-    {
-        T result = static_cast<T>(1);
+#define MSTD_STATIC_REQUIRE(...) \
+    /* NOLINTBEGIN */            \
+    STATIC_REQUIRE(__VA_ARGS__)  \
+    /* NOLINTEND */
 
-        if (exponent < 0)
-        {
-            base     = 1 / base;
-            exponent = -exponent;
-        }
-
-        for (int i = 0; i < exponent; i++)
-            result *= base;
-
-        return result;
-    }
-
-}   // namespace mstd::math
-
-#endif   // __MSTD_MATH_POWER_HPP__
+#endif   // __MSTD_TEST_UTILS_HPP__

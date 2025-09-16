@@ -1,3 +1,25 @@
+/*****************************************************************************
+<GPL_HEADER>
+
+    mstd library
+    Copyright (C) 2025-now  Jakob Gamper
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+<GPL_HEADER>
+******************************************************************************/
+
 #ifndef __MSTD_DIM_RATIO_HPP__
 #define __MSTD_DIM_RATIO_HPP__
 
@@ -68,6 +90,7 @@ namespace mstd::units
          * @brief get the ratio for a specific dimension
          *
          * @tparam ID The dimension ID for example SIDimId::Length
+         * @return the ratio at the given index
          */
         template <SIDimId ID>
         using si_ratio =
@@ -77,6 +100,7 @@ namespace mstd::units
          * @brief get the ratio for a specific dimension
          *
          * @tparam ID The dimension ID for example ExtraDimId::Currency
+         * @return the ratio at the given index
          */
         template <ExtraDimId ID>
         using ex_ratio =
@@ -94,6 +118,7 @@ namespace mstd::units
      *
      * @tparam Ratio1
      * @tparam Ratio2
+     * @return the resulting dim_ratio after multiplication
      */
     template <details::DimRatio Ratio1, details::DimRatio Ratio2>
     using dim_ratio_mul_t = dim_ratio<
@@ -105,6 +130,7 @@ namespace mstd::units
      *
      * @tparam R1
      * @tparam R2
+     * @return the resulting dim_ratio after division
      */
     template <details::DimRatio Ratio1, details::DimRatio Ratio2>
     using dim_ratio_div_t = dim_ratio<
@@ -116,6 +142,7 @@ namespace mstd::units
      *
      * @tparam DimRatio
      * @tparam Exp
+     * @return the resulting dim_ratio after power
      */
     template <details::DimRatio Ratio, int Exp>
     using dim_ratio_pow_t = dim_ratio<
@@ -133,8 +160,9 @@ namespace mstd::units
      *
      * @tparam D
      * @tparam R
+     * @return the resulting dim_ratio
      */
-    template <SimpleDim Dim, ratio::StdRatio Ratio>
+    template <details::SimpleDim Dim, ratio::StdRatio Ratio>
     using make_dim_ratio_single_t =
         typename details::make_dim_ratio_single<Dim, Ratio>::type;
 

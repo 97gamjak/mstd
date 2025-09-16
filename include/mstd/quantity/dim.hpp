@@ -25,6 +25,7 @@
 
 #include <cstddef>
 
+#include "dim_details.hpp"
 #include "enums.hpp"
 #include "mstd/pack.hpp"
 
@@ -53,20 +54,35 @@ namespace mstd::units
      * @tparam ExtraDimPack A `details::integer_pack` representing the extra
      * dimension exponents.
      */
-    template <class SIDimPack, class ExtraDimPack>
+    template <pack::details::IntegerPack SI, pack::details::IntegerPack Extra>
     struct dim
     {
-        using si = SIDimPack;
-        using ex = ExtraDimPack;
+        static_assert(SI::size == SIDimIdMeta::size, "si size mismatch");
+        static_assert(Extra::size == ExtraDimIdMeta::size, "ex size mismatch");
 
-        static constexpr size_t si_size = SIDimPack::size;
-        static constexpr size_t ex_size = ExtraDimPack::size;
+        using si = SI;
+        using ex = Extra;
 
+        static constexpr size_t si_size = SI::size;
+        static constexpr size_t ex_size = Extra::size;
+
+        /**
+         * @brief get the exponent of a specific si dimension
+         *
+         * @tparam ID
+         */
         template <SIDimId ID>
-        static constexpr int si_exp = SIDimPack::template get<ID>();
+        static constexpr int si_exp =
+            SI::template get<static_cast<size_t>(ID)>();
 
+        /**
+         * @brief get the exponent of a specific extra dimension
+         *
+         * @tparam ID
+         */
         template <ExtraDimId ID>
-        static constexpr int ex_exp = ExtraDimPack::template get<ID>();
+        static constexpr int ex_exp =
+            Extra::template get<static_cast<size_t>(ID)>();
     };
 
     /*****************************
@@ -78,79 +94,38 @@ namespace mstd::units
     /**
      * @brief Adds two dimensions.
      *
-     * @tparam D1 The first dimension type.
-     * @tparam D2 The second dimension type.
+     * @tparam Dim1 The first dimension type.
+     * @tparam Dim2 The second dimension type.
      * @return The resulting dimension after adding the two dimensions.
      */
-    template <class D1, class D2>
+    template <details::DimType Dim1, details::DimType Dim2>
     using dim_mul_t =
-        dim<pack::pack_add_t<typename D1::si, typename D2::si>,
-            pack::pack_add_t<typename D1::ex, typename D2::ex>>;
+        dim<pack::pack_add_t<typename Dim1::si, typename Dim2::si>,
+            pack::pack_add_t<typename Dim1::ex, typename Dim2::ex>>;
 
     /**
      * @brief Subtracts one dimension from another.
      *
-     * @tparam D1 The dimension type to subtract from.
-     * @tparam D2 The dimension type to subtract.
+     * @tparam Dim1 The dimension type to subtract from.
+     * @tparam Dim2 The dimension type to subtract.
      * @return The resulting dimension after subtraction.
      */
-    template <class D1, class D2>
+    template <details::DimType Dim1, details::DimType Dim2>
     using dim_div_t =
-        dim<pack::pack_sub_t<typename D1::si, typename D2::si>,
-            pack::pack_sub_t<typename D1::ex, typename D2::ex>>;
+        dim<pack::pack_sub_t<typename Dim1::si, typename Dim2::si>,
+            pack::pack_sub_t<typename Dim1::ex, typename Dim2::ex>>;
 
     /**
      * @brief Raises a dimension to an integer power.
      *
-     * @tparam D The dimension type to raise to a power.
-     * @tparam K The power to raise the dimension to.
+     * @tparam Dim The dimension type to raise to a power.
+     * @tparam Exp The power to raise the dimension to.
      * @return The resulting dimension after raising to the power.
      */
-    template <class D, int K>
+    template <details::DimType Dim, int Exp>
     using dim_pow_t =
-        dim<pack::pack_scale_t<typename D::si, K>,
-            pack::pack_scale_t<typename D::ex, K>>;
-
-    /*****************************
-     *                           *
-     * Dimension comparison API  *
-     *                           *
-     *****************************/
-
-    template <class Dim>
-    constexpr size_t has_si_dim()
-    {
-        return Dim::si::num_vals_set() > 0;
-    }
-
-    template <class Dim>
-    constexpr size_t has_ex_dim()
-    {
-        return Dim::ex::num_vals_set() > 0;
-    }
-
-    /**
-     * @brief Checks if a dimension is dimensionless (i.e., has no physical
-     * units).
-     *
-     * @tparam D The dimension type to check.
-     * @return true if the dimension is dimensionless, false otherwise.
-     */
-    template <class D>
-    inline constexpr bool is_dimensionless_v = []
-    { return has_si_dim<D>() == 0 && has_ex_dim<D>() == 0; }();
-
-    template <class Dim>
-    constexpr bool is_simple_base_dim()
-    {
-        return Dim::si::num_vals_set() + Dim::ex::num_vals_set() == 1;
-    }
-
-    template <class Dim>
-    concept SimpleDim = is_simple_base_dim<Dim>();
-
-    template <class Dim>
-    concept ZeroDim = is_dimensionless_v<Dim>;
+        dim<pack::pack_scale_t<typename Dim::si, Exp>,
+            pack::pack_scale_t<typename Dim::ex, Exp>>;
 
 }   // namespace mstd::units
 

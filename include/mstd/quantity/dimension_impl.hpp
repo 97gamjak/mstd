@@ -23,7 +23,7 @@
 #ifndef __MSTD_DIMENSION_IMPL_HPP__
 #define __MSTD_DIMENSION_IMPL_HPP__
 
-#include "dimension.hpp"
+#include "dim.hpp"
 
 namespace mstd::units
 {

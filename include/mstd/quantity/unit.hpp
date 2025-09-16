@@ -23,8 +23,8 @@
 #ifndef __MSTD_UNITS_UNIT_HPP__
 #define __MSTD_UNITS_UNIT_HPP__
 
+#include "dim_details.hpp"
 #include "dim_ratio.hpp"
-#include "dimension.hpp"
 #include "mstd/ratio.hpp"
 
 namespace mstd::units
@@ -50,7 +50,10 @@ namespace mstd::units
         using global = GlobalRatio;
     };
 
-    template <SimpleDim Dim, ratio::StdRatio Ratio, ratio::StdRatio GlobalRatio>
+    template <
+        details::SimpleDim Dim,
+        ratio::StdRatio    Ratio,
+        ratio::StdRatio    GlobalRatio>
     struct unit<Dim, Ratio, GlobalRatio>
     {
         using dim    = Dim;

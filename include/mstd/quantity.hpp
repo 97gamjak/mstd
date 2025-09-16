@@ -23,7 +23,7 @@
 #ifndef __MSTD_UNITS_HPP__
 #define __MSTD_UNITS_HPP__
 
-#include "quantity/dimension.hpp"         // IWYU pragma: export
+#include "quantity/dim.hpp"               // IWYU pragma: export
 #include "quantity/dimension_impl.hpp"    // IWYU pragma: export
 #include "quantity/quantity.hpp"          // IWYU pragma: export
 #include "quantity/quantity_impl.hpp"     // IWYU pragma: export

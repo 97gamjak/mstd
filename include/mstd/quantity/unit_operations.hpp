@@ -23,7 +23,7 @@
 #ifndef __MSTD_UNIT_OPERATIONS_HPP__
 #define __MSTD_UNIT_OPERATIONS_HPP__
 
-#include "dimension.hpp"
+#include "dim.hpp"
 #include "mstd/math.hpp"
 #include "mstd/pack.hpp"
 #include "mstd/ratio.hpp"

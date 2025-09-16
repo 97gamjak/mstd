@@ -1,5 +1,6 @@
 Checks:          'clang-diagnostic-*,clang-analyzer-*,cppcoreguidelines-*,modernize-*,-modernize-use-trailing-return-type'
 HeaderFilterRegex: '*.hpp'
+AnalyzeMacros: false
 FormatStyle:     google
 CheckOptions:
   - key:             cert-dcl16-c.NewSuffixes

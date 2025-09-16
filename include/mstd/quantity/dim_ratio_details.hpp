@@ -1,7 +1,29 @@
+/*****************************************************************************
+<GPL_HEADER>
+
+    mstd library
+    Copyright (C) 2025-now  Jakob Gamper
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+<GPL_HEADER>
+******************************************************************************/
+
 #ifndef __MSTD_DIM_RATIO_DETAILS_HPP__
 #define __MSTD_DIM_RATIO_DETAILS_HPP__
 
-#include "dimension.hpp"
+#include "dim_details.hpp"
 #include "mstd/pack.hpp"
 
 namespace mstd::units
@@ -58,7 +80,7 @@ namespace mstd::units
          * @tparam Dim - has to be a simple base dimension
          * @tparam Ratio
          */
-        template <SimpleDim Dim, ratio::StdRatio Ratio>
+        template <details::SimpleDim Dim, ratio::StdRatio Ratio>
         struct make_dim_ratio_single
         {
             static constexpr bool has_si = has_si_dim<Dim>();
