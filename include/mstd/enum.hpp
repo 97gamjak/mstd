@@ -29,9 +29,9 @@
 #include <string_view>   // IWYU pragma: keep
 #include <type_traits>   // IWYU pragma: keep
 
-// ------------------------------------------------------------
+//
 // Element expanders
-// ------------------------------------------------------------
+//
 // X(Name)       -> Name,
 // X(Name, 42)   -> Name = 42,
 #define MSTD_ENUM_MAKE_ENUM(name, ...) name __VA_OPT__(= __VA_ARGS__),
