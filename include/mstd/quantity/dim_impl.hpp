@@ -33,39 +33,50 @@ namespace mstd::units
      *                                          *
      ********************************************/
 
-    using si_one    = pack::make_default_integer_pack<SIDimIdMeta::size>::type;
+    using si_one = pack::make_default_integer_pack<SIDimIdMeta::size>::type;
+
     using si_length = pack::make_single_integer_pack_t<
         SIDimIdMeta::size,
         SIDimIdMeta::to_underlying(SIDimId::Length)>;
+
     using si_mass = pack::make_single_integer_pack_t<
         SIDimIdMeta::size,
         SIDimIdMeta::to_underlying(SIDimId::Mass)>;
+
     using si_time = pack::make_single_integer_pack_t<
         SIDimIdMeta::size,
         SIDimIdMeta::to_underlying(SIDimId::Time)>;
+
     using si_current = pack::make_single_integer_pack_t<
         SIDimIdMeta::size,
         SIDimIdMeta::to_underlying(SIDimId::Current)>;
+
     using si_temperature = pack::make_single_integer_pack_t<
         SIDimIdMeta::size,
         SIDimIdMeta::to_underlying(SIDimId::Temperature)>;
+
     using si_amount = pack::make_single_integer_pack_t<
         SIDimIdMeta::size,
         SIDimIdMeta::to_underlying(SIDimId::Amount)>;
+
     using si_luminous = pack::make_single_integer_pack_t<
         SIDimIdMeta::size,
         SIDimIdMeta::to_underlying(SIDimId::Luminous)>;
 
     using ex_one = pack::make_default_integer_pack<ExtraDimIdMeta::size>::type;
+
     using ex_angle = pack::make_single_integer_pack_t<
         ExtraDimIdMeta::size,
         ExtraDimIdMeta::to_underlying(ExtraDimId::Angle)>;
+
     using ex_currency = pack::make_single_integer_pack_t<
         ExtraDimIdMeta::size,
         ExtraDimIdMeta::to_underlying(ExtraDimId::Currency)>;
+
     using ex_info = pack::make_single_integer_pack_t<
         ExtraDimIdMeta::size,
         ExtraDimIdMeta::to_underlying(ExtraDimId::Info)>;
+
     using ex_count = pack::make_single_integer_pack_t<
         ExtraDimIdMeta::size,
         ExtraDimIdMeta::to_underlying(ExtraDimId::Count)>;

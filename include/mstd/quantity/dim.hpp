@@ -32,6 +32,25 @@
 namespace mstd::units
 {
 
+    /*************************
+     *                       *
+     * Default integer packs *
+     *                       *
+     *************************/
+
+    /**
+     * @brief default_si_pack, which is an integer_pack of all SI dimensions
+     */
+    using default_si_pack =
+        pack::make_default_integer_pack_t<SIDimIdMeta::size>;
+
+    /**
+     * @brief default_extra_pack, which is an integer_pack of all Extra
+     * dimensions
+     */
+    using default_extra_pack =
+        pack::make_default_integer_pack_t<ExtraDimIdMeta::size>;
+
     /***********************
      *                     *
      * The dimension class *
@@ -54,7 +73,9 @@ namespace mstd::units
      * @tparam ExtraDimPack A `details::integer_pack` representing the extra
      * dimension exponents.
      */
-    template <pack::details::IntegerPack SI, pack::details::IntegerPack Extra>
+    template <
+        pack::details::IntegerPack SI    = default_si_pack,
+        pack::details::IntegerPack Extra = default_extra_pack>
     struct dim
     {
         static_assert(SI::size == SIDimIdMeta::size, "si size mismatch");
