@@ -25,7 +25,7 @@
 
 #include <numbers>
 
-#include "dimension_impl.hpp"
+#include "dim_impl.hpp"
 #include "unit.hpp"
 #include "unit_operations.hpp"
 
