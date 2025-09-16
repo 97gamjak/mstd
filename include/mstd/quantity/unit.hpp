@@ -25,22 +25,42 @@
 
 #include "dim_details.hpp"
 #include "dim_ratio.hpp"
+#include "mstd/error.hpp"
 #include "mstd/ratio.hpp"
 
 namespace mstd::units
 {
+    /**
+     * @brief placeholder for a unit
+     *
+     * @details
+     *
+     * This is a placeholder for a unit. The general case is forbidden.
+     * All applicable specializations must be provided explicitly.
+     *
+     * @tparam Dim
+     * @tparam RatioDim
+     * @tparam GlobalRatio
+     */
     template <
-        class Dim,
-        class RatioDim,
+        typename Dim,
+        typename RatioDim,
         ratio::StdRatio GlobalRatio = std::ratio<1>>
     struct unit
     {
-        // TODO: implement false type and custom MACRO
-        static_assert(std::false_type::value, "unit must be specialized");
+        MSTD_COMPILE_FAIL("unit must be specialized");
     };
 
+    /**
+     * @brief unit definition for a dimension, a dim_ratio and a ratio as a
+     * global ratio
+     *
+     * @tparam Dim
+     * @tparam RatioDim
+     * @tparam GlobalRatio
+     */
     template <
-        class Dim,
+        details::DimType  Dim,
         details::DimRatio RatioDim,
         ratio::StdRatio   GlobalRatio>
     struct unit<Dim, RatioDim, GlobalRatio>
@@ -50,6 +70,14 @@ namespace mstd::units
         using global = GlobalRatio;
     };
 
+    /**
+     * @brief unit definition for a dimension (a simple base dimension), a ratio
+     * and a ratio as a global ratio
+     *
+     * @tparam Dim
+     * @tparam Ratio
+     * @tparam GlobalRatio
+     */
     template <
         details::SimpleDim Dim,
         ratio::StdRatio    Ratio,
@@ -61,7 +89,14 @@ namespace mstd::units
         using global = GlobalRatio;
     };
 
-    template <class Dim, ratio::StdRatio GlobalRatio>
+    /**
+     * @brief unit definition for a dimension (a simple base dimension), no
+     * ratio and a ratio as a global ratio
+     *
+     * @tparam Dim
+     * @tparam GlobalRatio
+     */
+    template <details::DimType Dim, ratio::StdRatio GlobalRatio>
     struct unit<Dim, std::ratio<1>, GlobalRatio>
     {
         using dim    = Dim;
@@ -69,11 +104,22 @@ namespace mstd::units
         using global = GlobalRatio;
     };
 
+    /**
+     * @brief real unit definition. This is a unit with a real factor as a
+     * general multiplier/scaling factor
+     *
+     * @tparam Dim
+     * @tparam Ratio
+     * @tparam GlobalRatio
+     */
     template <
-        typename Dim,
-        long double F,
+        details::DimType Dim,
+        long double      F,
         typename DimRatioOrRatio,
         ratio::StdRatio GlobalRatio = std::ratio<1>>
+    requires(
+        ratio::StdRatio<DimRatioOrRatio> || details::DimRatio<DimRatioOrRatio>
+    )
     struct real_unit : unit<Dim, DimRatioOrRatio, GlobalRatio>
     {
         static constexpr long double factor = F;
