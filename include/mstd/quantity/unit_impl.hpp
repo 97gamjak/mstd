@@ -39,48 +39,47 @@ namespace mstd::units
 
     // clang-format off
     template <class U>
-    concept length_unit = std::is_same_v<typename unit_traits<U>::dim, dim_length>;
+    concept length_unit = details::has_dim_v<U, dim_length>;
     template <class U>
-    concept mass_unit = std::is_same_v<typename unit_traits<U>::dim, dim_mass>;
+    concept mass_unit = details::has_dim_v<U, dim_mass>;
     template <class U>
-    concept time_unit = std::is_same_v<typename unit_traits<U>::dim, dim_time>;
+    concept time_unit = details::has_dim_v<U, dim_time>;
     template <class U>
-    concept current_unit = std::is_same_v<typename unit_traits<U>::dim, dim_current>;
+    concept current_unit = details::has_dim_v<U, dim_current>;
     template <class U>
-    concept temperature_unit = std::is_same_v<typename unit_traits<U>::dim, dim_temp>;
+    concept temperature_unit = details::has_dim_v<U, dim_temp>;
     template <class U>
-    concept amount_unit = std::is_same_v<typename unit_traits<U>::dim, dim_amount>;
+    concept amount_unit = details::has_dim_v<U, dim_amount>;
     template <class U>
-    concept luminous_unit = std::is_same_v<typename unit_traits<U>::dim, dim_luminous>;
+    concept luminous_unit = details::has_dim_v<U, dim_luminous>;
 
     template <class U>
-    concept angle_unit = std::is_same_v<typename unit_traits<U>::dim, dim_angle>;
+    concept angle_unit = details::has_dim_v<U, dim_angle>;
     template <class U>
-    concept currency_unit = std::is_same_v<typename unit_traits<U>::dim, dim_currency>;
+    concept currency_unit = details::has_dim_v<U, dim_currency>;
     template <class U>
-    concept info_unit = std::is_same_v<typename unit_traits<U>::dim, dim_info>;
+    concept info_unit = details::has_dim_v<U, dim_info>;
     template <class U>
-    concept scalar_unit = std::is_same_v<typename unit_traits<U>::dim, dim_scalar>;
+    concept scalar_unit = details::has_dim_v<U, dim_scalar>;
     template <class U>
     concept dimensionless_unit = scalar_unit<U> && std::is_same_v<typename U::ratio, std::ratio<1>>;
 
     template <class U>
-    concept area_unit = std::is_same_v<typename unit_traits<U>::dim, dim_area>;
+    concept area_unit = details::has_dim_v<U, dim_area>;
     template <class U>
-    concept volume_unit = std::is_same_v<typename unit_traits<U>::dim, dim_volume>;
+    concept volume_unit = details::has_dim_v<U, dim_volume>;
     template <class U>
-    concept density_unit = std::is_same_v<typename unit_traits<U>::dim, dim_density>;
+    concept density_unit = details::has_dim_v<U, dim_density>;
     template <class U>
-    concept velocity_unit = std::is_same_v<typename unit_traits<
-    U>::dim, dim_velocity>;
+    concept velocity_unit = details::has_dim_v<U, dim_velocity>;
     template <class U>
-    concept acceleration_unit = std::is_same_v<typename unit_traits<U>::dim, dim_acceleration>;
+    concept acceleration_unit = details::has_dim_v<U, dim_acceleration>;
     template <class U>
-    concept force_unit = std::is_same_v<typename unit_traits<U>::dim, dim_force>;
+    concept force_unit = details::has_dim_v<U, dim_force>;
     template <class U>
-    concept energy_unit = std::is_same_v<typename unit_traits<U>::dim, dim_energy>;
+    concept energy_unit = details::has_dim_v<U, dim_energy>;
     template <class U>
-    concept power_unit = std::is_same_v<typename unit_traits<U>::dim, dim_power>;
+    concept power_unit = details::has_dim_v<U, dim_power>;
     // clang-format on
 
     /***********************

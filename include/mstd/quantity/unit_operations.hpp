@@ -23,148 +23,102 @@
 #ifndef __MSTD_UNIT_OPERATIONS_HPP__
 #define __MSTD_UNIT_OPERATIONS_HPP__
 
-#include "dim.hpp"
-#include "mstd/math.hpp"
 #include "mstd/pack.hpp"
 #include "mstd/ratio.hpp"
-#include "unit.hpp"
+#include "unit_details.hpp"
+
+/**
+ * @file unit_operations.hpp
+ * @brief Compile-time utilities for unit algebra and scaling.
+ *
+ * Provides helpers to combine units (multiply, divide, power), check
+ * dimensional compatibility, and compute conversion/scaling factors
+ * relative to SI from a unit's ratio, global ratio, and real factor.
+ */
 
 namespace mstd::units
 {
-    template <class U>
-    struct unit_traits;
 
-    template <class Dim, class Ratio, ratio::StdRatio GlobalRatio>
-    struct unit_traits<unit<Dim, Ratio, GlobalRatio>>
-    {
-        using dim    = Dim;
-        using ratio  = typename unit<Dim, Ratio, GlobalRatio>::ratio;
-        using global = GlobalRatio;
-        static constexpr long double factor  = 1.0L;
-        static constexpr bool        is_real = false;
-    };
-
-    template <
-        class Dim,
-        long double F,
-        class Ratio,
-        ratio::StdRatio GlobalRatio>
-    struct unit_traits<real_unit<Dim, F, Ratio, GlobalRatio>>
-    {
-        using dim    = Dim;
-        using ratio  = typename real_unit<Dim, F, Ratio, GlobalRatio>::ratio;
-        using global = GlobalRatio;
-        static constexpr long double factor  = F;
-        static constexpr bool        is_real = true;
-    };
-
+    /**
+     * @brief Checks if two units have the same dimension
+     *
+     * @tparam Unit1
+     * @tparam Unit2
+     */
     template <class Unit1, class Unit2>
     inline constexpr bool same_dimension_v = std::is_same_v<
-        typename unit_traits<Unit1>::dim,
-        typename unit_traits<Unit2>::dim>;
+        typename details::unit_traits<Unit1>::dim,
+        typename details::unit_traits<Unit2>::dim>;
 
+    /**
+     * @brief
+     *
+     *
+     * @tparam Unit1
+     * @tparam Unit2
+     */
     template <class Unit1, class Unit2>
     inline constexpr bool compatible_units_v = same_dimension_v<Unit1, Unit2>;
 
-    template <
-        class Dim,
-        long double FactorToSI,
-        class Ratio,
-        ratio::StdRatio GlobalRatio,
-        bool            AnyReal>
-    struct build_unit_impl;
-
-    template <
-        class Dim,
-        long double F,
-        class Ratio,
-        ratio::StdRatio GlobalRatio>
-    struct build_unit_impl<Dim, F, Ratio, GlobalRatio, false>
-    {
-        using type = unit<Dim, Ratio, GlobalRatio>;
-    };
-
-    template <
-        class Dim,
-        long double F,
-        class Ratio,
-        ratio::StdRatio GlobalRatio>
-    struct build_unit_impl<Dim, F, Ratio, GlobalRatio, true>
-    {
-        using type = real_unit<Dim, F, Ratio, GlobalRatio>;
-    };
-
-    template <
-        class Dim,
-        long double FactorToSI,
-        class Ratio,
-        ratio::StdRatio GlobalRatio,
-        bool            AnyReal>
-    using build_unit_t = typename build_unit_impl<
-        Dim,
-        FactorToSI,
-        Ratio,
-        GlobalRatio,
-        (AnyReal || (FactorToSI != static_cast<long double>(1)))>::type;
-
+    /**
+     * @brief Multiply two units to form a composite unit.
+     *
+     * @tparam Unit1 Left unit
+     * @tparam Unit2 Right unit
+     */
     template <class Unit1, class Unit2>
-    struct unit_mul_impl
-    {
-        using T1    = unit_traits<Unit1>;
-        using T2    = unit_traits<Unit2>;
-        using dim   = dim_mul_t<typename T1::dim, typename T2::dim>;
-        using ratio = dim_ratio_mul_t<typename T1::ratio, typename T2::ratio>;
-        using global =
-            std::ratio_multiply<typename T1::global, typename T2::global>;
+    using unit_mul = typename details::unit_mul_impl<Unit1, Unit2>::type;
 
-        static constexpr long double f        = T1::factor * T2::factor;
-        static constexpr bool        any_real = T1::is_real || T2::is_real;
-        using type = build_unit_t<dim, f, ratio, global, any_real>;
-    };
-
+    /**
+     * @brief Divide two units to form a composite unit.
+     *
+     * @tparam Unit1 Numerator unit
+     * @tparam Unit2 Denominator unit
+     */
     template <class Unit1, class Unit2>
-    using unit_mul = typename unit_mul_impl<Unit1, Unit2>::type;
+    using unit_div = typename details::unit_div_impl<Unit1, Unit2>::type;
 
-    template <class Unit1, class Unit2>
-    struct unit_div_impl
-    {
-        using T1    = unit_traits<Unit1>;
-        using T2    = unit_traits<Unit2>;
-        using dim   = dim_div_t<typename T1::dim, typename T2::dim>;
-        using ratio = dim_ratio_div_t<typename T1::ratio, typename T2::ratio>;
-        using global =
-            std::ratio_divide<typename T1::global, typename T2::global>;
-
-        static constexpr long double factor   = T1::factor / T2::factor;
-        static constexpr bool        any_real = T1::is_real || T2::is_real;
-        using type = build_unit_t<dim, factor, ratio, global, any_real>;
-    };
-    template <class Unit1, class Unit2>
-    using unit_div = typename unit_div_impl<Unit1, Unit2>::type;
-
+    /**
+     * @brief Raise a unit to an integer power.
+     *
+     * @tparam Unit Base unit
+     * @tparam Exp  Integer exponent (can be negative)
+     */
     template <class Unit, int Exp>
-    struct unit_pow_impl
-    {
-        using T      = unit_traits<Unit>;
-        using dim    = dim_pow_t<typename T::dim, Exp>;
-        using ratio  = dim_ratio_pow_t<typename T::ratio, Exp>;
-        using global = ratio::template ratio_pow_t<typename T::global, Exp>;
-        static constexpr long double factor   = math::power(T::factor, Exp);
-        static constexpr bool        any_real = T::is_real;
-        using type = build_unit_t<dim, factor, ratio, global, any_real>;
-    };
-    template <class Unit, int Exp>
-    using unit_pow = typename unit_pow_impl<Unit, Exp>::type;
+    using unit_pow = typename details::unit_pow_impl<Unit, Exp>::type;
 
+    /**
+     * @brief Compile-time ratio multiplier of a unit relative to SI.
+     *
+     * Product of the dimensional ratio components (SI and extra ratio pack)
+     * and the unit's global ratio.
+     *
+     * @tparam Unit Unit to query
+     */
     template <class Unit>
     inline constexpr long double ratio_v =
-        pack::ratio_pack_v<typename unit_traits<Unit>::ratio::si> *
-        pack::ratio_pack_v<typename unit_traits<Unit>::ratio::ex> *
-        ratio::ratio_v<typename unit_traits<Unit>::global>;
+        pack::ratio_pack_v<typename details::unit_traits<Unit>::ratio::si> *
+        pack::ratio_pack_v<typename details::unit_traits<Unit>::ratio::ex> *
+        ratio::ratio_v<typename details::unit_traits<Unit>::global>;
 
+    /**
+     * @brief Real scaling factor attached to a unit.
+     *
+     * For regular units this is 1; for real_unit it is the provided factor.
+     *
+     * @tparam Unit Unit to query
+     */
     template <class Unit>
-    inline constexpr long double factor_v = unit_traits<Unit>::factor;
+    inline constexpr long double factor_v = details::unit_traits<Unit>::factor;
 
+    /**
+     * @brief Overall scale of a unit relative to SI.
+     *
+     * Equals `factor_v<Unit> * ratio_v<Unit>` and can be used to convert
+     * between the unit and its SI counterpart.
+     *
+     * @tparam Unit Unit to query
+     */
     template <class Unit>
     inline constexpr long double scale_v = factor_v<Unit> * ratio_v<Unit>;
 

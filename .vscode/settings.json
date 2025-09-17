@@ -21,4 +21,8 @@
     "c-cpp-flylint.clang.includePaths": [
         "${workspaceFolder}/include",
     ],
+    "files.associations": {
+        "*.tpp": "c++",
+        "type_traits": "cpp"
+    },
 }

@@ -25,7 +25,7 @@
 
 #include "unit_operations.hpp"
 
-namespace mstd::units
+namespace mstd::units::details
 {
     /**
      * @brief Get the common unit type for two compatible units.
@@ -59,33 +59,35 @@ namespace mstd::units
         static constexpr bool        one1 = (f1 == 1.0L);
         static constexpr bool        one2 = (f2 == 1.0L);
 
+        static constexpr bool only1 = (one1 && !one2);
+        static constexpr bool only2 = (!one1 && one2);
+        static constexpr bool both  = (one1 && one2);
+        static constexpr bool none  = (!one1 && !one2);
+
         // rule 1: if only one has factor==1, pick that one
-        using prefer_factor_one = std::conditional_t<
-            (one1 && !one2),
-            Unit1,
-            std::conditional_t<(!one1 && one2), Unit2, void>>;
+        using rule1 = std::
+            conditional_t<only1, Unit1, std::conditional_t<only2, Unit2, void>>;
 
         // rule 2: if both factors != 1, pick LHS
-        using both_not_one = std::conditional_t<(!one1 && !one2), Unit1, void>;
+        using rule2 = std::conditional_t<none, Unit1, void>;
 
         // rule 3: both factors == 1 → pick smallest ratio (finer); tie → LHS
         static constexpr long double r1 = ratio_v<Unit1>;
         static constexpr long double r2 = ratio_v<Unit2>;
-        using both_one_pick_ratio       = std::conditional_t<
-                  (one1 && one2),
-                  std::conditional_t<
-                      (r1 < r2),
-                      Unit1,
-                      std::conditional_t<(r2 < r1), Unit2, Unit1>>,   // tie → LHS
-                  void>;
 
-        using type = std::conditional_t<
-            !std::is_void_v<prefer_factor_one>,
-            prefer_factor_one,
+        using rule3 = std::conditional_t<
+            both,
             std::conditional_t<
-                !std::is_void_v<both_not_one>,
-                both_not_one,
-                both_one_pick_ratio>>;
+                (r1 < r2),
+                Unit1,
+                std::conditional_t<(r2 < r1), Unit2, Unit1>>,   // tie → LHS
+            void>;
+
+        // select type based on rules
+        using type = std::conditional_t<
+            !std::is_void_v<rule1>,
+            rule1,
+            std::conditional_t<!std::is_void_v<rule2>, rule2, rule3>>;
     };
 
     /**
@@ -97,6 +99,6 @@ namespace mstd::units
     template <class U1, class U2>
     using common_unit_t = typename common_unit_impl<U1, U2>::type;
 
-}   // namespace mstd::units
+}   // namespace mstd::units::details
 
 #endif   // __MSTD_UNIT_COMMON_HPP__

@@ -223,7 +223,7 @@ namespace mstd::units
         const quantity<Unit2, R2>& b
     )
     {
-        using unit      = common_unit_t<Unit1, Unit2>;
+        using unit      = details::common_unit_t<Unit1, Unit2>;
         const auto aNew = to<unit>(a);
         const auto bNew = to<unit>(b);
 
@@ -250,7 +250,7 @@ namespace mstd::units
         const quantity<Unit2, R2>& b
     )
     {
-        using unit      = common_unit_t<Unit1, Unit2>;
+        using unit      = details::common_unit_t<Unit1, Unit2>;
         using R         = std::common_type_t<R1, R2>;
         const auto aNew = to<unit, R>(a);
         const auto bNew = to<unit, R>(b);

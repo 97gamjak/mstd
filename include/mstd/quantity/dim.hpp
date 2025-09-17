@@ -29,6 +29,14 @@
 #include "enums.hpp"
 #include "mstd/pack.hpp"
 
+/**
+ * @file dim.hpp
+ * @brief Core dimension type and compile-time operations.
+ *
+ * Defines the `dim` type representing physical dimensions as exponent packs
+ * and provides utilities to combine and transform them at compile time.
+ */
+
 namespace mstd::units
 {
 
@@ -39,14 +47,17 @@ namespace mstd::units
      *************************/
 
     /**
-     * @brief default_si_pack, which is an integer_pack of all SI dimensions
+     * @brief Integer pack covering all SI base dimensions.
+     *
+     * Alias of `pack::make_default_integer_pack_t<SIDimIdMeta::size>`.
      */
     using default_si_pack =
         pack::make_default_integer_pack_t<SIDimIdMeta::size>;
 
     /**
-     * @brief default_extra_pack, which is an integer_pack of all Extra
-     * dimensions
+     * @brief Integer pack covering all extra (non-SI) dimensions.
+     *
+     * Alias of `pack::make_default_integer_pack_t<ExtraDimIdMeta::size>`.
      */
     using default_extra_pack =
         pack::make_default_integer_pack_t<ExtraDimIdMeta::size>;
@@ -58,20 +69,18 @@ namespace mstd::units
      ***********************/
 
     /**
-     * @brief A class representing a physical dimension.
+     * @brief Encodes a physical dimension via exponent packs.
      *
-     * @details A dimension is represented by two packs of integers:
-     *          - The first pack represents the exponents of the 7 base SI
-     * dimensions: length, mass, time, electric current, temperature, amount of
-     * substance, luminous intensity.
-     *          - The second pack represents the exponents of 4 additional
-     * "extra" dimensions: angle, currency, information, count. Each pack is
-     * implemented using the `details::integer_pack` class, which provides
-     * compile-time storage and manipulation of integer sequences.
-     * @tparam SIDimPack   A `details::integer_pack` representing the SI
-     * dimension exponents.
-     * @tparam ExtraDimPack A `details::integer_pack` representing the extra
-     * dimension exponents.
+     * @details Two integer packs store exponents for:
+     * - SI base dimensions (7 entries): length, mass, time, electric current,
+     *   temperature, amount of substance, luminous intensity
+     * - Extra dimensions (4 entries): angle, currency, information, count
+     *
+     * Packs are `pack::details::integer_pack` specializations providing
+     * compile-time sequence access and arithmetic.
+     *
+     * @tparam SI Pack of SI exponents; defaults to all zeros.
+     * @tparam Extra Pack of extra exponents; defaults to all zeros.
      */
     template <
         pack::details::IntegerPack SI    = default_si_pack,
@@ -81,25 +90,29 @@ namespace mstd::units
         static_assert(SI::size == SIDimIdMeta::size, "si size mismatch");
         static_assert(Extra::size == ExtraDimIdMeta::size, "ex size mismatch");
 
+        /** Pack of SI exponents. */
         using si = SI;
+        /** Pack of extra exponents. */
         using ex = Extra;
 
+        /** Number of SI dimensions represented. */
         static constexpr size_t si_size = SI::size;
+        /** Number of extra dimensions represented. */
         static constexpr size_t ex_size = Extra::size;
 
         /**
-         * @brief get the exponent of a specific si dimension
+         * @brief Exponent of a specific SI dimension.
          *
-         * @tparam ID
+         * @tparam ID Enum value identifying the SI dimension.
          */
         template <SIDimId ID>
         static constexpr int si_exp =
             SI::template get<static_cast<size_t>(ID)>();
 
         /**
-         * @brief get the exponent of a specific extra dimension
+         * @brief Exponent of a specific extra dimension.
          *
-         * @tparam ID
+         * @tparam ID Enum value identifying the extra dimension.
          */
         template <ExtraDimId ID>
         static constexpr int ex_exp =
@@ -113,11 +126,10 @@ namespace mstd::units
      *****************************/
 
     /**
-     * @brief Adds two dimensions.
+     * @brief Combine dimensions by adding exponents (multiplication of units).
      *
-     * @tparam Dim1 The first dimension type.
-     * @tparam Dim2 The second dimension type.
-     * @return The resulting dimension after adding the two dimensions.
+     * @tparam Dim1 Left operand dimension.
+     * @tparam Dim2 Right operand dimension.
      */
     template <details::DimType Dim1, details::DimType Dim2>
     using dim_mul_t =
@@ -125,11 +137,10 @@ namespace mstd::units
             pack::pack_add_t<typename Dim1::ex, typename Dim2::ex>>;
 
     /**
-     * @brief Subtracts one dimension from another.
+     * @brief Combine dimensions by subtracting exponents (division of units).
      *
-     * @tparam Dim1 The dimension type to subtract from.
-     * @tparam Dim2 The dimension type to subtract.
-     * @return The resulting dimension after subtraction.
+     * @tparam Dim1 Numerator dimension.
+     * @tparam Dim2 Denominator dimension.
      */
     template <details::DimType Dim1, details::DimType Dim2>
     using dim_div_t =
@@ -137,11 +148,10 @@ namespace mstd::units
             pack::pack_sub_t<typename Dim1::ex, typename Dim2::ex>>;
 
     /**
-     * @brief Raises a dimension to an integer power.
+     * @brief Raise a dimension to an integer power.
      *
-     * @tparam Dim The dimension type to raise to a power.
-     * @tparam Exp The power to raise the dimension to.
-     * @return The resulting dimension after raising to the power.
+     * @tparam Dim Base dimension.
+     * @tparam Exp Integer exponent (can be negative).
      */
     template <details::DimType Dim, int Exp>
     using dim_pow_t =
