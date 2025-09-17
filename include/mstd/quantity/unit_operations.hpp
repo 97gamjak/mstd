@@ -97,8 +97,10 @@ namespace mstd::units
      */
     template <class Unit>
     inline constexpr long double ratio_v =
-        pack::ratio_pack_v<typename details::unit_traits<Unit>::ratio::si> *
-        pack::ratio_pack_v<typename details::unit_traits<Unit>::ratio::ex> *
+        pack::details::ratio_pack_v<
+            typename details::unit_traits<Unit>::ratio::si> *
+        pack::details::ratio_pack_v<
+            typename details::unit_traits<Unit>::ratio::ex> *
         ratio::ratio_v<typename details::unit_traits<Unit>::global>;
 
     /**

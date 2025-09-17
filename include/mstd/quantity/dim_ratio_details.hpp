@@ -29,7 +29,7 @@
 namespace mstd::units
 {
     // forward declaration
-    template <pack::RatioPack Si, pack::RatioPack Extra>
+    template <pack::details::RatioPack Si, pack::details::RatioPack Extra>
     struct dim_ratio;
 
     namespace details

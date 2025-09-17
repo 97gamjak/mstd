@@ -68,8 +68,8 @@ namespace mstd::units
      *
      */
     template <
-        pack::RatioPack SiRatioPack    = default_si_ratio_pack,
-        pack::RatioPack ExtraRatioPack = default_extra_ratio_pack>
+        pack::details::RatioPack SiRatioPack    = default_si_ratio_pack,
+        pack::details::RatioPack ExtraRatioPack = default_extra_ratio_pack>
     struct dim_ratio
     {
         // putting static asserts instead of requires to make forward
