@@ -33,7 +33,7 @@ namespace mstd::units
      *                                          *
      ********************************************/
 
-    using si_one = pack::make_default_integer_pack<SIDimIdMeta::size>::type;
+    using si_one = pack::make_default_integer_pack_t<SIDimIdMeta::size>;
 
     using si_length = pack::make_single_integer_pack_t<
         SIDimIdMeta::size,
@@ -63,7 +63,7 @@ namespace mstd::units
         SIDimIdMeta::size,
         SIDimIdMeta::to_underlying(SIDimId::Luminous)>;
 
-    using ex_one = pack::make_default_integer_pack<ExtraDimIdMeta::size>::type;
+    using ex_one = pack::make_default_integer_pack_t<ExtraDimIdMeta::size>;
 
     using ex_angle = pack::make_single_integer_pack_t<
         ExtraDimIdMeta::size,
