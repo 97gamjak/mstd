@@ -252,10 +252,12 @@ namespace mstd::units
     {
         using unit      = details::common_unit_t<Unit1, Unit2>;
         using R         = std::common_type_t<R1, R2>;
-        const auto aNew = to<unit, R>(a);
-        const auto bNew = to<unit, R>(b);
+        const auto aCommon = to<unit>(a);
+        const auto bCommon = to<unit>(b);
+        const R     v     =
+            static_cast<R>(aCommon.value()) - static_cast<R>(bCommon.value());
 
-        return aNew - bNew;
+        return quantity<unit, R>(v);
     }
 
     /**
@@ -277,7 +279,7 @@ namespace mstd::units
     {
         using U       = unit_mul<U1, U2>;
         using R       = std::common_type_t<R1, R2>;
-        constexpr R v = static_cast<R>(a.value()) * static_cast<R>(b.value());
+        const R v = static_cast<R>(a.value()) * static_cast<R>(b.value());
 
         return quantity<U, R>(v);
     }
@@ -300,7 +302,7 @@ namespace mstd::units
     {
         using U       = unit_div<U1, U2>;
         using R       = std::common_type_t<R1, R2>;
-        constexpr R v = static_cast<R>(a.value()) / static_cast<R>(b.value());
+        const R v = static_cast<R>(a.value()) / static_cast<R>(b.value());
 
         return quantity<U, R>(v);
     }
