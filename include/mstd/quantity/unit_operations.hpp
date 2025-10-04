@@ -63,20 +63,24 @@ namespace mstd::units
     /**
      * @brief Multiply two units to form a composite unit.
      *
-     * @tparam Unit1 Left unit
-     * @tparam Unit2 Right unit
+     * @tparam Unit1 First unit
+     * @tparam Unit2 Second unit
+     * @tparam Units Additional units to multiply (optional)
      */
-    template <class Unit1, class Unit2>
-    using unit_mul = typename details::unit_mul_impl<Unit1, Unit2>::type;
+    template <class... Units>
+    using unit_mul = typename details::unit_mul_pack<Units...>::type;
 
     /**
      * @brief Divide two units to form a composite unit.
      *
      * @tparam Unit1 Numerator unit
      * @tparam Unit2 Denominator unit
+     * @tparam Units Additional units to multiply into the denominator
+     * (optional)
      */
-    template <class Unit1, class Unit2>
-    using unit_div = typename details::unit_div_impl<Unit1, Unit2>::type;
+    template <class Unit1, class Unit2, class... Units>
+    using unit_div =
+        typename details::unit_div_impl<Unit1, unit_mul<Unit2, Units...>>::type;
 
     /**
      * @brief Raise a unit to an integer power.

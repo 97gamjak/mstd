@@ -77,10 +77,12 @@ TEST_CASE("quantity conversions and comparisons", "[units]")
     );
     REQUIRE(length_mm.value() == Catch::Approx(2500.0));
 
-    const Velocity<kmph> highway_speed{72.0};
-    const auto           highway_speed_mps = to<mps>(highway_speed);
+    const Velocity<km_per_h> highway_speed{72.0};
+    const auto               highway_speed_mps = to<m_per_s>(highway_speed);
     STATIC_REQUIRE(
-        std::is_same_v<std::decay_t<decltype(highway_speed_mps)>, Velocity<mps>>
+        std::is_same_v<
+            std::decay_t<decltype(highway_speed_mps)>,
+            Velocity<m_per_s>>
     );
     REQUIRE(highway_speed_mps.value() == Catch::Approx(20.0));
 
@@ -131,7 +133,7 @@ TEST_CASE("quantity arithmetic for compatible units", "[units]")
     REQUIRE(difference_same.baseValue() == Catch::Approx(1.5));
 
     const auto velocity = Length<m>{10.0} / Time<s>{2.0};
-    STATIC_REQUIRE(std::is_same_v<typename decltype(velocity)::unit, mps>);
+    STATIC_REQUIRE(std::is_same_v<typename decltype(velocity)::unit, m_per_s>);
     REQUIRE(velocity.value() == Catch::Approx(5.0));
 
     const auto area = Length<m>{3.0} * Length<m>{2.0};
@@ -175,13 +177,16 @@ TEST_CASE("quantity interaction with scalars", "[units]")
     );
     REQUIRE(mass_scaled.value() == Catch::Approx(12.0));
 
-    const auto acceleration = Velocity<mps>{10.0} / Time<s>{2.0};
+    const auto acceleration = Velocity<m_per_s>{10.0} / Time<s>{2.0};
     STATIC_REQUIRE(
-        std::is_same_v<typename decltype(acceleration)::unit, unit_div<mps, s>>
+        std::is_same_v<
+            typename decltype(acceleration)::unit,
+            unit_div<m_per_s, s>>
     );
     REQUIRE(acceleration.value() == Catch::Approx(5.0));
 
-    const auto dimensionless_ratio = Velocity<mps>{50.0} / Velocity<mps>{10.0};
+    const auto dimensionless_ratio =
+        Velocity<m_per_s>{50.0} / Velocity<m_per_s>{10.0};
     REQUIRE(dimensionless_ratio.baseValue() == Catch::Approx(5.0));
     STATIC_REQUIRE(
         same_dimension_v<typename decltype(dimensionless_ratio)::unit, unitless>
