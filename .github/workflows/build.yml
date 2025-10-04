@@ -1,0 +1,45 @@
+name: BUILD
+
+on:
+  pull_request:
+    branches:
+      - '*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-24.04, ubuntu-24.04-arm]
+        build: [Release, Debug]
+        gcc: [13, 14]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive  # ✅ ensure Catch2 is pulled in
+
+      - name: Cache CMake build
+        uses: actions/cache@v4
+        with:
+          path: build
+          key: |
+            cmake-${{ runner.os }}-gcc${{ matrix.gcc }}-${{ matrix.build }}-${{ hashFiles('CMakeLists.txt', 'external/Catch2/**') }}
+          restore-keys: |
+            cmake-${{ runner.os }}-gcc${{ matrix.gcc }}-${{ matrix.build }}-
+
+      - name: Install gcc${{ matrix.gcc }}
+        run: |
+          sudo apt update
+          sudo apt install -y gcc-${{ matrix.gcc }} g++-${{ matrix.gcc }}
+        shell: bash
+
+      - name: Build and Test Project
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=${{ matrix.build }}
+          cmake --build build -j$(nproc)
+          ctest --test-dir build --output-on-failure
+        env:
+          CC: gcc-${{ matrix.gcc }}
+          CXX: g++-${{ matrix.gcc }}
