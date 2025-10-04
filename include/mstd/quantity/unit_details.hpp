@@ -24,6 +24,7 @@
 #define __MSTD_UNITS_DETAILS_HPP__
 
 #include "dim.hpp"
+#include "mstd/error.hpp"
 #include "mstd/math.hpp"
 #include "mstd/ratio.hpp"
 #include "unit.hpp"
@@ -182,10 +183,6 @@ namespace mstd::units::details
     template <>
     struct unit_mul_pack<>
     {
-        static_assert(
-            std::is_void_v<void>,
-            "unit_mul_pack<>: at least one unit type must be provided"
-        );
     };
 
     /** @brief Base case: single unit provided.

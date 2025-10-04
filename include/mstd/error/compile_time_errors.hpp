@@ -20,9 +20,34 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_ERROR_HPP__
-#define __MSTD_ERROR_HPP__
+#ifndef __COMPILE_TIME_ERRORS_HPP__
+#define __COMPILE_TIME_ERRORS_HPP__
 
-#include "error/compile_time_errors.hpp"   // IWYU pragma: export
+#include <type_traits>
 
-#endif   // __MSTD_ERROR_HPP__
+/**
+ * @file compile_time_errors.hpp
+ * @brief Utilities for generating compile-time errors with custom messages.
+ *
+ * Provides a mechanism to trigger static assertions with user-defined error
+ * messages, useful for enforcing constraints in template metaprogramming.
+ */
+
+namespace mstd::error
+{
+    // clang-format off
+    /**
+     * @brief a struct that is always false
+     * 
+     * @tparam T 
+     */
+    template <typename T>
+    struct always_false : std::false_type{};
+    // clang-format on
+
+}   // namespace mstd::error
+
+#define MSTD_COMPILE_FAIL(msg) \
+    static_assert(::mstd::error::always_false<void>::value, msg)
+
+#endif   // __COMPILE_TIME_ERRORS_HPP__
