@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### Feature
+
+- add velocity unit Angstrom per seconds
+
 <!-- insertion marker -->
 ## [0.0.1](https://github.com/97gamjak/mstd/releases/tag/0.0.1) - 2025-10-04
 
