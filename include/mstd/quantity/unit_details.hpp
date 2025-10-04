@@ -166,6 +166,53 @@ namespace mstd::units::details
     };
 
     /**
+     * @brief Helper struct to multiply multiple units.
+     *
+     * Recursively reduces the parameter pack by multiplying the first two
+     * units, then combining the result with the next unit, and so on.
+     */
+    template <class... Units>
+    struct unit_mul_pack;
+
+    /** @brief Base case: no units provided.
+     *
+     * This specialization triggers a static assertion failure to ensure that
+     * at least one unit type is provided.
+     */
+    template <>
+    struct unit_mul_pack<>
+    {
+        static_assert(
+            std::is_void_v<void>,
+            "unit_mul_pack<>: at least one unit type must be provided"
+        );
+    };
+
+    /** @brief Base case: single unit provided.
+     *
+     * This specialization simply returns the provided unit type.
+     */
+    template <class U>
+    struct unit_mul_pack<U>
+    {
+        using type = U;
+    };
+
+    /**
+     * @brief Implementation of unit multiplication for multiple units.
+     *
+     * Recursively reduces the parameter pack by multiplying the first two
+     * units, then combining the result with the next unit, and so on.
+     */
+    template <class U1, class U2, class... Us>
+    struct unit_mul_pack<U1, U2, Us...>
+    {
+        using type = typename unit_mul_pack<
+            typename unit_mul_impl<U1, U2>::type,
+            Us...>::type;
+    };
+
+    /**
      * @brief Implementation of unit division at type level.
      *
      * Divides dimensions, composes dim ratios and global ratios, and divides

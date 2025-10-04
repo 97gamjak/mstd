@@ -171,16 +171,15 @@ namespace mstd::units
         using rad = unit<dim_angle, std::ratio<1>>;
         using deg = real_unit<dim_angle, __RAD_TO_DEG__, std::ratio<1>>;
 
-        using mps   = unit_div<m, s>;
-        using kmph  = unit_div<km, h>;
-        using Angps = unit_div<Ang, s>;
+        using m_per_s   = unit_div<m, s>;
+        using km_per_h  = unit_div<km, h>;
+        using Ang_per_s = unit_div<Ang, s>;
         using c =
             real_unit<dim_velocity, __SPEED_OF_LIGHT_TO_MPS__, std::ratio<1>>;
 
-        using mps2 = unit_div<mps, s>;
-        using test = unit_mul<m, s>;
+        using m_per_s2 = unit_div<m_per_s, s>;
 
-        using N  = unit_mul<kg, mps2>;
+        using N  = unit_mul<kg, m_per_s2>;
         using kN = unit<N::dim, std::kilo>;
         using MN = unit<N::dim, std::mega>;
 
@@ -190,7 +189,9 @@ namespace mstd::units
         using GJ   = unit<J::dim, std::giga>;
         using cal  = real_unit<J::dim, __CAL_TO_J__, std::ratio<1>>;
         using kcal = real_unit<cal::dim, cal::factor, std::ratio<1>, std::kilo>;
-        using _    = typename kcal::dim;
+
+        using kcal_per_mol         = unit_div<kcal, mol>;
+        using kcal_per_mol_per_Ang = unit_div<kcal, mol, Ang>;
 
         using W  = unit_div<J, s>;
         using kW = unit<W::dim, std::kilo>;
