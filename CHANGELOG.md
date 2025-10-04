@@ -12,4 +12,8 @@ All notable changes to this project will be documented in this file.
 
 - add CI to create automatically a tag and a release on github
 
+### Bug Fix
+
+- add permissions to create tag workflow
+
 <!-- insertion marker -->
