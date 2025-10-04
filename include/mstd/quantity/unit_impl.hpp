@@ -171,8 +171,9 @@ namespace mstd::units
         using rad = unit<dim_angle, std::ratio<1>>;
         using deg = real_unit<dim_angle, __RAD_TO_DEG__, std::ratio<1>>;
 
-        using mps = unit_div<m, s>;
-        using kmh = unit_div<km, h>;
+        using mps   = unit_div<m, s>;
+        using kmph  = unit_div<km, h>;
+        using Angps = unit_div<Ang, s>;
         using c =
             real_unit<dim_velocity, __SPEED_OF_LIGHT_TO_MPS__, std::ratio<1>>;
 
