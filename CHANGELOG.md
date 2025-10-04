@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+<!-- insertion marker -->
+## [0.0.1](https://github.com/97gamjak/mstd/releases/tag/0.0.1) - 2025-10-04
+
 ### Feature
 
 - Introduce Quantity class for compile time unit conversions
@@ -16,4 +19,3 @@ All notable changes to this project will be documented in this file.
 
 - add permissions to create tag workflow
 
-<!-- insertion marker -->
