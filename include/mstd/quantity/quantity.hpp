@@ -67,12 +67,22 @@ namespace mstd::units
         /**
          * @brief Construct a quantity from a base value (SI unit).
          *
-         * @param from_base_tag Tag to indicate base value construction.
          * @param base The base value in SI units.
          */
         constexpr quantity(from_base_t, Rep base)   // base (SI) ctor
             : _baseValue(base)
         {
+        }
+
+        /**
+         * @brief Construct a quantity from a base value (SI unit).
+         *
+         * @param base The base value in SI units.
+         * @return constexpr quantity
+         */
+        static constexpr quantity from_base(Rep base)
+        {
+            return quantity(typename quantity::from_base_t{}, base);
         }
 
         /**
@@ -120,10 +130,7 @@ namespace mstd::units
     constexpr quantity<UTo, R> to(quantity<UFrom, R> q)
     requires compatible_units_v<UFrom, UTo>
     {
-        return quantity<UTo, R>(
-            typename quantity<UTo, R>::from_base_t{},
-            q.baseValue()
-        );
+        return quantity<UTo, R>::from_base(q.baseValue());
     }
 
     /**
@@ -250,11 +257,11 @@ namespace mstd::units
         const quantity<Unit2, R2>& b
     )
     {
-        using unit      = details::common_unit_t<Unit1, Unit2>;
-        using R         = std::common_type_t<R1, R2>;
+        using unit         = details::common_unit_t<Unit1, Unit2>;
+        using R            = std::common_type_t<R1, R2>;
         const auto aCommon = to<unit>(a);
         const auto bCommon = to<unit>(b);
-        const R     v     =
+        const R    v =
             static_cast<R>(aCommon.value()) - static_cast<R>(bCommon.value());
 
         return quantity<unit, R>(v);
@@ -277,8 +284,8 @@ namespace mstd::units
     template <class U1, class R1, class U2, class R2>
     constexpr auto operator*(quantity<U1, R1> a, quantity<U2, R2> b)
     {
-        using U       = unit_mul<U1, U2>;
-        using R       = std::common_type_t<R1, R2>;
+        using U   = unit_mul<U1, U2>;
+        using R   = std::common_type_t<R1, R2>;
         const R v = static_cast<R>(a.value()) * static_cast<R>(b.value());
 
         return quantity<U, R>(v);
@@ -302,9 +309,10 @@ namespace mstd::units
     {
         using U       = unit_div<U1, U2>;
         using R       = std::common_type_t<R1, R2>;
-        const R v = static_cast<R>(a.value()) / static_cast<R>(b.value());
+        const R aBase = static_cast<R>(a.baseValue());
+        const R bBase = static_cast<R>(b.baseValue());
 
-        return quantity<U, R>(v);
+        return quantity<U, R>::from_base(aBase / bBase);
     }
 
     /**

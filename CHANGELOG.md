@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - add velocity unit Angstrom per seconds
 - add force unit kcal per mole Angstrom
 - add possibility to multiply and divide more than two unit with one call (see unit_mul, unit_div)
+- add static function to create a quantity from a baseValue
 
 ### Breaking Changes
 
