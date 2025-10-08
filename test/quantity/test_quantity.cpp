@@ -192,3 +192,23 @@ TEST_CASE("quantity interaction with scalars", "[units]")
         same_dimension_v<typename decltype(dimensionless_ratio)::unit, unitless>
     );
 }
+
+TEST_CASE("quantity division", "[units]")
+{
+    using namespace mstd::units;
+    using namespace mstd::units::literals;
+    auto length = Length<km>{1.0};
+    auto vel    = Velocity<m_per_s>{10.0};
+
+    auto time = length / vel;
+
+    REQUIRE(factor_v<typename decltype(time)::unit> == Catch::Approx(3600.0));
+
+    // REQUIRE(time.value() == Catch::Approx(100));
+
+    auto acc = Acceleration<m_per_s2>{2.0};
+
+    REQUIRE(
+        to<unit_div<m, h, h>>(acc).value() == Catch::Approx(2.0 * 3600 * 3600)
+    );
+}
