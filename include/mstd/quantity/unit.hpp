@@ -27,6 +27,7 @@
 #include "dim_ratio.hpp"
 #include "mstd/error.hpp"
 #include "mstd/ratio.hpp"
+#include "mstd/tags/unit.hpp"
 
 namespace mstd::units
 {
@@ -46,7 +47,7 @@ namespace mstd::units
         typename Dim,
         typename RatioDim,
         ratio::StdRatio GlobalRatio = std::ratio<1>>
-    struct unit
+    struct unit : public unit_tag
     {
         MSTD_COMPILE_FAIL("unit must be specialized");
     };
@@ -63,7 +64,7 @@ namespace mstd::units
         details::DimType  Dim,
         details::DimRatio RatioDim,
         ratio::StdRatio   GlobalRatio>
-    struct unit<Dim, RatioDim, GlobalRatio>
+    struct unit<Dim, RatioDim, GlobalRatio> : public unit_tag
     {
         using dim    = Dim;
         using ratio  = RatioDim;
@@ -82,7 +83,7 @@ namespace mstd::units
         details::SimpleDim Dim,
         ratio::StdRatio    Ratio,
         ratio::StdRatio    GlobalRatio>
-    struct unit<Dim, Ratio, GlobalRatio>
+    struct unit<Dim, Ratio, GlobalRatio> : public unit_tag
     {
         using dim    = Dim;
         using ratio  = make_dim_ratio_single_t<Dim, Ratio>;
@@ -97,7 +98,7 @@ namespace mstd::units
      * @tparam GlobalRatio
      */
     template <details::DimType Dim, ratio::StdRatio GlobalRatio>
-    struct unit<Dim, std::ratio<1>, GlobalRatio>
+    struct unit<Dim, std::ratio<1>, GlobalRatio> : public unit_tag
     {
         using dim    = Dim;
         using ratio  = dim_ratio<>;
