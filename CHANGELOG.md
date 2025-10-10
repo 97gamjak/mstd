@@ -6,9 +6,20 @@ All notable changes to this project will be documented in this file.
 
 ### Feature
 
+#### Units
+
 - add velocity unit Angstrom per seconds
 - add force unit kcal per mole Angstrom
+
+#### Quantities
+
 - add possibility to multiply and divide more than two unit with one call (see unit_mul, unit_div)
+
+#### Type Traits
+
+- introducing new type_traits library
+  - is_unit_v
+  - concept UnitType
 
 ### Breaking Changes
 

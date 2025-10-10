@@ -42,6 +42,11 @@ if(MSTD_BUILD_TESTS)
         mstd
         Catch2::Catch2WithMain
     )
+    target_include_directories(
+        mstd_tests
+        SYSTEM PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/external/Catch2/src
+    )
     target_compile_features(mstd_tests
         PRIVATE
         cxx_std_20

@@ -2,6 +2,7 @@
     "cSpell.words": [
         "Angps",
         "centi",
+        "centimetres",
         "cppcoreguidelines",
         "EXTRADIMID",
         "femto",
@@ -20,8 +21,15 @@
         "umol"
     ],
     "C_Cpp.default.compileCommands": "${workspaceFolder}/.build/compile_commands.json",
+    "c-cpp-flylint.clang.enable": false,
     "c-cpp-flylint.clang.includePaths": [
         "${workspaceFolder}/include",
+    ],
+    "c-cpp-flylint.clang.extraArgs": [
+        "-isystem${workspaceFolder}/external/Catch2/src"
+    ],
+    "c-cpp-flylint.cppcheck.extraArgs": [
+        "-i ${workspaceFolder}/external/Catch2/src" // adjust path as needed
     ],
     "files.associations": {
         "*.tpp": "c++",
