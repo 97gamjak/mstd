@@ -31,6 +31,12 @@
 
 namespace mstd
 {
+    struct BaseUnit : public unit_tag
+    {
+        static constexpr long double factor  = 1.0L;
+        static constexpr bool        is_real = false;
+    };
+
     /**
      * @brief placeholder for a unit
      *
@@ -47,7 +53,7 @@ namespace mstd
         typename Dim,
         typename RatioDim,
         StdRatio GlobalRatio = std::ratio<1>>
-    struct unit : public unit_tag
+    struct simple_unit : public public BaseUnit
     {
         MSTD_COMPILE_FAIL("unit must be specialized");
     };
@@ -64,7 +70,7 @@ namespace mstd
         details::DimType  Dim,
         details::DimRatio RatioDim,
         StdRatio          GlobalRatio>
-    struct unit<Dim, RatioDim, GlobalRatio> : public unit_tag
+    struct simple_unit<Dim, RatioDim, GlobalRatio> : public public BaseUnit
     {
         using dim    = Dim;
         using ratio  = RatioDim;
@@ -80,7 +86,7 @@ namespace mstd
      * @tparam GlobalRatio
      */
     template <details::SimpleDim Dim, StdRatio Ratio, StdRatio GlobalRatio>
-    struct unit<Dim, Ratio, GlobalRatio> : public unit_tag
+    struct simple_unit<Dim, Ratio, GlobalRatio> : public public BaseUnit
     {
         using dim    = Dim;
         using ratio  = make_dim_ratio_single_t<Dim, Ratio>;
@@ -95,7 +101,7 @@ namespace mstd
      * @tparam GlobalRatio
      */
     template <details::DimType Dim, StdRatio GlobalRatio>
-    struct unit<Dim, std::ratio<1>, GlobalRatio> : public unit_tag
+    struct simple_unit<Dim, std::ratio<1>, GlobalRatio> : public public BaseUnit
     {
         using dim    = Dim;
         using ratio  = dim_ratio<>;
@@ -114,11 +120,12 @@ namespace mstd
         details::DimType Dim,
         long double      F,
         typename DimRatioOrRatio,
-        StdRatio GlobalRatio = std::ratio<1>>
+        StdRatio GlobalRatio>
     requires(StdRatio<DimRatioOrRatio> || details::DimRatio<DimRatioOrRatio>)
-    struct real_unit : unit<Dim, DimRatioOrRatio, GlobalRatio>
+    struct unit : simple_unit<Dim, DimRatioOrRatio, GlobalRatio>
     {
-        static constexpr long double factor = F;
+        static constexpr long double factor  = F;
+        static constexpr bool        is_real = true;
     };
 
 }   // namespace mstd
