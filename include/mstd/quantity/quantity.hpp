@@ -25,6 +25,7 @@
 
 #include <type_traits>
 
+#include "mstd/tags/quantity_tag.hpp"
 #include "mstd/type_traits/unit_traits.hpp"
 #include "unit_common.hpp"
 #include "unit_operations.hpp"
@@ -39,7 +40,7 @@ namespace mstd
      * @tparam Rep The representation type (default: double).
      */
     template <UnitType U, class Rep = double>
-    class quantity
+    class quantity : public quantity_tag
     {
        public:
         using unit = U;

@@ -18,8 +18,12 @@ All notable changes to this project will be documented in this file.
 #### Type Traits
 
 - introducing new type_traits library
-  - is_unit_v
-  - concept UnitType
+  - unit
+    - is_unit_v
+    - concept UnitType
+  - quantity
+    - is_quantity_v
+    - concept QuantityType
 
 ### Breaking Changes
 

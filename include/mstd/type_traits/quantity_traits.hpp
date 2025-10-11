@@ -20,15 +20,18 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_TAGS_UNIT_HPP__
-#define __MSTD_TAGS_UNIT_HPP__
+#ifndef __MSTD_TYPE_TRAITS_QUANTITY_TRAITS_HPP__
+#define __MSTD_TYPE_TRAITS_QUANTITY_TRAITS_HPP__
+
+#include "mstd/tags/quantity_tag.hpp"
 
 namespace mstd
 {
-    struct unit_tag
-    {
-    };
+    template <typename T>
+    constexpr bool is_quantity_v = std::is_base_of_v<quantity_tag, T>;
 
+    template <typename T>
+    concept QuantityType = is_quantity_v<T>;
 }   // namespace mstd
 
-#endif   // __MSTD_TAGS_UNIT_HPP__
+#endif   // __MSTD_TYPE_TRAITS_QUANTITY_TRAITS_HPP__
