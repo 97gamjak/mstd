@@ -23,7 +23,7 @@
 #ifndef __FUNCTIONAL_HPP__
 #define __FUNCTIONAL_HPP__
 
-namespace mstd::functional
+namespace mstd
 {
     /**
      * @brief Functor for addition.
@@ -54,6 +54,6 @@ namespace mstd::functional
         constexpr int operator()(int e) const { return e * K; }
     };
 
-}   // namespace mstd::functional
+}   // namespace mstd
 
 #endif   // __FUNCTIONAL_HPP__

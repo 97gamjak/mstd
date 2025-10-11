@@ -26,9 +26,8 @@
 #include "mstd/quantity.hpp"
 #include "test_utils.hpp"
 
-using namespace mstd::units;
-using namespace mstd::units::details;
-using namespace mstd::pack;
+using namespace mstd;
+using namespace mstd::details;
 
 // Small helper for cleaner static type asserts
 template <class A, class B>

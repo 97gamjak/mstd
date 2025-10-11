@@ -25,7 +25,7 @@
 
 #include "unit_operations.hpp"
 
-namespace mstd::units::details
+namespace mstd::details
 {
     /**
      * @brief Get the common unit type for two compatible units.
@@ -99,6 +99,6 @@ namespace mstd::units::details
     template <class U1, class U2>
     using common_unit_t = typename common_unit_impl<U1, U2>::type;
 
-}   // namespace mstd::units::details
+}   // namespace mstd::details
 
 #endif   // __MSTD_UNIT_COMMON_HPP__

@@ -25,10 +25,10 @@
 
 #include "mstd/pack.hpp"
 
-namespace mstd::units
+namespace mstd
 {
     // forward declaration
-    template <pack::details::IntegerPack SI, pack::details::IntegerPack Extra>
+    template <details::IntegerPack SI, details::IntegerPack Extra>
     struct dim;
 
     namespace details
@@ -37,7 +37,7 @@ namespace mstd::units
         template <typename>
         struct is_dim : std::false_type{};
 
-        template <pack::details::IntegerPack SI, pack::details::IntegerPack Extra>
+        template <details::IntegerPack SI, details::IntegerPack Extra>
         struct is_dim<dim<SI, Extra>> : std::true_type{};
         // clang-format on
 
@@ -118,6 +118,6 @@ namespace mstd::units
         concept ZeroDim = is_dimensionless_v<Dim>;
 
     }   // namespace details
-}   // namespace mstd::units
+}   // namespace mstd
 
 #endif   // __MSTD_DIM_DETAILS_HPP__

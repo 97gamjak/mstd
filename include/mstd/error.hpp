@@ -25,7 +25,7 @@
 
 #include <type_traits>
 
-namespace mstd::error
+namespace mstd
 {
     // clang-format off
     /**
@@ -37,9 +37,9 @@ namespace mstd::error
     struct always_false : std::false_type{};
     // clang-format on
 
-}   // namespace mstd::error
+}   // namespace mstd
 
 #define MSTD_COMPILE_FAIL(msg) \
-    static_assert(::mstd::error::always_false<void>::value, msg)
+    static_assert(::mstd::always_false<void>::value, msg)
 
 #endif   // __MSTD_ERROR_HPP__

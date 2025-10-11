@@ -29,7 +29,7 @@
 #include "unit.hpp"
 #include "unit_operations.hpp"
 
-namespace mstd::units
+namespace mstd
 {
     /*****************
      *               *
@@ -200,6 +200,6 @@ namespace mstd::units
 
     }   // namespace literals
 
-}   // namespace mstd::units
+}   // namespace mstd
 
 #endif   // __MSTD_UNIT_IMPL_HPP__

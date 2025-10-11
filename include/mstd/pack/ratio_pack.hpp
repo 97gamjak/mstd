@@ -40,7 +40,7 @@
  * and create common pack shapes.
  */
 
-namespace mstd::pack
+namespace mstd
 {
     /*********************
      *                   *
@@ -116,12 +116,12 @@ namespace mstd::pack
         typename details::make_default_ratio_pack<N>::type;
 
     /** Create a ratio_pack of size N with a single ratio R at index Idx. */
-    template <ratio::StdRatio R, size_t Idx, size_t N>
+    template <StdRatio R, size_t Idx, size_t N>
     using make_ratio_pack_single_t =
         decltype(details::make_ratio_pack_at_impl_R<R, Idx>(
             std::make_index_sequence<N>{}
         ));
 
-}   // namespace mstd::pack
+}   // namespace mstd
 
 #endif   // __MSTD_RATIO_PACK_HPP__

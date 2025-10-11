@@ -38,7 +38,7 @@
  * construction helpers, and detection traits used by the public interface.
  */
 
-namespace mstd::pack
+namespace mstd
 {
     template <class... Rs>
     struct ratio_pack;
@@ -91,7 +91,7 @@ namespace mstd::pack
         constexpr auto ratio_pack_pow_impl(std::index_sequence<I...>)
         {
             return ratio_pack<
-                ratio::ratio_pow_t<typename Pack::template type_at<I>, K>...>{};
+                ratio_pow_t<typename Pack::template type_at<I>, K>...>{};
         }
 
         /*********************
@@ -139,7 +139,7 @@ namespace mstd::pack
         template <size_t Idx, size_t... I>
         constexpr auto make_ratio_pack_at_impl(std::index_sequence<I...>)
         {
-            return pack::ratio_pack<
+            return ratio_pack<
                 std::
                     conditional_t<I == Idx, std::ratio<1>, std::ratio<1>>...>{};
         }
@@ -147,12 +147,12 @@ namespace mstd::pack
         template <class R, size_t Idx, size_t... I>
         constexpr auto make_ratio_pack_at_impl_R(std::index_sequence<I...>)
         {
-            return pack::ratio_pack<
+            return ratio_pack<
                 std::conditional_t<I == Idx, R, std::ratio<1>>...>{};
         }
 
     }   // namespace details
 
-}   // namespace mstd::pack
+}   // namespace mstd
 
 #endif   // __MSTD_RATIO_PACK_DETAILS_HPP__

@@ -28,8 +28,8 @@
 
 TEST_CASE("quantity construction and accessors", "[units]")
 {
-    using namespace mstd::units;
-    using namespace mstd::units::literals;
+    using namespace mstd;
+    using namespace mstd::literals;
 
     constexpr Length<m> one_meter{1.0};
     STATIC_REQUIRE(one_meter.value() == 1.0);
@@ -57,8 +57,8 @@ TEST_CASE("quantity construction and accessors", "[units]")
 
 TEST_CASE("quantity conversions and comparisons", "[units]")
 {
-    using namespace mstd::units;
-    using namespace mstd::units::literals;
+    using namespace mstd;
+    using namespace mstd::literals;
 
     STATIC_REQUIRE(same_dimension_v<cm, m>);
     STATIC_REQUIRE_FALSE(same_dimension_v<cm, kg>);
@@ -102,8 +102,8 @@ TEST_CASE("quantity conversions and comparisons", "[units]")
 
 TEST_CASE("quantity arithmetic for compatible units", "[units]")
 {
-    using namespace mstd::units;
-    using namespace mstd::units::literals;
+    using namespace mstd;
+    using namespace mstd::literals;
 
     const Length<m>      a{2.0};
     const Length<m, int> b{3};
@@ -151,8 +151,8 @@ TEST_CASE("quantity arithmetic for compatible units", "[units]")
 
 TEST_CASE("quantity interaction with scalars", "[units]")
 {
-    using namespace mstd::units;
-    using namespace mstd::units::literals;
+    using namespace mstd;
+    using namespace mstd::literals;
 
     const Length<m> base_length{1.5};
     const auto      stretched = base_length * 2;

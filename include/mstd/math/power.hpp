@@ -23,7 +23,7 @@
 #ifndef __MSTD_MATH_POWER_HPP__
 #define __MSTD_MATH_POWER_HPP__
 
-namespace mstd::math
+namespace mstd
 {
 
     template <typename T>
@@ -43,6 +43,6 @@ namespace mstd::math
         return result;
     }
 
-}   // namespace mstd::math
+}   // namespace mstd
 
 #endif   // __MSTD_MATH_POWER_HPP__

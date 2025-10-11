@@ -29,7 +29,7 @@
 #include "unit_common.hpp"
 #include "unit_operations.hpp"
 
-namespace mstd::units
+namespace mstd
 {
 
     /**
@@ -361,6 +361,6 @@ namespace mstd::units
         return quantity<U, R>(static_cast<R>(q.value()) / static_cast<R>(s));
     }
 
-}   // namespace mstd::units
+}   // namespace mstd
 
 #endif   // __MSTD_UNITS_QUANTITY_HPP__

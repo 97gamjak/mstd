@@ -26,7 +26,7 @@
 #include "quantity.hpp"
 #include "unit_impl.hpp"
 
-namespace mstd::units
+namespace mstd
 {
     /***************************
      *                         *
@@ -91,6 +91,6 @@ namespace mstd::units
     template <energy_unit U, class Rep = double>
     using Energy = quantity<U, Rep>;
 
-}   // namespace mstd::units
+}   // namespace mstd
 
 #endif   // __MSTD_UNITS_QUANTITY_IMPL_HPP__

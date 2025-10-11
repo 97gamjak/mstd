@@ -37,7 +37,7 @@
  * real scaling factors and ratio/global-ratio composition.
  */
 
-namespace mstd::units::details
+namespace mstd::details
 {
     /*****************
      *               *
@@ -58,7 +58,7 @@ namespace mstd::units::details
     /**
      * @brief Traits for `unit<Dim, Ratio, GlobalRatio>`.
      */
-    template <class Dim, class Ratio, ratio::StdRatio GlobalRatio>
+    template <class Dim, class Ratio, StdRatio GlobalRatio>
     struct unit_traits<unit<Dim, Ratio, GlobalRatio>>
     {
         using dim    = Dim;
@@ -71,11 +71,7 @@ namespace mstd::units::details
     /**
      * @brief Traits for `real_unit<Dim, F, Ratio, GlobalRatio>`.
      */
-    template <
-        class Dim,
-        long double F,
-        class Ratio,
-        ratio::StdRatio GlobalRatio>
+    template <class Dim, long double F, class Ratio, StdRatio GlobalRatio>
     struct unit_traits<real_unit<Dim, F, Ratio, GlobalRatio>>
     {
         using dim    = Dim;
@@ -101,25 +97,17 @@ namespace mstd::units::details
         class Dim,
         long double FactorToSI,
         class Ratio,
-        ratio::StdRatio GlobalRatio,
-        bool            AnyReal>
+        StdRatio GlobalRatio,
+        bool     AnyReal>
     struct build_unit_impl;
 
-    template <
-        class Dim,
-        long double F,
-        class Ratio,
-        ratio::StdRatio GlobalRatio>
+    template <class Dim, long double F, class Ratio, StdRatio GlobalRatio>
     struct build_unit_impl<Dim, F, Ratio, GlobalRatio, false>
     {
         using type = unit<Dim, Ratio, GlobalRatio>;
     };
 
-    template <
-        class Dim,
-        long double F,
-        class Ratio,
-        ratio::StdRatio GlobalRatio>
+    template <class Dim, long double F, class Ratio, StdRatio GlobalRatio>
     struct build_unit_impl<Dim, F, Ratio, GlobalRatio, true>
     {
         using type = real_unit<Dim, F, Ratio, GlobalRatio>;
@@ -129,8 +117,8 @@ namespace mstd::units::details
         class Dim,
         long double FactorToSI,
         class Ratio,
-        ratio::StdRatio GlobalRatio,
-        bool            AnyReal>
+        StdRatio GlobalRatio,
+        bool     AnyReal>
     using build_unit_t = typename build_unit_impl<
         Dim,
         FactorToSI,
@@ -245,8 +233,8 @@ namespace mstd::units::details
         using T      = unit_traits<Unit>;
         using dim    = dim_pow_t<typename T::dim, Exp>;
         using ratio  = dim_ratio_pow_t<typename T::ratio, Exp>;
-        using global = ratio::template ratio_pow_t<typename T::global, Exp>;
-        static constexpr long double factor   = math::power(T::factor, Exp);
+        using global = ratio_pow_t<typename T::global, Exp>;
+        static constexpr long double factor   = power(T::factor, Exp);
         static constexpr bool        any_real = T::is_real;
         using type = build_unit_t<dim, factor, ratio, global, any_real>;
     };
@@ -255,6 +243,6 @@ namespace mstd::units::details
     inline constexpr bool has_dim_v =
         std::is_same_v<typename unit_traits<Unit>::dim, Dim>;
 
-}   // namespace mstd::units::details
+}   // namespace mstd::details
 
 #endif   // __MSTD_UNITS_DETAILS_HPP__
