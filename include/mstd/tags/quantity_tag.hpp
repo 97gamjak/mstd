@@ -20,15 +20,15 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_TAGS_UNIT_HPP__
-#define __MSTD_TAGS_UNIT_HPP__
+#ifndef __MSTD_TAGS_QUANTITY_HPP__
+#define __MSTD_TAGS_QUANTITY_HPP__
 
 namespace mstd
 {
-    struct unit_tag
+    struct quantity_tag
     {
     };
 
 }   // namespace mstd
 
-#endif   // __MSTD_TAGS_UNIT_HPP__
+#endif   // __MSTD_TAGS_QUANTITY_HPP__
