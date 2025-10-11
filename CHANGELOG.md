@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 ### Breaking Changes
 
 - all pre-defined units with a division like `mps` are not used like `m_per_s`
+- remove all `sub-namespaces` besides `mstd` and `details`  
 
 <!-- insertion marker -->
 ## [0.0.1](https://github.com/97gamjak/mstd/releases/tag/0.0.1) - 2025-10-04

@@ -26,7 +26,7 @@
 #include <concepts>
 #include <ratio>
 
-namespace mstd::ratio
+namespace mstd
 {
 
     namespace details
@@ -84,10 +84,13 @@ namespace mstd::ratio
         { T::den } -> std::convertible_to<long long>;
     };
 
+    template <typename T>
+    inline constexpr long double ratio_v = 1.0L;
+
     template <StdRatio T>
-    static constexpr long double ratio_v =
+    static constexpr long double ratio_v<T> =
         static_cast<long double>(T::num) / static_cast<long double>(T::den);
 
-}   // namespace mstd::ratio
+}   // namespace mstd
 
 #endif   // __MSTD_UNITS_RATIO_HPP__

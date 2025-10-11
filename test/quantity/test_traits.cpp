@@ -7,7 +7,7 @@
 TEST_CASE("type_trait", "[units]")
 {
     using namespace mstd;
-    MSTD_STATIC_REQUIRE(is_unit_v<units::literals::cm>);
-    MSTD_STATIC_REQUIRE(is_unit_v<units::literals::m>);
-    MSTD_STATIC_REQUIRE(is_unit_v<units::literals::kg>);
+    MSTD_STATIC_REQUIRE(is_unit_v<literals::cm>);
+    MSTD_STATIC_REQUIRE(is_unit_v<literals::m>);
+    MSTD_STATIC_REQUIRE(is_unit_v<literals::kg>);
 }

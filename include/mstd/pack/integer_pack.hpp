@@ -37,7 +37,7 @@
  * pack operations (add, sub, scale) and simple factory aliases.
  */
 
-namespace mstd::pack
+namespace mstd
 {
     /***********************
      *                     *
@@ -103,13 +103,13 @@ namespace mstd::pack
      *************************/
     /** Add two packs element-wise. */
     template <class A, class B>
-    using pack_add_t = details::pack_zip_t<A, B, functional::add_fn>;
+    using pack_add_t = details::pack_zip_t<A, B, add_fn>;
     /** Subtract two packs element-wise. */
     template <class A, class B>
-    using pack_sub_t = details::pack_zip_t<A, B, functional::sub_fn>;
+    using pack_sub_t = details::pack_zip_t<A, B, sub_fn>;
     /** Scale a pack by a compile-time integer K. */
     template <class P, int K>
-    using pack_scale_t = details::pack_map_t<P, functional::scale_fn<K>>;
+    using pack_scale_t = details::pack_map_t<P, scale_fn<K>>;
 
     /*********************
      *                   *
@@ -126,6 +126,6 @@ namespace mstd::pack
     using make_single_integer_pack_t =
         typename details::make_single_integer_pack<N, Ix, I>::type;
 
-}   // namespace mstd::pack
+}   // namespace mstd
 
 #endif   // __MSTD_INTEGER_PACK_HPP__

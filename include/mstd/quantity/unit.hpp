@@ -29,7 +29,7 @@
 #include "mstd/ratio.hpp"
 #include "mstd/tags/unit_tag.hpp"
 
-namespace mstd::units
+namespace mstd
 {
     /**
      * @brief placeholder for a unit
@@ -46,7 +46,7 @@ namespace mstd::units
     template <
         typename Dim,
         typename RatioDim,
-        ratio::StdRatio GlobalRatio = std::ratio<1>>
+        StdRatio GlobalRatio = std::ratio<1>>
     struct unit : public unit_tag
     {
         MSTD_COMPILE_FAIL("unit must be specialized");
@@ -63,7 +63,7 @@ namespace mstd::units
     template <
         details::DimType  Dim,
         details::DimRatio RatioDim,
-        ratio::StdRatio   GlobalRatio>
+        StdRatio          GlobalRatio>
     struct unit<Dim, RatioDim, GlobalRatio> : public unit_tag
     {
         using dim    = Dim;
@@ -79,10 +79,7 @@ namespace mstd::units
      * @tparam Ratio
      * @tparam GlobalRatio
      */
-    template <
-        details::SimpleDim Dim,
-        ratio::StdRatio    Ratio,
-        ratio::StdRatio    GlobalRatio>
+    template <details::SimpleDim Dim, StdRatio Ratio, StdRatio GlobalRatio>
     struct unit<Dim, Ratio, GlobalRatio> : public unit_tag
     {
         using dim    = Dim;
@@ -97,7 +94,7 @@ namespace mstd::units
      * @tparam Dim
      * @tparam GlobalRatio
      */
-    template <details::DimType Dim, ratio::StdRatio GlobalRatio>
+    template <details::DimType Dim, StdRatio GlobalRatio>
     struct unit<Dim, std::ratio<1>, GlobalRatio> : public unit_tag
     {
         using dim    = Dim;
@@ -117,15 +114,13 @@ namespace mstd::units
         details::DimType Dim,
         long double      F,
         typename DimRatioOrRatio,
-        ratio::StdRatio GlobalRatio = std::ratio<1>>
-    requires(
-        ratio::StdRatio<DimRatioOrRatio> || details::DimRatio<DimRatioOrRatio>
-    )
+        StdRatio GlobalRatio = std::ratio<1>>
+    requires(StdRatio<DimRatioOrRatio> || details::DimRatio<DimRatioOrRatio>)
     struct real_unit : unit<Dim, DimRatioOrRatio, GlobalRatio>
     {
         static constexpr long double factor = F;
     };
 
-}   // namespace mstd::units
+}   // namespace mstd
 
 #endif   // __MSTD_UNITS_UNIT_HPP__

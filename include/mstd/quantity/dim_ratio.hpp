@@ -27,7 +27,7 @@
 #include "enums.hpp"
 #include "mstd/pack.hpp"
 
-namespace mstd::units
+namespace mstd
 {
     /***********************
      *                     *
@@ -38,15 +38,14 @@ namespace mstd::units
     /**
      * @brief default_si_ratio_pack, which is a ratio_pack of all SI dimensions
      */
-    using default_si_ratio_pack =
-        pack::make_default_ratio_pack_t<SIDimIdMeta::size>;
+    using default_si_ratio_pack = make_default_ratio_pack_t<SIDimIdMeta::size>;
 
     /**
      * @brief default_extra_ratio_pack, which is a ratio_pack of all Extra
      * dimensions
      */
     using default_extra_ratio_pack =
-        pack::make_default_ratio_pack_t<ExtraDimIdMeta::size>;
+        make_default_ratio_pack_t<ExtraDimIdMeta::size>;
 
     /***********************
      *                     *
@@ -61,15 +60,15 @@ namespace mstd::units
      * of a quantity. It contains two compile time lists of ratios.
      * The first list is for the SI dimensions and the second list is for the
      * Extra dimensions.
-     * @tparam SiRatioPack    A `pack::ratio_pack` representing the SI
+     * @tparam SiRatioPack    A `ratio_pack` representing the SI
      * dimension ratios.
-     * @tparam ExtraRatioPack A `pack::ratio_pack` representing the Extra
+     * @tparam ExtraRatioPack A `ratio_pack` representing the Extra
      * dimension ratios.
      *
      */
     template <
-        pack::details::RatioPack SiRatioPack    = default_si_ratio_pack,
-        pack::details::RatioPack ExtraRatioPack = default_extra_ratio_pack>
+        details::RatioPack SiRatioPack    = default_si_ratio_pack,
+        details::RatioPack ExtraRatioPack = default_extra_ratio_pack>
     struct dim_ratio
     {
         // putting static asserts instead of requires to make forward
@@ -122,8 +121,8 @@ namespace mstd::units
      */
     template <details::DimRatio Ratio1, details::DimRatio Ratio2>
     using dim_ratio_mul_t = dim_ratio<
-        pack::ratio_pack_mul_t<typename Ratio1::si, typename Ratio2::si>,
-        pack::ratio_pack_mul_t<typename Ratio1::ex, typename Ratio2::ex>>;
+        ratio_pack_mul_t<typename Ratio1::si, typename Ratio2::si>,
+        ratio_pack_mul_t<typename Ratio1::ex, typename Ratio2::ex>>;
 
     /**
      * @brief dim_ratio division
@@ -134,8 +133,8 @@ namespace mstd::units
      */
     template <details::DimRatio Ratio1, details::DimRatio Ratio2>
     using dim_ratio_div_t = dim_ratio<
-        pack::ratio_pack_div_t<typename Ratio1::si, typename Ratio2::si>,
-        pack::ratio_pack_div_t<typename Ratio1::ex, typename Ratio2::ex>>;
+        ratio_pack_div_t<typename Ratio1::si, typename Ratio2::si>,
+        ratio_pack_div_t<typename Ratio1::ex, typename Ratio2::ex>>;
 
     /**
      * @brief dim_ratio power
@@ -146,8 +145,8 @@ namespace mstd::units
      */
     template <details::DimRatio Ratio, int Exp>
     using dim_ratio_pow_t = dim_ratio<
-        pack::ratio_pack_pow_t<typename Ratio::si, Exp>,
-        pack::ratio_pack_pow_t<typename Ratio::ex, Exp>>;
+        ratio_pack_pow_t<typename Ratio::si, Exp>,
+        ratio_pack_pow_t<typename Ratio::ex, Exp>>;
 
     /***************************************
      *                                     *
@@ -162,10 +161,10 @@ namespace mstd::units
      * @tparam R
      * @return the resulting dim_ratio
      */
-    template <details::SimpleDim Dim, ratio::StdRatio Ratio>
+    template <details::SimpleDim Dim, StdRatio Ratio>
     using make_dim_ratio_single_t =
         typename details::make_dim_ratio_single<Dim, Ratio>::type;
 
-}   // namespace mstd::units
+}   // namespace mstd
 
 #endif   // __MSTD_DIM_RATIO_HPP__

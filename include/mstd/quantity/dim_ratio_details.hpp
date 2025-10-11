@@ -26,10 +26,10 @@
 #include "dim_details.hpp"
 #include "mstd/pack.hpp"
 
-namespace mstd::units
+namespace mstd
 {
     // forward declaration
-    template <pack::details::RatioPack Si, pack::details::RatioPack Extra>
+    template <details::RatioPack Si, details::RatioPack Extra>
     struct dim_ratio;
 
     namespace details
@@ -80,7 +80,7 @@ namespace mstd::units
          * @tparam Dim - has to be a simple base dimension
          * @tparam Ratio
          */
-        template <details::SimpleDim Dim, ratio::StdRatio Ratio>
+        template <details::SimpleDim Dim, StdRatio Ratio>
         struct make_dim_ratio_single
         {
             static constexpr bool has_si = has_si_dim<Dim>();
@@ -99,8 +99,8 @@ namespace mstd::units
             static constexpr size_t default_size = has_si ? ex_size : si_size;
 
             // make the ratio packs
-            using default_pack = pack::make_default_ratio_pack_t<default_size>;
-            using new_pack = pack::make_ratio_pack_single_t<Ratio, index, size>;
+            using default_pack = make_default_ratio_pack_t<default_size>;
+            using new_pack     = make_ratio_pack_single_t<Ratio, index, size>;
 
             // make the si and ex packs
             using si = std::conditional_t<has_si, new_pack, default_pack>;
@@ -115,6 +115,6 @@ namespace mstd::units
 
     }   // namespace details
 
-}   // namespace mstd::units
+}   // namespace mstd
 
 #endif   // __MSTD_DIM_RATIO_DETAILS_HPP__

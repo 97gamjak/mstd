@@ -36,7 +36,7 @@
  * by the public `integer_pack` interface and its aliases.
  */
 
-namespace mstd::pack
+namespace mstd
 {
     template <int... T>
     struct integer_pack;
@@ -182,6 +182,6 @@ namespace mstd::pack
 
     }   // namespace details
 
-}   // namespace mstd::pack
+}   // namespace mstd
 
 #endif   // __MSTD_INTEGER_PACK_DETAILS_HPP__

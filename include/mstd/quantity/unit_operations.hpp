@@ -36,7 +36,7 @@
  * relative to SI from a unit's ratio, global ratio, and real factor.
  */
 
-namespace mstd::units
+namespace mstd
 {
 
     /**
@@ -97,15 +97,15 @@ namespace mstd::units
      * Product of the dimensional ratio components (SI and extra ratio pack)
      * and the unit's global ratio.
      *
+     * @details this is a partial specialization
+     *
      * @tparam Unit Unit to query
      */
-    template <class Unit>
-    inline constexpr long double ratio_v =
-        pack::details::ratio_pack_v<
-            typename details::unit_traits<Unit>::ratio::si> *
-        pack::details::ratio_pack_v<
-            typename details::unit_traits<Unit>::ratio::ex> *
-        ratio::ratio_v<typename details::unit_traits<Unit>::global>;
+    template <UnitType Unit>
+    inline constexpr long double ratio_v<Unit> =
+        details::ratio_pack_v<typename details::unit_traits<Unit>::ratio::si> *
+        details::ratio_pack_v<typename details::unit_traits<Unit>::ratio::ex> *
+        ratio_v<typename details::unit_traits<Unit>::global>;
 
     /**
      * @brief Real scaling factor attached to a unit.
@@ -128,6 +128,6 @@ namespace mstd::units
     template <class Unit>
     inline constexpr long double scale_v = factor_v<Unit> * ratio_v<Unit>;
 
-}   // namespace mstd::units
+}   // namespace mstd
 
 #endif   // __MSTD_UNIT_OPERATIONS_HPP__
