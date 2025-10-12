@@ -40,29 +40,64 @@ namespace mstd
         SIDimIdMeta::size,
         SIDimIdMeta::to_underlying(SIDimId::Length)>;
 
+    using si_inverse_length = make_single_integer_pack_t<
+        SIDimIdMeta::size,
+        SIDimIdMeta::to_underlying(SIDimId::Length),
+        -1>;
+
     using si_mass = make_single_integer_pack_t<
         SIDimIdMeta::size,
         SIDimIdMeta::to_underlying(SIDimId::Mass)>;
+
+    using si_inverse_mass = make_single_integer_pack_t<
+        SIDimIdMeta::size,
+        SIDimIdMeta::to_underlying(SIDimId::Mass),
+        -1>;
 
     using si_time = make_single_integer_pack_t<
         SIDimIdMeta::size,
         SIDimIdMeta::to_underlying(SIDimId::Time)>;
 
+    using si_inverse_time = make_single_integer_pack_t<
+        SIDimIdMeta::size,
+        SIDimIdMeta::to_underlying(SIDimId::Time),
+        -1>;
+
     using si_current = make_single_integer_pack_t<
         SIDimIdMeta::size,
         SIDimIdMeta::to_underlying(SIDimId::Current)>;
+
+    using si_inverse_current = make_single_integer_pack_t<
+        SIDimIdMeta::size,
+        SIDimIdMeta::to_underlying(SIDimId::Current),
+        -1>;
 
     using si_temperature = make_single_integer_pack_t<
         SIDimIdMeta::size,
         SIDimIdMeta::to_underlying(SIDimId::Temperature)>;
 
+    using si_inverse_temperature = make_single_integer_pack_t<
+        SIDimIdMeta::size,
+        SIDimIdMeta::to_underlying(SIDimId::Temperature),
+        -1>;
+
     using si_amount = make_single_integer_pack_t<
         SIDimIdMeta::size,
         SIDimIdMeta::to_underlying(SIDimId::Amount)>;
 
+    using si_inverse_amount = make_single_integer_pack_t<
+        SIDimIdMeta::size,
+        SIDimIdMeta::to_underlying(SIDimId::Amount),
+        -1>;
+
     using si_luminous = make_single_integer_pack_t<
         SIDimIdMeta::size,
         SIDimIdMeta::to_underlying(SIDimId::Luminous)>;
+
+    using si_inverse_luminous = make_single_integer_pack_t<
+        SIDimIdMeta::size,
+        SIDimIdMeta::to_underlying(SIDimId::Luminous),
+        -1>;
 
     using ex_one = make_default_integer_pack_t<ExtraDimIdMeta::size>;
 
@@ -70,17 +105,37 @@ namespace mstd
         ExtraDimIdMeta::size,
         ExtraDimIdMeta::to_underlying(ExtraDimId::Angle)>;
 
+    using ex_inverse_angle = make_single_integer_pack_t<
+        ExtraDimIdMeta::size,
+        ExtraDimIdMeta::to_underlying(ExtraDimId::Angle),
+        -1>;
+
     using ex_currency = make_single_integer_pack_t<
         ExtraDimIdMeta::size,
         ExtraDimIdMeta::to_underlying(ExtraDimId::Currency)>;
+
+    using ex_inverse_currency = make_single_integer_pack_t<
+        ExtraDimIdMeta::size,
+        ExtraDimIdMeta::to_underlying(ExtraDimId::Currency),
+        -1>;
 
     using ex_info = make_single_integer_pack_t<
         ExtraDimIdMeta::size,
         ExtraDimIdMeta::to_underlying(ExtraDimId::Info)>;
 
+    using ex_inverse_info = make_single_integer_pack_t<
+        ExtraDimIdMeta::size,
+        ExtraDimIdMeta::to_underlying(ExtraDimId::Info),
+        -1>;
+
     using ex_count = make_single_integer_pack_t<
         ExtraDimIdMeta::size,
         ExtraDimIdMeta::to_underlying(ExtraDimId::Count)>;
+
+    using ex_inverse_count = make_single_integer_pack_t<
+        ExtraDimIdMeta::size,
+        ExtraDimIdMeta::to_underlying(ExtraDimId::Count),
+        -1>;
 
     /**********************
      *                    *
@@ -98,6 +153,17 @@ namespace mstd
     using dim_amount   = Dim<si_amount, ex_one>;
     using dim_luminous = Dim<si_luminous, ex_one>;
 
+    using dim_inv_length = Dim<si_length, ex_count>;
+    using dim_inv_mass   = Dim<si_inverse_mass, ex_count>;
+    using dim_inv_time   = Dim<si_inverse_time, ex_count>;
+    using dim_inv_count  = Dim<si_one, ex_inverse_count>;
+    using dim_inv_angle  = Dim<si_one, ex_inverse_angle>;
+    using dim_inv_info   = Dim<si_one, ex_inverse_info>;
+    using dim_inv_curr   = Dim<si_inverse_current, ex_count>;
+    using dim_inv_temp   = Dim<si_inverse_temperature, ex_count>;
+    using dim_inv_amount = Dim<si_inverse_amount, ex_count>;
+    using dim_inv_lum    = Dim<si_inverse_luminous, ex_count>;
+
     /********************
      *                  *
      * Other base units *
@@ -107,6 +173,10 @@ namespace mstd
     using dim_angle    = Dim<si_one, ex_angle>;
     using dim_currency = Dim<si_one, ex_currency>;
     using dim_info     = Dim<si_one, ex_info>;
+
+    using dim_inv_angle    = Dim<si_one, ex_inverse_angle>;
+    using dim_inv_currency = Dim<si_one, ex_inverse_currency>;
+    using dim_inv_info     = Dim<si_one, ex_inverse_info>;
 
     /************************
      *                      *
@@ -122,6 +192,15 @@ namespace mstd
     using dim_force        = dim_mul_t<dim_mass, dim_acceleration>;
     using dim_energy       = dim_mul_t<dim_force, dim_length>;
     using dim_power        = dim_div_t<dim_energy, dim_time>;
+
+    using dim_inv_area         = dim_mul_t<dim_inv_length, dim_inv_length>;
+    using dim_inv_volume       = dim_mul_t<dim_inv_area, dim_inv_length>;
+    using dim_inv_density      = dim_div_t<dim_inv_mass, dim_inv_volume>;
+    using dim_inv_velocity     = dim_div_t<dim_inv_length, dim_inv_time>;
+    using dim_inv_acceleration = dim_div_t<dim_inv_velocity, dim_inv_time>;
+    using dim_inv_force        = dim_mul_t<dim_inv_mass, dim_inv_acceleration>;
+    using dim_inv_energy       = dim_mul_t<dim_inv_force, dim_inv_length>;
+    using dim_inv_power        = dim_div_t<dim_inv_energy, dim_inv_time>;
 
 }   // namespace mstd
 

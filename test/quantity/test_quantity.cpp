@@ -192,3 +192,17 @@ TEST_CASE("quantity interaction with scalars", "[units]")
         same_dimension_v<typename decltype(dimensionless_ratio)::unit, unitless>
     );
 }
+
+TEST_CASE("quantity multiplication", "[units]")
+{
+    using namespace mstd;
+    using namespace mstd::literals;
+
+    const Time<s> time{10.0};
+    // const Time<unit_div_t<unitless, s>> inv_time{0.1};
+    using unit = Unit<dim_inv_time>;
+    const Time<unit> inv_time{0.1};
+
+    const auto check = time * inv_time;
+    REQUIRE(check.baseValue() == Catch::Approx(1.0));
+}

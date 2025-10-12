@@ -40,47 +40,47 @@ namespace mstd
 
     // clang-format off
     template <class U>
-    concept length_unit = has_dim_v<U, dim_length>;
+    concept length_unit = has_dim_v<U, dim_length> || has_dim_v<U, dim_inv_length>;
     template <class U>
-    concept mass_unit = has_dim_v<U, dim_mass>;
+    concept mass_unit = has_dim_v<U, dim_mass> || has_dim_v<U, dim_inv_mass>;
     template <class U>
-    concept time_unit = has_dim_v<U, dim_time>;
+    concept time_unit = has_dim_v<U, dim_time> || has_dim_v<U, dim_inv_time>;
     template <class U>
-    concept current_unit = has_dim_v<U, dim_current>;
+    concept current_unit = has_dim_v<U, dim_current> || has_dim_v<U, dim_inv_curr>;
     template <class U>
-    concept temperature_unit = has_dim_v<U, dim_temp>;
+    concept temperature_unit = has_dim_v<U, dim_temp> || has_dim_v<U, dim_inv_temp>;
     template <class U>
-    concept amount_unit = has_dim_v<U, dim_amount>;
+    concept amount_unit = has_dim_v<U, dim_amount> || has_dim_v<U, dim_inv_amount>;
     template <class U>
-    concept luminous_unit = has_dim_v<U, dim_luminous>;
+    concept luminous_unit = has_dim_v<U, dim_luminous> || has_dim_v<U, dim_inv_lum>;
 
     template <class U>
-    concept angle_unit = has_dim_v<U, dim_angle>;
+    concept angle_unit = has_dim_v<U, dim_angle> || has_dim_v<U, dim_inv_angle>;
     template <class U>
-    concept currency_unit = has_dim_v<U, dim_currency>;
+    concept currency_unit = has_dim_v<U, dim_currency> || has_dim_v<U, dim_inv_currency>;
     template <class U>
-    concept info_unit = has_dim_v<U, dim_info>;
+    concept info_unit = has_dim_v<U, dim_info> || has_dim_v<U, dim_inv_info>;
     template <class U>
     concept scalar_unit = has_dim_v<U, dim_scalar>;
     template <class U>
     concept dimensionless_unit = scalar_unit<U> && std::is_same_v<typename U::ratio, std::ratio<1>>;
 
     template <class U>
-    concept area_unit = has_dim_v<U, dim_area>;
+    concept area_unit = has_dim_v<U, dim_area> || has_dim_v<U, dim_inv_area>;
     template <class U>
-    concept volume_unit = has_dim_v<U, dim_volume>;
+    concept volume_unit = has_dim_v<U, dim_volume> || has_dim_v<U, dim_inv_volume>;
     template <class U>
-    concept density_unit = has_dim_v<U, dim_density>;
+    concept density_unit = has_dim_v<U, dim_density> || has_dim_v<U, dim_inv_density>;
     template <class U>
-    concept velocity_unit = has_dim_v<U, dim_velocity>;
+    concept velocity_unit = has_dim_v<U, dim_velocity> || has_dim_v<U, dim_inv_velocity>;
     template <class U>
-    concept acceleration_unit = has_dim_v<U, dim_acceleration>;
+    concept acceleration_unit = has_dim_v<U, dim_acceleration> || has_dim_v<U, dim_inv_acceleration>;
     template <class U>
-    concept force_unit = has_dim_v<U, dim_force>;
+    concept force_unit = has_dim_v<U, dim_force> || has_dim_v<U, dim_inv_force>;
     template <class U>
-    concept energy_unit = has_dim_v<U, dim_energy>;
+    concept energy_unit = has_dim_v<U, dim_energy> || has_dim_v<U, dim_inv_energy>;
     template <class U>
-    concept power_unit = has_dim_v<U, dim_power>;
+    concept power_unit = has_dim_v<U, dim_power> || has_dim_v<U, dim_inv_power>;
     // clang-format on
 
     /***********************
@@ -111,7 +111,7 @@ namespace mstd
 
         static constexpr long double __CAL_TO_J__ = 4.184L;
 
-        using unitless = Unit<dim_scalar, length_dim_ratio<>>;
+        using unitless = Unit<dim_scalar>;
 
         using km  = Unit<dim_length, length_dim_ratio<std::kilo>>;
         using m   = Unit<dim_length, length_dim_ratio<>>;
