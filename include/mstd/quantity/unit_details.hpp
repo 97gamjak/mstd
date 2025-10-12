@@ -39,93 +39,6 @@
 
 namespace mstd::details
 {
-    /*****************
-     *               *
-     * Unit traits   *
-     *               *
-     *****************/
-
-    /**
-     * @brief Trait carrier for unit-like types.
-     *
-     * Primary template left undefined; only specific unit forms are
-     * specialized below to expose `dim`, `ratio`, `global`, `factor`, and
-     * whether a type is a real unit (`is_real`).
-     */
-    template <class U>
-    struct unit_traits;
-
-    /**
-     * @brief Traits for `unit<Dim, Ratio, GlobalRatio>`.
-     */
-    template <class Dim, class Ratio, StdRatio GlobalRatio>
-    struct unit_traits<unit<Dim, Ratio, GlobalRatio>>
-    {
-        using dim    = Dim;
-        using ratio  = typename unit<Dim, Ratio, GlobalRatio>::ratio;
-        using global = GlobalRatio;
-        static constexpr long double factor  = 1.0L;
-        static constexpr bool        is_real = false;
-    };
-
-    /**
-     * @brief Traits for `real_unit<Dim, F, Ratio, GlobalRatio>`.
-     */
-    template <class Dim, long double F, class Ratio, StdRatio GlobalRatio>
-    struct unit_traits<real_unit<Dim, F, Ratio, GlobalRatio>>
-    {
-        using dim    = Dim;
-        using ratio  = typename real_unit<Dim, F, Ratio, GlobalRatio>::ratio;
-        using global = GlobalRatio;
-        static constexpr long double factor  = F;
-        static constexpr bool        is_real = true;
-    };
-
-    /*************************
-     *                       *
-     * Build unit selection  *
-     *                       *
-     *************************/
-
-    /**
-     * @brief Selects `unit` vs `real_unit` based on factor and flags.
-     *
-     * If `AnyReal` is true or `FactorToSI != 1`, the resulting type is a
-     * `real_unit`; otherwise it is a plain `unit`.
-     */
-    template <
-        class Dim,
-        long double FactorToSI,
-        class Ratio,
-        StdRatio GlobalRatio,
-        bool     AnyReal>
-    struct build_unit_impl;
-
-    template <class Dim, long double F, class Ratio, StdRatio GlobalRatio>
-    struct build_unit_impl<Dim, F, Ratio, GlobalRatio, false>
-    {
-        using type = unit<Dim, Ratio, GlobalRatio>;
-    };
-
-    template <class Dim, long double F, class Ratio, StdRatio GlobalRatio>
-    struct build_unit_impl<Dim, F, Ratio, GlobalRatio, true>
-    {
-        using type = real_unit<Dim, F, Ratio, GlobalRatio>;
-    };
-
-    template <
-        class Dim,
-        long double FactorToSI,
-        class Ratio,
-        StdRatio GlobalRatio,
-        bool     AnyReal>
-    using build_unit_t = typename build_unit_impl<
-        Dim,
-        FactorToSI,
-        Ratio,
-        GlobalRatio,
-        (AnyReal || (FactorToSI != static_cast<long double>(1)))>::type;
-
     /************************
      *                      *
      * Operation back-ends  *
@@ -138,19 +51,17 @@ namespace mstd::details
      * Multiplies dimensions, composes dim ratios and global ratios, and
      * multiplies real factors. Chooses `unit` or `real_unit` accordingly.
      */
-    template <class Unit1, class Unit2>
+    template <class U1, class U2>
     struct unit_mul_impl
     {
-        using T1    = unit_traits<Unit1>;
-        using T2    = unit_traits<Unit2>;
-        using dim   = dim_mul_t<typename T1::dim, typename T2::dim>;
-        using ratio = dim_ratio_mul_t<typename T1::ratio, typename T2::ratio>;
+        using dim   = dim_mul_t<typename U1::dim, typename U2::dim>;
+        using ratio = dim_ratio_mul_t<typename U1::ratio, typename U2::ratio>;
         using global =
-            std::ratio_multiply<typename T1::global, typename T2::global>;
+            std::ratio_multiply<typename U1::global, typename U2::global>;
 
-        static constexpr long double f        = T1::factor * T2::factor;
-        static constexpr bool        any_real = T1::is_real || T2::is_real;
-        using type = build_unit_t<dim, f, ratio, global, any_real>;
+        static constexpr long double f        = U1::factor * U2::factor;
+        static constexpr bool        any_real = U1::is_real || U2::is_real;
+        using type                            = unit<dim, ratio, global, f>;
     };
 
     /**
@@ -206,19 +117,17 @@ namespace mstd::details
      * Divides dimensions, composes dim ratios and global ratios, and divides
      * real factors. Chooses `unit` or `real_unit` accordingly.
      */
-    template <class Unit1, class Unit2>
+    template <class U1, class U2>
     struct unit_div_impl
     {
-        using T1    = unit_traits<Unit1>;
-        using T2    = unit_traits<Unit2>;
-        using dim   = dim_div_t<typename T1::dim, typename T2::dim>;
-        using ratio = dim_ratio_div_t<typename T1::ratio, typename T2::ratio>;
+        using dim   = dim_div_t<typename U1::dim, typename U2::dim>;
+        using ratio = dim_ratio_div_t<typename U1::ratio, typename U2::ratio>;
         using global =
-            std::ratio_divide<typename T1::global, typename T2::global>;
+            std::ratio_divide<typename U1::global, typename U2::global>;
 
-        static constexpr long double factor   = T1::factor / T2::factor;
-        static constexpr bool        any_real = T1::is_real || T2::is_real;
-        using type = build_unit_t<dim, factor, ratio, global, any_real>;
+        static constexpr long double factor   = U1::factor / U2::factor;
+        static constexpr bool        any_real = U1::is_real || U2::is_real;
+        using type = unit<dim, ratio, global, factor>;
     };
 
     /**
@@ -230,18 +139,18 @@ namespace mstd::details
     template <class Unit, int Exp>
     struct unit_pow_impl
     {
-        using T      = unit_traits<Unit>;
-        using dim    = dim_pow_t<typename T::dim, Exp>;
-        using ratio  = dim_ratio_pow_t<typename T::ratio, Exp>;
-        using global = ratio_pow_t<typename T::global, Exp>;
-        static constexpr long double factor   = power(T::factor, Exp);
-        static constexpr bool        any_real = T::is_real;
-        using type = build_unit_t<dim, factor, ratio, global, any_real>;
+        using dim    = dim_pow_t<typename Unit::dim, Exp>;
+        using ratio  = dim_ratio_pow_t<typename Unit::ratio, Exp>;
+        using global = ratio_pow_t<typename Unit::global, Exp>;
+
+        static constexpr long double factor   = power(Unit::factor, Exp);
+        static constexpr bool        any_real = Unit::is_real;
+
+        using type = unit<dim, ratio, global, factor>;
     };
 
     template <class Unit, class Dim>
-    inline constexpr bool has_dim_v =
-        std::is_same_v<typename unit_traits<Unit>::dim, Dim>;
+    inline constexpr bool has_dim_v = std::is_same_v<typename Unit::dim, Dim>;
 
 }   // namespace mstd::details
 

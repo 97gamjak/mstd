@@ -46,9 +46,8 @@ namespace mstd
      * @tparam Unit2
      */
     template <class Unit1, class Unit2>
-    inline constexpr bool same_dimension_v = std::is_same_v<
-        typename details::unit_traits<Unit1>::dim,
-        typename details::unit_traits<Unit2>::dim>;
+    inline constexpr bool same_dimension_v =
+        std::is_same_v<typename Unit1::dim, typename Unit2::dim>;
 
     /**
      * @brief
@@ -103,9 +102,9 @@ namespace mstd
      */
     template <UnitType Unit>
     inline constexpr long double ratio_v<Unit> =
-        details::ratio_pack_v<typename details::unit_traits<Unit>::ratio::si> *
-        details::ratio_pack_v<typename details::unit_traits<Unit>::ratio::ex> *
-        ratio_v<typename details::unit_traits<Unit>::global>;
+        details::ratio_pack_v<typename Unit::ratio::si> *
+        details::ratio_pack_v<typename Unit::ratio::ex> *
+        ratio_v<typename Unit::global>;
 
     /**
      * @brief Real scaling factor attached to a unit.
@@ -115,7 +114,7 @@ namespace mstd
      * @tparam Unit Unit to query
      */
     template <class Unit>
-    inline constexpr long double factor_v = details::unit_traits<Unit>::factor;
+    inline constexpr long double factor_v = Unit::factor;
 
     /**
      * @brief Overall scale of a unit relative to SI.
@@ -127,6 +126,19 @@ namespace mstd
      */
     template <class Unit>
     inline constexpr long double scale_v = factor_v<Unit> * ratio_v<Unit>;
+
+    template <class Unit, long double F>
+    struct scaled_unit_impl
+    {
+        using type = unit<
+            typename Unit::dim,
+            typename Unit::ratio,
+            typename Unit::global,
+            Unit::factor * F>;
+    };
+
+    template <class Unit, long double F>
+    using scaled_unit = typename scaled_unit_impl<Unit, F>::type;
 
 }   // namespace mstd
 
