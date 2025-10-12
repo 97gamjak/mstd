@@ -32,13 +32,13 @@ namespace mstd
 {
 
     /**
-     * @brief A quantity represents a physical quantity with a unit and a value.
+     * @brief A Quantity represents a physical Quantity with a unit and a value.
      *
      * @tparam U The unit type.
      * @tparam Rep The representation type (default: double).
      */
     template <UnitType U, class Rep = double>
-    class quantity
+    class Quantity
     {
        public:
         using unit = U;
@@ -55,28 +55,28 @@ namespace mstd
 
        public:
         /**
-         * @brief Construct a quantity from a value.
+         * @brief Construct a Quantity from a value.
          *
          * @param v The value to convert.
          */
-        constexpr explicit quantity(Rep v)
+        constexpr explicit Quantity(Rep v)
             : _baseValue(v * static_cast<Rep>(scale_v<unit>))
         {
         }
 
         /**
-         * @brief Construct a quantity from a base value (SI unit).
+         * @brief Construct a Quantity from a base value (SI unit).
          *
          * @param from_base_tag Tag to indicate base value construction.
          * @param base The base value in SI units.
          */
-        constexpr quantity(from_base_t, Rep base)   // base (SI) ctor
+        constexpr Quantity(from_base_t, Rep base)   // base (SI) ctor
             : _baseValue(base)
         {
         }
 
         /**
-         * @brief Get the value of the quantity in its unit.
+         * @brief Get the value of the Quantity in its unit.
          *
          * @return The value in the specified unit.
          */
@@ -86,7 +86,7 @@ namespace mstd
         }
 
         /**
-         * @brief Get the base value of the quantity in SI units.
+         * @brief Get the base value of the Quantity in SI units.
          *
          * @return The base value in SI units.
          */
@@ -94,7 +94,7 @@ namespace mstd
     };
 
     /**
-     * @brief Construct a quantity from a base value (SI unit).
+     * @brief Construct a Quantity from a base value (SI unit).
      *
      * @tparam U The unit type.
      * @tparam Rep The representation type (default: double).
@@ -104,42 +104,42 @@ namespace mstd
     template <class U, class Rep = double>
     constexpr auto qty(Rep v)
     {
-        return quantity<U, Rep>(v);
+        return Quantity<U, Rep>(v);
     }
 
     /**
-     * @brief Convert a quantity to another unit.
+     * @brief Convert a Quantity to another unit.
      *
      * @tparam UTo The target unit type.
      * @tparam UFrom The source unit type.
      * @tparam R The representation type (default: double).
-     * @param q The quantity to convert.
-     * @return constexpr quantity<UTo, R>
+     * @param q The Quantity to convert.
+     * @return constexpr Quantity<UTo, R>
      */
     template <class UTo, class UFrom, class R>
-    constexpr quantity<UTo, R> to(quantity<UFrom, R> q)
+    constexpr Quantity<UTo, R> to(Quantity<UFrom, R> q)
     requires same_dimension_v<UFrom, UTo>
     {
-        return quantity<UTo, R>(
-            typename quantity<UTo, R>::from_base_t{},
+        return Quantity<UTo, R>(
+            typename Quantity<UTo, R>::from_base_t{},
             q.baseValue()
         );
     }
 
     /**
-     * @brief Convert a quantity to a scalar value by dividing by another
-     * quantity of the same dimension.
+     * @brief Convert a Quantity to a scalar value by dividing by another
+     * Quantity of the same dimension.
      *
      * @tparam Rep The representation type (default: double).
      * @tparam U1 The unit type of the numerator.
      * @tparam U2 The unit type of the denominator.
-     * @param a The numerator quantity.
-     * @param b The denominator quantity.
+     * @param a The numerator Quantity.
+     * @param b The denominator Quantity.
      * @return Rep The resulting scalar value.
      */
     template <class Rep, class U1, class U2>
     requires same_dimension_v<U1, U2>
-    constexpr Rep quantity_cast(quantity<U1, Rep> a, quantity<U2, Rep> b)
+    constexpr Rep quantity_cast(Quantity<U1, Rep> a, Quantity<U2, Rep> b)
     {
         return to<U1>(b).value() ? a.value() / to<U1>(b).value() : Rep{};
     }
@@ -147,16 +147,16 @@ namespace mstd
     /**
      * @brief Equality operator
      *
-     * @tparam U1 The unit type of the first quantity.
-     * @tparam U2 The unit type of the second quantity.
-     * @tparam R1 The representation type of the first quantity.
-     * @tparam R2 The representation type of the second quantity.
-     * @param a The first quantity.
-     * @param b The second quantity.
+     * @tparam U1 The unit type of the first Quantity.
+     * @tparam U2 The unit type of the second Quantity.
+     * @tparam R1 The representation type of the first Quantity.
+     * @tparam R2 The representation type of the second Quantity.
+     * @param a The first Quantity.
+     * @param b The second Quantity.
      * @return constexpr bool True if the quantities are equal, false otherwise.
      */
     template <class U1, class U2, class R1, class R2>
-    constexpr bool operator==(quantity<U1, R1> a, quantity<U2, R2> b)
+    constexpr bool operator==(Quantity<U1, R1> a, Quantity<U2, R2> b)
     {
         auto ret  = same_dimension_v<U1, U2>;
         ret      &= a.baseValue() == b.baseValue();
@@ -168,59 +168,59 @@ namespace mstd
      * @brief Addition operator for quantities with the same unit.
      *
      * @tparam U The unit type.
-     * @tparam R1 The representation type of the first quantity.
-     * @tparam R2 The representation type of the second quantity.
-     * @param a The first quantity.
-     * @param b The second quantity.
-     * @return constexpr auto The resulting quantity after addition.
+     * @tparam R1 The representation type of the first Quantity.
+     * @tparam R2 The representation type of the second Quantity.
+     * @param a The first Quantity.
+     * @param b The second Quantity.
+     * @return constexpr auto The resulting Quantity after addition.
      */
     template <class U, class R1, class R2>
-    constexpr auto operator+(const quantity<U, R1>& a, const quantity<U, R2>& b)
+    constexpr auto operator+(const Quantity<U, R1>& a, const Quantity<U, R2>& b)
     {
         using R   = std::common_type_t<R1, R2>;
         const R v = static_cast<R>(a.value()) + static_cast<R>(b.value());
 
-        return quantity<U, R>(v);
+        return Quantity<U, R>(v);
     }
 
     /**
      * @brief Subtraction operator for quantities with the same unit.
      *
      * @tparam U The unit type.
-     * @tparam R1 The representation type of the first quantity.
-     * @tparam R2 The representation type of the second quantity.
-     * @param a The first quantity.
-     * @param b The second quantity.
-     * @return constexpr auto The resulting quantity after subtraction.
+     * @tparam R1 The representation type of the first Quantity.
+     * @tparam R2 The representation type of the second Quantity.
+     * @param a The first Quantity.
+     * @param b The second Quantity.
+     * @return constexpr auto The resulting Quantity after subtraction.
      */
     template <class U, class R1, class R2>
-    constexpr auto operator-(const quantity<U, R1>& a, const quantity<U, R2>& b)
+    constexpr auto operator-(const Quantity<U, R1>& a, const Quantity<U, R2>& b)
     {
         using R   = std::common_type_t<R1, R2>;
         const R v = static_cast<R>(a.value()) - static_cast<R>(b.value());
 
-        return quantity<U, R>(v);
+        return Quantity<U, R>(v);
     }
 
     /**
      * @brief Addition operator for quantities with compatible units.
      *
-     * @tparam Unit1 The unit type of the first quantity.
-     * @tparam Unit2 The unit type of the second quantity.
-     * @tparam R1 The representation type of the first quantity.
-     * @tparam R2 The representation type of the second quantity.
-     * @param a The first quantity.
-     * @param b The second quantity.
-     * @return requires constexpr auto The resulting quantity after addition.
-     * @return requires constexpr auto The resulting quantity after subtraction.
-     * @note The resulting quantity will have the common unit of the two input
+     * @tparam Unit1 The unit type of the first Quantity.
+     * @tparam Unit2 The unit type of the second Quantity.
+     * @tparam R1 The representation type of the first Quantity.
+     * @tparam R2 The representation type of the second Quantity.
+     * @param a The first Quantity.
+     * @param b The second Quantity.
+     * @return requires constexpr auto The resulting Quantity after addition.
+     * @return requires constexpr auto The resulting Quantity after subtraction.
+     * @note The resulting Quantity will have the common unit of the two input
      * quantities.
      */
     template <class Unit1, class Unit2, class R1, class R2>
     requires same_dimension_v<Unit1, Unit2>
     constexpr auto operator+(
-        const quantity<Unit1, R1>& a,
-        const quantity<Unit2, R2>& b
+        const Quantity<Unit1, R1>& a,
+        const Quantity<Unit2, R2>& b
     )
     {
         using unit      = common_unit_t<Unit1, Unit2>;
@@ -233,21 +233,21 @@ namespace mstd
     /**
      * @brief Subtraction operator for quantities with compatible units.
      *
-     * @tparam Unit1 The unit type of the first quantity.
-     * @tparam Unit2 The unit type of the second quantity.
-     * @tparam R1 The representation type of the first quantity.
-     * @tparam R2 The representation type of the second quantity.
-     * @param a The first quantity.
-     * @param b The second quantity.
-     * @return requires constexpr auto The resulting quantity after subtraction.
-     * @note The resulting quantity will have the common unit of the two input
+     * @tparam Unit1 The unit type of the first Quantity.
+     * @tparam Unit2 The unit type of the second Quantity.
+     * @tparam R1 The representation type of the first Quantity.
+     * @tparam R2 The representation type of the second Quantity.
+     * @param a The first Quantity.
+     * @param b The second Quantity.
+     * @return requires constexpr auto The resulting Quantity after subtraction.
+     * @note The resulting Quantity will have the common unit of the two input
      * quantities.
      */
     template <class Unit1, class Unit2, class R1, class R2>
     requires same_dimension_v<Unit1, Unit2>
     constexpr auto operator-(
-        const quantity<Unit1, R1>& a,
-        const quantity<Unit2, R2>& b
+        const Quantity<Unit1, R1>& a,
+        const Quantity<Unit2, R2>& b
     )
     {
         using unit         = common_unit_t<Unit1, Unit2>;
@@ -257,107 +257,107 @@ namespace mstd
         const R    v =
             static_cast<R>(aCommon.value()) - static_cast<R>(bCommon.value());
 
-        return quantity<unit, R>(v);
+        return Quantity<unit, R>(v);
     }
 
     /**
      * @brief Multiplication operator for quantities
      *
-     * @tparam Unit1 The unit type of the first quantity.
-     * @tparam Unit2 The unit type of the second quantity.
-     * @tparam R1 The representation type of the first quantity.
-     * @tparam R2 The representation type of the second quantity.
-     * @param a The first quantity.
-     * @param b The second quantity.
-     * @return requires constexpr auto The resulting quantity after
+     * @tparam Unit1 The unit type of the first Quantity.
+     * @tparam Unit2 The unit type of the second Quantity.
+     * @tparam R1 The representation type of the first Quantity.
+     * @tparam R2 The representation type of the second Quantity.
+     * @param a The first Quantity.
+     * @param b The second Quantity.
+     * @return requires constexpr auto The resulting Quantity after
      * multiplication.
-     * @note The resulting quantity will have the product unit of the two input
+     * @note The resulting Quantity will have the product unit of the two input
      * quantities.
      */
     template <class U1, class R1, class U2, class R2>
-    constexpr auto operator*(quantity<U1, R1> a, quantity<U2, R2> b)
+    constexpr auto operator*(Quantity<U1, R1> a, Quantity<U2, R2> b)
     {
         using U   = unit_mul_t<U1, U2>;
         using R   = std::common_type_t<R1, R2>;
         const R v = static_cast<R>(a.value()) * static_cast<R>(b.value());
 
-        return quantity<U, R>(v);
+        return Quantity<U, R>(v);
     }
 
     /**
      * @brief Division operator for quantities
      *
-     * @tparam Unit1 The unit type of the numerator quantity.
-     * @tparam Unit2 The unit type of the denominator quantity.
-     * @tparam R1 The representation type of the numerator quantity.
-     * @tparam R2 The representation type of the denominator quantity.
-     * @param a The numerator quantity.
-     * @param b The denominator quantity.
-     * @return requires constexpr auto The resulting quantity after division.
-     * @note The resulting quantity will have the quotient unit of the two input
+     * @tparam Unit1 The unit type of the numerator Quantity.
+     * @tparam Unit2 The unit type of the denominator Quantity.
+     * @tparam R1 The representation type of the numerator Quantity.
+     * @tparam R2 The representation type of the denominator Quantity.
+     * @param a The numerator Quantity.
+     * @param b The denominator Quantity.
+     * @return requires constexpr auto The resulting Quantity after division.
+     * @note The resulting Quantity will have the quotient unit of the two input
      * quantities.
      */
     template <class U1, class R1, class U2, class R2>
-    constexpr auto operator/(quantity<U1, R1> a, quantity<U2, R2> b)
+    constexpr auto operator/(Quantity<U1, R1> a, Quantity<U2, R2> b)
     {
         using U   = unit_div_t<U1, U2>;
         using R   = std::common_type_t<R1, R2>;
         const R v = static_cast<R>(a.value()) / static_cast<R>(b.value());
 
-        return quantity<U, R>(v);
+        return Quantity<U, R>(v);
     }
 
     /**
-     * @brief Multiplication operator for quantity and scalar
+     * @brief Multiplication operator for Quantity and scalar
      *
-     * @tparam U The unit type of the quantity.
-     * @tparam R1 The representation type of the quantity.
+     * @tparam U The unit type of the Quantity.
+     * @tparam R1 The representation type of the Quantity.
      * @tparam S The scalar type.
-     * @param q The quantity.
+     * @param q The Quantity.
      * @param s The scalar value.
-     * @return constexpr auto The resulting quantity after multiplication.
+     * @return constexpr auto The resulting Quantity after multiplication.
      */
     template <class U, class R1, class S>
-    constexpr auto operator*(quantity<U, R1> q, S s)
+    constexpr auto operator*(Quantity<U, R1> q, S s)
     requires std::is_arithmetic_v<S>
     {
         using R = std::common_type_t<R1, S>;
-        return quantity<U, R>(static_cast<R>(q.value()) * static_cast<R>(s));
+        return Quantity<U, R>(static_cast<R>(q.value()) * static_cast<R>(s));
     }
 
     /**
-     * @brief Multiplication operator for scalar and quantity
+     * @brief Multiplication operator for scalar and Quantity
      *
-     * @tparam U The unit type of the quantity.
-     * @tparam R1 The representation type of the quantity.
+     * @tparam U The unit type of the Quantity.
+     * @tparam R1 The representation type of the Quantity.
      * @tparam S The scalar type.
      * @param s The scalar value.
-     * @param q The quantity.
-     * @return constexpr auto The resulting quantity after multiplication.
+     * @param q The Quantity.
+     * @return constexpr auto The resulting Quantity after multiplication.
      */
     template <class U, class R1, class S>
-    constexpr auto operator*(S s, quantity<U, R1> q)
+    constexpr auto operator*(S s, Quantity<U, R1> q)
     requires std::is_arithmetic_v<S>
     {
         return q * s;
     }
 
     /**
-     * @brief Division operator for quantity and scalar
+     * @brief Division operator for Quantity and scalar
      *
-     * @tparam U The unit type of the quantity.
-     * @tparam R1 The representation type of the quantity.
+     * @tparam U The unit type of the Quantity.
+     * @tparam R1 The representation type of the Quantity.
      * @tparam S The scalar type.
-     * @param q The quantity.
+     * @param q The Quantity.
      * @param s The scalar value.
-     * @return constexpr auto The resulting quantity after division.
+     * @return constexpr auto The resulting Quantity after division.
      */
     template <class U, class R1, class S>
-    constexpr auto operator/(quantity<U, R1> q, S s)
+    constexpr auto operator/(Quantity<U, R1> q, S s)
     requires std::is_arithmetic_v<S>
     {
         using R = std::common_type_t<R1, S>;
-        return quantity<U, R>(static_cast<R>(q.value()) / static_cast<R>(s));
+        return Quantity<U, R>(static_cast<R>(q.value()) / static_cast<R>(s));
     }
 
 }   // namespace mstd
