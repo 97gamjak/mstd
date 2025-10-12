@@ -84,7 +84,7 @@ namespace mstd
     template <
         IntegerPackType SI    = default_si_pack,
         IntegerPackType Extra = default_extra_pack>
-    struct dim
+    struct Dim
     {
         static_assert(SI::size == SIDimIdMeta::size, "si size mismatch");
         static_assert(Extra::size == ExtraDimIdMeta::size, "ex size mismatch");

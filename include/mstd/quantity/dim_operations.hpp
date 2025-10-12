@@ -44,7 +44,7 @@ namespace mstd
      */
     template <DimType Dim1, DimType Dim2>
     using dim_mul_t =
-        dim<pack_add_t<typename Dim1::si, typename Dim2::si>,
+        Dim<pack_add_t<typename Dim1::si, typename Dim2::si>,
             pack_add_t<typename Dim1::ex, typename Dim2::ex>>;
 
     /**
@@ -55,7 +55,7 @@ namespace mstd
      */
     template <DimType Dim1, DimType Dim2>
     using dim_div_t =
-        dim<pack_sub_t<typename Dim1::si, typename Dim2::si>,
+        Dim<pack_sub_t<typename Dim1::si, typename Dim2::si>,
             pack_sub_t<typename Dim1::ex, typename Dim2::ex>>;
 
     /**
@@ -64,10 +64,10 @@ namespace mstd
      * @tparam Dim Base dimension.
      * @tparam Exp Integer exponent (can be negative).
      */
-    template <DimType Dim, int Exp>
+    template <DimType D, int Exp>
     using dim_pow_t =
-        dim<pack_scale_t<typename Dim::si, Exp>,
-            pack_scale_t<typename Dim::ex, Exp>>;
+        Dim<pack_scale_t<typename D::si, Exp>,
+            pack_scale_t<typename D::ex, Exp>>;
 
 }   // namespace mstd
 

@@ -88,15 +88,15 @@ namespace mstd
      *                    *
      **********************/
 
-    using dim_one      = dim<si_one, ex_one>;
+    using dim_one      = Dim<si_one, ex_one>;
     using dim_scalar   = dim_one;
-    using dim_length   = dim<si_length, ex_one>;
-    using dim_mass     = dim<si_mass, ex_one>;
-    using dim_time     = dim<si_time, ex_one>;
-    using dim_current  = dim<si_current, ex_one>;
-    using dim_temp     = dim<si_temperature, ex_one>;
-    using dim_amount   = dim<si_amount, ex_one>;
-    using dim_luminous = dim<si_luminous, ex_one>;
+    using dim_length   = Dim<si_length, ex_one>;
+    using dim_mass     = Dim<si_mass, ex_one>;
+    using dim_time     = Dim<si_time, ex_one>;
+    using dim_current  = Dim<si_current, ex_one>;
+    using dim_temp     = Dim<si_temperature, ex_one>;
+    using dim_amount   = Dim<si_amount, ex_one>;
+    using dim_luminous = Dim<si_luminous, ex_one>;
 
     /********************
      *                  *
@@ -104,9 +104,9 @@ namespace mstd
      *                  *
      ********************/
 
-    using dim_angle    = dim<si_one, ex_angle>;
-    using dim_currency = dim<si_one, ex_currency>;
-    using dim_info     = dim<si_one, ex_info>;
+    using dim_angle    = Dim<si_one, ex_angle>;
+    using dim_currency = Dim<si_one, ex_currency>;
+    using dim_info     = Dim<si_one, ex_info>;
 
     /************************
      *                      *
