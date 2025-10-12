@@ -85,6 +85,33 @@ namespace mstd
     template <typename T>
     constexpr bool is_quantity_v = QuantityType<T>;
 
+    // default case false see below specializations
+    template <typename T, typename U>
+    inline constexpr bool has_dim_v = false;
+
+    /**
+     * @brief Check if a unit has a specific dimension.
+     *
+     * @tparam Unit The unit type.
+     * @tparam Dim The dimension type to check against.
+     * @return true if the unit has the specified dimension, false otherwise.
+     */
+    template <UnitType Unit, DimType Dim>
+    inline constexpr bool has_dim_v<Unit, Dim> =
+        std::is_same_v<typename Unit::dim, Dim>;
+
+    /**
+     * @brief Check if a quantity has a specific dimension.
+     *
+     * @tparam Q The quantity type.
+     * @tparam U The unit type to check against.
+     * @return true if the quantity has the specified dimension, false
+     * otherwise.
+     */
+    template <QuantityType Q, DimType Dim>
+    inline constexpr bool has_dim_v<Q, Dim> =
+        std::is_same_v<typename Q::unit::dim, Dim>;
+
 }   // namespace mstd
 
 #endif   // __MSTD_TYPE_TRAITS_QUANTITY_TRAITS_HPP__

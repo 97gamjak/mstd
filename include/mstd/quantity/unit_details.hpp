@@ -39,11 +39,11 @@
 
 namespace mstd::details
 {
-    /************************
-     *                      *
-     * Operation back-ends  *
-     *                      *
-     ************************/
+    /*******************************************************************
+     *                                                                 *
+     * multiplying, dividing, powering and scaling units at type level *
+     *                                                                 *
+     *******************************************************************/
 
     /**
      * @brief Implementation of unit multiplication at type level.
@@ -54,14 +54,12 @@ namespace mstd::details
     template <class U1, class U2>
     struct unit_mul_impl
     {
-        using dim   = dim_mul_t<typename U1::dim, typename U2::dim>;
-        using ratio = dim_ratio_mul_t<typename U1::ratio, typename U2::ratio>;
-        using global =
-            std::ratio_multiply<typename U1::global, typename U2::global>;
+        using dim    = dim_mul_t<typename U1::dim, typename U2::dim>;
+        using ratio  = dim_ratio_mul_t<typename U1::ratio, typename U2::ratio>;
+        using global = ratio_mul_t<typename U1::global, typename U2::global>;
 
-        static constexpr long double f        = U1::factor_v * U2::factor_v;
-        static constexpr bool        any_real = U1::is_real || U2::is_real;
-        using type                            = Unit<dim, ratio, global, f>;
+        static constexpr long double f = U1::factor_v * U2::factor_v;
+        using type                     = Unit<dim, ratio, global, f>;
     };
 
     /**
@@ -120,13 +118,12 @@ namespace mstd::details
     template <class U1, class U2>
     struct unit_div_impl
     {
-        using dim   = dim_div_t<typename U1::dim, typename U2::dim>;
-        using ratio = dim_ratio_div_t<typename U1::ratio, typename U2::ratio>;
-        using global =
-            std::ratio_divide<typename U1::global, typename U2::global>;
+        using dim    = dim_div_t<typename U1::dim, typename U2::dim>;
+        using ratio  = dim_ratio_div_t<typename U1::ratio, typename U2::ratio>;
+        using global = ratio_div_t<typename U1::global, typename U2::global>;
 
         static constexpr long double factor_v = U1::factor_v / U2::factor_v;
-        static constexpr bool        any_real = U1::is_real || U2::is_real;
+
         using type = Unit<dim, ratio, global, factor_v>;
     };
 
@@ -144,13 +141,9 @@ namespace mstd::details
         using global = ratio_pow_t<typename U::global, Exp>;
 
         static constexpr long double factor_v = power(U::factor_v, Exp);
-        static constexpr bool        any_real = U::is_real;
 
         using type = Unit<dim, ratio, global, factor_v>;
     };
-
-    template <class Unit, class Dim>
-    inline constexpr bool has_dim_v = std::is_same_v<typename Unit::dim, Dim>;
 
     /**
      * @brief Extract the real scaling factor of a unit relative to SI.

@@ -26,6 +26,8 @@
 #include <concepts>
 #include <ratio>
 
+#include "mstd/type_traits/ratio_traits.hpp"
+
 namespace mstd
 {
 
@@ -37,6 +39,28 @@ namespace mstd
      */
     template <intmax_t Num, intmax_t Den = 1>
     using ratio = std::ratio<Num, Den>;
+
+    /**
+     * @brief Compile-time ratio multiplier.
+     *
+     * Multiplies two std::ratio types.
+     *
+     * @tparam R1 First ratio
+     * @tparam R2 Second ratio
+     */
+    template <RatioType R1, RatioType R2>
+    using ratio_mul_t = std::ratio_multiply<R1, R2>;
+
+    /**
+     * @brief Compile-time ratio divider.
+     *
+     * Divides two std::ratio types.
+     *
+     * @tparam R1 First ratio (numerator)
+     * @tparam R2 Second ratio (denominator)
+     */
+    template <RatioType R1, RatioType R2>
+    using ratio_div_t = std::ratio_divide<R1, R2>;
 
     namespace details
     {
