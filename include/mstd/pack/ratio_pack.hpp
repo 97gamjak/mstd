@@ -29,13 +29,13 @@
 #include <tuple>
 
 #include "mstd/ratio.hpp"
-#include "ratio_pack_details.hpp"
+#include "mstd/type_traits/pack_traits.hpp"
 
 /**
  * @file ratio_pack.hpp
  * @brief Public ratio_pack type and high-level aliases.
  *
- * Exposes `ratio_pack`, a fixed-size compile-time list of `std::ratio` types,
+ * Exposes `RatioPack`, a fixed-size compile-time list of `std::ratio` types,
  * plus helpers to multiply/divide element-wise, raise all entries to a power,
  * and create common pack shapes.
  */
@@ -50,10 +50,10 @@ namespace mstd
     /**
      * @brief A compile-time list of ratios.
      *
-     * @tparam Rs The ratios to include in the ratio_pack.
+     * @tparam Rs The ratios to include in the RatioPack.
      */
     template <class... Rs>
-    struct ratio_pack
+    struct RatioPack
     {
         // store actual ratio values as long double so we can index them
         static constexpr std::array<long double, sizeof...(Rs)> vals{
@@ -84,43 +84,6 @@ namespace mstd
             return vals[static_cast<size_t>(I)];
         }
     };
-
-    /*************************
-     *                       *
-     * Convenience aliases   *
-     *                       *
-     *************************/
-    /** Element-wise multiply two ratio packs. */
-    template <details::RatioPack A, details::RatioPack B>
-    using ratio_pack_mul_t =
-        details::ratio_pack_zip_t<A, B, std::ratio_multiply>;
-
-    /** Element-wise divide two ratio packs. */
-    template <details::RatioPack A, details::RatioPack B>
-    using ratio_pack_div_t = details::ratio_pack_zip_t<A, B, std::ratio_divide>;
-
-    /** Raise each ratio in a pack to integer power K. */
-    template <details::RatioPack Pack, int K>
-    using ratio_pack_pow_t = decltype(details::ratio_pack_pow_impl<Pack, K>(
-        std::make_index_sequence<Pack::size>{}
-    ));
-
-    /*********************
-     *                   *
-     * Factory aliases   *
-     *                   *
-     *********************/
-    /** Create a ratio_pack of size N filled with `std::ratio<1>`. */
-    template <std::size_t N>
-    using make_default_ratio_pack_t =
-        typename details::make_default_ratio_pack<N>::type;
-
-    /** Create a ratio_pack of size N with a single ratio R at index Idx. */
-    template <StdRatio R, size_t Idx, size_t N>
-    using make_ratio_pack_single_t =
-        decltype(details::make_ratio_pack_at_impl_R<R, Idx>(
-            std::make_index_sequence<N>{}
-        ));
 
 }   // namespace mstd
 

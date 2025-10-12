@@ -24,46 +24,14 @@
 #define __MSTD_DIM_RATIO_DETAILS_HPP__
 
 #include "dim_details.hpp"
+#include "dim_ratio.hpp"
 #include "mstd/pack.hpp"
+#include "mstd/type_traits/ratio_traits.hpp"
 
 namespace mstd
 {
-    // forward declaration
-    template <details::RatioPack Si, details::RatioPack Extra>
-    struct dim_ratio;
-
     namespace details
     {
-        /***************
-         *             *
-         * Type traits *
-         *             *
-         ***************/
-
-        // clang-format off
-        template <typename>
-        struct is_dim_ratio : std::false_type{};
-
-        template <typename pack1, typename pack2>
-        struct is_dim_ratio<dim_ratio<pack1, pack2>> : std::true_type{};
-        // clang-format on
-
-        /**
-         * @brief concept for dim_ratio types
-         *
-         * @tparam T
-         */
-        template <typename T>
-        concept DimRatio = is_dim_ratio<T>::value;
-
-        /**
-         * @brief function to check if a type is a dim_ratio
-         *
-         * @tparam T
-         */
-        template <typename T>
-        inline constexpr bool is_dim_ratio_v = is_dim_ratio<T>::value;
-
         /***************************************
          *                                     *
          * Build ratio_dim from a single ratio *
@@ -71,16 +39,16 @@ namespace mstd
          ***************************************/
 
         /**
-         * @brief struct to make a dim_ratio from a dimension and a single ratio
+         * @brief struct to make a DimRatio from a dimension and a single ratio
          *
-         * This struct is used to make a dim_ratio from a dimension and a single
+         * This struct is used to make a DimRatio from a dimension and a single
          * ratio. Important requirement is that the dimension is a simple base
          * dimension.
          *
          * @tparam Dim - has to be a simple base dimension
          * @tparam Ratio
          */
-        template <details::SimpleDim Dim, StdRatio Ratio>
+        template <details::SimpleDim Dim, RatioType Ratio>
         struct make_dim_ratio_single
         {
             static constexpr bool has_si = has_si_dim<Dim>();
@@ -110,7 +78,7 @@ namespace mstd
             static_assert(ex::size == Dim::ex_size, "ex size mismatch");
 
             // make the dim_ratio
-            using type = dim_ratio<si, ex>;
+            using type = DimRatio<si, ex>;
         };
 
     }   // namespace details

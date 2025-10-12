@@ -27,57 +27,54 @@
 #include "dim_ratio.hpp"
 #include "mstd/error.hpp"
 #include "mstd/ratio.hpp"
-#include "mstd/tags/unit_tag.hpp"
+#include "mstd/type_traits/quantity_traits.hpp"
 
 namespace mstd
 {
-    template <details::DimType Dim>
-    struct BaseUnit : public unit_tag
+    /**
+     * @brief BaseUnit definition for a dimension
+     *
+     * @tparam Dim
+     */
+    template <DimType Dim>
+    struct BaseUnit
     {
-        using dim                           = Dim;
-        static constexpr long double factor = 1.0L;
+        using dim                             = Dim;
+        static constexpr long double factor_v = 1.0L;
     };
 
     /**
-     * @brief placeholder for a unit
+     * @brief placeholder for a Unit
      *
-     * @details
-     *
-     * This is a placeholder for a unit. The general case is forbidden.
-     * All applicable specializations must be provided explicitly.
-     *
-     * @tparam Dim
-     * @tparam RatioDim
-     * @tparam GlobalRatio
+     * @tparam Dim The dimension of the unit
+     * @tparam Ratio The DimRatio of the unit (default: all 1)
+     * @tparam Global The global ratio of the unit (default: 1/1)
+     * @tparam F The real factor of the unit (default: 1.0L)
      */
     template <
-        details::DimType  Dim,
-        details::DimRatio RatioDim    = dim_ratio<>,
-        StdRatio          GlobalRatio = std::ratio<1>,
-        long double       F           = 1.0L>
-    struct unit : public BaseUnit<Dim>
+        DimType      Dim,
+        DimRatioType Ratio  = DimRatio<>,
+        RatioType    Global = ratio<1>,
+        long double  F      = 1.0L>
+    struct Unit : public BaseUnit<Dim>
     {
-        using ratio                         = RatioDim;
-        using global                        = GlobalRatio;
-        static constexpr long double factor = F;
+        using ratio                           = Ratio;
+        using global                          = Global;
+        static constexpr long double factor_v = F;
     };
 
     /**
-     * @brief unit definition for a dimension, a dim_ratio and a ratio as a
-     * global ratio
+     * @brief Specialization for units without real factor
      *
-     * @tparam Dim
-     * @tparam RatioDim
-     * @tparam GlobalRatio
+     * @tparam Dim The dimension of the unit
+     * @tparam Ratio The DimRatio of the unit (default: all 1)
+     * @tparam Global The global ratio of the unit (default: 1/1)
      */
-    template <
-        details::DimType  Dim,
-        details::DimRatio RatioDim,
-        StdRatio          GlobalRatio>
-    struct unit<Dim, RatioDim, GlobalRatio> : public BaseUnit<Dim>
+    template <DimType Dim, DimRatioType Ratio, RatioType Global>
+    struct Unit<Dim, Ratio, Global> : public BaseUnit<Dim>
     {
-        using ratio  = RatioDim;
-        using global = GlobalRatio;
+        using ratio  = Ratio;
+        using global = Global;
     };
 
 }   // namespace mstd

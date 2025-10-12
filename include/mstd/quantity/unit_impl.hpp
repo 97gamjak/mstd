@@ -40,47 +40,47 @@ namespace mstd
 
     // clang-format off
     template <class U>
-    concept length_unit = details::has_dim_v<U, dim_length>;
+    concept length_unit = has_dim_v<U, dim_length>;
     template <class U>
-    concept mass_unit = details::has_dim_v<U, dim_mass>;
+    concept mass_unit = has_dim_v<U, dim_mass>;
     template <class U>
-    concept time_unit = details::has_dim_v<U, dim_time>;
+    concept time_unit = has_dim_v<U, dim_time>;
     template <class U>
-    concept current_unit = details::has_dim_v<U, dim_current>;
+    concept current_unit = has_dim_v<U, dim_current>;
     template <class U>
-    concept temperature_unit = details::has_dim_v<U, dim_temp>;
+    concept temperature_unit = has_dim_v<U, dim_temp>;
     template <class U>
-    concept amount_unit = details::has_dim_v<U, dim_amount>;
+    concept amount_unit = has_dim_v<U, dim_amount>;
     template <class U>
-    concept luminous_unit = details::has_dim_v<U, dim_luminous>;
+    concept luminous_unit = has_dim_v<U, dim_luminous>;
 
     template <class U>
-    concept angle_unit = details::has_dim_v<U, dim_angle>;
+    concept angle_unit = has_dim_v<U, dim_angle>;
     template <class U>
-    concept currency_unit = details::has_dim_v<U, dim_currency>;
+    concept currency_unit = has_dim_v<U, dim_currency>;
     template <class U>
-    concept info_unit = details::has_dim_v<U, dim_info>;
+    concept info_unit = has_dim_v<U, dim_info>;
     template <class U>
-    concept scalar_unit = details::has_dim_v<U, dim_scalar>;
+    concept scalar_unit = has_dim_v<U, dim_scalar>;
     template <class U>
     concept dimensionless_unit = scalar_unit<U> && std::is_same_v<typename U::ratio, std::ratio<1>>;
 
     template <class U>
-    concept area_unit = details::has_dim_v<U, dim_area>;
+    concept area_unit = has_dim_v<U, dim_area>;
     template <class U>
-    concept volume_unit = details::has_dim_v<U, dim_volume>;
+    concept volume_unit = has_dim_v<U, dim_volume>;
     template <class U>
-    concept density_unit = details::has_dim_v<U, dim_density>;
+    concept density_unit = has_dim_v<U, dim_density>;
     template <class U>
-    concept velocity_unit = details::has_dim_v<U, dim_velocity>;
+    concept velocity_unit = has_dim_v<U, dim_velocity>;
     template <class U>
-    concept acceleration_unit = details::has_dim_v<U, dim_acceleration>;
+    concept acceleration_unit = has_dim_v<U, dim_acceleration>;
     template <class U>
-    concept force_unit = details::has_dim_v<U, dim_force>;
+    concept force_unit = has_dim_v<U, dim_force>;
     template <class U>
-    concept energy_unit = details::has_dim_v<U, dim_energy>;
+    concept energy_unit = has_dim_v<U, dim_energy>;
     template <class U>
-    concept power_unit = details::has_dim_v<U, dim_power>;
+    concept power_unit = has_dim_v<U, dim_power>;
     // clang-format on
 
     /***********************
@@ -111,94 +111,94 @@ namespace mstd
 
         static constexpr long double __CAL_TO_J__ = 4.184L;
 
-        using unitless = unit<dim_scalar, length_dim_ratio<>>;
+        using unitless = Unit<dim_scalar, length_dim_ratio<>>;
 
-        using km  = unit<dim_length, length_dim_ratio<std::kilo>>;
-        using m   = unit<dim_length, length_dim_ratio<>>;
-        using dm  = unit<dim_length, length_dim_ratio<std::deci>>;
-        using cm  = unit<dim_length, length_dim_ratio<std::centi>>;
-        using mm  = unit<dim_length, length_dim_ratio<std::milli>>;
-        using um  = unit<dim_length, length_dim_ratio<std::micro>>;
-        using nm  = unit<dim_length, length_dim_ratio<std::nano>>;
-        using pm  = unit<dim_length, length_dim_ratio<std::pico>>;
-        using fm  = unit<dim_length, length_dim_ratio<std::femto>>;
-        using Ang = unit<dim_length, length_dim_ratio<__ANG_IN_M_RATIO__>>;
+        using km  = Unit<dim_length, length_dim_ratio<std::kilo>>;
+        using m   = Unit<dim_length, length_dim_ratio<>>;
+        using dm  = Unit<dim_length, length_dim_ratio<std::deci>>;
+        using cm  = Unit<dim_length, length_dim_ratio<std::centi>>;
+        using mm  = Unit<dim_length, length_dim_ratio<std::milli>>;
+        using um  = Unit<dim_length, length_dim_ratio<std::micro>>;
+        using nm  = Unit<dim_length, length_dim_ratio<std::nano>>;
+        using pm  = Unit<dim_length, length_dim_ratio<std::pico>>;
+        using fm  = Unit<dim_length, length_dim_ratio<std::femto>>;
+        using Ang = Unit<dim_length, length_dim_ratio<__ANG_IN_M_RATIO__>>;
 
-        using t   = unit<dim_mass, mass_dim_ratio<std::kilo>>;
-        using kg  = unit<dim_mass, mass_dim_ratio<std::ratio<1>>>;
-        using g   = unit<dim_mass, mass_dim_ratio<std::milli>>;
-        using mg  = unit<dim_mass, mass_dim_ratio<std::micro>>;
-        using ug  = unit<dim_mass, mass_dim_ratio<std::nano>>;
-        using ng  = unit<dim_mass, mass_dim_ratio<std::pico>>;
-        using pg  = unit<dim_mass, mass_dim_ratio<std::femto>>;
-        using amu = scaled_unit<kg, __AMU_TO_KG__>;
+        using t   = Unit<dim_mass, mass_dim_ratio<std::kilo>>;
+        using kg  = Unit<dim_mass, mass_dim_ratio<std::ratio<1>>>;
+        using g   = Unit<dim_mass, mass_dim_ratio<std::milli>>;
+        using mg  = Unit<dim_mass, mass_dim_ratio<std::micro>>;
+        using ug  = Unit<dim_mass, mass_dim_ratio<std::nano>>;
+        using ng  = Unit<dim_mass, mass_dim_ratio<std::pico>>;
+        using pg  = Unit<dim_mass, mass_dim_ratio<std::femto>>;
+        using amu = scaled_unit_t<kg, __AMU_TO_KG__>;
 
-        using y   = unit<dim_time, time_dim_ratio<std::ratio<__Y_TO_S__>>>;
-        using d   = unit<dim_time, time_dim_ratio<std::ratio<__D_TO_S__>>>;
-        using h   = unit<dim_time, time_dim_ratio<std::ratio<__H_TO_S__>>>;
-        using min = unit<dim_time, time_dim_ratio<std::ratio<__MIN_TO_S__>>>;
-        using s   = unit<dim_time, time_dim_ratio<>>;
-        using ms  = unit<dim_time, time_dim_ratio<std::milli>>;
-        using us  = unit<dim_time, time_dim_ratio<std::micro>>;
-        using ns  = unit<dim_time, time_dim_ratio<std::nano>>;
-        using ps  = unit<dim_time, time_dim_ratio<std::pico>>;
-        using fs  = unit<dim_time, time_dim_ratio<std::femto>>;
+        using y   = Unit<dim_time, time_dim_ratio<std::ratio<__Y_TO_S__>>>;
+        using d   = Unit<dim_time, time_dim_ratio<std::ratio<__D_TO_S__>>>;
+        using h   = Unit<dim_time, time_dim_ratio<std::ratio<__H_TO_S__>>>;
+        using min = Unit<dim_time, time_dim_ratio<std::ratio<__MIN_TO_S__>>>;
+        using s   = Unit<dim_time, time_dim_ratio<>>;
+        using ms  = Unit<dim_time, time_dim_ratio<std::milli>>;
+        using us  = Unit<dim_time, time_dim_ratio<std::micro>>;
+        using ns  = Unit<dim_time, time_dim_ratio<std::nano>>;
+        using ps  = Unit<dim_time, time_dim_ratio<std::pico>>;
+        using fs  = Unit<dim_time, time_dim_ratio<std::femto>>;
 
-        using A  = unit<dim_current, current_dim_ratio<>>;
-        using mA = unit<dim_current, current_dim_ratio<std::milli>>;
-        using uA = unit<dim_current, current_dim_ratio<std::micro>>;
-        using nA = unit<dim_current, current_dim_ratio<std::nano>>;
-        using pA = unit<dim_current, current_dim_ratio<std::pico>>;
-        using fA = unit<dim_current, current_dim_ratio<std::femto>>;
+        using A  = Unit<dim_current, current_dim_ratio<>>;
+        using mA = Unit<dim_current, current_dim_ratio<std::milli>>;
+        using uA = Unit<dim_current, current_dim_ratio<std::micro>>;
+        using nA = Unit<dim_current, current_dim_ratio<std::nano>>;
+        using pA = Unit<dim_current, current_dim_ratio<std::pico>>;
+        using fA = Unit<dim_current, current_dim_ratio<std::femto>>;
 
-        using K  = unit<dim_temp, temp_dim_ratio<>>;
-        using mK = unit<dim_temp, temp_dim_ratio<std::milli>>;
-        using uK = unit<dim_temp, temp_dim_ratio<std::micro>>;
-        using nK = unit<dim_temp, temp_dim_ratio<std::nano>>;
-        using pK = unit<dim_temp, temp_dim_ratio<std::pico>>;
-        using fK = unit<dim_temp, temp_dim_ratio<std::femto>>;
+        using K  = Unit<dim_temp, temp_dim_ratio<>>;
+        using mK = Unit<dim_temp, temp_dim_ratio<std::milli>>;
+        using uK = Unit<dim_temp, temp_dim_ratio<std::micro>>;
+        using nK = Unit<dim_temp, temp_dim_ratio<std::nano>>;
+        using pK = Unit<dim_temp, temp_dim_ratio<std::pico>>;
+        using fK = Unit<dim_temp, temp_dim_ratio<std::femto>>;
 
-        using mol  = unit<dim_amount, amount_dim_ratio<>>;
-        using mmol = unit<dim_amount, amount_dim_ratio<std::milli>>;
-        using umol = unit<dim_amount, amount_dim_ratio<std::micro>>;
-        using nmol = unit<dim_amount, amount_dim_ratio<std::nano>>;
-        using pmol = unit<dim_amount, amount_dim_ratio<std::pico>>;
+        using mol  = Unit<dim_amount, amount_dim_ratio<>>;
+        using mmol = Unit<dim_amount, amount_dim_ratio<std::milli>>;
+        using umol = Unit<dim_amount, amount_dim_ratio<std::micro>>;
+        using nmol = Unit<dim_amount, amount_dim_ratio<std::nano>>;
+        using pmol = Unit<dim_amount, amount_dim_ratio<std::pico>>;
 
-        using cd  = unit<dim_luminous, luminous_dim_ratio<>>;
-        using mcd = unit<dim_luminous, luminous_dim_ratio<std::milli>>;
-        using ucd = unit<dim_luminous, luminous_dim_ratio<std::micro>>;
-        using ncd = unit<dim_luminous, luminous_dim_ratio<std::nano>>;
-        using pcd = unit<dim_luminous, luminous_dim_ratio<std::pico>>;
-        using fcd = unit<dim_luminous, luminous_dim_ratio<std::femto>>;
+        using cd  = Unit<dim_luminous, luminous_dim_ratio<>>;
+        using mcd = Unit<dim_luminous, luminous_dim_ratio<std::milli>>;
+        using ucd = Unit<dim_luminous, luminous_dim_ratio<std::micro>>;
+        using ncd = Unit<dim_luminous, luminous_dim_ratio<std::nano>>;
+        using pcd = Unit<dim_luminous, luminous_dim_ratio<std::pico>>;
+        using fcd = Unit<dim_luminous, luminous_dim_ratio<std::femto>>;
 
-        using rad = unit<dim_angle, angle_dim_ratio<>>;
-        using deg = scaled_unit<rad, __RAD_TO_DEG__>;
+        using rad = Unit<dim_angle, angle_dim_ratio<>>;
+        using deg = scaled_unit_t<rad, __RAD_TO_DEG__>;
 
-        using m_per_s   = unit_div<m, s>;
-        using km_per_h  = unit_div<km, h>;
-        using Ang_per_s = unit_div<Ang, s>;
-        using c         = scaled_unit<m_per_s, __SPEED_OF_LIGHT_TO_MPS__>;
+        using m_per_s   = unit_div_t<m, s>;
+        using km_per_h  = unit_div_t<km, h>;
+        using Ang_per_s = unit_div_t<Ang, s>;
+        using c         = scaled_unit_t<m_per_s, __SPEED_OF_LIGHT_TO_MPS__>;
 
-        using m_per_s2 = unit_div<m_per_s, s>;
+        using m_per_s2 = unit_div_t<m_per_s, s>;
 
-        using N  = unit_mul<kg, m_per_s2>;
-        using kN = unit<N::dim, dim_ratio<>, std::kilo>;
-        using MN = unit<N::dim, dim_ratio<>, std::mega>;
+        using N  = unit_mul_t<kg, m_per_s2>;
+        using kN = Unit<N::dim, DimRatio<>, std::kilo>;
+        using MN = Unit<N::dim, DimRatio<>, std::mega>;
 
-        using J    = unit_mul<N, m>;
-        using kJ   = unit<J::dim, dim_ratio<>, std::kilo>;
-        using MJ   = unit<J::dim, dim_ratio<>, std::mega>;
-        using GJ   = unit<J::dim, dim_ratio<>, std::giga>;
-        using cal  = scaled_unit<J, __CAL_TO_J__>;
-        using kcal = scaled_unit<kJ, cal::factor>;
+        using J    = unit_mul_t<N, m>;
+        using kJ   = Unit<J::dim, DimRatio<>, std::kilo>;
+        using MJ   = Unit<J::dim, DimRatio<>, std::mega>;
+        using GJ   = Unit<J::dim, DimRatio<>, std::giga>;
+        using cal  = scaled_unit_t<J, __CAL_TO_J__>;
+        using kcal = scaled_unit_t<kJ, cal::factor_v>;
 
-        using kcal_per_mol         = unit_div<kcal, mol>;
-        using kcal_per_mol_per_Ang = unit_div<kcal, mol, Ang>;
+        using kcal_per_mol         = unit_div_t<kcal, mol>;
+        using kcal_per_mol_per_Ang = unit_div_t<kcal, mol, Ang>;
 
-        using W  = unit_div<J, s>;
-        using kW = unit<W::dim, dim_ratio<>, std::kilo>;
-        using MW = unit<W::dim, dim_ratio<>, std::mega>;
-        using GW = unit<W::dim, dim_ratio<>, std::giga>;
+        using W  = unit_div_t<J, s>;
+        using kW = Unit<W::dim, DimRatio<>, std::kilo>;
+        using MW = Unit<W::dim, DimRatio<>, std::mega>;
+        using GW = Unit<W::dim, DimRatio<>, std::giga>;
 
     }   // namespace literals
 

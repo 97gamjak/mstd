@@ -33,31 +33,11 @@
  *
  * Provides helpers to combine units (multiply, divide, power), check
  * dimensional compatibility, and compute conversion/scaling factors
- * relative to SI from a unit's ratio, global ratio, and real factor.
+ * relative to SI from a unit's ratio, global ratio, and real factor_v.
  */
 
 namespace mstd
 {
-
-    /**
-     * @brief Checks if two units have the same dimension
-     *
-     * @tparam Unit1
-     * @tparam Unit2
-     */
-    template <class Unit1, class Unit2>
-    inline constexpr bool same_dimension_v =
-        std::is_same_v<typename Unit1::dim, typename Unit2::dim>;
-
-    /**
-     * @brief
-     *
-     *
-     * @tparam Unit1
-     * @tparam Unit2
-     */
-    template <class Unit1, class Unit2>
-    inline constexpr bool compatible_units_v = same_dimension_v<Unit1, Unit2>;
 
     /**
      * @brief Multiply two units to form a composite unit.
@@ -66,8 +46,8 @@ namespace mstd
      * @tparam Unit2 Second unit
      * @tparam Units Additional units to multiply (optional)
      */
-    template <class... Units>
-    using unit_mul = typename details::unit_mul_pack<Units...>::type;
+    template <UnitType... Units>
+    using unit_mul_t = typename details::unit_mul_pack<Units...>::type;
 
     /**
      * @brief Divide two units to form a composite unit.
@@ -77,9 +57,9 @@ namespace mstd
      * @tparam Units Additional units to multiply into the denominator
      * (optional)
      */
-    template <class Unit1, class Unit2, class... Units>
-    using unit_div =
-        typename details::unit_div_impl<Unit1, unit_mul<Unit2, Units...>>::type;
+    template <UnitType Unit1, UnitType Unit2, UnitType... Units>
+    using unit_div_t = typename details::
+        unit_div_impl<Unit1, unit_mul_t<Unit2, Units...>>::type;
 
     /**
      * @brief Raise a unit to an integer power.
@@ -87,8 +67,8 @@ namespace mstd
      * @tparam Unit Base unit
      * @tparam Exp  Integer exponent (can be negative)
      */
-    template <class Unit, int Exp>
-    using unit_pow = typename details::unit_pow_impl<Unit, Exp>::type;
+    template <UnitType Unit, int Exp>
+    using unit_pow_t = typename details::unit_pow_impl<Unit, Exp>::type;
 
     /**
      * @brief Compile-time ratio multiplier of a unit relative to SI.
@@ -102,9 +82,8 @@ namespace mstd
      */
     template <UnitType Unit>
     inline constexpr long double ratio_v<Unit> =
-        details::ratio_pack_v<typename Unit::ratio::si> *
-        details::ratio_pack_v<typename Unit::ratio::ex> *
-        ratio_v<typename Unit::global>;
+        ratio_pack_v<typename Unit::ratio::si> *
+        ratio_pack_v<typename Unit::ratio::ex> * ratio_v<typename Unit::global>;
 
     /**
      * @brief Real scaling factor attached to a unit.
@@ -113,8 +92,8 @@ namespace mstd
      *
      * @tparam Unit Unit to query
      */
-    template <class Unit>
-    inline constexpr long double factor_v = Unit::factor;
+    template <UnitType Unit>
+    inline constexpr long double factor_v = Unit::factor_v;
 
     /**
      * @brief Overall scale of a unit relative to SI.
@@ -124,21 +103,29 @@ namespace mstd
      *
      * @tparam Unit Unit to query
      */
-    template <class Unit>
+    template <UnitType Unit>
     inline constexpr long double scale_v = factor_v<Unit> * ratio_v<Unit>;
 
-    template <class Unit, long double F>
-    struct scaled_unit_impl
-    {
-        using type = unit<
-            typename Unit::dim,
-            typename Unit::ratio,
-            typename Unit::global,
-            Unit::factor * F>;
-    };
+    /**
+     * @brief Scale a unit by a real factor at compile time.
+     *
+     * Produces a new unit with the same dimension and ratios, but with the
+     * provided real factor applied.
+     *
+     * @tparam Unit Base unit to scale
+     * @tparam F Scaling factor (must be non-zero)
+     */
+    template <UnitType Unit, long double F>
+    using scaled_unit_t = typename details::scaled_unit_impl<Unit, F>::type;
 
-    template <class Unit, long double F>
-    using scaled_unit = typename scaled_unit_impl<Unit, F>::type;
+    /**
+     * @brief Get the common unit type for two compatible units.
+     *
+     * @tparam U1 The first unit type.
+     * @tparam U2 The second unit type.
+     */
+    template <UnitType U1, UnitType U2>
+    using common_unit_t = typename details::common_unit_impl<U1, U2>::type;
 
 }   // namespace mstd
 

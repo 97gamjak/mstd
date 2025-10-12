@@ -24,8 +24,10 @@
 #define __MSTD_UNITS_DETAILS_HPP__
 
 #include "dim.hpp"
+#include "dim_ratio_operations.hpp"
 #include "mstd/math.hpp"
 #include "mstd/ratio.hpp"
+#include "mstd/type_traits/quantity_traits.hpp"
 #include "unit.hpp"
 
 /**
@@ -39,11 +41,11 @@
 
 namespace mstd::details
 {
-    /************************
-     *                      *
-     * Operation back-ends  *
-     *                      *
-     ************************/
+    /*******************************************************************
+     *                                                                 *
+     * multiplying, dividing, powering and scaling units at type level *
+     *                                                                 *
+     *******************************************************************/
 
     /**
      * @brief Implementation of unit multiplication at type level.
@@ -54,14 +56,12 @@ namespace mstd::details
     template <class U1, class U2>
     struct unit_mul_impl
     {
-        using dim   = dim_mul_t<typename U1::dim, typename U2::dim>;
-        using ratio = dim_ratio_mul_t<typename U1::ratio, typename U2::ratio>;
-        using global =
-            std::ratio_multiply<typename U1::global, typename U2::global>;
+        using dim    = dim_mul_t<typename U1::dim, typename U2::dim>;
+        using ratio  = dim_ratio_mul_t<typename U1::ratio, typename U2::ratio>;
+        using global = ratio_mul_t<typename U1::global, typename U2::global>;
 
-        static constexpr long double f        = U1::factor * U2::factor;
-        static constexpr bool        any_real = U1::is_real || U2::is_real;
-        using type                            = unit<dim, ratio, global, f>;
+        static constexpr long double f = U1::factor_v * U2::factor_v;
+        using type                     = Unit<dim, ratio, global, f>;
     };
 
     /**
@@ -120,14 +120,13 @@ namespace mstd::details
     template <class U1, class U2>
     struct unit_div_impl
     {
-        using dim   = dim_div_t<typename U1::dim, typename U2::dim>;
-        using ratio = dim_ratio_div_t<typename U1::ratio, typename U2::ratio>;
-        using global =
-            std::ratio_divide<typename U1::global, typename U2::global>;
+        using dim    = dim_div_t<typename U1::dim, typename U2::dim>;
+        using ratio  = dim_ratio_div_t<typename U1::ratio, typename U2::ratio>;
+        using global = ratio_div_t<typename U1::global, typename U2::global>;
 
-        static constexpr long double factor   = U1::factor / U2::factor;
-        static constexpr bool        any_real = U1::is_real || U2::is_real;
-        using type = unit<dim, ratio, global, factor>;
+        static constexpr long double factor_v = U1::factor_v / U2::factor_v;
+
+        using type = Unit<dim, ratio, global, factor_v>;
     };
 
     /**
@@ -136,21 +135,102 @@ namespace mstd::details
      * Exponentiates dimensions and ratios; raises the real factor; preserves
      * real-ness if the base unit is real.
      */
-    template <class Unit, int Exp>
+    template <class U, int Exp>
     struct unit_pow_impl
     {
-        using dim    = dim_pow_t<typename Unit::dim, Exp>;
-        using ratio  = dim_ratio_pow_t<typename Unit::ratio, Exp>;
-        using global = ratio_pow_t<typename Unit::global, Exp>;
+        using dim    = dim_pow_t<typename U::dim, Exp>;
+        using ratio  = dim_ratio_pow_t<typename U::ratio, Exp>;
+        using global = ratio_pow_t<typename U::global, Exp>;
 
-        static constexpr long double factor   = power(Unit::factor, Exp);
-        static constexpr bool        any_real = Unit::is_real;
+        static constexpr long double factor_v = power(U::factor_v, Exp);
 
-        using type = unit<dim, ratio, global, factor>;
+        using type = Unit<dim, ratio, global, factor_v>;
     };
 
-    template <class Unit, class Dim>
-    inline constexpr bool has_dim_v = std::is_same_v<typename Unit::dim, Dim>;
+    /**
+     * @brief Extract the real scaling factor of a unit relative to SI.
+     *
+     * Product of the dimensional ratio components (SI and extra ratio pack)
+     * and the unit's global ratio.
+     */
+    template <class U, long double F>
+    struct scaled_unit_impl
+    {
+        using type = Unit<
+            typename U::dim,
+            typename U::ratio,
+            typename U::global,
+            U::factor_v * F>;
+    };
+
+    /**************************************************
+     *                                                *
+     * common unit selection for two compatible units *
+     *                                                *
+     **************************************************/
+
+    /**
+     * @brief Get the common unit type for two compatible units.
+     *
+     * @tparam U1 The first unit type.
+     * @tparam U2 The second unit type.
+     * @tparam Enable SFINAE helper.
+     */
+    template <UnitType U1, UnitType U2, class Enable = void>
+    struct common_unit_impl;
+
+    /**
+     * @brief Get the common unit type for two compatible units.
+     *
+     * @details The common unit is determined by the following rules:
+     * 1. if only one has factor==1, pick that one
+     * 2. if both factors != 1, pick LHS
+     * 3. both factors == 1 → pick smallest ratio (finer); tie → LHS
+     *
+     * @tparam Unit1 The first unit type.
+     * @tparam Unit2 The second unit type.
+     */
+    template <UnitType Unit1, UnitType Unit2>
+    struct common_unit_impl<
+        Unit1,
+        Unit2,
+        std::enable_if_t<same_dimension_v<Unit1, Unit2>>>
+    {
+        static constexpr long double f1   = Unit1::factor_v;
+        static constexpr long double f2   = Unit2::factor_v;
+        static constexpr bool        one1 = (f1 == 1.0L);
+        static constexpr bool        one2 = (f2 == 1.0L);
+
+        static constexpr bool only1 = (one1 && !one2);
+        static constexpr bool only2 = (!one1 && one2);
+        static constexpr bool both  = (one1 && one2);
+        static constexpr bool none  = (!one1 && !one2);
+
+        // rule 1: if only one has factor==1, pick that one
+        using rule1 = std::
+            conditional_t<only1, Unit1, std::conditional_t<only2, Unit2, void>>;
+
+        // rule 2: if both factors != 1, pick LHS
+        using rule2 = std::conditional_t<none, Unit1, void>;
+
+        // rule 3: both factors == 1 → pick smallest ratio (finer); tie → LHS
+        static constexpr long double r1 = ratio_v<Unit1>;
+        static constexpr long double r2 = ratio_v<Unit2>;
+
+        using rule3 = std::conditional_t<
+            both,
+            std::conditional_t<
+                (r1 < r2),
+                Unit1,
+                std::conditional_t<(r2 < r1), Unit2, Unit1>>,   // tie → LHS
+            void>;
+
+        // select type based on rules
+        using type = std::conditional_t<
+            !std::is_void_v<rule1>,
+            rule1,
+            std::conditional_t<!std::is_void_v<rule2>, rule2, rule3>>;
+    };
 
 }   // namespace mstd::details
 

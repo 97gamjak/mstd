@@ -62,8 +62,8 @@ TEST_CASE("quantity conversions and comparisons", "[units]")
 
     STATIC_REQUIRE(same_dimension_v<cm, m>);
     STATIC_REQUIRE_FALSE(same_dimension_v<cm, kg>);
-    STATIC_REQUIRE(compatible_units_v<cm, mm>);
-    STATIC_REQUIRE_FALSE(compatible_units_v<cm, s>);
+    STATIC_REQUIRE(same_dimension_v<cm, mm>);
+    STATIC_REQUIRE_FALSE(same_dimension_v<cm, s>);
 
     const Length<cm> length_cm{250.0};
     const auto       length_m = to<m>(length_cm);
@@ -138,13 +138,13 @@ TEST_CASE("quantity arithmetic for compatible units", "[units]")
 
     const auto area = Length<m>{3.0} * Length<m>{2.0};
     STATIC_REQUIRE(
-        std::is_same_v<typename decltype(area)::unit, unit_mul<m, m>>
+        std::is_same_v<typename decltype(area)::unit, unit_mul_t<m, m>>
     );
     REQUIRE(area.value() == Catch::Approx(6.0));
 
     const auto energy = Force<N>{2.0} * Length<m>{3.0};
     STATIC_REQUIRE(
-        std::is_same_v<typename decltype(energy)::unit, unit_mul<N, m>>
+        std::is_same_v<typename decltype(energy)::unit, unit_mul_t<N, m>>
     );
     REQUIRE(energy.value() == Catch::Approx(6.0));
 }
@@ -181,7 +181,7 @@ TEST_CASE("quantity interaction with scalars", "[units]")
     STATIC_REQUIRE(
         std::is_same_v<
             typename decltype(acceleration)::unit,
-            unit_div<m_per_s, s>>
+            unit_div_t<m_per_s, s>>
     );
     REQUIRE(acceleration.value() == Catch::Approx(5.0));
 

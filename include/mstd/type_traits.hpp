@@ -23,6 +23,8 @@
 #ifndef __MSTD_TYPE_TRAITS_HPP__
 #define __MSTD_TYPE_TRAITS_HPP__
 
-#include "type_traits/unit_traits.hpp"   // IWYU pragma: export
+#include "type_traits/pack_traits.hpp"       // IWYU pragma: export
+#include "type_traits/quantity_traits.hpp"   // IWYU pragma: export
+#include "type_traits/ratio_traits.hpp"      // IWYU pragma: export
 
 #endif   // __MSTD_TYPE_TRAITS_HPP__
