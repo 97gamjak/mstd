@@ -35,12 +35,12 @@ namespace mstd
      ***********************/
 
     /**
-     * @brief default_si_ratio_pack, which is a ratio_pack of all SI dimensions
+     * @brief default_si_ratio_pack, which is a RatioPack of all SI dimensions
      */
     using default_si_ratio_pack = make_default_ratio_pack_t<SIDimIdMeta::size>;
 
     /**
-     * @brief default_extra_ratio_pack, which is a ratio_pack of all Extra
+     * @brief default_extra_ratio_pack, which is a RatioPack of all Extra
      * dimensions
      */
     using default_extra_ratio_pack =
@@ -59,9 +59,9 @@ namespace mstd
      * of a quantity. It contains two compile time lists of ratios.
      * The first list is for the SI dimensions and the second list is for the
      * Extra dimensions.
-     * @tparam SiRatioPack    A `ratio_pack` representing the SI
+     * @tparam SiRatioPack    A `RatioPack` representing the SI
      * dimension ratios.
-     * @tparam ExtraRatioPack A `ratio_pack` representing the Extra
+     * @tparam ExtraRatioPack A `RatioPack` representing the Extra
      * dimension ratios.
      *
      */

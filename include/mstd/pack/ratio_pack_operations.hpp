@@ -29,9 +29,9 @@
 namespace mstd
 {
     /**
-     * @brief Get the value of a ratio_pack as long double
+     * @brief Get the value of a RatioPack as long double
      *
-     * @tparam Pack The ratio_pack type
+     * @tparam Pack The RatioPack type
      * @return constexpr long double The product of all ratios in the pack as
      * long double
      */
@@ -68,12 +68,12 @@ namespace mstd
      *                   *
      *********************/
 
-    /** Create a ratio_pack of size N filled with `std::ratio<1>`. */
+    /** Create a RatioPack of size N filled with `std::ratio<1>`. */
     template <std::size_t N>
     using make_default_ratio_pack_t =
         typename details::make_default_ratio_pack<N>::type;
 
-    /** Create a ratio_pack of size N with a single ratio R at index Idx. */
+    /** Create a RatioPack of size N with a single ratio R at index Idx. */
     template <StdRatio R, size_t Idx, size_t N>
     using make_ratio_pack_single_t =
         decltype(details::make_ratio_pack_at_impl_R<R, Idx>(

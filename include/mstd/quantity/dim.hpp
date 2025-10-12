@@ -75,7 +75,7 @@ namespace mstd
      *   temperature, amount of substance, luminous intensity
      * - Extra dimensions (4 entries): angle, currency, information, count
      *
-     * Packs are `details::integer_pack` specializations providing
+     * Packs are `details::` specializations providing
      * compile-time sequence access and arithmetic.
      *
      * @tparam SI Pack of SI exponents; defaults to all zeros.

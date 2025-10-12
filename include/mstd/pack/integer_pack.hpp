@@ -26,15 +26,14 @@
 #include <array>
 #include <cstddef>
 
-#include "integer_pack_details.hpp"
 #include "mstd/functional.hpp"
 #include "mstd/type_traits/pack_traits.hpp"
 
 /**
  * @file integer_pack.hpp
- * @brief Public integer_pack type and high-level aliases.
+ * @brief Public IntegerPack type and high-level aliases.
  *
- * Exposes `integer_pack`, a fixed-size compile-time list of ints, plus common
+ * Exposes `IntegerPack`, a fixed-size compile-time list of ints, plus common
  * pack operations (add, sub, scale) and simple factory aliases.
  */
 
@@ -45,13 +44,14 @@ namespace mstd
      * Integer pack type   *
      *                     *
      ***********************/
+
     /**
      * @brief A compile-time list of integers.
      *
-     * @tparam Es The integers to include in the integer_pack.
+     * @tparam Es The integers to include in the IntegerPack.
      */
     template <int... Es>
-    struct integer_pack
+    struct IntegerPack
     {
         static constexpr std::array<int, sizeof...(Es)> vals{Es...};
 
@@ -96,36 +96,6 @@ namespace mstd
             return -1;
         }
     };
-
-    /*************************
-     *                       *
-     * Convenience aliases   *
-     *                       *
-     *************************/
-    /** Add two packs element-wise. */
-    template <class A, class B>
-    using pack_add_t = details::pack_zip_t<A, B, add_fn>;
-    /** Subtract two packs element-wise. */
-    template <class A, class B>
-    using pack_sub_t = details::pack_zip_t<A, B, sub_fn>;
-    /** Scale a pack by a compile-time integer K. */
-    template <class P, int K>
-    using pack_scale_t = details::pack_map_t<P, scale_fn<K>>;
-
-    /*********************
-     *                   *
-     * Factory aliases   *
-     *                   *
-     *********************/
-    /** Create an `integer_pack` of size N filled with zeros. */
-    template <std::size_t N>
-    using make_default_integer_pack_t =
-        typename details::make_default_integer_pack<N>::type;
-
-    /** Create an `integer_pack` of size N with 0s except index Ix set to I. */
-    template <std::size_t N, std::size_t Ix, int I = 1>
-    using make_single_integer_pack_t =
-        typename details::make_single_integer_pack<N, Ix, I>::type;
 
 }   // namespace mstd
 

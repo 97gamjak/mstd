@@ -35,7 +35,7 @@
  * @file ratio_pack.hpp
  * @brief Public ratio_pack type and high-level aliases.
  *
- * Exposes `ratio_pack`, a fixed-size compile-time list of `std::ratio` types,
+ * Exposes `RatioPack`, a fixed-size compile-time list of `std::ratio` types,
  * plus helpers to multiply/divide element-wise, raise all entries to a power,
  * and create common pack shapes.
  */
@@ -50,10 +50,10 @@ namespace mstd
     /**
      * @brief A compile-time list of ratios.
      *
-     * @tparam Rs The ratios to include in the ratio_pack.
+     * @tparam Rs The ratios to include in the RatioPack.
      */
     template <class... Rs>
-    struct ratio_pack
+    struct RatioPack
     {
         // store actual ratio values as long double so we can index them
         static constexpr std::array<long double, sizeof...(Rs)> vals{
