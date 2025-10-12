@@ -108,12 +108,6 @@ namespace mstd
             return r;
         }
 
-        template <class Pack>
-        inline constexpr long double ratio_pack_v =
-            details::ratio_pack_value_impl<Pack>(
-                std::make_index_sequence<Pack::size>{}
-            );
-
         /*********************
          *                   *
          * Pack factories    *

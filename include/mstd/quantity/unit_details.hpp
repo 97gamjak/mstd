@@ -152,6 +152,22 @@ namespace mstd::details
     template <class Unit, class Dim>
     inline constexpr bool has_dim_v = std::is_same_v<typename Unit::dim, Dim>;
 
+    /**
+     * @brief Extract the real scaling factor of a unit relative to SI.
+     *
+     * Product of the dimensional ratio components (SI and extra ratio pack)
+     * and the unit's global ratio.
+     */
+    template <class U, long double F>
+    struct scaled_unit_impl
+    {
+        using type = Unit<
+            typename U::dim,
+            typename U::ratio,
+            typename U::global,
+            U::factor_v * F>;
+    };
+
 }   // namespace mstd::details
 
 #endif   // __MSTD_UNITS_DETAILS_HPP__

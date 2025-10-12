@@ -52,7 +52,7 @@ namespace mstd::details
     struct common_unit_impl<
         Unit1,
         Unit2,
-        std::enable_if_t<compatible_units_v<Unit1, Unit2>>>
+        std::enable_if_t<same_dimension_v<Unit1, Unit2>>>
     {
         static constexpr long double f1   = factor_v<Unit1>;
         static constexpr long double f2   = factor_v<Unit2>;

@@ -131,7 +131,7 @@ namespace mstd
         using ug  = Unit<dim_mass, mass_dim_ratio<std::nano>>;
         using ng  = Unit<dim_mass, mass_dim_ratio<std::pico>>;
         using pg  = Unit<dim_mass, mass_dim_ratio<std::femto>>;
-        using amu = scaled_unit<kg, __AMU_TO_KG__>;
+        using amu = scaled_unit_t<kg, __AMU_TO_KG__>;
 
         using y   = Unit<dim_time, time_dim_ratio<std::ratio<__Y_TO_S__>>>;
         using d   = Unit<dim_time, time_dim_ratio<std::ratio<__D_TO_S__>>>;
@@ -172,30 +172,30 @@ namespace mstd
         using fcd = Unit<dim_luminous, luminous_dim_ratio<std::femto>>;
 
         using rad = Unit<dim_angle, angle_dim_ratio<>>;
-        using deg = scaled_unit<rad, __RAD_TO_DEG__>;
+        using deg = scaled_unit_t<rad, __RAD_TO_DEG__>;
 
-        using m_per_s   = unit_div<m, s>;
-        using km_per_h  = unit_div<km, h>;
-        using Ang_per_s = unit_div<Ang, s>;
-        using c         = scaled_unit<m_per_s, __SPEED_OF_LIGHT_TO_MPS__>;
+        using m_per_s   = unit_div_t<m, s>;
+        using km_per_h  = unit_div_t<km, h>;
+        using Ang_per_s = unit_div_t<Ang, s>;
+        using c         = scaled_unit_t<m_per_s, __SPEED_OF_LIGHT_TO_MPS__>;
 
-        using m_per_s2 = unit_div<m_per_s, s>;
+        using m_per_s2 = unit_div_t<m_per_s, s>;
 
-        using N  = unit_mul<kg, m_per_s2>;
+        using N  = unit_mul_t<kg, m_per_s2>;
         using kN = Unit<N::dim, dim_ratio<>, std::kilo>;
         using MN = Unit<N::dim, dim_ratio<>, std::mega>;
 
-        using J    = unit_mul<N, m>;
+        using J    = unit_mul_t<N, m>;
         using kJ   = Unit<J::dim, dim_ratio<>, std::kilo>;
         using MJ   = Unit<J::dim, dim_ratio<>, std::mega>;
         using GJ   = Unit<J::dim, dim_ratio<>, std::giga>;
-        using cal  = scaled_unit<J, __CAL_TO_J__>;
-        using kcal = scaled_unit<kJ, cal::factor_v>;
+        using cal  = scaled_unit_t<J, __CAL_TO_J__>;
+        using kcal = scaled_unit_t<kJ, cal::factor_v>;
 
-        using kcal_per_mol         = unit_div<kcal, mol>;
-        using kcal_per_mol_per_Ang = unit_div<kcal, mol, Ang>;
+        using kcal_per_mol         = unit_div_t<kcal, mol>;
+        using kcal_per_mol_per_Ang = unit_div_t<kcal, mol, Ang>;
 
-        using W  = unit_div<J, s>;
+        using W  = unit_div_t<J, s>;
         using kW = Unit<W::dim, dim_ratio<>, std::kilo>;
         using MW = Unit<W::dim, dim_ratio<>, std::mega>;
         using GW = Unit<W::dim, dim_ratio<>, std::giga>;

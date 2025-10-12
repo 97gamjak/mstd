@@ -119,7 +119,7 @@ namespace mstd
      */
     template <class UTo, class UFrom, class R>
     constexpr quantity<UTo, R> to(quantity<UFrom, R> q)
-    requires compatible_units_v<UFrom, UTo>
+    requires same_dimension_v<UFrom, UTo>
     {
         return quantity<UTo, R>(
             typename quantity<UTo, R>::from_base_t{},
@@ -139,7 +139,7 @@ namespace mstd
      * @return Rep The resulting scalar value.
      */
     template <class Rep, class U1, class U2>
-    requires compatible_units_v<U1, U2>
+    requires same_dimension_v<U1, U2>
     constexpr Rep quantity_cast(quantity<U1, Rep> a, quantity<U2, Rep> b)
     {
         return to<U1>(b).value() ? a.value() / to<U1>(b).value() : Rep{};
@@ -159,7 +159,7 @@ namespace mstd
     template <class U1, class U2, class R1, class R2>
     constexpr bool operator==(quantity<U1, R1> a, quantity<U2, R2> b)
     {
-        auto ret  = compatible_units_v<U1, U2>;
+        auto ret  = same_dimension_v<U1, U2>;
         ret      &= a.baseValue() == b.baseValue();
 
         return ret;
@@ -218,7 +218,7 @@ namespace mstd
      * quantities.
      */
     template <class Unit1, class Unit2, class R1, class R2>
-    requires compatible_units_v<Unit1, Unit2>
+    requires same_dimension_v<Unit1, Unit2>
     constexpr auto operator+(
         const quantity<Unit1, R1>& a,
         const quantity<Unit2, R2>& b
@@ -245,7 +245,7 @@ namespace mstd
      * quantities.
      */
     template <class Unit1, class Unit2, class R1, class R2>
-    requires compatible_units_v<Unit1, Unit2>
+    requires same_dimension_v<Unit1, Unit2>
     constexpr auto operator-(
         const quantity<Unit1, R1>& a,
         const quantity<Unit2, R2>& b
@@ -278,7 +278,7 @@ namespace mstd
     template <class U1, class R1, class U2, class R2>
     constexpr auto operator*(quantity<U1, R1> a, quantity<U2, R2> b)
     {
-        using U   = unit_mul<U1, U2>;
+        using U   = unit_mul_t<U1, U2>;
         using R   = std::common_type_t<R1, R2>;
         const R v = static_cast<R>(a.value()) * static_cast<R>(b.value());
 
@@ -301,7 +301,7 @@ namespace mstd
     template <class U1, class R1, class U2, class R2>
     constexpr auto operator/(quantity<U1, R1> a, quantity<U2, R2> b)
     {
-        using U   = unit_div<U1, U2>;
+        using U   = unit_div_t<U1, U2>;
         using R   = std::common_type_t<R1, R2>;
         const R v = static_cast<R>(a.value()) / static_cast<R>(b.value());
 
