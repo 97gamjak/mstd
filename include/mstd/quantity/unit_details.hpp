@@ -61,7 +61,7 @@ namespace mstd::details
 
         static constexpr long double f        = U1::factor_v * U2::factor_v;
         static constexpr bool        any_real = U1::is_real || U2::is_real;
-        using type                            = unit<dim, ratio, global, f>;
+        using type                            = Unit<dim, ratio, global, f>;
     };
 
     /**
@@ -127,7 +127,7 @@ namespace mstd::details
 
         static constexpr long double factor_v = U1::factor_v / U2::factor_v;
         static constexpr bool        any_real = U1::is_real || U2::is_real;
-        using type = unit<dim, ratio, global, factor_v>;
+        using type = Unit<dim, ratio, global, factor_v>;
     };
 
     /**
@@ -136,17 +136,17 @@ namespace mstd::details
      * Exponentiates dimensions and ratios; raises the real factor; preserves
      * real-ness if the base unit is real.
      */
-    template <class Unit, int Exp>
+    template <class U, int Exp>
     struct unit_pow_impl
     {
-        using dim    = dim_pow_t<typename Unit::dim, Exp>;
-        using ratio  = dim_ratio_pow_t<typename Unit::ratio, Exp>;
-        using global = ratio_pow_t<typename Unit::global, Exp>;
+        using dim    = dim_pow_t<typename U::dim, Exp>;
+        using ratio  = dim_ratio_pow_t<typename U::ratio, Exp>;
+        using global = ratio_pow_t<typename U::global, Exp>;
 
-        static constexpr long double factor_v = power(Unit::factor_v, Exp);
-        static constexpr bool        any_real = Unit::is_real;
+        static constexpr long double factor_v = power(U::factor_v, Exp);
+        static constexpr bool        any_real = U::is_real;
 
-        using type = unit<dim, ratio, global, factor_v>;
+        using type = Unit<dim, ratio, global, factor_v>;
     };
 
     template <class Unit, class Dim>

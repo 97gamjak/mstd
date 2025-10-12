@@ -127,14 +127,14 @@ namespace mstd
     template <class Unit>
     inline constexpr long double scale_v = factor_v<Unit> * ratio_v<Unit>;
 
-    template <class Unit, long double F>
+    template <class U, long double F>
     struct scaled_unit_impl
     {
-        using type = unit<
-            typename Unit::dim,
-            typename Unit::ratio,
-            typename Unit::global,
-            Unit::factor_v * F>;
+        using type = Unit<
+            typename U::dim,
+            typename U::ratio,
+            typename U::global,
+            U::factor_v * F>;
     };
 
     template <class Unit, long double F>

@@ -29,6 +29,15 @@
 namespace mstd
 {
 
+    /**
+     * @brief Alias for std::ratio
+     *
+     * @tparam Num Numerator
+     * @tparam Den Denominator (default: 1)
+     */
+    template <intmax_t Num, intmax_t Den = 1>
+    using ratio = std::ratio<Num, Den>;
+
     namespace details
     {
 
