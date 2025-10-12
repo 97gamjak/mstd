@@ -190,7 +190,7 @@ namespace mstd
         using MJ   = unit<J::dim, dim_ratio<>, std::mega>;
         using GJ   = unit<J::dim, dim_ratio<>, std::giga>;
         using cal  = scaled_unit<J, __CAL_TO_J__>;
-        using kcal = scaled_unit<kJ, cal::factor>;
+        using kcal = scaled_unit<kJ, cal::factor_v>;
 
         using kcal_per_mol         = unit_div<kcal, mol>;
         using kcal_per_mol_per_Ang = unit_div<kcal, mol, Ang>;

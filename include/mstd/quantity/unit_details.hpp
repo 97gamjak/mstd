@@ -59,7 +59,7 @@ namespace mstd::details
         using global =
             std::ratio_multiply<typename U1::global, typename U2::global>;
 
-        static constexpr long double f        = U1::factor * U2::factor;
+        static constexpr long double f        = U1::factor_v * U2::factor_v;
         static constexpr bool        any_real = U1::is_real || U2::is_real;
         using type                            = unit<dim, ratio, global, f>;
     };
@@ -125,9 +125,9 @@ namespace mstd::details
         using global =
             std::ratio_divide<typename U1::global, typename U2::global>;
 
-        static constexpr long double factor   = U1::factor / U2::factor;
+        static constexpr long double factor_v = U1::factor_v / U2::factor_v;
         static constexpr bool        any_real = U1::is_real || U2::is_real;
-        using type = unit<dim, ratio, global, factor>;
+        using type = unit<dim, ratio, global, factor_v>;
     };
 
     /**
@@ -143,10 +143,10 @@ namespace mstd::details
         using ratio  = dim_ratio_pow_t<typename Unit::ratio, Exp>;
         using global = ratio_pow_t<typename Unit::global, Exp>;
 
-        static constexpr long double factor   = power(Unit::factor, Exp);
+        static constexpr long double factor_v = power(Unit::factor_v, Exp);
         static constexpr bool        any_real = Unit::is_real;
 
-        using type = unit<dim, ratio, global, factor>;
+        using type = unit<dim, ratio, global, factor_v>;
     };
 
     template <class Unit, class Dim>

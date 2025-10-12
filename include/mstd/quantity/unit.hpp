@@ -27,15 +27,15 @@
 #include "dim_ratio.hpp"
 #include "mstd/error.hpp"
 #include "mstd/ratio.hpp"
-#include "mstd/tags/unit_tag.hpp"
+#include "mstd/type_traits/quantity_traits.hpp"
 
 namespace mstd
 {
-    template <details::DimType Dim>
-    struct BaseUnit : public unit_tag
+    template <DimType Dim>
+    struct BaseUnit
     {
-        using dim                           = Dim;
-        static constexpr long double factor = 1.0L;
+        using dim                             = Dim;
+        static constexpr long double factor_v = 1.0L;
     };
 
     /**
@@ -51,15 +51,15 @@ namespace mstd
      * @tparam GlobalRatio
      */
     template <
-        details::DimType  Dim,
-        details::DimRatio RatioDim    = dim_ratio<>,
-        StdRatio          GlobalRatio = std::ratio<1>,
-        long double       F           = 1.0L>
+        DimType      Dim,
+        DimRatioType RatioDim    = dim_ratio<>,
+        StdRatio     GlobalRatio = std::ratio<1>,
+        long double  F           = 1.0L>
     struct unit : public BaseUnit<Dim>
     {
-        using ratio                         = RatioDim;
-        using global                        = GlobalRatio;
-        static constexpr long double factor = F;
+        using ratio                           = RatioDim;
+        using global                          = GlobalRatio;
+        static constexpr long double factor_v = F;
     };
 
     /**
@@ -70,10 +70,7 @@ namespace mstd
      * @tparam RatioDim
      * @tparam GlobalRatio
      */
-    template <
-        details::DimType  Dim,
-        details::DimRatio RatioDim,
-        StdRatio          GlobalRatio>
+    template <DimType Dim, DimRatioType RatioDim, StdRatio GlobalRatio>
     struct unit<Dim, RatioDim, GlobalRatio> : public BaseUnit<Dim>
     {
         using ratio  = RatioDim;

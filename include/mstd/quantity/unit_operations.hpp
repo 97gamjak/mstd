@@ -33,7 +33,7 @@
  *
  * Provides helpers to combine units (multiply, divide, power), check
  * dimensional compatibility, and compute conversion/scaling factors
- * relative to SI from a unit's ratio, global ratio, and real factor.
+ * relative to SI from a unit's ratio, global ratio, and real factor_v.
  */
 
 namespace mstd
@@ -114,7 +114,7 @@ namespace mstd
      * @tparam Unit Unit to query
      */
     template <class Unit>
-    inline constexpr long double factor_v = Unit::factor;
+    inline constexpr long double factor_v = Unit::factor_v;
 
     /**
      * @brief Overall scale of a unit relative to SI.
@@ -134,7 +134,7 @@ namespace mstd
             typename Unit::dim,
             typename Unit::ratio,
             typename Unit::global,
-            Unit::factor * F>;
+            Unit::factor_v * F>;
     };
 
     template <class Unit, long double F>

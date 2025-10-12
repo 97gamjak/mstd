@@ -23,15 +23,60 @@
 #ifndef __MSTD_TYPE_TRAITS_QUANTITY_TRAITS_HPP__
 #define __MSTD_TYPE_TRAITS_QUANTITY_TRAITS_HPP__
 
-#include "mstd/tags/quantity_tag.hpp"
+#include "pack_traits.hpp"
+#include "ratio_traits.hpp"
 
 namespace mstd
 {
+    /**
+     * @brief Concept for dimension types.
+     *
+     * @details A dimension type must provide two nested types `si` and `ex`
+     * which are both integer packs.
+     */
     template <typename T>
-    constexpr bool is_quantity_v = std::is_base_of_v<quantity_tag, T>;
+    concept DimType =
+        IntegerPackType<typename T::si> && IntegerPackType<typename T::ex>;
 
     template <typename T>
-    concept QuantityType = is_quantity_v<T>;
+    constexpr bool is_dim_v = DimType<T>;
+
+    /**
+     * @brief Concept for dimension ratio types.
+     *
+     * @details A dimension ratio type must provide two nested types `si` and
+     * `ex` which are both ratio packs.
+     */
+    template <typename T>
+    concept DimRatioType =
+        RatioPackType<typename T::si> && RatioPackType<typename T::ex>;
+
+    template <typename T>
+    constexpr bool is_dim_ratio_v = DimRatioType<T>;
+
+    template <typename T>
+    concept UnitType =
+        DimType<typename T::dim> && DimRatioType<typename T::ratio> &&
+        RatioType<typename T::global> && requires {
+            { T::factor_v } -> std::convertible_to<long double>;
+        } && (T::factor_v != 0.0L);
+
+    template <typename T>
+    constexpr bool is_unit_v = UnitType<T>;
+
+    /**
+     * @brief Concept for quantity types.
+     *
+     * @details A quantity type must provide a nested type `unit` which is a
+     * unit type and a nested type `rep` which is the representation type.
+     */
+    template <typename T>
+    concept QuantityType =
+        UnitType<typename T::unit> && requires { typename T::rep; };
+
+    template <typename T>
+    constexpr bool is_quantity_v = QuantityType<T>;
+
 }   // namespace mstd
 
 #endif   // __MSTD_TYPE_TRAITS_QUANTITY_TRAITS_HPP__
