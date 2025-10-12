@@ -85,6 +85,17 @@ namespace mstd
     template <typename T>
     constexpr bool is_quantity_v = QuantityType<T>;
 
+    /**
+     * @brief Checks if two units have the same dimension
+     *
+     * @tparam Unit1 First unit
+     * @tparam Unit2 Second unit
+     * @return true if both units have the same dimension, false otherwise
+     */
+    template <UnitType U1, UnitType U2>
+    inline constexpr bool same_dimension_v =
+        std::is_same_v<typename U1::dim, typename U2::dim>;
+
     // default case false see below specializations
     template <typename T, typename U>
     inline constexpr bool has_dim_v = false;

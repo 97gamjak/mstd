@@ -23,12 +23,13 @@
 #ifndef __MSTD_UNITS_HPP__
 #define __MSTD_UNITS_HPP__
 
-#include "quantity/dim.hpp"               // IWYU pragma: export
-#include "quantity/dim_impl.hpp"          // IWYU pragma: export
-#include "quantity/quantity.hpp"          // IWYU pragma: export
-#include "quantity/quantity_impl.hpp"     // IWYU pragma: export
-#include "quantity/unit.hpp"              // IWYU pragma: export
-#include "quantity/unit_impl.hpp"         // IWYU pragma: export
-#include "quantity/unit_operations.hpp"   // IWYU pragma: export
+#include "mstd/type_traits/quantity_traits.hpp"   // IWYU pragma: export
+#include "quantity/dim.hpp"                       // IWYU pragma: export
+#include "quantity/dim_impl.hpp"                  // IWYU pragma: export
+#include "quantity/quantity.hpp"                  // IWYU pragma: export
+#include "quantity/quantity_impl.hpp"             // IWYU pragma: export
+#include "quantity/unit.hpp"                      // IWYU pragma: export
+#include "quantity/unit_impl.hpp"                 // IWYU pragma: export
+#include "quantity/unit_operations.hpp"           // IWYU pragma: export
 
 #endif   // __MSTD_UNITS_HPP__

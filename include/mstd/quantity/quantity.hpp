@@ -26,7 +26,6 @@
 #include <type_traits>
 
 #include "mstd/type_traits/quantity_traits.hpp"
-#include "unit_common.hpp"
 #include "unit_operations.hpp"
 
 namespace mstd
@@ -224,7 +223,7 @@ namespace mstd
         const quantity<Unit2, R2>& b
     )
     {
-        using unit      = details::common_unit_t<Unit1, Unit2>;
+        using unit      = common_unit_t<Unit1, Unit2>;
         const auto aNew = to<unit>(a);
         const auto bNew = to<unit>(b);
 
@@ -251,7 +250,7 @@ namespace mstd
         const quantity<Unit2, R2>& b
     )
     {
-        using unit         = details::common_unit_t<Unit1, Unit2>;
+        using unit         = common_unit_t<Unit1, Unit2>;
         using R            = std::common_type_t<R1, R2>;
         const auto aCommon = to<unit>(a);
         const auto bCommon = to<unit>(b);

@@ -26,6 +26,7 @@
 #include "dim.hpp"
 #include "mstd/math.hpp"
 #include "mstd/ratio.hpp"
+#include "mstd/type_traits/quantity_traits.hpp"
 #include "unit.hpp"
 
 /**
@@ -159,6 +160,75 @@ namespace mstd::details
             typename U::ratio,
             typename U::global,
             U::factor_v * F>;
+    };
+
+    /**************************************************
+     *                                                *
+     * common unit selection for two compatible units *
+     *                                                *
+     **************************************************/
+
+    /**
+     * @brief Get the common unit type for two compatible units.
+     *
+     * @tparam U1 The first unit type.
+     * @tparam U2 The second unit type.
+     * @tparam Enable SFINAE helper.
+     */
+    template <UnitType U1, UnitType U2, class Enable = void>
+    struct common_unit_impl;
+
+    /**
+     * @brief Get the common unit type for two compatible units.
+     *
+     * @details The common unit is determined by the following rules:
+     * 1. if only one has factor==1, pick that one
+     * 2. if both factors != 1, pick LHS
+     * 3. both factors == 1 → pick smallest ratio (finer); tie → LHS
+     *
+     * @tparam Unit1 The first unit type.
+     * @tparam Unit2 The second unit type.
+     */
+    template <UnitType Unit1, UnitType Unit2>
+    struct common_unit_impl<
+        Unit1,
+        Unit2,
+        std::enable_if_t<same_dimension_v<Unit1, Unit2>>>
+    {
+        static constexpr long double f1   = Unit1::factor_v;
+        static constexpr long double f2   = Unit2::factor_v;
+        static constexpr bool        one1 = (f1 == 1.0L);
+        static constexpr bool        one2 = (f2 == 1.0L);
+
+        static constexpr bool only1 = (one1 && !one2);
+        static constexpr bool only2 = (!one1 && one2);
+        static constexpr bool both  = (one1 && one2);
+        static constexpr bool none  = (!one1 && !one2);
+
+        // rule 1: if only one has factor==1, pick that one
+        using rule1 = std::
+            conditional_t<only1, Unit1, std::conditional_t<only2, Unit2, void>>;
+
+        // rule 2: if both factors != 1, pick LHS
+        using rule2 = std::conditional_t<none, Unit1, void>;
+
+        // rule 3: both factors == 1 → pick smallest ratio (finer); tie → LHS
+        static constexpr long double r1 = ratio_v<Unit1>;
+        static constexpr long double r2 = ratio_v<Unit2>;
+
+        using rule3 = std::conditional_t<
+            both,
+            std::conditional_t<
+                (r1 < r2),
+                Unit1,
+                std::conditional_t<(r2 < r1), Unit2, Unit1>>,   // tie → LHS
+            void>;
+
+        // select type based on rules
+        using type = std::conditional_t<
+            !std::is_void_v<rule1>,
+            rule1,
+            std::conditional_t<!std::is_void_v<rule2>, rule2, rule3>>;
     };
 
 }   // namespace mstd::details

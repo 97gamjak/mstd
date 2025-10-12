@@ -40,17 +40,6 @@ namespace mstd
 {
 
     /**
-     * @brief Checks if two units have the same dimension
-     *
-     * @tparam Unit1 First unit
-     * @tparam Unit2 Second unit
-     * @return true if both units have the same dimension, false otherwise
-     */
-    template <UnitType Unit1, UnitType Unit2>
-    inline constexpr bool same_dimension_v =
-        std::is_same_v<typename Unit1::dim, typename Unit2::dim>;
-
-    /**
      * @brief Multiply two units to form a composite unit.
      *
      * @tparam Unit1 First unit
@@ -128,6 +117,15 @@ namespace mstd
      */
     template <UnitType Unit, long double F>
     using scaled_unit_t = typename details::scaled_unit_impl<Unit, F>::type;
+
+    /**
+     * @brief Get the common unit type for two compatible units.
+     *
+     * @tparam U1 The first unit type.
+     * @tparam U2 The second unit type.
+     */
+    template <UnitType U1, UnitType U2>
+    using common_unit_t = typename details::common_unit_impl<U1, U2>::type;
 
 }   // namespace mstd
 
