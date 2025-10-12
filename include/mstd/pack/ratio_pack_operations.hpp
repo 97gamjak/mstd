@@ -74,7 +74,7 @@ namespace mstd
         typename details::make_default_ratio_pack<N>::type;
 
     /** Create a RatioPack of size N with a single ratio R at index Idx. */
-    template <StdRatio R, size_t Idx, size_t N>
+    template <RatioType R, size_t Idx, size_t N>
     using make_ratio_pack_single_t =
         decltype(details::make_ratio_pack_at_impl_R<R, Idx>(
             std::make_index_sequence<N>{}

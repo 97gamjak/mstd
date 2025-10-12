@@ -77,7 +77,7 @@ namespace mstd
      * @tparam R
      * @return the resulting DimRatio
      */
-    template <details::SimpleDim Dim, StdRatio Ratio>
+    template <details::SimpleDim Dim, RatioType Ratio>
     using make_dim_ratio_single_t =
         typename details::make_dim_ratio_single<Dim, Ratio>::type;
 

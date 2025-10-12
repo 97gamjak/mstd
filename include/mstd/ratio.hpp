@@ -111,16 +111,10 @@ namespace mstd
         T::den;
     };
 
-    template <class T>
-    concept StdRatio = requires {
-        { T::num } -> std::convertible_to<long long>;
-        { T::den } -> std::convertible_to<long long>;
-    };
-
     template <typename T>
     inline constexpr long double ratio_v = 1.0L;
 
-    template <StdRatio T>
+    template <RatioType T>
     static constexpr long double ratio_v<T> =
         static_cast<long double>(T::num) / static_cast<long double>(T::den);
 
