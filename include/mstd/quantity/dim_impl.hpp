@@ -24,6 +24,7 @@
 #define __MSTD_DIMENSION_IMPL_HPP__
 
 #include "dim.hpp"
+#include "dim_operations.hpp"
 
 namespace mstd
 {

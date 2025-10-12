@@ -28,6 +28,7 @@
 
 #include "integer_pack_details.hpp"
 #include "mstd/functional.hpp"
+#include "mstd/type_traits/pack_traits.hpp"
 
 /**
  * @file integer_pack.hpp
