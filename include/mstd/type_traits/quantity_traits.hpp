@@ -26,6 +26,14 @@
 #include "pack_traits.hpp"
 #include "ratio_traits.hpp"
 
+/**
+ * @file quantity_traits.hpp
+ * @brief Concepts for quantity, unit, dimension, and dimension ratio types.
+ *
+ * Provides concepts to check if a type conforms to the expected interface
+ * of quantity types, unit types, dimension types, and dimension ratio types.
+ */
+
 namespace mstd
 {
     /**
