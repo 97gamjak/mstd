@@ -31,10 +31,11 @@
 
 namespace mstd
 {
+    template <details::DimType Dim>
     struct BaseUnit : public unit_tag
     {
-        static constexpr long double factor  = 1.0L;
-        static constexpr bool        is_real = false;
+        using dim                           = Dim;
+        static constexpr long double factor = 1.0L;
     };
 
     /**
@@ -50,12 +51,15 @@ namespace mstd
      * @tparam GlobalRatio
      */
     template <
-        typename Dim,
-        typename RatioDim,
-        StdRatio GlobalRatio = std::ratio<1>>
-    struct simple_unit : public public BaseUnit
+        details::DimType  Dim,
+        details::DimRatio RatioDim    = dim_ratio<>,
+        StdRatio          GlobalRatio = std::ratio<1>,
+        long double       F           = 1.0L>
+    struct unit : public BaseUnit<Dim>
     {
-        MSTD_COMPILE_FAIL("unit must be specialized");
+        using ratio                         = RatioDim;
+        using global                        = GlobalRatio;
+        static constexpr long double factor = F;
     };
 
     /**
@@ -70,62 +74,10 @@ namespace mstd
         details::DimType  Dim,
         details::DimRatio RatioDim,
         StdRatio          GlobalRatio>
-    struct simple_unit<Dim, RatioDim, GlobalRatio> : public public BaseUnit
+    struct unit<Dim, RatioDim, GlobalRatio> : public BaseUnit<Dim>
     {
-        using dim    = Dim;
         using ratio  = RatioDim;
         using global = GlobalRatio;
-    };
-
-    /**
-     * @brief unit definition for a dimension (a simple base dimension), a ratio
-     * and a ratio as a global ratio
-     *
-     * @tparam Dim
-     * @tparam Ratio
-     * @tparam GlobalRatio
-     */
-    template <details::SimpleDim Dim, StdRatio Ratio, StdRatio GlobalRatio>
-    struct simple_unit<Dim, Ratio, GlobalRatio> : public public BaseUnit
-    {
-        using dim    = Dim;
-        using ratio  = make_dim_ratio_single_t<Dim, Ratio>;
-        using global = GlobalRatio;
-    };
-
-    /**
-     * @brief unit definition for a dimension (a simple base dimension), no
-     * ratio and a ratio as a global ratio
-     *
-     * @tparam Dim
-     * @tparam GlobalRatio
-     */
-    template <details::DimType Dim, StdRatio GlobalRatio>
-    struct simple_unit<Dim, std::ratio<1>, GlobalRatio> : public public BaseUnit
-    {
-        using dim    = Dim;
-        using ratio  = dim_ratio<>;
-        using global = GlobalRatio;
-    };
-
-    /**
-     * @brief real unit definition. This is a unit with a real factor as a
-     * general multiplier/scaling factor
-     *
-     * @tparam Dim
-     * @tparam Ratio
-     * @tparam GlobalRatio
-     */
-    template <
-        details::DimType Dim,
-        long double      F,
-        typename DimRatioOrRatio,
-        StdRatio GlobalRatio>
-    requires(StdRatio<DimRatioOrRatio> || details::DimRatio<DimRatioOrRatio>)
-    struct unit : simple_unit<Dim, DimRatioOrRatio, GlobalRatio>
-    {
-        static constexpr long double factor  = F;
-        static constexpr bool        is_real = true;
     };
 
 }   // namespace mstd
