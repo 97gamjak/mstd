@@ -24,6 +24,7 @@
 #define __MSTD_UNITS_DETAILS_HPP__
 
 #include "dim.hpp"
+#include "dim_ratio_operations.hpp"
 #include "mstd/math.hpp"
 #include "mstd/ratio.hpp"
 #include "mstd/type_traits/quantity_traits.hpp"

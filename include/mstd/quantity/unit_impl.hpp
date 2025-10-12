@@ -182,13 +182,13 @@ namespace mstd
         using m_per_s2 = unit_div_t<m_per_s, s>;
 
         using N  = unit_mul_t<kg, m_per_s2>;
-        using kN = Unit<N::dim, dim_ratio<>, std::kilo>;
-        using MN = Unit<N::dim, dim_ratio<>, std::mega>;
+        using kN = Unit<N::dim, DimRatio<>, std::kilo>;
+        using MN = Unit<N::dim, DimRatio<>, std::mega>;
 
         using J    = unit_mul_t<N, m>;
-        using kJ   = Unit<J::dim, dim_ratio<>, std::kilo>;
-        using MJ   = Unit<J::dim, dim_ratio<>, std::mega>;
-        using GJ   = Unit<J::dim, dim_ratio<>, std::giga>;
+        using kJ   = Unit<J::dim, DimRatio<>, std::kilo>;
+        using MJ   = Unit<J::dim, DimRatio<>, std::mega>;
+        using GJ   = Unit<J::dim, DimRatio<>, std::giga>;
         using cal  = scaled_unit_t<J, __CAL_TO_J__>;
         using kcal = scaled_unit_t<kJ, cal::factor_v>;
 
@@ -196,9 +196,9 @@ namespace mstd
         using kcal_per_mol_per_Ang = unit_div_t<kcal, mol, Ang>;
 
         using W  = unit_div_t<J, s>;
-        using kW = Unit<W::dim, dim_ratio<>, std::kilo>;
-        using MW = Unit<W::dim, dim_ratio<>, std::mega>;
-        using GW = Unit<W::dim, dim_ratio<>, std::giga>;
+        using kW = Unit<W::dim, DimRatio<>, std::kilo>;
+        using MW = Unit<W::dim, DimRatio<>, std::mega>;
+        using GW = Unit<W::dim, DimRatio<>, std::giga>;
 
     }   // namespace literals
 

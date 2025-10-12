@@ -47,13 +47,13 @@ namespace mstd
      * @brief placeholder for a Unit
      *
      * @tparam Dim The dimension of the unit
-     * @tparam Ratio The dim_ratio of the unit (default: all 1)
+     * @tparam Ratio The DimRatio of the unit (default: all 1)
      * @tparam Global The global ratio of the unit (default: 1/1)
      * @tparam F The real factor of the unit (default: 1.0L)
      */
     template <
         DimType      Dim,
-        DimRatioType Ratio  = dim_ratio<>,
+        DimRatioType Ratio  = DimRatio<>,
         RatioType    Global = ratio<1>,
         long double  F      = 1.0L>
     struct Unit : public BaseUnit<Dim>
@@ -67,7 +67,7 @@ namespace mstd
      * @brief Specialization for units without real factor
      *
      * @tparam Dim The dimension of the unit
-     * @tparam Ratio The dim_ratio of the unit (default: all 1)
+     * @tparam Ratio The DimRatio of the unit (default: all 1)
      * @tparam Global The global ratio of the unit (default: 1/1)
      */
     template <DimType Dim, DimRatioType Ratio, RatioType Global>
