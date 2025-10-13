@@ -26,8 +26,41 @@
 #include <concepts>
 #include <ratio>
 
-namespace mstd::ratio
+#include "mstd/type_traits/ratio_traits.hpp"
+
+namespace mstd
 {
+
+    /**
+     * @brief Alias for std::ratio
+     *
+     * @tparam Num Numerator
+     * @tparam Den Denominator (default: 1)
+     */
+    template <intmax_t Num, intmax_t Den = 1>
+    using ratio = std::ratio<Num, Den>;
+
+    /**
+     * @brief Compile-time ratio multiplier.
+     *
+     * Multiplies two std::ratio types.
+     *
+     * @tparam R1 First ratio
+     * @tparam R2 Second ratio
+     */
+    template <RatioType R1, RatioType R2>
+    using ratio_mul_t = std::ratio_multiply<R1, R2>;
+
+    /**
+     * @brief Compile-time ratio divider.
+     *
+     * Divides two std::ratio types.
+     *
+     * @tparam R1 First ratio (numerator)
+     * @tparam R2 Second ratio (denominator)
+     */
+    template <RatioType R1, RatioType R2>
+    using ratio_div_t = std::ratio_divide<R1, R2>;
 
     namespace details
     {
@@ -78,16 +111,13 @@ namespace mstd::ratio
         T::den;
     };
 
-    template <class T>
-    concept StdRatio = requires {
-        { T::num } -> std::convertible_to<long long>;
-        { T::den } -> std::convertible_to<long long>;
-    };
+    template <typename T>
+    inline constexpr long double ratio_v = 1.0L;
 
-    template <StdRatio T>
-    static constexpr long double ratio_v =
+    template <RatioType T>
+    static constexpr long double ratio_v<T> =
         static_cast<long double>(T::num) / static_cast<long double>(T::den);
 
-}   // namespace mstd::ratio
+}   // namespace mstd
 
 #endif   // __MSTD_UNITS_RATIO_HPP__

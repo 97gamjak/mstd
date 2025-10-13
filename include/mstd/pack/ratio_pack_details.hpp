@@ -29,6 +29,7 @@
 #include <tuple>
 
 #include "mstd/ratio.hpp"
+#include "ratio_pack.hpp"
 
 /**
  * @file ratio_pack_details.hpp
@@ -38,31 +39,10 @@
  * construction helpers, and detection traits used by the public interface.
  */
 
-namespace mstd::pack
+namespace mstd
 {
-    template <class... Rs>
-    struct ratio_pack;
-
     namespace details
     {
-        /********************
-         *                  *
-         * Traits & concept *
-         *                  *
-         ********************/
-        template <class>
-        struct is_ratio_pack : std::false_type
-        {
-        };
-
-        template <class... Rs>
-        struct is_ratio_pack<ratio_pack<Rs...>> : std::true_type
-        {
-        };
-
-        template <class T>
-        concept RatioPack = details::is_ratio_pack<T>::value;
-
         /*******************
          *                 *
          * Pack algorithms  *
@@ -75,8 +55,8 @@ namespace mstd::pack
             size_t... I>
         constexpr auto ratio_pack_zip_impl(std::index_sequence<I...>)
         {
-            static_assert(A::size == B::size, "ratio_pack size mismatch");
-            return ratio_pack<typename F<
+            static_assert(A::size == B::size, "RatioPack size mismatch");
+            return RatioPack<typename F<
                 typename A::template type_at<I>,
                 typename B::template type_at<I>>::type...>{};
         }
@@ -86,12 +66,12 @@ namespace mstd::pack
             std::make_index_sequence<A::size>{}
         ));
 
-        // ---- apply power to every entry in a ratio_pack
+        // ---- apply power to every entry in a RatioPack
         template <class Pack, int K, size_t... I>
         constexpr auto ratio_pack_pow_impl(std::index_sequence<I...>)
         {
-            return ratio_pack<
-                ratio::ratio_pow_t<typename Pack::template type_at<I>, K>...>{};
+            return RatioPack<
+                ratio_pow_t<typename Pack::template type_at<I>, K>...>{};
         }
 
         /*********************
@@ -107,12 +87,6 @@ namespace mstd::pack
             ((r *= Pack::template get<I>()), ...);
             return r;
         }
-
-        template <class Pack>
-        inline constexpr long double ratio_pack_v =
-            details::ratio_pack_value_impl<Pack>(
-                std::make_index_sequence<Pack::size>{}
-            );
 
         /*********************
          *                   *
@@ -130,16 +104,16 @@ namespace mstd::pack
         template <std::size_t N, std::size_t... Is>
         struct make_default_ratio_pack<N, std::index_sequence<Is...>>
         {
-            using type = ratio_pack<default_ratio<Is>...>;
+            using type = RatioPack<default_ratio<Is>...>;
         };
 
         /**
-         * @brief Build a ratio_pack of size N with ratio R at index Idx.
+         * @brief Build a RatioPack of size N with ratio R at index Idx.
          */
         template <size_t Idx, size_t... I>
         constexpr auto make_ratio_pack_at_impl(std::index_sequence<I...>)
         {
-            return pack::ratio_pack<
+            return RatioPack<
                 std::
                     conditional_t<I == Idx, std::ratio<1>, std::ratio<1>>...>{};
         }
@@ -147,12 +121,12 @@ namespace mstd::pack
         template <class R, size_t Idx, size_t... I>
         constexpr auto make_ratio_pack_at_impl_R(std::index_sequence<I...>)
         {
-            return pack::ratio_pack<
+            return RatioPack<
                 std::conditional_t<I == Idx, R, std::ratio<1>>...>{};
         }
 
     }   // namespace details
 
-}   // namespace mstd::pack
+}   // namespace mstd
 
 #endif   // __MSTD_RATIO_PACK_DETAILS_HPP__

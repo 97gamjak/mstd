@@ -20,29 +20,11 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_MATH_POWER_HPP__
-#define __MSTD_MATH_POWER_HPP__
+#ifndef __MSTD_TYPE_TRAITS_HPP__
+#define __MSTD_TYPE_TRAITS_HPP__
 
-namespace mstd
-{
+#include "type_traits/pack_traits.hpp"       // IWYU pragma: export
+#include "type_traits/quantity_traits.hpp"   // IWYU pragma: export
+#include "type_traits/ratio_traits.hpp"      // IWYU pragma: export
 
-    template <typename T>
-    T power(T base, int exponent)
-    {
-        T result = static_cast<T>(1);
-
-        if (exponent < 0)
-        {
-            base     = 1 / base;
-            exponent = -exponent;
-        }
-
-        for (int i = 0; i < exponent; i++)
-            result *= base;
-
-        return result;
-    }
-
-}   // namespace mstd
-
-#endif   // __MSTD_MATH_POWER_HPP__
+#endif   // __MSTD_TYPE_TRAITS_HPP__

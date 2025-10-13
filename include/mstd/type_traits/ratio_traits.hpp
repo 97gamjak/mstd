@@ -20,29 +20,34 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_MATH_POWER_HPP__
-#define __MSTD_MATH_POWER_HPP__
+#ifndef __MSTD_RATIO_TRAITS_HPP__
+#define __MSTD_RATIO_TRAITS_HPP__
+
+/**
+ * @file ratio_traits.hpp
+ * @brief Concepts for std::ratio types.
+ *
+ * Provides concepts to check if a type conforms to the expected interface
+ * of std::ratio types.
+ */
 
 namespace mstd
 {
 
+    /**
+     * @brief Concept for std::ratio types.
+     *
+     * @details A ratio type must provide two static members `num` and `den`.
+     */
     template <typename T>
-    T power(T base, int exponent)
-    {
-        T result = static_cast<T>(1);
+    concept RatioType = requires {
+        T::num;
+        T::den;
+    };
 
-        if (exponent < 0)
-        {
-            base     = 1 / base;
-            exponent = -exponent;
-        }
-
-        for (int i = 0; i < exponent; i++)
-            result *= base;
-
-        return result;
-    }
+    template <typename T>
+    constexpr bool is_ratio_v = RatioType<T>;
 
 }   // namespace mstd
 
-#endif   // __MSTD_MATH_POWER_HPP__
+#endif   // __MSTD_RATIO_TRAITS_HPP__

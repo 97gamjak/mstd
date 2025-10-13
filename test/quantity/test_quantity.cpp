@@ -28,8 +28,8 @@
 
 TEST_CASE("quantity construction and accessors", "[units]")
 {
-    using namespace mstd::units;
-    using namespace mstd::units::literals;
+    using namespace mstd;
+    using namespace mstd::literals;
 
     constexpr Length<m> one_meter{1.0};
     STATIC_REQUIRE(one_meter.value() == 1.0);
@@ -57,13 +57,13 @@ TEST_CASE("quantity construction and accessors", "[units]")
 
 TEST_CASE("quantity conversions and comparisons", "[units]")
 {
-    using namespace mstd::units;
-    using namespace mstd::units::literals;
+    using namespace mstd;
+    using namespace mstd::literals;
 
     STATIC_REQUIRE(same_dimension_v<cm, m>);
     STATIC_REQUIRE_FALSE(same_dimension_v<cm, kg>);
-    STATIC_REQUIRE(compatible_units_v<cm, mm>);
-    STATIC_REQUIRE_FALSE(compatible_units_v<cm, s>);
+    STATIC_REQUIRE(same_dimension_v<cm, mm>);
+    STATIC_REQUIRE_FALSE(same_dimension_v<cm, s>);
 
     const Length<cm> length_cm{250.0};
     const auto       length_m = to<m>(length_cm);
@@ -102,8 +102,8 @@ TEST_CASE("quantity conversions and comparisons", "[units]")
 
 TEST_CASE("quantity arithmetic for compatible units", "[units]")
 {
-    using namespace mstd::units;
-    using namespace mstd::units::literals;
+    using namespace mstd;
+    using namespace mstd::literals;
 
     const Length<m>      a{2.0};
     const Length<m, int> b{3};
@@ -138,21 +138,21 @@ TEST_CASE("quantity arithmetic for compatible units", "[units]")
 
     const auto area = Length<m>{3.0} * Length<m>{2.0};
     STATIC_REQUIRE(
-        std::is_same_v<typename decltype(area)::unit, unit_mul<m, m>>
+        std::is_same_v<typename decltype(area)::unit, unit_mul_t<m, m>>
     );
     REQUIRE(area.value() == Catch::Approx(6.0));
 
     const auto energy = Force<N>{2.0} * Length<m>{3.0};
     STATIC_REQUIRE(
-        std::is_same_v<typename decltype(energy)::unit, unit_mul<N, m>>
+        std::is_same_v<typename decltype(energy)::unit, unit_mul_t<N, m>>
     );
     REQUIRE(energy.value() == Catch::Approx(6.0));
 }
 
 TEST_CASE("quantity interaction with scalars", "[units]")
 {
-    using namespace mstd::units;
-    using namespace mstd::units::literals;
+    using namespace mstd;
+    using namespace mstd::literals;
 
     const Length<m> base_length{1.5};
     const auto      stretched = base_length * 2;
@@ -181,7 +181,7 @@ TEST_CASE("quantity interaction with scalars", "[units]")
     STATIC_REQUIRE(
         std::is_same_v<
             typename decltype(acceleration)::unit,
-            unit_div<m_per_s, s>>
+            unit_div_t<m_per_s, s>>
     );
     REQUIRE(acceleration.value() == Catch::Approx(5.0));
 
@@ -195,8 +195,8 @@ TEST_CASE("quantity interaction with scalars", "[units]")
 
 TEST_CASE("quantity division", "[units]")
 {
-    using namespace mstd::units;
-    using namespace mstd::units::literals;
+    using namespace mstd;
+    using namespace mstd::literals;
     auto length = Length<km>{1.0};
     auto vel    = Velocity<m_per_s>{10.0};
 
@@ -209,6 +209,20 @@ TEST_CASE("quantity division", "[units]")
     auto acc = Acceleration<m_per_s2>{2.0};
 
     REQUIRE(
-        to<unit_div<m, h, h>>(acc).value() == Catch::Approx(2.0 * 3600 * 3600)
+        to<unit_div_t<m, h, h>>(acc).value() == Catch::Approx(2.0 * 3600 * 3600)
     );
+}
+
+TEST_CASE("quantity multiplication", "[units]")
+{
+    using namespace mstd;
+    using namespace mstd::literals;
+
+    const Time<s> time{10.0};
+    // const Time<unit_div_t<unitless, s>> inv_time{0.1};
+    using unit = Unit<dim_inv_time>;
+    const Time<unit> inv_time{0.1};
+
+    const auto check = time * inv_time;
+    REQUIRE(check.baseValue() == Catch::Approx(1.0));
 }

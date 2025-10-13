@@ -27,7 +27,7 @@
 
 #include "mstd/enum.hpp"
 
-namespace mstd::units
+namespace mstd
 {
     // NOLINTBEGIN
 
@@ -75,6 +75,6 @@ namespace mstd::units
     MSTD_ENUM(ExtraDimId, size_t, EXTRADIMID_LIST)
 
     // NOLINTEND
-}   // namespace mstd::units
+}   // namespace mstd
 
 #endif   // __MSTD_UNITS_ENUMS_HPP__

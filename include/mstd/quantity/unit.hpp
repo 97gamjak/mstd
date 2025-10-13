@@ -27,104 +27,56 @@
 #include "dim_ratio.hpp"
 #include "mstd/error.hpp"
 #include "mstd/ratio.hpp"
+#include "mstd/type_traits/quantity_traits.hpp"
 
-namespace mstd::units
+namespace mstd
 {
     /**
-     * @brief placeholder for a unit
-     *
-     * @details
-     *
-     * This is a placeholder for a unit. The general case is forbidden.
-     * All applicable specializations must be provided explicitly.
+     * @brief BaseUnit definition for a dimension
      *
      * @tparam Dim
-     * @tparam RatioDim
-     * @tparam GlobalRatio
      */
-    template <
-        typename Dim,
-        typename RatioDim,
-        ratio::StdRatio GlobalRatio = std::ratio<1>>
-    struct unit
+    template <DimType Dim>
+    struct BaseUnit
     {
-        MSTD_COMPILE_FAIL("unit must be specialized");
+        using dim                             = Dim;
+        static constexpr long double factor_v = 1.0L;
     };
 
     /**
-     * @brief unit definition for a dimension, a dim_ratio and a ratio as a
-     * global ratio
+     * @brief placeholder for a Unit
      *
-     * @tparam Dim
-     * @tparam RatioDim
-     * @tparam GlobalRatio
+     * @tparam Dim The dimension of the unit
+     * @tparam Ratio The DimRatio of the unit (default: all 1)
+     * @tparam Global The global ratio of the unit (default: 1/1)
+     * @tparam F The real factor of the unit (default: 1.0L)
      */
     template <
-        details::DimType  Dim,
-        details::DimRatio RatioDim,
-        ratio::StdRatio   GlobalRatio>
-    struct unit<Dim, RatioDim, GlobalRatio>
+        DimType      Dim,
+        DimRatioType Ratio  = DimRatio<>,
+        RatioType    Global = ratio<1>,
+        long double  F      = 1.0L>
+    struct Unit : public BaseUnit<Dim>
     {
-        using dim    = Dim;
-        using ratio  = RatioDim;
-        using global = GlobalRatio;
+        using ratio                           = Ratio;
+        using global                          = Global;
+        static constexpr long double factor_v = F;
     };
 
     /**
-     * @brief unit definition for a dimension (a simple base dimension), a ratio
-     * and a ratio as a global ratio
+     * @brief Specialization for units without real factor
      *
-     * @tparam Dim
-     * @tparam Ratio
-     * @tparam GlobalRatio
+     * @tparam Dim The dimension of the unit
+     * @tparam Ratio The DimRatio of the unit (default: all 1)
+     * @tparam Global The global ratio of the unit (default: 1/1)
      */
-    template <
-        details::SimpleDim Dim,
-        ratio::StdRatio    Ratio,
-        ratio::StdRatio    GlobalRatio>
-    struct unit<Dim, Ratio, GlobalRatio>
+    template <DimType Dim, DimRatioType Ratio, RatioType Global>
+    struct Unit<Dim, Ratio, Global> : public BaseUnit<Dim>
     {
-        using dim    = Dim;
-        using ratio  = make_dim_ratio_single_t<Dim, Ratio>;
-        using global = GlobalRatio;
+        using ratio  = Ratio;
+        using global = Global;
     };
 
-    /**
-     * @brief unit definition for a dimension (a simple base dimension), no
-     * ratio and a ratio as a global ratio
-     *
-     * @tparam Dim
-     * @tparam GlobalRatio
-     */
-    template <details::DimType Dim, ratio::StdRatio GlobalRatio>
-    struct unit<Dim, std::ratio<1>, GlobalRatio>
-    {
-        using dim    = Dim;
-        using ratio  = dim_ratio<>;
-        using global = GlobalRatio;
-    };
-
-    /**
-     * @brief real unit definition. This is a unit with a real factor as a
-     * general multiplier/scaling factor
-     *
-     * @tparam Dim
-     * @tparam Ratio
-     * @tparam GlobalRatio
-     */
-    template <
-        details::DimType Dim,
-        long double      F,
-        typename DimRatioOrRatio,
-        ratio::StdRatio GlobalRatio = std::ratio<1>>
-    requires(
-        ratio::StdRatio<DimRatioOrRatio> || details::DimRatio<DimRatioOrRatio>
-    )
-    struct real_unit : unit<Dim, DimRatioOrRatio, GlobalRatio>
-    {
-        static constexpr long double factor = F;
-    };
-
-}   // namespace mstd::units
+}   // namespace mstd
 
 #endif   // __MSTD_UNITS_UNIT_HPP__
