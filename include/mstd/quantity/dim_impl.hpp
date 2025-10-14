@@ -153,16 +153,13 @@ namespace mstd
     using dim_amount   = Dim<si_amount, ex_one>;
     using dim_luminous = Dim<si_luminous, ex_one>;
 
-    using dim_inv_length = Dim<si_length, ex_count>;
-    using dim_inv_mass   = Dim<si_inverse_mass, ex_count>;
-    using dim_inv_time   = Dim<si_inverse_time, ex_count>;
-    using dim_inv_count  = Dim<si_one, ex_inverse_count>;
-    using dim_inv_angle  = Dim<si_one, ex_inverse_angle>;
-    using dim_inv_info   = Dim<si_one, ex_inverse_info>;
-    using dim_inv_curr   = Dim<si_inverse_current, ex_count>;
-    using dim_inv_temp   = Dim<si_inverse_temperature, ex_count>;
-    using dim_inv_amount = Dim<si_inverse_amount, ex_count>;
-    using dim_inv_lum    = Dim<si_inverse_luminous, ex_count>;
+    using dim_inv_length = Dim<si_length, ex_one>;
+    using dim_inv_mass   = Dim<si_inverse_mass, ex_one>;
+    using dim_inv_time   = Dim<si_inverse_time, ex_one>;
+    using dim_inv_curr   = Dim<si_inverse_current, ex_one>;
+    using dim_inv_temp   = Dim<si_inverse_temperature, ex_one>;
+    using dim_inv_amount = Dim<si_inverse_amount, ex_one>;
+    using dim_inv_lum    = Dim<si_inverse_luminous, ex_one>;
 
     /********************
      *                  *
