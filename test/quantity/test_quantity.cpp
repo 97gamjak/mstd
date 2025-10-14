@@ -25,6 +25,7 @@
 #include <type_traits>
 
 #include "mstd/quantity.hpp"
+#include "test_utils.hpp"
 
 TEST_CASE("quantity construction and accessors", "[units]")
 {
@@ -213,15 +214,46 @@ TEST_CASE("quantity division", "[units]")
     );
 }
 
-TEST_CASE("quantity multiplication", "[units]")
+TEST_CASE("quantity inverse", "[units]")
 {
     using namespace mstd;
     using namespace mstd::literals;
 
     const Time<s> time{10.0};
-    // const Time<unit_div_t<unitless, s>> inv_time{0.1};
-    using unit = Unit<dim_inv_time>;
-    const Time<unit> inv_time{0.1};
+    using per_s  = unit_div_t<unitless, s>;
+    using _per_s = Unit<dim_inv_time>;
+
+    MSTD_STATIC_REQUIRE(per_s::dim::si::size == _per_s::dim::si::size);
+    MSTD_STATIC_REQUIRE(per_s::dim::si::size == SIDimIdMeta::size);
+    for (int i = 0; i < 7; ++i)
+    {
+        MSTD_STATIC_REQUIRE(
+            per_s::dim::si::vals[i] == _per_s::dim::si::vals[i]
+        );
+    }
+
+    MSTD_STATIC_REQUIRE(per_s::dim::ex::size == _per_s::dim::ex::size);
+    MSTD_STATIC_REQUIRE(per_s::dim::ex::size == ExtraDimIdMeta::size);
+    for (int i = 0; i < 7; ++i)
+    {
+        MSTD_STATIC_REQUIRE(
+            per_s::dim::ex::vals[i] == _per_s::dim::ex::vals[i]
+        );
+    }
+
+    MSTD_STATIC_REQUIRE(has_dim_v<_per_s, dim_inv_time>);
+    MSTD_STATIC_REQUIRE(has_dim_v<per_s, dim_inv_time>);
+    MSTD_STATIC_REQUIRE(same_dimension_v<per_s, _per_s>);
+}
+
+TEST_CASE("Quantity multiplication", "[units]")
+{
+    using namespace mstd;
+    using namespace mstd::literals;
+
+    using per_s = unit_div_t<unitless, s>;
+
+    const Time<_per_s> inv_time{0.1};
 
     const auto check = time * inv_time;
     REQUIRE(check.baseValue() == Catch::Approx(1.0));
