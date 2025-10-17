@@ -66,13 +66,41 @@ namespace mstd
             std::make_index_sequence<A::size>{}
         ));
 
-        // ---- apply power to every entry in a RatioPack
-        template <class Pack, int K, size_t... I>
-        constexpr auto ratio_pack_pow_impl(std::index_sequence<I...>)
+        template <class Pack, IntegerPackType IntPack>
+        struct ratio_pack_pow_impl
         {
-            return RatioPack<
-                ratio_pow_t<typename Pack::template type_at<I>, K>...>{};
-        }
+            static_assert(
+                Pack::size == IntPack::size,
+                "RatioPack and IntegerPack size mismatch"
+            );
+            template <class Seq>
+            struct _impl;
+
+            // expand over indices
+            template <std::size_t... I>
+            struct _impl<std::index_sequence<I...>>
+            {
+                // REQUIRE: IntPack::template get<I> is a static constexpr int
+                // (a value), not a function
+                using type = RatioPack<ratio_pow_t<
+                    typename Pack::template type_at<I>,
+                    IntPack::template get<I>>...>;
+            };
+
+            // produce the final type by instantiating the helper with
+            // 0..Pack::size-1
+            using type =
+                typename _impl<std::make_index_sequence<Pack::size>>::type;
+        };
+
+        // ---- apply power to every entry in a RatioPack
+        template <class Pack, int K>
+        struct ratio_pack_pow_k_impl
+        {
+            using type =
+                ratio_pack_pow_impl<Pack, make_integer_pack_t<Pack::size, K>>::
+                    type;
+        };
 
         /*********************
          *                   *

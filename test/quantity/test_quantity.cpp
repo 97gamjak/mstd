@@ -227,18 +227,14 @@ TEST_CASE("quantity inverse", "[units]")
     MSTD_STATIC_REQUIRE(per_s::dim::si::size == SIDimIdMeta::size);
     for (int i = 0; i < 7; ++i)
     {
-        MSTD_STATIC_REQUIRE(
-            per_s::dim::si::vals[i] == _per_s::dim::si::vals[i]
-        );
+        REQUIRE(per_s::dim::si::vals[i] == _per_s::dim::si::vals[i]);
     }
 
     MSTD_STATIC_REQUIRE(per_s::dim::ex::size == _per_s::dim::ex::size);
     MSTD_STATIC_REQUIRE(per_s::dim::ex::size == ExtraDimIdMeta::size);
     for (int i = 0; i < 7; ++i)
     {
-        MSTD_STATIC_REQUIRE(
-            per_s::dim::ex::vals[i] == _per_s::dim::ex::vals[i]
-        );
+        REQUIRE(per_s::dim::ex::vals[i] == _per_s::dim::ex::vals[i]);
     }
 
     MSTD_STATIC_REQUIRE(has_dim_v<_per_s, dim_inv_time>);
@@ -252,9 +248,16 @@ TEST_CASE("Quantity multiplication", "[units]")
     using namespace mstd::literals;
 
     using per_s = unit_div_t<unitless, s>;
-
-    const Time<_per_s> inv_time{0.1};
+    const Time<per_s> inv_time{0.1};
+    const Time<s>     time{10.0};
 
     const auto check = time * inv_time;
     REQUIRE(check.baseValue() == Catch::Approx(1.0));
+
+    using per_h = unit_div_t<unitless, h>;
+    const Time<per_h> inv_time_h{0.1};
+    const Time<h>     time_h{10.0};
+
+    const auto check_h = time_h * inv_time_h;
+    REQUIRE(check_h.baseValue() == Catch::Approx(3600.0));
 }

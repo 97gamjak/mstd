@@ -23,6 +23,7 @@
 #ifndef __MSTD_RATIO_PACK_OPERATIONS_HPP__
 #define __MSTD_RATIO_PACK_OPERATIONS_HPP__
 
+#include "mstd/error.hpp"
 #include "ratio_pack.hpp"
 #include "ratio_pack_details.hpp"
 
@@ -56,11 +57,13 @@ namespace mstd
     template <RatioPackType A, RatioPackType B>
     using ratio_pack_div_t = details::ratio_pack_zip_t<A, B, std::ratio_divide>;
 
+    /** Raise each ratio in a pack to integer powers from an IntegerPack. */
+    template <RatioPackType Pack, IntegerPackType IntPack>
+    using ratio_pack_pow_t = details::ratio_pack_pow_impl<Pack, IntPack>::type;
+
     /** Raise each ratio in a pack to integer power K. */
     template <RatioPackType Pack, int K>
-    using ratio_pack_pow_t = decltype(details::ratio_pack_pow_impl<Pack, K>(
-        std::make_index_sequence<Pack::size>{}
-    ));
+    using ratio_pack_pow_k_t = details::ratio_pack_pow_k_impl<Pack, K>::type;
 
     /*********************
      *                   *

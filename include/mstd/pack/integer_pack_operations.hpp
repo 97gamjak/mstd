@@ -27,9 +27,9 @@ namespace mstd
      *                   *
      *********************/
     /** Create an `IntegerPack` of size N filled with zeros. */
-    template <std::size_t N>
-    using make_default_integer_pack_t =
-        typename details::make_default_integer_pack<N>::type;
+    template <std::size_t N, int value = 0>
+    using make_integer_pack_t =
+        typename details::make_integer_pack<N, value>::type;
 
     /** Create an `IntegerPack` of size N with 0s except index Ix set to I. */
     template <std::size_t N, std::size_t Ix, int I = 1>

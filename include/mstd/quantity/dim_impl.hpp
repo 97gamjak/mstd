@@ -34,7 +34,7 @@ namespace mstd
      *                                          *
      ********************************************/
 
-    using si_one = make_default_integer_pack_t<SIDimIdMeta::size>;
+    using si_one = make_integer_pack_t<SIDimIdMeta::size>;
 
     using si_length = make_single_integer_pack_t<
         SIDimIdMeta::size,
@@ -99,7 +99,7 @@ namespace mstd
         SIDimIdMeta::to_underlying(SIDimId::Luminous),
         -1>;
 
-    using ex_one = make_default_integer_pack_t<ExtraDimIdMeta::size>;
+    using ex_one = make_integer_pack_t<ExtraDimIdMeta::size>;
 
     using ex_angle = make_single_integer_pack_t<
         ExtraDimIdMeta::size,

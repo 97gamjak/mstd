@@ -81,6 +81,25 @@ namespace mstd
             using type = DimRatio<si, ex>;
         };
 
+        template <DimRatioType R, DimType D>
+        struct dim_ratio_pow_impl
+        {
+            using type = DimRatio<
+                ratio_pack_pow_t<typename R::si, typename D::si>,
+                ratio_pack_pow_t<typename R::ex, typename D::ex>>;
+        };
+
+        template <DimRatioType R1, DimType D1, DimRatioType R2, DimType D2>
+        struct dim_ratio_mul_impl
+        {
+            using R1pow = dim_ratio_pow_impl<R1, D1>::type;
+            using R2pow = dim_ratio_pow_impl<R2, D2>::type;
+
+            using type = DimRatio<
+                ratio_pack_mul_t<typename R1pow::si, typename R2pow::si>,
+                ratio_pack_mul_t<typename R1pow::ex, typename R2pow::ex>>;
+        };
+
     }   // namespace details
 
 }   // namespace mstd

@@ -59,10 +59,20 @@ namespace mstd
      * @tparam Exp
      * @return the resulting DimRatio after power
      */
-    template <DimRatioType R, int Exp>
-    using dim_ratio_pow_t = DimRatio<
-        ratio_pack_pow_t<typename R::si, Exp>,
-        ratio_pack_pow_t<typename R::ex, Exp>>;
+    template <DimRatioType R, DimType D>
+    using dim_ratio_pow_t = details::dim_ratio_pow_impl<R, D>::type;
+
+    /**
+     * @brief DimRatio power with integer K
+     *
+     * @tparam DimRatio
+     * @tparam K
+     * @return the resulting DimRatio after power
+     */
+    template <DimRatioType R, int K>
+    using dim_ratio_pow_k_t = DimRatio<
+        ratio_pack_pow_k_t<typename R::si, K>,
+        ratio_pack_pow_k_t<typename R::ex, K>>;
 
     /***************************************
      *                                     *

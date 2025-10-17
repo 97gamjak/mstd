@@ -139,7 +139,7 @@ namespace mstd::details
     struct unit_pow_impl
     {
         using dim    = dim_pow_t<typename U::dim, Exp>;
-        using ratio  = dim_ratio_pow_t<typename U::ratio, Exp>;
+        using ratio  = dim_ratio_pow_k_t<typename U::ratio, Exp>;
         using global = ratio_pow_t<typename U::global, Exp>;
 
         static constexpr long double factor_v = power(U::factor_v, Exp);

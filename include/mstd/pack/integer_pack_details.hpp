@@ -114,9 +114,9 @@ namespace mstd
          * @tparam F The function to apply.
          */
         template <class A, class B, class F>
-        using pack_zip_t = decltype(pack_zip_impl<A, B, F>(
-            std::make_index_sequence<A::size>{}
-        ));
+        using pack_zip_t =
+            decltype(pack_zip_impl<A, B, F>(std::make_index_sequence<A::size>{})
+            );
 
         /*********************
          *                   *
@@ -124,15 +124,26 @@ namespace mstd
          *                   *
          *********************/
         /**
-         * @brief Build a zero-initialized `IntegerPack` of size N.
+         * @brief Build an `IntegerPack` of size N filled with `value`.
          */
-        template <std::size_t N, typename Seq = std::make_index_sequence<N>>
-        struct make_default_integer_pack;
-
-        template <std::size_t N, std::size_t... Is>
-        struct make_default_integer_pack<N, std::index_sequence<Is...>>
+        template <std::size_t N, int value = 0>
+        struct make_integer_pack
         {
-            using type = IntegerPack<(static_cast<void>(Is), 0)...>;
+            /**
+             * @brief Build an `IntegerPack` of size N filled with `value`.
+             *
+             * @tparam Is A sequence of indices.
+             */
+            template <typename Seq>
+            struct _impl;
+
+            template <size_t... Is>
+            struct _impl<std::index_sequence<Is...>>
+            {
+                using type = IntegerPack<(static_cast<void>(Is), value)...>;
+            };
+
+            using type = typename _impl<std::make_index_sequence<N>>::type;
         };
 
         /**
