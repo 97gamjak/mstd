@@ -92,12 +92,22 @@ namespace mstd
         template <DimRatioType R1, DimType D1, DimRatioType R2, DimType D2>
         struct dim_ratio_mul_impl
         {
-            using R1pow = dim_ratio_pow_impl<R1, D1>::type;
-            using R2pow = dim_ratio_pow_impl<R2, D2>::type;
+            using _R1pow = dim_ratio_pow_impl<R1, D1>::type;
+            using _R2pow = dim_ratio_pow_impl<R2, D2>::type;
+            using _si1   = typename _R1pow::si;
+            using _si2   = typename _R2pow::si;
+            using _ex1   = typename _R1pow::ex;
+            using _ex2   = typename _R2pow::ex;
 
-            using type = DimRatio<
-                ratio_pack_mul_t<typename R1pow::si, typename R2pow::si>,
-                ratio_pack_mul_t<typename R1pow::ex, typename R2pow::ex>>;
+            static_assert(_si1::size == D1::si_size, "si size mismatch");
+            static_assert(_ex1::size == D1::ex_size, "ex size mismatch");
+            static_assert(_si2::size == D2::si_size, "si size mismatch");
+            static_assert(_ex2::size == D2::ex_size, "ex size mismatch");
+
+            using _r1si = ratio_pack_mul_t<_si1, _si2>;
+            using _r1ex = ratio_pack_mul_t<_ex1, _ex2>;
+
+            using type = DimRatio<_r1si, _r1ex>;
         };
 
     }   // namespace details

@@ -35,10 +35,8 @@ namespace mstd
      * @tparam Ratio2
      * @return the resulting DimRatio after multiplication
      */
-    template <DimRatioType R1, DimRatioType R2>
-    using dim_ratio_mul_t = DimRatio<
-        ratio_pack_mul_t<typename R1::si, typename R2::si>,
-        ratio_pack_mul_t<typename R1::ex, typename R2::ex>>;
+    template <DimRatioType R1, DimType D1, DimRatioType R2, DimType D2>
+    using dim_ratio_mul_t = details::dim_ratio_mul_impl<R1, D1, R2, D2>::type;
 
     /**
      * @brief DimRatio division

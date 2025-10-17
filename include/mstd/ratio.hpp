@@ -26,6 +26,7 @@
 #include <concepts>
 #include <ratio>
 
+#include "mstd/error.hpp"
 #include "mstd/type_traits/ratio_traits.hpp"
 
 namespace mstd
@@ -66,38 +67,41 @@ namespace mstd
     {
 
         template <class R, int K>
-        struct ratio_pow_impl;
+        struct ratio_pow_impl
+        {
+            MSTD_COMPILE_FAIL("Unsupported ratio type");
+        };
 
-        template <class R>
+        template <RatioType R, int K>
+        struct ratio_pow_impl<R, K>
+        {
+            // Handle negative exponents by flipping numerator/denominator
+            using _invRatio = std::ratio<R::den, R::num>;
+            using base      = std::conditional_t<(K < 0), _invRatio, R>;
+
+            // Absolute value of the exponent
+            static constexpr int e = (K < 0 ? -K : K);
+
+            // Start from ratio<1,1>
+            using type = std::conditional_t<
+                e == 0,
+                std::ratio<1>,
+                typename std::ratio_multiply<
+                    base,
+                    typename ratio_pow_impl<base, e - 1>::type>::type>;
+        };
+
+        // --- Base cases ---
+        template <RatioType R>
         struct ratio_pow_impl<R, 0>
         {
             using type = std::ratio<1>;
         };
 
-        template <class R, int K>
-        struct ratio_pow_impl
+        template <RatioType R>
+        struct ratio_pow_impl<R, 1>
         {
-            // exponentiation by squaring (works for K>0 and K<0)
-            using base =
-                std::conditional_t<(K < 0), std::ratio<R::den, R::num>, R>;
-            static constexpr int e = (K < 0 ? -K : K);
-
-            template <int N, class Acc, class Cur>
-            struct step
-            {
-                using type = std::conditional_t<
-                    (N == 0),
-                    Acc,
-                    typename step<
-                        (N >> 1),
-                        std::conditional_t<
-                            (N & 1),
-                            std::ratio_multiply<Acc, Cur>,
-                            Acc>,
-                        std::ratio_multiply<Cur, Cur>>::type>;
-            };
-
-            using type = typename step<e, std::ratio<1>, base>::type;
+            using type = R;
         };
 
     }   // namespace details

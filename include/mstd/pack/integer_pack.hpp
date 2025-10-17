@@ -64,10 +64,7 @@ namespace mstd
          * @return constexpr int The value at the specified index.
          */
         template <auto I>
-        static constexpr int get()
-        {
-            return vals[static_cast<size_t>(I)];
-        }
+        static constexpr int get = vals[static_cast<size_t>(I)];
 
         /**
          * @brief Number of non-zero entries in the pack.

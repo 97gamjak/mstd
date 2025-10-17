@@ -104,8 +104,7 @@ namespace mstd
          * @tparam ID Enum value identifying the SI dimension.
          */
         template <SIDimId ID>
-        static constexpr int si_exp =
-            SI::template get<static_cast<size_t>(ID)>();
+        static constexpr int si_exp = SI::template get<ID>;
 
         /**
          * @brief Exponent of a specific extra dimension.
@@ -113,8 +112,7 @@ namespace mstd
          * @tparam ID Enum value identifying the extra dimension.
          */
         template <ExtraDimId ID>
-        static constexpr int ex_exp =
-            Extra::template get<static_cast<size_t>(ID)>();
+        static constexpr int ex_exp = Extra::template get<ID>;
     };
 
 }   // namespace mstd

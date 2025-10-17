@@ -46,7 +46,7 @@ namespace mstd
     template <typename T>
     concept IntegerPackType = requires {
         { T::size } -> std::convertible_to<std::size_t>;
-        { T::template get<0>() } -> std::convertible_to<int>;
+        { T::template get<0> } -> std::convertible_to<int>;
     };
 
     /**

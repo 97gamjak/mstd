@@ -56,8 +56,12 @@ namespace mstd::details
     template <class U1, class U2>
     struct unit_mul_impl
     {
-        using dim    = dim_mul_t<typename U1::dim, typename U2::dim>;
-        using ratio  = dim_ratio_mul_t<typename U1::ratio, typename U2::ratio>;
+        using _D1    = typename U1::dim;
+        using _D2    = typename U2::dim;
+        using _R1    = typename U1::ratio;
+        using _R2    = typename U2::ratio;
+        using dim    = dim_mul_t<_D1, _D2>;
+        using ratio  = dim_ratio_mul_t<_R1, _D1, _R2, _D2>;
         using global = ratio_mul_t<typename U1::global, typename U2::global>;
 
         static constexpr long double f = U1::factor_v * U2::factor_v;
