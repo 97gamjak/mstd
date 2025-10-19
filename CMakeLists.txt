@@ -46,6 +46,7 @@ if(MSTD_BUILD_TESTS)
         mstd_tests
         SYSTEM PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/external/Catch2/src
+        ${CMAKE_CURRENT_SOURCE_DIR}/test/include
     )
     target_compile_features(mstd_tests
         PRIVATE

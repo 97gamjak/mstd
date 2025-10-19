@@ -33,7 +33,7 @@ namespace mstd
      * 
      * @tparam T 
      */
-    template <typename T>
+    template <typename ...T>
     struct always_false : std::false_type{};
     // clang-format on
 

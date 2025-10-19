@@ -57,7 +57,7 @@ namespace mstd
     {
         // store actual ratio values as long double so we can index them
         static constexpr std::array<long double, sizeof...(Rs)> vals{
-            static_cast<long double>(Rs::num) / Rs::den...
+            ratio_v<Rs>...
         };
 
         /** Number of ratios stored. */

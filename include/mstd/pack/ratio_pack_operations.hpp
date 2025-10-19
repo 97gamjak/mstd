@@ -50,19 +50,18 @@ namespace mstd
 
     /** Element-wise multiply two ratio packs. */
     template <RatioPackType A, RatioPackType B>
-    using ratio_pack_mul_t =
-        details::ratio_pack_zip_t<A, B, std::ratio_multiply>;
+    using ratio_pack_mul_t = details::ratio_pack_zip_t<A, B, ratio_mul_t>;
 
     /** Element-wise divide two ratio packs. */
     template <RatioPackType A, RatioPackType B>
-    using ratio_pack_div_t = details::ratio_pack_zip_t<A, B, std::ratio_divide>;
+    using ratio_pack_div_t = details::ratio_pack_zip_t<A, B, ratio_div_t>;
 
     /** Raise each ratio in a pack to integer powers from an IntegerPack. */
-    template <RatioPackType Pack, IntegerPackType IntPack>
+    template <RatioPackType Pack, IntegerPackType IntPack>   // TODO: check this
     using ratio_pack_pow_t = details::ratio_pack_pow_impl<Pack, IntPack>::type;
 
     /** Raise each ratio in a pack to integer power K. */
-    template <RatioPackType Pack, int K>
+    template <RatioPackType Pack, int K>   // TODO: check this
     using ratio_pack_pow_k_t = details::ratio_pack_pow_k_impl<Pack, K>::type;
 
     /*********************

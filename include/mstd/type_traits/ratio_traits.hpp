@@ -48,6 +48,23 @@ namespace mstd
     template <typename T>
     constexpr bool is_ratio_v = RatioType<T>;
 
+    /**
+     * @brief Concept for PowRatio types.
+     *
+     * @details A PowRatio type must provide four static members `num`, `den`,
+     * `p` and `q`.
+     */
+    template <typename T>
+    concept PowRatioType = requires {
+        T::num;
+        T::den;
+        T::p;
+        T::q;
+    };
+
+    template <typename T>
+    constexpr bool is_pow_ratio_v = PowRatioType<T>;
+
 }   // namespace mstd
 
 #endif   // __MSTD_RATIO_TRAITS_HPP__
