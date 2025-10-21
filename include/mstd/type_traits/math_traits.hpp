@@ -20,10 +20,22 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_MATH_HPP__
-#define __MSTD_MATH_HPP__
+#ifndef __MSTD_TYPE_TRAITS_MATH_TRAITS_HPP__
+#define __MSTD_TYPE_TRAITS_MATH_TRAITS_HPP__
 
-#include "math/power.hpp"      // IWYU pragma: export
-#include "math/rational.hpp"   // IWYU pragma: export
+namespace mstd
+{
 
-#endif   // __MSTD_MATH_HPP__
+    template <typename T>
+    concept RationalType = requires {
+        T::num;
+        T::den;
+        T::gcd;
+    };
+
+    template <typename T>
+    constexpr bool is_rational_v = RationalType<T>;
+
+}   // namespace mstd
+
+#endif   // __MSTD_TYPE_TRAITS_MATH_TRAITS_HPP__

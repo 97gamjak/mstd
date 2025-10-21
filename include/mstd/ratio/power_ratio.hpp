@@ -1,3 +1,25 @@
+/*****************************************************************************
+<GPL_HEADER>
+
+    mstd library
+    Copyright (C) 2025-now  Jakob Gamper
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+<GPL_HEADER>
+******************************************************************************/
+
 #ifndef __MSTD_RATIO_POWER_RATIO_HPP__
 #define __MSTD_RATIO_POWER_RATIO_HPP__
 
@@ -6,6 +28,7 @@
 #include <ratio>
 
 #include "mstd/error.hpp"
+#include "mstd/math.hpp"
 #include "mstd/type_traits/ratio_traits.hpp"
 
 namespace mstd
@@ -17,31 +40,15 @@ namespace mstd
         intmax_t powQ = 1>
     struct PowRatio
     {
-        static constexpr intmax_t num = Num;
-        static constexpr intmax_t den = Den;
+        using ratio    = std::ratio<Num, Den>;
+        using rational = Rational<powP, powQ>;
 
-        using ratio = std::ratio<Num, Den>;
+        static constexpr auto num = Num;
+        static constexpr auto den = Den;
+        static constexpr auto p   = rational::num;
+        static constexpr auto q   = rational::den;
 
-        static constexpr intmax_t _gcd =
-            powP == 0 || powQ == 0 ? 1 : std::gcd(powP, powQ);
-
-        static constexpr intmax_t p = powP / _gcd;
-        static constexpr intmax_t q = powQ / _gcd;
-
-        static_assert(
-            _gcd != 0,
-            "PowRatio exp numerator p and denominator q must not be zero"
-        );
-
-        static_assert(
-            std::gcd(p, q) == 1,
-            "PowRatio exp numerator p and denominator q must be co-prime"
-        );
-
-        inline constexpr long double getExp() const
-        {
-            return static_cast<long double>(p) / static_cast<long double>(q);
-        }
+        inline constexpr auto getExp() const { return rational::value(); }
     };
 
     template <typename T>
@@ -104,6 +111,8 @@ namespace mstd
 
     template <typename R1, typename R2>
     using ratio_div_t = ratio_div_impl<R1, R2>::type;
+
+    // TODO: cleanup
 
 }   // namespace mstd
 

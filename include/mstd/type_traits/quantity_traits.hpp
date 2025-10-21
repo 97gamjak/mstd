@@ -63,11 +63,10 @@ namespace mstd
     constexpr bool is_dim_ratio_v = DimRatioType<T>;
 
     template <typename T>
-    concept UnitType =
-        DimType<typename T::dim> && DimRatioType<typename T::ratio> &&
-        RatioType<typename T::global> && requires {
-            { T::factor_v } -> std::convertible_to<long double>;
-        } && (T::factor_v != 0.0L);
+    concept UnitType = DimRatioType<typename T::dimRatio> &&
+                       RatioType<typename T::global> && requires {
+                           { T::factor_v } -> std::convertible_to<long double>;
+                       } && (T::factor_v != 0.0L);
 
     template <typename T>
     constexpr bool is_unit_v = UnitType<T>;

@@ -75,12 +75,31 @@ namespace mstd
     using make_default_ratio_pack_t =
         typename details::make_default_ratio_pack<N>::type;
 
+    /** Create a RatioPack of size N filled with PowRatio<>s. */
+    template <std::size_t N>
+    using make_pow_ratio_pack_t =
+        typename details::make_pow_ratio_pack<N>::type;
+
     /** Create a RatioPack of size N with a single ratio R at index Idx. */
     template <RatioType R, size_t Idx, size_t N>
     using make_ratio_pack_single_t =
-        decltype(details::make_ratio_pack_at_impl_R<R, Idx>(
+        decltype(details::make_ratio_pack_at_impl<R, Idx>(
             std::make_index_sequence<N>{}
         ));
+
+    template <RatioPackType R, IntegerPackType I>
+    requires(I::size == R::size && I::size > 0 &&
+             is_pow_ratio_v<typename R::type_at<0>>)
+    using make_pow_ratio_pack_t =
+        details::make_pow_ratio_pack_impl<R, I>::type;   // TODO: implement this
+
+    /**
+     * @brief check if a ratio is a power ratio pack or a standard ratio pack
+     *
+     * @tparam R
+     */
+    template <RatioPackType R>
+    constexpr bool is_pow_ratio_pack_v = is_pow_ratio_v<typename R::type_at<0>>;
 
 }   // namespace mstd
 

@@ -39,12 +39,18 @@ namespace mstd
      */
     using default_si_ratio_pack = make_default_ratio_pack_t<SIDimIdMeta::size>;
 
+    using default_si_power_ratio_pack =
+        make_pow_ratio_pack_t<SIDimIdMeta::size>;
+
     /**
      * @brief default_extra_ratio_pack, which is a RatioPack of all Extra
      * dimensions
      */
     using default_extra_ratio_pack =
         make_default_ratio_pack_t<ExtraDimIdMeta::size>;
+
+    using default_extra_power_ratio_pack =
+        make_pow_ratio_pack_t<ExtraDimIdMeta::size>;
 
     /***********************
      *                     *
@@ -66,12 +72,10 @@ namespace mstd
      *
      */
     template <
-        RatioPackType SiRatioPack    = default_si_ratio_pack,
+        RatioPackType SiRatioPack    = default_si_power_ratio_pack,
         RatioPackType ExtraRatioPack = default_extra_ratio_pack>
     struct DimRatio
     {
-        // putting static asserts instead of requires to make forward
-        // declaration easier to handle and modify
         static_assert(
             SiRatioPack::size == SIDimIdMeta::size,
             "DimRatio SiRatioPack size mismatch"
@@ -80,6 +84,11 @@ namespace mstd
             ExtraRatioPack::size == ExtraDimIdMeta::size,
             "DimRatio ExtraRatioPack size mismatch"
         );
+        // TODO: activate this as soon as rework is done
+        //  static_assert(
+        //      is_pow_ratio_v<typename SiRatioPack::type_at<0>>,
+        //      "DimRatio SiRatioPack first entry must be a pow ratio"
+        //  );
 
         using si = SiRatioPack;
         using ex = ExtraRatioPack;

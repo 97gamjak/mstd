@@ -39,122 +39,137 @@
  * construction helpers, and detection traits used by the public interface.
  */
 
-namespace mstd
+namespace mstd::details
 {
-    namespace details
+    /*******************
+     *                 *
+     * Pack algorithms  *
+     *                 *
+     *******************/
+    template <class A, class B, template <class, class> class F, size_t... I>
+    constexpr auto ratio_pack_zip_impl(std::index_sequence<I...>)
     {
-        /*******************
-         *                 *
-         * Pack algorithms  *
-         *                 *
-         *******************/
-        template <
-            class A,
-            class B,
-            template <class, class> class F,
-            size_t... I>
-        constexpr auto ratio_pack_zip_impl(std::index_sequence<I...>)
+        static_assert(A::size == B::size, "RatioPack size mismatch");
+        return RatioPack<typename F<
+            typename A::template type_at<I>,
+            typename B::template type_at<I>>::type...>{};
+    }
+
+    template <class A, class B, template <class, class> class F>
+    using ratio_pack_zip_t = decltype(ratio_pack_zip_impl<A, B, F>(
+        std::make_index_sequence<A::size>{}
+    ));
+
+    template <class Pack, IntegerPackType IntPack>
+    struct ratio_pack_pow_impl
+    {
+        static_assert(
+            Pack::size == IntPack::size,
+            "RatioPack and IntegerPack size mismatch"
+        );
+        template <class Seq>
+        struct _impl;
+
+        // expand over indices
+        template <size_t... I>
+        struct _impl<std::index_sequence<I...>>
         {
-            static_assert(A::size == B::size, "RatioPack size mismatch");
-            return RatioPack<typename F<
-                typename A::template type_at<I>,
-                typename B::template type_at<I>>::type...>{};
-        }
-
-        template <class A, class B, template <class, class> class F>
-        using ratio_pack_zip_t = decltype(ratio_pack_zip_impl<A, B, F>(
-            std::make_index_sequence<A::size>{}
-        ));
-
-        template <class Pack, IntegerPackType IntPack>
-        struct ratio_pack_pow_impl
-        {
-            static_assert(
-                Pack::size == IntPack::size,
-                "RatioPack and IntegerPack size mismatch"
-            );
-            template <class Seq>
-            struct _impl;
-
-            // expand over indices
-            template <std::size_t... I>
-            struct _impl<std::index_sequence<I...>>
-            {
-                // REQUIRE: IntPack::template get<I> is a static constexpr int
-                // (a value), not a function
-                using type = RatioPack<ratio_pow_t<
-                    typename Pack::template type_at<I>,
-                    IntPack::template get<I>>...>;
-            };
-
-            // produce the final type by instantiating the helper with
-            // 0..Pack::size-1
-            using type =
-                typename _impl<std::make_index_sequence<Pack::size>>::type;
+            // REQUIRE: IntPack::template get<I> is a static constexpr int
+            // (a value), not a function
+            using type = RatioPack<ratio_pow_t<
+                typename Pack::template type_at<I>,
+                IntPack::template get<I>>...>;
         };
 
-        // ---- apply power to every entry in a RatioPack
-        template <class Pack, int K>
-        struct ratio_pack_pow_k_impl
-        {
-            using type =
-                ratio_pack_pow_impl<Pack, make_integer_pack_t<Pack::size, K>>::
-                    type;
-        };
+        // produce the final type by instantiating the helper with
+        // 0..Pack::size-1
+        using type = typename _impl<std::make_index_sequence<Pack::size>>::type;
+    };
 
-        /*********************
-         *                   *
-         * Value computation *
-         *                   *
-         *********************/
-        template <class Pack, size_t... I>
-        consteval long double ratio_pack_value_impl(std::index_sequence<I...>)
-        {
-            auto r = static_cast<long double>(1);
-            // fold over compile-time indices
-            ((r *= Pack::template get<I>()), ...);
-            return r;
-        }
+    // ---- apply power to every entry in a RatioPack
+    template <class Pack, int K>
+    struct ratio_pack_pow_k_impl
+    {
+        using type =
+            ratio_pack_pow_impl<Pack, make_integer_pack_t<Pack::size, K>>::type;
+    };
 
-        /*********************
-         *                   *
-         * Pack factories    *
-         *                   *
-         *********************/
-        // helper: always yields std::ratio<1>
-        template <std::size_t>
-        using default_ratio = std::ratio<1>;
+    /*********************
+     *                   *
+     * Value computation *
+     *                   *
+     *********************/
+    template <class Pack, size_t... I>
+    consteval long double ratio_pack_value_impl(std::index_sequence<I...>)
+    {
+        auto r = static_cast<long double>(1);
+        // fold over compile-time indices
+        ((r *= Pack::template get<I>()), ...);
+        return r;
+    }
 
-        // main generator
-        template <std::size_t N, typename Seq = std::make_index_sequence<N>>
-        struct make_default_ratio_pack;
+    /*********************
+     *                   *
+     * Pack factories    *
+     *                   *
+     *********************/
+    // helper: always yields std::ratio<1>
+    template <size_t>   // TODO: move this to ratio
+    using default_ratio = std::ratio<1>;
 
-        template <std::size_t N, std::size_t... Is>
-        struct make_default_ratio_pack<N, std::index_sequence<Is...>>
-        {
-            using type = RatioPack<default_ratio<Is>...>;
-        };
+    template <size_t>   // TODO: move this to powratio
+    using default_pow_ratio = PowRatio<>;
 
-        /**
-         * @brief Build a RatioPack of size N with ratio R at index Idx.
-         */
-        template <size_t Idx, size_t... I>
-        constexpr auto make_ratio_pack_at_impl(std::index_sequence<I...>)
-        {
-            return RatioPack<
-                std::
-                    conditional_t<I == Idx, std::ratio<1>, std::ratio<1>>...>{};
-        }
-        // overload taking the actual R
-        template <class R, size_t Idx, size_t... I>
-        constexpr auto make_ratio_pack_at_impl_R(std::index_sequence<I...>)
-        {
-            return RatioPack<
-                std::conditional_t<I == Idx, R, std::ratio<1>>...>{};
-        }
+    // main generator
+    template <size_t N, typename Seq = std::make_index_sequence<N>>
+    struct make_default_ratio_pack;
 
-    }   // namespace details
+    template <size_t N, size_t... Is>
+    struct make_default_ratio_pack<N, std::index_sequence<Is...>>
+    {
+        using type = RatioPack<default_ratio<Is>...>;
+    };
 
-}   // namespace mstd
+    template <size_t N, typename Seq = std::make_index_sequence<N>>
+    struct make_pow_ratio_pack;
+
+    template <size_t N, size_t... Is>
+    struct make_pow_ratio_pack<N, std::index_sequence<Is...>>
+    {
+        using type = RatioPack<default_pow_ratio<Is>...>;
+    };
+
+    // overload taking the actual R
+    template <class R, size_t Idx, size_t... I>
+    constexpr auto make_ratio_pack_at_impl(std::index_sequence<I...>)
+    {
+        return RatioPack<std::conditional_t<I == Idx, R, std::ratio<1>>...>{};
+    }
+
+    template <typename R, typename I, typename Seq>
+    struct make_pow_ratio_pack_impl
+    {
+        MSTD_COMPILE_FAIL(
+            "making a power ratio pack with the given template args is not "
+            "supported"
+        );
+    }
+
+    template <RatioPackType R, IntegerPackType I, size_t... I>
+    requires(
+        I::size == R::size && I::size > 0 &&
+        is_pow_ratio_v<typename R::type_at<0>>
+    )
+    struct make_pow_ratio_pack_impl<
+        R,
+        I,
+        std::index_sequence<I...>>   // TODO: needs a second integer pack
+    {
+        using type = RatioPack<ratio_pow_t<
+            typename R::template type_at<I>,
+            I::template get<I>>...>;
+    };
+
+}   // namespace mstd::details
 
 #endif   // __MSTD_RATIO_PACK_DETAILS_HPP__

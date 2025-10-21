@@ -26,55 +26,31 @@
 #include "dim_details.hpp"
 #include "dim_ratio.hpp"
 #include "mstd/error.hpp"
+#include "mstd/math.hpp"
 #include "mstd/ratio.hpp"
-#include "mstd/type_traits/quantity_traits.hpp"
+#include "mstd/type_traits.hpp"
 
 namespace mstd
 {
     /**
-     * @brief BaseUnit definition for a dimension
-     *
-     * @tparam Dim
-     */
-    template <DimType Dim>
-    struct BaseUnit
-    {
-        using dim                             = Dim;
-        static constexpr long double factor_v = 1.0L;
-    };
-
-    /**
      * @brief placeholder for a Unit
      *
-     * @tparam Dim The dimension of the unit
-     * @tparam Ratio The DimRatio of the unit (default: all 1)
+     * @tparam DimRatio The DimRatio of the unit (default: all PowRatio<>)
      * @tparam Global The global ratio of the unit (default: 1/1)
+     * @tparam Exp The exponent of the unit (default: Rational<1,1>)
      * @tparam F The real factor of the unit (default: 1.0L)
      */
     template <
-        DimType      Dim,
-        DimRatioType Ratio  = DimRatio<>,
-        RatioType    Global = ratio<1>,
-        long double  F      = 1.0L>
-    struct Unit : public BaseUnit<Dim>
+        DimRatioType DimRatio = DimRatio<>,
+        RatioType    Global   = ratio<1>,
+        RationalType Exp      = Rational<1, 1>,
+        long double  F        = 1.0L>
+    struct Unit
     {
-        using ratio                           = Ratio;
+        using dimRatio                        = DimRatio;
         using global                          = Global;
+        using exponent                        = Exp;
         static constexpr long double factor_v = F;
-    };
-
-    /**
-     * @brief Specialization for units without real factor
-     *
-     * @tparam Dim The dimension of the unit
-     * @tparam Ratio The DimRatio of the unit (default: all 1)
-     * @tparam Global The global ratio of the unit (default: 1/1)
-     */
-    template <DimType Dim, DimRatioType Ratio, RatioType Global>
-    struct Unit<Dim, Ratio, Global> : public BaseUnit<Dim>
-    {
-        using ratio  = Ratio;
-        using global = Global;
     };
 
 }   // namespace mstd
