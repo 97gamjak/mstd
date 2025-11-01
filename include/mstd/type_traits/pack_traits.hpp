@@ -23,6 +23,7 @@
 #ifndef __MSTD_PACK_TRAITS_HPP__
 #define __MSTD_PACK_TRAITS_HPP__
 
+#include "math_traits.hpp"
 #include "ratio_traits.hpp"
 
 /**
@@ -59,7 +60,7 @@ namespace mstd
     template <typename T>
     concept RatioPackType = requires {
         { T::size } -> std::convertible_to<std::size_t>;
-        is_ratio_v<decltype(T::template get<0>())>;
+        is_rational_v<decltype(T::template get<0>())>;
     };
 
 }   // namespace mstd

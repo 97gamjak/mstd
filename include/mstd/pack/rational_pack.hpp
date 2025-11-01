@@ -20,22 +20,22 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_RATIO_PACK_HPP__
-#define __MSTD_RATIO_PACK_HPP__
+#ifndef __MSTD__PACK__RATIONAL_PACK_HPP__
+#define __MSTD__PACK__RATIONAL_PACK_HPP__
 
 #include <array>
 #include <cstddef>
 #include <ratio>
 #include <tuple>
 
-#include "mstd/ratio.hpp"
-#include "mstd/type_traits/pack_traits.hpp"
+#include "mstd/math.hpp"
+#include "mstd/type_traits.hpp"
 
 /**
  * @file ratio_pack.hpp
  * @brief Public ratio_pack type and high-level aliases.
  *
- * Exposes `RatioPack`, a fixed-size compile-time list of `std::ratio` types,
+ * Exposes `RationalPack`, a fixed-size compile-time list of `std::ratio` types,
  * plus helpers to multiply/divide element-wise, raise all entries to a power,
  * and create common pack shapes.
  */
@@ -47,18 +47,19 @@ namespace mstd
      * Ratio pack type   *
      *                   *
      *********************/
+
     /**
-     * @brief A compile-time list of ratios.
+     * @brief A compile-time list of rational powers.
      *
-     * @tparam Rs The ratios to include in the RatioPack.
+     * @tparam Rs The ratios to include in the RationalPack.
      */
-    template <class... Rs>
-    struct RatioPack
+    template <typename... Rs>
+    requires((is_convertible_to_rational_power_v<Rs>) || ...)
+    struct RationalPack
     {
         // store actual ratio values as long double so we can index them
-        static constexpr std::array<long double, sizeof...(Rs)> vals{
-            ratio_v<Rs>...
-        };
+        static constexpr std::array<long double, sizeof...(Rs)> vals{Rs::value(
+        )...};
 
         /** Number of ratios stored. */
         static constexpr size_t size = sizeof...(Rs);
@@ -87,4 +88,4 @@ namespace mstd
 
 }   // namespace mstd
 
-#endif   // __MSTD_RATIO_PACK_HPP__
+#endif   // __MSTD__PACK__RATIONAL_PACK_HPP__

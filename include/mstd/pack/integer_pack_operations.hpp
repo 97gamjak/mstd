@@ -25,6 +25,7 @@
 
 #include "integer_pack.hpp"
 #include "integer_pack_details.hpp"
+#include "mstd/type_traits.hpp"
 
 namespace mstd
 {
@@ -33,9 +34,19 @@ namespace mstd
      * Convenience aliases   *
      *                       *
      *************************/
-    /** Add two packs element-wise. */
-    template <class A, class B>
-    using pack_add_t = details::pack_zip_t<A, B, add_fn>;
+
+    /**
+     * @brief Adds two integer packs packs element-wise.
+     *
+     * @tparam A
+     * @tparam B
+     */
+    template <IntegerPackType A, IntegerPackType B>
+    struct add_type<A, B>
+    {
+        using type = details::pack_zip_t<A, B, add_fn>;
+    };
+
     /** Subtract two packs element-wise. */
     template <class A, class B>
     using pack_sub_t = details::pack_zip_t<A, B, sub_fn>;

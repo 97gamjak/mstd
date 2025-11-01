@@ -85,8 +85,8 @@ namespace mstd
         struct dim_ratio_pow_impl
         {
             using type = DimRatio<
-                ratio_pack_pow_t<typename R::si, typename D::si>,
-                ratio_pack_pow_t<typename R::ex, typename D::ex>>;
+                pow_type_t<typename R::si, typename D::si>,
+                pow_type_t<typename R::ex, typename D::ex>>;
         };
 
         template <DimRatioType R1, DimType D1, DimRatioType R2, DimType D2>
@@ -104,8 +104,8 @@ namespace mstd
             static_assert(_si2::size == D2::si_size, "si size mismatch");
             static_assert(_ex2::size == D2::ex_size, "ex size mismatch");
 
-            using _r1si = ratio_pack_mul_t<_si1, _si2>;
-            using _r1ex = ratio_pack_mul_t<_ex1, _ex2>;
+            using _r1si = mul_type_t<_si1, _si2>;
+            using _r1ex = mul_type_t<_ex1, _ex2>;
 
             using type = DimRatio<_r1si, _r1ex>;
         };

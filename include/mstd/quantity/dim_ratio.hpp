@@ -73,7 +73,7 @@ namespace mstd
      */
     template <
         RatioPackType SiRatioPack    = default_si_power_ratio_pack,
-        RatioPackType ExtraRatioPack = default_extra_ratio_pack>
+        RatioPackType ExtraRatioPack = default_extra_power_ratio_pack>
     struct DimRatio
     {
         static_assert(
@@ -85,10 +85,10 @@ namespace mstd
             "DimRatio ExtraRatioPack size mismatch"
         );
         // TODO: activate this as soon as rework is done
-        //  static_assert(
-        //      is_pow_ratio_v<typename SiRatioPack::type_at<0>>,
-        //      "DimRatio SiRatioPack first entry must be a pow ratio"
-        //  );
+        static_assert(
+            is_pow_ratio_v<typename SiRatioPack::template type_at<0>>,
+            "DimRatio SiRatioPack first entry must be a pow ratio"
+        );
 
         using si = SiRatioPack;
         using ex = ExtraRatioPack;

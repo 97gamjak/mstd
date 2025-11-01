@@ -27,7 +27,6 @@
 #include "dim_ratio.hpp"
 #include "mstd/error.hpp"
 #include "mstd/math.hpp"
-#include "mstd/ratio.hpp"
 #include "mstd/type_traits.hpp"
 
 namespace mstd
@@ -42,7 +41,7 @@ namespace mstd
      */
     template <
         DimRatioType DimRatio = DimRatio<>,
-        RatioType    Global   = ratio<1>,
+        RationalType Global   = Rational<1, 1>,
         RationalType Exp      = Rational<1, 1>,
         long double  F        = 1.0L>
     struct Unit

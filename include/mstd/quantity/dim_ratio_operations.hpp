@@ -35,8 +35,13 @@ namespace mstd
      * @tparam Ratio2
      * @return the resulting DimRatio after multiplication
      */
-    template <DimRatioType R1, DimType D1, DimRatioType R2, DimType D2>
-    using dim_ratio_mul_t = details::dim_ratio_mul_impl<R1, D1, R2, D2>::type;
+    template <DimRatioType R1, DimRatioType R2>
+    struct mul_type_t<R1, R2>
+    {
+        using type = DimRatio<
+            mul_type_t<typename R1::si, typename R2::si>,
+            mul_type_t<typename R1::ex, typename R2::ex>>;
+    }
 
     /**
      * @brief DimRatio division
@@ -46,9 +51,12 @@ namespace mstd
      * @return the resulting DimRatio after division
      */
     template <DimRatioType R1, DimRatioType R2>
-    using dim_ratio_div_t = DimRatio<
-        ratio_pack_div_t<typename R1::si, typename R2::si>,
-        ratio_pack_div_t<typename R1::ex, typename R2::ex>>;
+    struct div_type_t<R1, R2>
+    {
+        using type = DimRatio<
+            div_type_t<typename R1::si, typename R2::si>,
+            div_type_t<typename R1::ex, typename R2::ex>>;
+    };
 
     /**
      * @brief DimRatio power
@@ -58,7 +66,10 @@ namespace mstd
      * @return the resulting DimRatio after power
      */
     template <DimRatioType R, DimType D>
-    using dim_ratio_pow_t = details::dim_ratio_pow_impl<R, D>::type;
+    struct pow_type_t<R, D>
+    {
+        using type = details::dim_ratio_pow_impl<R, D>::type;
+    }
 
     /**
      * @brief DimRatio power with integer K

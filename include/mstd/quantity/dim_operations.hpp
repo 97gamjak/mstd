@@ -44,8 +44,8 @@ namespace mstd
      */
     template <DimType Dim1, DimType Dim2>
     using dim_mul_t =
-        Dim<pack_add_t<typename Dim1::si, typename Dim2::si>,
-            pack_add_t<typename Dim1::ex, typename Dim2::ex>>;
+        Dim<add_type_t<typename Dim1::si, typename Dim2::si>,
+            add_type_t<typename Dim1::ex, typename Dim2::ex>>;
 
     /**
      * @brief Combine dimensions by subtracting exponents (division of units).

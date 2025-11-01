@@ -26,7 +26,6 @@
 #include "dim.hpp"
 #include "dim_ratio_operations.hpp"
 #include "mstd/math.hpp"
-#include "mstd/ratio.hpp"
 #include "mstd/type_traits/quantity_traits.hpp"
 #include "unit.hpp"
 
@@ -41,6 +40,12 @@
 
 namespace mstd::details
 {
+    template <DimType D>
+    struct build_unit_impl
+    {
+        using _size = D::si::size;
+        using type  = Unit<>;
+    };
     /*******************************************************************
      *                                                                 *
      * multiplying, dividing, powering and scaling units at type level *
@@ -62,7 +67,7 @@ namespace mstd::details
         using _R2    = typename U2::ratio;
         using dim    = dim_mul_t<_D1, _D2>;
         using ratio  = dim_ratio_mul_t<_R1, _D1, _R2, _D2>;
-        using global = ratio_mul_t<typename U1::global, typename U2::global>;
+        using global = mul_type_t<typename U1::global, typename U2::global>;
 
         static constexpr long double f = U1::factor_v * U2::factor_v;
         using type                     = Unit<dim, ratio, global, f>;
@@ -126,7 +131,7 @@ namespace mstd::details
     {
         using dim    = dim_div_t<typename U1::dim, typename U2::dim>;
         using ratio  = dim_ratio_div_t<typename U1::ratio, typename U2::ratio>;
-        using global = ratio_div_t<typename U1::global, typename U2::global>;
+        using global = div_type_t<typename U1::global, typename U2::global>;
 
         static constexpr long double factor_v = U1::factor_v / U2::factor_v;
 
@@ -144,7 +149,7 @@ namespace mstd::details
     {
         using dim    = dim_pow_t<typename U::dim, Exp>;
         using ratio  = dim_ratio_pow_k_t<typename U::ratio, Exp>;
-        using global = ratio_pow_t<typename U::global, Exp>;
+        using global = rational_pow_t<typename U::global, Exp>;
 
         static constexpr long double factor_v = power(U::factor_v, Exp);
 

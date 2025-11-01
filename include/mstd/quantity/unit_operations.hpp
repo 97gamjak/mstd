@@ -24,7 +24,6 @@
 #define __MSTD_UNIT_OPERATIONS_HPP__
 
 #include "mstd/pack.hpp"
-#include "mstd/ratio.hpp"
 #include "unit_details.hpp"
 
 /**
@@ -38,6 +37,8 @@
 
 namespace mstd
 {
+    template <DimType D>
+    using build_unit_t = typename details::build_unit_impl<D>::type;
 
     /**
      * @brief Multiply two units to form a composite unit.

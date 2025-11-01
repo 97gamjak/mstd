@@ -20,10 +20,23 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_RATIO__
-#define __MSTD_RATIO__
+#ifndef __TYPE_TRAITS__TYPE_TRAITS_HPP__
+#define __TYPE_TRAITS__TYPE_TRAITS_HPP__
 
-#include "ratio/power_ratio.hpp"   // IWYU pragma: export
-#include "ratio/ratio.hpp"         // IWYU pragma: export
+#include <type_traits>
 
-#endif   // __MSTD_RATIO__
+namespace mstd
+{
+    template <auto T>
+    requires std::is_integral_v<decltype(T)>
+    using IntegralConst = std::integral_constant<decltype(T), T>;
+
+    template <typename T>
+    concept IntegralConstantType = requires {
+        typename T::value_type;
+        T::value;
+    } && std::is_integral_v<typename T::value_type>;
+
+}   // namespace mstd
+
+#endif   // __TYPE_TRAITS__TYPE_TRAITS_HPP__

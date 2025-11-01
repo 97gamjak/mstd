@@ -63,7 +63,7 @@ namespace mstd
     template <class U>
     concept scalar_unit = has_dim_v<U, dim_scalar>;
     template <class U>
-    concept dimensionless_unit = scalar_unit<U> && std::is_same_v<typename U::ratio, std::ratio<1>>;
+    concept dimensionless_unit = scalar_unit<U> && std::is_same_v<typename U::ratio, Rational<1>>;
 
     template <class U>
     concept area_unit = has_dim_v<U, dim_area> || has_dim_v<U, dim_inv_area>;
@@ -94,7 +94,7 @@ namespace mstd
         static constexpr long double   __AMU_TO_KG__    = 1.66053906660e-27L;
         static constexpr long long int __M_IN_ANG_EXP__ = 1E10;
 
-        using __ANG_IN_M_RATIO__ = std::ratio<1, __M_IN_ANG_EXP__>;
+        using __ANG_IN_M_RATIO__ = Rational<1, __M_IN_ANG_EXP__>;
 
         static constexpr int __MIN_TO_S__ = 60;
         static constexpr int __H_TO_MIN__ = 60;
@@ -125,7 +125,7 @@ namespace mstd
         using Ang = Unit<dim_length, length_dim_ratio<__ANG_IN_M_RATIO__>>;
 
         using t   = Unit<dim_mass, mass_dim_ratio<std::kilo>>;
-        using kg  = Unit<dim_mass, mass_dim_ratio<std::ratio<1>>>;
+        using kg  = Unit<dim_mass, mass_dim_ratio<Rational<1>>>;
         using g   = Unit<dim_mass, mass_dim_ratio<std::milli>>;
         using mg  = Unit<dim_mass, mass_dim_ratio<std::micro>>;
         using ug  = Unit<dim_mass, mass_dim_ratio<std::nano>>;
@@ -133,10 +133,10 @@ namespace mstd
         using pg  = Unit<dim_mass, mass_dim_ratio<std::femto>>;
         using amu = scaled_unit_t<kg, __AMU_TO_KG__>;
 
-        using y   = Unit<dim_time, time_dim_ratio<std::ratio<__Y_TO_S__>>>;
-        using d   = Unit<dim_time, time_dim_ratio<std::ratio<__D_TO_S__>>>;
-        using h   = Unit<dim_time, time_dim_ratio<std::ratio<__H_TO_S__>>>;
-        using min = Unit<dim_time, time_dim_ratio<std::ratio<__MIN_TO_S__>>>;
+        using y   = Unit<dim_time, time_dim_ratio<rational<__Y_TO_S__>>>;
+        using d   = Unit<dim_time, time_dim_ratio<rational<__D_TO_S__>>>;
+        using h   = Unit<dim_time, time_dim_ratio<rational<__H_TO_S__>>>;
+        using min = Unit<dim_time, time_dim_ratio<rational<__MIN_TO_S__>>>;
         using s   = Unit<dim_time, time_dim_ratio<>>;
         using ms  = Unit<dim_time, time_dim_ratio<std::milli>>;
         using us  = Unit<dim_time, time_dim_ratio<std::micro>>;

@@ -24,8 +24,8 @@
 #define __MSTD_RATIO_PACK_OPERATIONS_HPP__
 
 #include "mstd/error.hpp"
-#include "ratio_pack.hpp"
-#include "ratio_pack_details.hpp"
+#include "rational_pack.hpp"
+#include "rational_pack_details.hpp"
 
 namespace mstd
 {
@@ -50,15 +50,24 @@ namespace mstd
 
     /** Element-wise multiply two ratio packs. */
     template <RatioPackType A, RatioPackType B>
-    using ratio_pack_mul_t = details::ratio_pack_zip_t<A, B, ratio_mul_t>;
+    struct mul_type<A, B>
+    {
+        using type = details::ratio_pack_zip_t<A, B, mul_type_t>;
+    };
 
     /** Element-wise divide two ratio packs. */
     template <RatioPackType A, RatioPackType B>
-    using ratio_pack_div_t = details::ratio_pack_zip_t<A, B, ratio_div_t>;
+    struct div_type<A, B>
+    {
+        using type = details::ratio_pack_zip_t<A, B, div_type_t>;
+    };
 
     /** Raise each ratio in a pack to integer powers from an IntegerPack. */
     template <RatioPackType Pack, IntegerPackType IntPack>   // TODO: check this
-    using ratio_pack_pow_t = details::ratio_pack_pow_impl<Pack, IntPack>::type;
+    struct pow_type<Pack, IntPack>
+    {
+        using type = details::ratio_pack_pow_impl<Pack, IntPack>::type;
+    };
 
     /** Raise each ratio in a pack to integer power K. */
     template <RatioPackType Pack, int K>   // TODO: check this
@@ -70,12 +79,10 @@ namespace mstd
      *                   *
      *********************/
 
-    /** Create a RatioPack of size N filled with `std::ratio<1>`. */
     template <std::size_t N>
     using make_default_ratio_pack_t =
         typename details::make_default_ratio_pack<N>::type;
 
-    /** Create a RatioPack of size N filled with PowRatio<>s. */
     template <std::size_t N>
     using make_pow_ratio_pack_t =
         typename details::make_pow_ratio_pack<N>::type;
@@ -87,11 +94,12 @@ namespace mstd
             std::make_index_sequence<N>{}
         ));
 
-    template <RatioPackType R, IntegerPackType I>
-    requires(I::size == R::size && I::size > 0 &&
-             is_pow_ratio_v<typename R::type_at<0>>)
-    using make_pow_ratio_pack_t =
-        details::make_pow_ratio_pack_impl<R, I>::type;   // TODO: implement this
+    // template <RatioPackType R, IntegerPackType I>
+    // requires(I::size == R::size && I::size > 0 &&
+    //          is_pow_ratio_v<typename R::template type_at<0>>)
+    // using make_pow_ratio_pack_t =
+    //     details::make_pow_ratio_pack_impl<R, I>::type;   // TODO: implement
+    //     this
 
     /**
      * @brief check if a ratio is a power ratio pack or a standard ratio pack
@@ -99,7 +107,8 @@ namespace mstd
      * @tparam R
      */
     template <RatioPackType R>
-    constexpr bool is_pow_ratio_pack_v = is_pow_ratio_v<typename R::type_at<0>>;
+    constexpr bool is_pow_ratio_pack_v =
+        is_pow_ratio_v<typename R::template type_at<0>>;
 
 }   // namespace mstd
 
