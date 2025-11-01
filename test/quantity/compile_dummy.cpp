@@ -25,4 +25,3 @@
 #include "mstd/math.hpp"         // IWYU pragma: keep
 #include "mstd/pack.hpp"         // IWYU pragma: keep
 #include "mstd/quantity.hpp"     // IWYU pragma: keep
-#include "mstd/ratio.hpp"        // IWYU pragma: keep

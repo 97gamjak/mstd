@@ -20,8 +20,8 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_DIM_RATIO_OPERATIONS_HPP__
-#define __MSTD_DIM_RATIO_OPERATIONS_HPP__
+#ifndef __MSTD__QUANTITY__DIM_RATIO_OPERATIONS_HPP__
+#define __MSTD__QUANTITY__DIM_RATIO_OPERATIONS_HPP__
 
 #include "dim_ratio.hpp"
 #include "dim_ratio_details.hpp"
@@ -36,12 +36,12 @@ namespace mstd
      * @return the resulting DimRatio after multiplication
      */
     template <DimRatioType R1, DimRatioType R2>
-    struct mul_type_t<R1, R2>
+    struct mul_type<R1, R2>
     {
         using type = DimRatio<
             mul_type_t<typename R1::si, typename R2::si>,
             mul_type_t<typename R1::ex, typename R2::ex>>;
-    }
+    };
 
     /**
      * @brief DimRatio division
@@ -51,7 +51,7 @@ namespace mstd
      * @return the resulting DimRatio after division
      */
     template <DimRatioType R1, DimRatioType R2>
-    struct div_type_t<R1, R2>
+    struct div_type<R1, R2>
     {
         using type = DimRatio<
             div_type_t<typename R1::si, typename R2::si>,
@@ -66,10 +66,10 @@ namespace mstd
      * @return the resulting DimRatio after power
      */
     template <DimRatioType R, DimType D>
-    struct pow_type_t<R, D>
+    struct pow_type<R, D>
     {
         using type = details::dim_ratio_pow_impl<R, D>::type;
-    }
+    };
 
     /**
      * @brief DimRatio power with integer K
@@ -102,4 +102,4 @@ namespace mstd
 
 }   // namespace mstd
 
-#endif   // __MSTD_DIM_RATIO_OPERATIONS_HPP__
+#endif   // __MSTD__QUANTITY__DIM_RATIO_OPERATIONS_HPP__

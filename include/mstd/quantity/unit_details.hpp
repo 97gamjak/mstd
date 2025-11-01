@@ -66,7 +66,7 @@ namespace mstd::details
         using _R1    = typename U1::ratio;
         using _R2    = typename U2::ratio;
         using dim    = dim_mul_t<_D1, _D2>;
-        using ratio  = dim_ratio_mul_t<_R1, _D1, _R2, _D2>;
+        using ratio  = mul_type_t<_R1, _D1, _R2, _D2>;
         using global = mul_type_t<typename U1::global, typename U2::global>;
 
         static constexpr long double f = U1::factor_v * U2::factor_v;
