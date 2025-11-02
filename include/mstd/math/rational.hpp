@@ -31,7 +31,7 @@
 
 namespace mstd
 {
-    template <intmax_t Num = 1, intmax_t Den = 1>
+    template <intmax_t Num = 0, intmax_t Den = 1>
     struct Rational
     {
         static constexpr intmax_t rawNum = Num;
@@ -60,6 +60,9 @@ namespace mstd
             return _num / _den;
         }
     };
+
+    template <intmax_t Num = 1, intmax_t Den = 1>
+    using Ratio = Rational<Num, Den>;
 
     template <intmax_t T>
     using DefaultRational = Rational<>;

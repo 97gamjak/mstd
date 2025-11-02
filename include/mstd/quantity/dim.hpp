@@ -81,8 +81,8 @@ namespace mstd
      * @tparam Extra Pack of extra exponents; defaults to all zeros.
      */
     template <
-        IntegerPackType SI    = default_si_pack,
-        IntegerPackType Extra = default_extra_pack>
+        RationalPackType SI    = default_si_pack,
+        RationalPackType Extra = default_extra_pack>
     struct Dim
     {
         static_assert(SI::size == SIDimIdMeta::size, "si size mismatch");
