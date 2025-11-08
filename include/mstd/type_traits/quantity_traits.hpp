@@ -44,7 +44,7 @@ namespace mstd
      */
     template <typename T>
     concept DimType =
-        IntegerPackType<typename T::si> && IntegerPackType<typename T::ex>;
+        RationalPackType<typename T::si> && RationalPackType<typename T::ex>;
 
     template <typename T>
     constexpr bool is_dim_v = DimType<T>;

@@ -79,20 +79,22 @@ namespace mstd
      *                   *
      *********************/
 
-    template <std::size_t N>
-    using make_default_ratio_pack_t =
-        typename details::make_default_ratio_pack<N>::type;
+    template <std::size_t N, RationalType R = Rational<>>
+    using make_rational_pack_t =
+        typename details::make_rational_pack<N, R>::type;
 
     template <std::size_t N>
     using make_pow_ratio_pack_t =
         typename details::make_pow_ratio_pack<N>::type;
 
     /** Create a RatioPack of size N with a single ratio R at index Idx. */
-    template <RatioType R, size_t Idx, size_t N>
-    using make_ratio_pack_single_t =
-        decltype(details::make_ratio_pack_at_impl<R, Idx>(
-            std::make_index_sequence<N>{}
-        ));
+    template <
+        size_t       N,
+        size_t       Idx,
+        RationalType R       = Rational<1>,
+        RationalType Default = Rational<>>
+    using make_single_rational_pack_t =
+        details::make_single_rational_pack<N, Idx, R, Default>::type;
 
     // template <RatioPackType R, IntegerPackType I>
     // requires(I::size == R::size && I::size > 0 &&

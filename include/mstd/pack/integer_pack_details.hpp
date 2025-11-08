@@ -37,136 +37,128 @@
  * by the public `IntegerPack` interface and its aliases.
  */
 
-namespace mstd
+namespace mstd::details
 {
-    namespace details
+    /*******************
+     *                 *
+     * Pack algorithms  *
+     *                 *
+     *******************/
+    /**
+     * @brief Map a function over the elements of a IntegerPack.
+     *
+     * @tparam P The IntegerPack to operate on.
+     * @tparam F The function to apply.
+     * @tparam I The index sequence for unpacking the IntegerPack.
+     * @return constexpr auto The resulting IntegerPack after applying the
+     * function.
+     */
+    template <class P, class F, size_t... I>
+    constexpr auto pack_map_impl(std::index_sequence<I...>)
     {
-        /*******************
-         *                 *
-         * Pack algorithms  *
-         *                 *
-         *******************/
-        /**
-         * @brief Map a function over the elements of a IntegerPack.
-         *
-         * @tparam P The IntegerPack to operate on.
-         * @tparam F The function to apply.
-         * @tparam I The index sequence for unpacking the IntegerPack.
-         * @return constexpr auto The resulting IntegerPack after applying the
-         * function.
-         */
-        template <class P, class F, size_t... I>
-        constexpr auto pack_map_impl(std::index_sequence<I...>)
-        {
-            F f{};
-            return IntegerPack<f(P::vals[I])...>{};
-        }
+        F f{};
+        return IntegerPack<f(P::vals[I])...>{};
+    }
 
-        /**
-         * @brief Implementation note
-         *
-         * Uses an index sequence to access `P::vals[I]` and builds a new
-         * `IntegerPack` with the mapped values.
-         */
+    /**
+     * @brief Implementation note
+     *
+     * Uses an index sequence to access `P::vals[I]` and builds a new
+     * `IntegerPack` with the mapped values.
+     */
 
-        /**
-         * @brief Zip two packs together using a function.
-         *
-         * @tparam A The first IntegerPack.
-         * @tparam B The second IntegerPack.
-         * @tparam F The function to apply.
-         * @tparam I The index sequence for unpacking the packs.
-         * @return constexpr auto The resulting IntegerPack after applying the
-         * function.
-         */
-        template <class A, class B, class F, size_t... I>
-        constexpr auto pack_zip_impl(std::index_sequence<I...>)
-        {
-            static_assert(
-                A::size == B::size,
-                "IntegerPack size mismatch in zip"
-            );
-            F f{};
-            return IntegerPack<f(A::vals[I], B::vals[I])...>{};
-        }
+    /**
+     * @brief Zip two packs together using a function.
+     *
+     * @tparam A The first IntegerPack.
+     * @tparam B The second IntegerPack.
+     * @tparam F The function to apply.
+     * @tparam I The index sequence for unpacking the packs.
+     * @return constexpr auto The resulting IntegerPack after applying the
+     * function.
+     */
+    template <class A, class B, class F, size_t... I>
+    constexpr auto pack_zip_impl(std::index_sequence<I...>)
+    {
+        static_assert(A::size == B::size, "IntegerPack size mismatch in zip");
+        F f{};
+        return IntegerPack<f(A::vals[I], B::vals[I])...>{};
+    }
 
-        /****************************************
-         *                                      *
-         * Useful aliases for common operations *
-         *                                      *
-         ****************************************/
+    /****************************************
+     *                                      *
+     * Useful aliases for common operations *
+     *                                      *
+     ****************************************/
 
-        /**
-         * @brief Useful alias for mapping a function over a IntegerPack.
-         *
-         * @tparam P The IntegerPack to operate on.
-         * @tparam F The function to apply.
-         */
-        template <class P, class F>
-        using pack_map_t =
-            decltype(pack_map_impl<P, F>(std::make_index_sequence<P::size>{}));
+    /**
+     * @brief Useful alias for mapping a function over a IntegerPack.
+     *
+     * @tparam P The IntegerPack to operate on.
+     * @tparam F The function to apply.
+     */
+    template <class P, class F>
+    using pack_map_t =
+        decltype(pack_map_impl<P, F>(std::make_index_sequence<P::size>{}));
 
-        /**
-         * @brief Useful alias for zipping two packs together using a function.
-         *
-         * @tparam A The first IntegerPack.
-         * @tparam B The second IntegerPack.
-         * @tparam F The function to apply.
-         */
-        template <class A, class B, class F>
-        using pack_zip_t =
-            decltype(pack_zip_impl<A, B, F>(std::make_index_sequence<A::size>{})
-            );
+    /**
+     * @brief Useful alias for zipping two packs together using a function.
+     *
+     * @tparam A The first IntegerPack.
+     * @tparam B The second IntegerPack.
+     * @tparam F The function to apply.
+     */
+    template <class A, class B, class F>
+    using pack_zip_t =
+        decltype(pack_zip_impl<A, B, F>(std::make_index_sequence<A::size>{}));
 
-        /*********************
-         *                   *
-         * Pack factories    *
-         *                   *
-         *********************/
+    /*********************
+     *                   *
+     * Pack factories    *
+     *                   *
+     *********************/
+    /**
+     * @brief Build an `IntegerPack` of size N filled with `value`.
+     */
+    template <std::size_t N, int value = 0>
+    struct make_integer_pack
+    {
         /**
          * @brief Build an `IntegerPack` of size N filled with `value`.
-         */
-        template <std::size_t N, int value = 0>
-        struct make_integer_pack
-        {
-            /**
-             * @brief Build an `IntegerPack` of size N filled with `value`.
-             *
-             * @tparam Is A sequence of indices.
-             */
-            template <typename Seq>
-            struct _impl;
-
-            template <size_t... Is>
-            struct _impl<std::index_sequence<Is...>>
-            {
-                using type = IntegerPack<(static_cast<void>(Is), value)...>;
-            };
-
-            using type = typename _impl<std::make_index_sequence<N>>::type;
-        };
-
-        /**
-         * @brief Build an `IntegerPack` of size N with a single non-zero.
          *
-         * Sets the element at index `Ix` to value `I` (default 1); all others
-         * are zero.
+         * @tparam Is A sequence of indices.
          */
-        template <
-            std::size_t N,
-            std::size_t Ix,
-            int         I = 1,
-            typename Seq  = std::make_index_sequence<N>>
-        struct make_single_integer_pack;
+        template <typename Seq>
+        struct _impl;
 
-        template <std::size_t N, std::size_t Ix, int I, std::size_t... Is>
-        struct make_single_integer_pack<N, Ix, I, std::index_sequence<Is...>>
+        template <size_t... Is>
+        struct _impl<std::index_sequence<Is...>>
         {
-            using type = IntegerPack<(Is == Ix ? I : 0)...>;
+            using type = IntegerPack<(static_cast<void>(Is), value)...>;
         };
 
-    }   // namespace details
+        using type = typename _impl<std::make_index_sequence<N>>::type;
+    };
 
-}   // namespace mstd
+    /**
+     * @brief Build an `IntegerPack` of size N with a single non-zero.
+     *
+     * Sets the element at index `Ix` to value `I` (default 1); all others
+     * are zero.
+     */
+    template <
+        std::size_t N,
+        std::size_t Ix,
+        int         I = 1,
+        typename Seq  = std::make_index_sequence<N>>
+    struct make_single_integer_pack;
+
+    template <std::size_t N, std::size_t Ix, int I, std::size_t... Is>
+    struct make_single_integer_pack<N, Ix, I, std::index_sequence<Is...>>
+    {
+        using type = IntegerPack<(Is == Ix ? I : 0)...>;
+    };
+
+}   // namespace mstd::details
 
 #endif   // __MSTD_INTEGER_PACK_DETAILS_HPP__

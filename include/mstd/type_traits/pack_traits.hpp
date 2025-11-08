@@ -50,6 +50,24 @@ namespace mstd
         { T::template get<0> } -> std::convertible_to<int>;
     };
 
+    namespace details
+    {
+        template <typename T, size_t... I>
+        constexpr bool is_ratio_pack_ok(std::index_sequence<I...>)
+        {
+            return (is_rational_v<typename T::template type_at<I>> && ...);
+        }
+
+        template <typename T, size_t... I>
+        constexpr bool is_pow_ratio_pack_ok(std::index_sequence<I...>)
+        {
+            return (
+                is_rational_power_v<typename T::template type_at<I>> && ...
+            );
+        }
+
+    }   // namespace details
+
     /**
      * @brief Concept for ratio pack types.
      *
@@ -60,8 +78,17 @@ namespace mstd
     template <typename T>
     concept RatioPackType = requires {
         { T::size } -> std::convertible_to<std::size_t>;
-        is_rational_v<decltype(T::template get<0>())>;
-    };
+    } && details::is_ratio_pack_ok<T>(std::make_index_sequence<T::size>{});
+
+    template <typename T>
+    concept RationalPackType = requires {
+        { T::size } -> std::convertible_to<std::size_t>;
+    } && details::is_ratio_pack_ok<T>(std::make_index_sequence<T::size>{});
+
+    template <typename T>
+    concept RationalPowerPackType = requires {
+        { T::size } -> std::convertible_to<std::size_t>;
+    } && details::is_pow_ratio_pack_ok<T>(std::make_index_sequence<T::size>{});
 
 }   // namespace mstd
 

@@ -48,7 +48,7 @@ namespace mstd
          * @tparam Dim - has to be a simple base dimension
          * @tparam Ratio
          */
-        template <details::SimpleDim Dim, RatioType Ratio>
+        template <details::SimpleDim Dim, RatioType R>
         struct make_dim_ratio_single
         {
             static constexpr bool has_si = has_si_dim<Dim>();
@@ -67,8 +67,12 @@ namespace mstd
             static constexpr size_t default_size = has_si ? ex_size : si_size;
 
             // make the ratio packs
-            using default_pack = make_default_ratio_pack_t<default_size>;
-            using new_pack     = make_ratio_pack_single_t<Ratio, index, size>;
+            // NOTE: use here Ratio<> as default ratio to have a default
+            // Rational value of 1/1 for the default pack otherwise the pack
+            // would be Rational<> which defaults to 0/1
+            using default_pack = make_rational_pack_t<default_size, Ratio<>>;
+            using new_pack =
+                make_single_rational_pack_t<size, index, R, Ratio<>>;
 
             // make the si and ex packs
             using si = std::conditional_t<has_si, new_pack, default_pack>;

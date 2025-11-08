@@ -113,14 +113,54 @@ namespace mstd::details
      *                   *
      *********************/
 
-    // main generator
-    template <size_t N, typename Seq = std::make_index_sequence<N>>
-    struct make_default_ratio_pack;
-
-    template <size_t N, size_t... Is>
-    struct make_default_ratio_pack<N, std::index_sequence<Is...>>
+    template <size_t N, RationalType rational = Rational<>>
+    struct make_rational_pack
     {
-        using type = RationalPack<DefaultRationalPower<Is>...>;
+        /**
+         * @brief Build an `RationalPack` of size N filled with `rational`.
+         *
+         * @tparam Is A sequence of indices.
+         */
+        template <typename Seq>
+        struct _impl;
+
+        template <size_t... Is>
+        struct _impl<std::index_sequence<Is...>>
+        {
+            template <std::size_t>
+            using repeat_t = rational;
+
+            using type = RationalPack<repeat_t<Is>...>;
+        };
+
+        using type = typename _impl<std::make_index_sequence<N>>::type;
+    };
+
+    template <
+        std::size_t  N,
+        std::size_t  Ix,
+        RationalType I,
+        RationalType Default>
+    struct make_single_rational_pack
+    {
+        /**
+         * @brief Build an `RationalPack` of size N filled with `rational`.
+         *
+         * @tparam Is A sequence of indices.
+         */
+        template <typename Seq>
+        struct _impl;
+
+        template <size_t... Is>
+        struct _impl<std::index_sequence<Is...>>
+        {
+            template <size_t i>
+            using repeat_t = std::conditional_t<i == Ix, I, Default>;
+
+            using type = RationalPack<repeat_t<Is>...>;
+        };
+
+        using type = typename _impl<std::make_index_sequence<N>>::type;
     };
 
     template <size_t N, typename Seq = std::make_index_sequence<N>>

@@ -25,6 +25,7 @@
 
 #include "dim.hpp"
 #include "dim_details.hpp"
+#include "mstd/type_traits.hpp"
 
 /**
  * @file dim_operations.hpp
@@ -43,9 +44,12 @@ namespace mstd
      * @tparam Dim2 Right operand dimension.
      */
     template <DimType Dim1, DimType Dim2>
-    using dim_mul_t =
-        Dim<add_type_t<typename Dim1::si, typename Dim2::si>,
-            add_type_t<typename Dim1::ex, typename Dim2::ex>>;
+    struct mul_type<Dim1, Dim2>
+    {
+        using type =
+            Dim<add_type_t<typename Dim1::si, typename Dim2::si>,
+                add_type_t<typename Dim1::ex, typename Dim2::ex>>;
+    };
 
     /**
      * @brief Combine dimensions by subtracting exponents (division of units).
@@ -55,8 +59,8 @@ namespace mstd
      */
     template <DimType Dim1, DimType Dim2>
     using dim_div_t =
-        Dim<pack_sub_t<typename Dim1::si, typename Dim2::si>,
-            pack_sub_t<typename Dim1::ex, typename Dim2::ex>>;
+        Dim<sub_type_t<typename Dim1::si, typename Dim2::si>,
+            sub_type_t<typename Dim1::ex, typename Dim2::ex>>;
 
     /**
      * @brief Raise a dimension to an integer power.

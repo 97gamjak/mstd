@@ -227,6 +227,22 @@ namespace mstd
     template <typename T>
     using to_pow_rational_t = typename to_pow_rational<T>::type;
 
+    using femto = Rational<1, 1000000000000000>;
+    using pico  = Rational<1, 1000000000000>;
+    using nano  = Rational<1, 1000000000>;
+    using micro = Rational<1, 1000000>;
+    using milli = Rational<1, 1000>;
+    using centi = Rational<1, 100>;
+    using deci  = Rational<1, 10>;
+    using deca  = Rational<10, 1>;
+    using hecto = Rational<100, 1>;
+    using kilo  = Rational<1000, 1>;
+    using mega  = Rational<1000000, 1>;
+    using giga  = Rational<1000000000, 1>;
+    using tera  = Rational<1000000000000, 1>;
+    using peta  = Rational<1000000000000000, 1>;
+    using exa   = Rational<1000000000000000000, 1>;
+
 }   // namespace mstd
 
 #endif   // __MSTD_MATH_RATIONAL_HPP__
