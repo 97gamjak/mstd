@@ -55,8 +55,8 @@ namespace mstd
             static constexpr bool has_ex = has_ex_dim<Dim>();
 
             // determine the index of the non-zero index in the dimension
-            static constexpr size_t siIndex = Dim::si::non_zero_index();
-            static constexpr size_t exIndex = Dim::ex::non_zero_index();
+            static constexpr size_t siIndex = Dim::si::first_non_zero_index();
+            static constexpr size_t exIndex = Dim::ex::first_non_zero_index();
 
             static constexpr size_t si_size = Dim::si_size;
             static constexpr size_t ex_size = Dim::ex_size;
@@ -70,9 +70,9 @@ namespace mstd
             // NOTE: use here Ratio<> as default ratio to have a default
             // Rational value of 1/1 for the default pack otherwise the pack
             // would be Rational<> which defaults to 0/1
-            using default_pack = make_rational_pack_t<default_size, Ratio<>>;
+            using default_pack = make_pow_ratio_pack_t<default_size>;
             using new_pack =
-                make_single_rational_pack_t<size, index, R, Ratio<>>;
+                make_single_rational_pow_pack_t<size, index, R, Ratio<1>>;
 
             // make the si and ex packs
             using si = std::conditional_t<has_si, new_pack, default_pack>;

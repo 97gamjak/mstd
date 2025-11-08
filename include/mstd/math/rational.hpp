@@ -75,8 +75,11 @@ namespace mstd
     };
 
     template <RationalType R, RationalType S>
-    using rational_sub_t =
-        Rational<R::num * S::den - S::num * R::den, R::den * S::den>;
+    struct sub_type<R, S>
+    {
+        using type =
+            Rational<R::num * S::den - S::num * R::den, R::den * S::den>;
+    };
 
     template <RationalType R, RationalType S>
     struct mul_type<R, S>

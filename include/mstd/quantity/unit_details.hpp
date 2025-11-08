@@ -65,12 +65,13 @@ namespace mstd::details
         using _D2    = typename U2::dim;
         using _R1    = typename U1::ratio;
         using _R2    = typename U2::ratio;
-        using dim    = dim_mul_t<_D1, _D2>;
-        using ratio  = mul_type_t<_R1, _D1, _R2, _D2>;
+        using dim    = mul_type_t<_D1, _D2>;
+        using ratio  = mul_type_t<_R1, _R2>;
         using global = mul_type_t<typename U1::global, typename U2::global>;
+        using exp    = mul_type_t<typename U1::exp, typename U2::exp>;
 
         static constexpr long double f = U1::factor_v * U2::factor_v;
-        using type                     = Unit<dim, ratio, global, f>;
+        using type                     = Unit<dim, ratio, global, exp, f>;
     };
 
     /**
@@ -129,13 +130,14 @@ namespace mstd::details
     template <class U1, class U2>
     struct unit_div_impl
     {
-        using dim    = dim_div_t<typename U1::dim, typename U2::dim>;
-        using ratio  = dim_ratio_div_t<typename U1::ratio, typename U2::ratio>;
+        using dim    = div_type_t<typename U1::dim, typename U2::dim>;
+        using ratio  = div_type_t<typename U1::ratio, typename U2::ratio>;
         using global = div_type_t<typename U1::global, typename U2::global>;
+        using exp    = div_type_t<typename U1::exp, typename U2::exp>;
 
         static constexpr long double factor_v = U1::factor_v / U2::factor_v;
 
-        using type = Unit<dim, ratio, global, factor_v>;
+        using type = Unit<dim, ratio, global, exp, factor_v>;
     };
 
     /**
@@ -150,10 +152,11 @@ namespace mstd::details
         using dim    = dim_pow_t<typename U::dim, Exp>;
         using ratio  = dim_ratio_pow_k_t<typename U::ratio, Exp>;
         using global = rational_pow_t<typename U::global, Exp>;
+        using exp    = pack_scale_t<typename U::exp, Exp>;
 
         static constexpr long double factor_v = power(U::factor_v, Exp);
 
-        using type = Unit<dim, ratio, global, factor_v>;
+        using type = Unit<dim, ratio, global, exp, factor_v>;
     };
 
     /**
@@ -169,6 +172,7 @@ namespace mstd::details
             typename U::dim,
             typename U::ratio,
             typename U::global,
+            typename U::exp,
             U::factor_v * F>;
     };
 
@@ -223,8 +227,8 @@ namespace mstd::details
         using rule2 = std::conditional_t<none, Unit1, void>;
 
         // rule 3: both factors == 1 → pick smallest ratio (finer); tie → LHS
-        static constexpr long double r1 = ratio_v<Unit1>;
-        static constexpr long double r2 = ratio_v<Unit2>;
+        static constexpr long double r1 = 1.0L;   // TODO: ratio_v<Unit1>;
+        static constexpr long double r2 = 1.0L;   // TODO: ratio_v<Unit2>;
 
         using rule3 = std::conditional_t<
             both,

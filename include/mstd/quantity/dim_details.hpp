@@ -38,7 +38,7 @@ namespace mstd
         template <typename Dim>
         inline constexpr size_t has_si_dim()
         {
-            return Dim::si::num_vals_set() > 0;
+            return Dim::si::num_non_zero() > 0;
         }
 
         /**
@@ -50,7 +50,7 @@ namespace mstd
         template <typename Dim>
         inline constexpr size_t has_ex_dim()
         {
-            return Dim::ex::num_vals_set() > 0;
+            return Dim::ex::num_non_zero() > 0;
         }
 
         /**
@@ -74,7 +74,7 @@ namespace mstd
         template <typename Dim>
         constexpr bool is_simple_base_dim()
         {
-            return Dim::si::num_vals_set() + Dim::ex::num_vals_set() == 1;
+            return Dim::si::num_non_zero() + Dim::ex::num_non_zero() == 1;
         }
 
         /**

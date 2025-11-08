@@ -63,7 +63,7 @@ namespace mstd
     template <class U>
     concept scalar_unit = has_dim_v<U, dim_scalar>;
     template <class U>
-    concept dimensionless_unit = scalar_unit<U> && is_same_v<typename U::ratio, Rational<1>>;
+    concept dimensionless_unit = scalar_unit<U> && std::is_same_v<typename U::ratio, Rational<1>>;
 
     template <class U>
     concept area_unit = has_dim_v<U, dim_area> || has_dim_v<U, dim_inv_area>;

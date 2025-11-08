@@ -49,9 +49,9 @@ namespace mstd::details
     constexpr auto ratio_pack_zip_impl(std::index_sequence<I...>)
     {
         static_assert(A::size == B::size, "RationalPack size mismatch");
-        return RationalPack<typename F<
-            typename A::template type_at<I>,
-            typename B::template type_at<I>>::type...>{};
+        return RationalPack<
+            F<typename A::template type_at<I>,
+              typename B::template type_at<I>>...>{};
     }
 
     template <class A, class B, template <class, class> class F>
@@ -158,6 +158,33 @@ namespace mstd::details
             using repeat_t = std::conditional_t<i == Ix, I, Default>;
 
             using type = RationalPack<repeat_t<Is>...>;
+        };
+
+        using type = typename _impl<std::make_index_sequence<N>>::type;
+    };
+
+    template <
+        std::size_t  N,
+        std::size_t  Ix,
+        RationalType I,
+        RationalType Default>
+    struct make_single_rational_pow_pack
+    {
+        /**
+         * @brief Build an `RationalPack` of size N filled with `rational`.
+         *
+         * @tparam Is A sequence of indices.
+         */
+        template <typename Seq>
+        struct _impl;
+
+        template <size_t... Is>
+        struct _impl<std::index_sequence<Is...>>
+        {
+            template <size_t i>
+            using repeat_t = std::conditional_t<i == Ix, I, Default>;
+
+            using type = to_pow_rational_t<RationalPack<repeat_t<Is>...>>;
         };
 
         using type = typename _impl<std::make_index_sequence<N>>::type;

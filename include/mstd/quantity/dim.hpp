@@ -49,16 +49,16 @@ namespace mstd
     /**
      * @brief Integer pack covering all SI base dimensions.
      *
-     * Alias of `make_integer_pack_t<SIDimIdMeta::size>`.
+     * Alias of `make_rational_pack_t<SIDimIdMeta::size>`.
      */
-    using default_si_pack = make_integer_pack_t<SIDimIdMeta::size>;
+    using default_si_pack = make_rational_pack_t<SIDimIdMeta::size>;
 
     /**
      * @brief Integer pack covering all extra (non-SI) dimensions.
      *
-     * Alias of `make_integer_pack_t<ExtraDimIdMeta::size>`.
+     * Alias of `make_rational_pack_t<ExtraDimIdMeta::size>`.
      */
-    using default_extra_pack = make_integer_pack_t<ExtraDimIdMeta::size>;
+    using default_extra_pack = make_rational_pack_t<ExtraDimIdMeta::size>;
 
     /***********************
      *                     *

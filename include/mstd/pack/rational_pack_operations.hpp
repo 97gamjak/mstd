@@ -48,6 +48,18 @@ namespace mstd
      *                       *
      *************************/
 
+    template <RatioPackType A, RatioPackType B>
+    struct add_type<A, B>
+    {
+        using type = details::ratio_pack_zip_t<A, B, add_type_t>;
+    };
+
+    template <RatioPackType A, RatioPackType B>
+    struct sub_type<A, B>
+    {
+        using type = details::ratio_pack_zip_t<A, B, sub_type_t>;
+    };
+
     /** Element-wise multiply two ratio packs. */
     template <RatioPackType A, RatioPackType B>
     struct mul_type<A, B>
@@ -79,13 +91,48 @@ namespace mstd
      *                   *
      *********************/
 
+    template <typename R>
+    struct to_pow_ratio_pack_impl
+    {
+        /**
+         * @brief Build an `RationalPack` of size N filled with `rational`.
+         *
+         * @tparam Is A sequence of indices.
+         */
+        template <typename Seq>
+        struct _impl;
+
+        template <size_t... Is>
+        struct _impl<std::index_sequence<Is...>>
+        {
+            template <size_t I>
+            using repeat_t = to_pow_rational_t<typename R::template type_at<I>>;
+
+            using type = RationalPack<repeat_t<Is>...>;
+        };
+
+        using type = typename _impl<std::make_index_sequence<R::size>>::type;
+    };
+
+    template <typename R>
+    using to_pow_ratio_pack_t = to_pow_ratio_pack_impl<R>::type;
+
     template <std::size_t N, RationalType R = Rational<>>
     using make_rational_pack_t =
         typename details::make_rational_pack<N, R>::type;
 
-    template <std::size_t N>
-    using make_pow_ratio_pack_t =
-        typename details::make_pow_ratio_pack<N>::type;
+    template <size_t N, RationalType R = Rational<1>>
+    using make_ratio_pack_t = typename details::make_rational_pack<N, R>::type;
+
+    template <std::size_t N, RationalType R>
+    struct make_pow_rational_pack   // TODO: implement version for RationalPower
+    {
+        using type = to_pow_ratio_pack_t<make_ratio_pack_t<N, R>>;
+    };
+
+    template <std::size_t N, typename R = Rational<1>>
+    using make_pow_ratio_pack_t = typename make_pow_rational_pack<N, R>::
+        type;   // TODO: implement version for RationalPower
 
     /** Create a RatioPack of size N with a single ratio R at index Idx. */
     template <
@@ -96,15 +143,18 @@ namespace mstd
     using make_single_rational_pack_t =
         details::make_single_rational_pack<N, Idx, R, Default>::type;
 
-    // template <RatioPackType R, IntegerPackType I>
-    // requires(I::size == R::size && I::size > 0 &&
-    //          is_pow_ratio_v<typename R::template type_at<0>>)
-    // using make_pow_ratio_pack_t =
-    //     details::make_pow_ratio_pack_impl<R, I>::type;   // TODO: implement
-    //     this
+    template <
+        size_t       N,
+        size_t       Idx,
+        RationalType R       = Rational<>,
+        RationalType Default = Rational<>>
+    using make_single_rational_pow_pack_t =
+        details::make_single_rational_pow_pack<N, Idx, R, Default>::
+            type;   // TODO: implement version for RationalPower
 
     /**
-     * @brief check if a ratio is a power ratio pack or a standard ratio pack
+     * @brief check if a ratio is a power ratio pack or a standard ratio
+     * pack
      *
      * @tparam R
      */

@@ -183,21 +183,21 @@ namespace mstd
 
     using dim_area         = mul_type_t<dim_length, dim_length>;
     using dim_volume       = mul_type_t<dim_area, dim_length>;
-    using dim_density      = dim_div_t<dim_mass, dim_volume>;
-    using dim_velocity     = dim_div_t<dim_length, dim_time>;
-    using dim_acceleration = dim_div_t<dim_velocity, dim_time>;
+    using dim_density      = div_type_t<dim_mass, dim_volume>;
+    using dim_velocity     = div_type_t<dim_length, dim_time>;
+    using dim_acceleration = div_type_t<dim_velocity, dim_time>;
     using dim_force        = mul_type_t<dim_mass, dim_acceleration>;
     using dim_energy       = mul_type_t<dim_force, dim_length>;
-    using dim_power        = dim_div_t<dim_energy, dim_time>;
+    using dim_power        = div_type_t<dim_energy, dim_time>;
 
     using dim_inv_area         = mul_type_t<dim_inv_length, dim_inv_length>;
     using dim_inv_volume       = mul_type_t<dim_inv_area, dim_inv_length>;
-    using dim_inv_density      = dim_div_t<dim_inv_mass, dim_inv_volume>;
-    using dim_inv_velocity     = dim_div_t<dim_inv_length, dim_inv_time>;
-    using dim_inv_acceleration = dim_div_t<dim_inv_velocity, dim_inv_time>;
+    using dim_inv_density      = div_type_t<dim_inv_mass, dim_inv_volume>;
+    using dim_inv_velocity     = div_type_t<dim_inv_length, dim_inv_time>;
+    using dim_inv_acceleration = div_type_t<dim_inv_velocity, dim_inv_time>;
     using dim_inv_force        = mul_type_t<dim_inv_mass, dim_inv_acceleration>;
     using dim_inv_energy       = mul_type_t<dim_inv_force, dim_inv_length>;
-    using dim_inv_power        = dim_div_t<dim_inv_energy, dim_inv_time>;
+    using dim_inv_power        = div_type_t<dim_inv_energy, dim_inv_time>;
 
 }   // namespace mstd
 

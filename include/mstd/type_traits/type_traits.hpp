@@ -37,6 +37,17 @@ namespace mstd
         T::value;
     } && std::is_integral_v<typename T::value_type>;
 
+    template <typename T, typename U>
+    struct convert
+    {
+        MSTD_COMPILE_FAIL(
+            "conversion between the given types is not supported"
+        );
+    };
+
+    template <typename T, typename U>
+    using convert_t = typename convert<T, U>::type;
+
 }   // namespace mstd
 
 #endif   // __TYPE_TRAITS__TYPE_TRAITS_HPP__

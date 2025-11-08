@@ -108,6 +108,15 @@
         "__nullptr": "cpp",
         "csignal": "cpp",
         "list": "cpp",
-        "text_encoding": "cpp"
+        "text_encoding": "cpp",
+        "__functional_base": "cpp",
+        "__functional_base_03": "cpp",
+        "__hash_table": "cpp",
+        "__tree": "cpp",
+        "__tuple": "cpp",
+        "__split_buffer": "cpp",
+        "queue": "cpp",
+        "stack": "cpp",
+        "source_location": "cpp"
     },
 }

@@ -56,8 +56,8 @@ namespace mstd
      * `ex` which are both ratio packs.
      */
     template <typename T>
-    concept DimRatioType =
-        RatioPackType<typename T::si> && RatioPackType<typename T::ex>;
+    concept DimRatioType = RationalPowerPackType<typename T::si> &&
+                           RationalPowerPackType<typename T::ex>;
 
     template <typename T>
     constexpr bool is_dim_ratio_v = DimRatioType<T>;

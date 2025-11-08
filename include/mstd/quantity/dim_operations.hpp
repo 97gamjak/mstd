@@ -58,9 +58,12 @@ namespace mstd
      * @tparam Dim2 Denominator dimension.
      */
     template <DimType Dim1, DimType Dim2>
-    using dim_div_t =
-        Dim<sub_type_t<typename Dim1::si, typename Dim2::si>,
-            sub_type_t<typename Dim1::ex, typename Dim2::ex>>;
+    struct div_type<Dim1, Dim2>
+    {
+        using type =
+            Dim<sub_type_t<typename Dim1::si, typename Dim2::si>,
+                sub_type_t<typename Dim1::ex, typename Dim2::ex>>;
+    };
 
     /**
      * @brief Raise a dimension to an integer power.

@@ -84,6 +84,33 @@ namespace mstd
         {
             return vals[static_cast<size_t>(I)];
         }
+
+        static constexpr size_t num_non_zero()
+        {
+            size_t count = 0;
+            for (size_t i = 0; i < size; ++i)
+                if (vals[i] != 0.0L)
+                    ++count;
+
+            return count;
+        }
+
+        /**
+         * @brief Index of the first non-zero entry.
+         *
+         * Returns `static_cast<size_t>(-1)` if all entries are zero.
+         */
+        static constexpr size_t first_non_zero_index()
+        {
+            if constexpr (num_non_zero() == 0)
+                return -1;
+
+            for (size_t i = 0; i < size; ++i)
+                if (vals[i] != 0.0L)
+                    return i;
+
+            return -1;
+        }
     };
 
 }   // namespace mstd

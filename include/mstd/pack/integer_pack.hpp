@@ -84,7 +84,7 @@ namespace mstd
          *
          * Returns `static_cast<size_t>(-1)` if all entries are zero.
          */
-        static constexpr size_t non_zero_index()
+        static constexpr size_t first_non_zero_index()
         {
             for (size_t i = 0; i < size; ++i)
                 if (vals[i] != 0)

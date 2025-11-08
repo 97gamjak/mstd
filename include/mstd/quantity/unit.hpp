@@ -50,7 +50,7 @@ namespace mstd
         using dim                             = Dim;
         using dimRatio                        = DimRatio;
         using global                          = Global;
-        using exponent                        = Exp;
+        using exp                             = Exp;
         static constexpr long double factor_v = F;
     };
 

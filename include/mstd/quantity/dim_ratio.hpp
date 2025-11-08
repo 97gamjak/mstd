@@ -37,7 +37,7 @@ namespace mstd
     /**
      * @brief default_si_ratio_pack, which is a RatioPack of all SI dimensions
      */
-    using default_si_ratio_pack = make_default_ratio_pack_t<SIDimIdMeta::size>;
+    using default_si_ratio_pack = make_ratio_pack_t<SIDimIdMeta::size>;
 
     using default_si_power_ratio_pack =
         make_pow_ratio_pack_t<SIDimIdMeta::size>;
@@ -46,8 +46,7 @@ namespace mstd
      * @brief default_extra_ratio_pack, which is a RatioPack of all Extra
      * dimensions
      */
-    using default_extra_ratio_pack =
-        make_default_ratio_pack_t<ExtraDimIdMeta::size>;
+    using default_extra_ratio_pack = make_ratio_pack_t<ExtraDimIdMeta::size>;
 
     using default_extra_power_ratio_pack =
         make_pow_ratio_pack_t<ExtraDimIdMeta::size>;
@@ -72,8 +71,8 @@ namespace mstd
      *
      */
     template <
-        RatioPackType SiRatioPack    = default_si_power_ratio_pack,
-        RatioPackType ExtraRatioPack = default_extra_power_ratio_pack>
+        RationalPowerPackType SiRatioPack    = default_si_power_ratio_pack,
+        RationalPowerPackType ExtraRatioPack = default_extra_power_ratio_pack>
     struct DimRatio
     {
         static_assert(
