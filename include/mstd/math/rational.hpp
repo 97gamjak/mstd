@@ -227,6 +227,13 @@ namespace mstd
         using type = R;
     };
 
+    template <RationalPowerType R, RationalPowerType S>
+    struct mul_type<R, S>
+    {
+        using exp_den = std::lcm<R::exponent::den, S::exponent::den>;
+        using expRmul = R::den
+    };
+
     template <typename T>
     using to_pow_rational_t = typename to_pow_rational<T>::type;
 

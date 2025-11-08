@@ -131,7 +131,7 @@ namespace mstd::details
     struct unit_div_impl
     {
         using dim    = div_type_t<typename U1::dim, typename U2::dim>;
-        using ratio  = div_type_t<typename U1::ratio, typename U2::ratio>;
+        using ratio  = div_type_t<typename U1::dimRatio, typename U2::dimRatio>;
         using global = div_type_t<typename U1::global, typename U2::global>;
         using exp    = div_type_t<typename U1::exp, typename U2::exp>;
 
@@ -150,7 +150,7 @@ namespace mstd::details
     struct unit_pow_impl
     {
         using dim    = dim_pow_t<typename U::dim, Exp>;
-        using ratio  = dim_ratio_pow_k_t<typename U::ratio, Exp>;
+        using ratio  = dim_ratio_pow_k_t<typename U::dimRatio, Exp>;
         using global = rational_pow_t<typename U::global, Exp>;
         using exp    = pack_scale_t<typename U::exp, Exp>;
 
@@ -170,7 +170,7 @@ namespace mstd::details
     {
         using type = Unit<
             typename U::dim,
-            typename U::ratio,
+            typename U::dimRatio,
             typename U::global,
             typename U::exp,
             U::factor_v * F>;

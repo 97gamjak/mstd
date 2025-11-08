@@ -71,21 +71,20 @@ namespace mstd
     template <UnitType Unit, int Exp>
     using unit_pow_t = typename details::unit_pow_impl<Unit, Exp>::type;
 
-    // /**
-    //  * @brief Compile-time ratio multiplier of a unit relative to SI.
-    //  *
-    //  * Product of the dimensional ratio components (SI and extra ratio pack)
-    //  * and the unit's global ratio.
-    //  *
-    //  * @details this is a partial specialization
-    //  *
-    //  * @tparam Unit Unit to query
-    //  */
-    // template <UnitType Unit>
-    // inline constexpr long double ratio_v<Unit> =
-    //     ratio_pack_v<typename Unit::ratio::si> *
-    //     ratio_pack_v<typename Unit::ratio::ex> * ratio_v<typename
-    //     Unit::global>; // TODO: fix this
+    /**
+     * @brief Compile-time ratio multiplier of a unit relative to SI.
+     *
+     * Product of the dimensional ratio components (SI and extra ratio pack)
+     * and the unit's global ratio.
+     *
+     * @details this is a partial specialization
+     *
+     * @tparam Unit Unit to query
+     */
+    template <UnitType Unit>
+    inline constexpr long double ratio_v<Unit> =
+        ratio_pack_v<typename Unit::ratio::si> *
+        ratio_pack_v<typename Unit::ratio::ex> * ratio_v<typename Unit::global>;
 
     /**
      * @brief Real scaling factor attached to a unit.
@@ -106,8 +105,7 @@ namespace mstd
      * @tparam Unit Unit to query
      */
     template <UnitType Unit>
-    inline constexpr long double scale_v =
-        factor_v<Unit> * 1.0L;   // TODO: ratio_v<Unit>;
+    inline constexpr long double scale_v = factor_v<Unit> * ratio_v<Unit>;
 
     /**
      * @brief Scale a unit by a real factor at compile time.

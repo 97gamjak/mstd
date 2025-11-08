@@ -133,10 +133,10 @@ namespace mstd
         using pg  = Unit<dim_mass, mass_dim_ratio<femto>>;
         using amu = scaled_unit_t<kg, __AMU_TO_KG__>;
 
-        using y   = Unit<dim_time, time_dim_ratio<rational<__Y_TO_S__>>>;
-        using d   = Unit<dim_time, time_dim_ratio<rational<__D_TO_S__>>>;
-        using h   = Unit<dim_time, time_dim_ratio<rational<__H_TO_S__>>>;
-        using min = Unit<dim_time, time_dim_ratio<rational<__MIN_TO_S__>>>;
+        using y   = Unit<dim_time, time_dim_ratio<Rational<__Y_TO_S__>>>;
+        using d   = Unit<dim_time, time_dim_ratio<Rational<__D_TO_S__>>>;
+        using h   = Unit<dim_time, time_dim_ratio<Rational<__H_TO_S__>>>;
+        using min = Unit<dim_time, time_dim_ratio<Rational<__MIN_TO_S__>>>;
         using s   = Unit<dim_time, time_dim_ratio<>>;
         using ms  = Unit<dim_time, time_dim_ratio<milli>>;
         using us  = Unit<dim_time, time_dim_ratio<micro>>;
@@ -174,9 +174,9 @@ namespace mstd
         using rad = Unit<dim_angle, angle_dim_ratio<>>;
         using deg = scaled_unit_t<rad, __RAD_TO_DEG__>;
 
-        using m_per_s   = unit_div_t<m, s>;
-        using km_per_h  = unit_div_t<km, h>;
-        using Ang_per_s = unit_div_t<Ang, s>;
+        using m_per_s   = div_type_t<m, s>;
+        using km_per_h  = div_type_t<km, h>;
+        using Ang_per_s = div_type_t<Ang, s>;
         using c         = scaled_unit_t<m_per_s, __SPEED_OF_LIGHT_TO_MPS__>;
 
         using m_per_s2 = unit_div_t<m_per_s, s>;

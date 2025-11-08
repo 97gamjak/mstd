@@ -184,7 +184,7 @@ namespace mstd::details
             template <size_t i>
             using repeat_t = std::conditional_t<i == Ix, I, Default>;
 
-            using type = to_pow_rational_t<RationalPack<repeat_t<Is>...>>;
+            using type = RationalPack<to_pow_rational_t<repeat_t<Is>>...>;
         };
 
         using type = typename _impl<std::make_index_sequence<N>>::type;
