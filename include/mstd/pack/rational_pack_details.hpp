@@ -46,30 +46,48 @@ namespace mstd::details
      * Pack algorithms  *
      *                 *
      *******************/
-    template <
-        template <class...> class F,
-        class Pack0,
-        class IndexSeq,
-        class... Packs>
-    struct ratio_pack_zip_impl;
-
-    // Specialization for std::index_sequence
-    template <
-        template <class...> class F,
-        class Pack0,
-        std::size_t... Is,
-        class... Packs>
-    struct ratio_pack_zip_impl<F, Pack0, std::index_sequence<Is...>, Packs...>
+    template <template <class, class> class F, class A, class B, size_t... I>
+    constexpr auto ratio_pack_zip_impl(std::index_sequence<I...>)
     {
-        static constexpr std::size_t size = Pack0::size;
+        static_assert(A::size == B::size, "RationalPack size mismatch");
+        return RationalPack<
+            F<typename A::template type_at<I>,
+              typename B::template type_at<I>>...>{};
+    }
 
-        static_assert(
-            ((Packs::size == size) && ...),
-            "zip_type_t: all packs must have same size"
-        );
+    template <template <class, class> class F, class A, class B>
+    using ratio_pack_zip_t = decltype(ratio_pack_zip_impl<F, A, B>(
+        std::make_index_sequence<A::size>{}
+    ));
 
-        using type = pack_rebind_t<Pack0, zip_at_t<Is, F, Pack0, Packs...>...>;
-    };
+    template <
+        template <class, class, class, class> class F,
+        class A,
+        class B,
+        class C,
+        class D,
+        size_t... I>
+    constexpr auto ratio_pack_zip4_impl(std::index_sequence<I...>)
+    {
+        static_assert(A::size == B::size, "RationalPack size mismatch");
+        static_assert(C::size == D::size, "RationalPack size mismatch");
+        static_assert(A::size == C::size, "RationalPack size mismatch");
+        return RationalPack<
+            F<typename A::template type_at<I>,
+              typename B::template type_at<I>,
+              typename C::template type_at<I>,
+              typename D::template type_at<I>>...>{};
+    }
+
+    template <
+        template <class, class, class, class> class F,
+        class A,
+        class B,
+        class C,
+        class D>
+    using ratio_pack_zip4_t = decltype(ratio_pack_zip4_impl<F, A, B, C, D>(
+        std::make_index_sequence<A::size>{}
+    ));
 
     template <
         template <typename, typename> typename F,

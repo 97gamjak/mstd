@@ -27,11 +27,11 @@
 #include "mstd/quantity.hpp"
 #include "test_utils.hpp"
 
+using namespace mstd;
+using namespace mstd::literals;
+
 TEST_CASE("quantity construction and accessors", "[units]")
 {
-    using namespace mstd;
-    using namespace mstd::literals;
-
     constexpr Length<m> one_meter{1.0};
     MSTD_STATIC_REQUIRE(one_meter.value() == 1.0);
     MSTD_STATIC_REQUIRE(one_meter.baseValue() == 1.0);
@@ -58,9 +58,6 @@ TEST_CASE("quantity construction and accessors", "[units]")
 
 TEST_CASE("quantity conversions and comparisons", "[units]")
 {
-    using namespace mstd;
-    using namespace mstd::literals;
-
     STATIC_REQUIRE(same_dimension_v<cm, m>);
     STATIC_REQUIRE_FALSE(same_dimension_v<cm, kg>);
     STATIC_REQUIRE(same_dimension_v<cm, mm>);
@@ -85,6 +82,13 @@ TEST_CASE("quantity conversions and comparisons", "[units]")
             std::decay_t<decltype(highway_speed_mps)>,
             Velocity<m_per_s>>
     );
+    REQUIRE(highway_speed.dimRatioSi(SIDimId::Length) == Catch::Approx(1000.0));
+    REQUIRE(
+        highway_speed.dimRatioSi(SIDimId::Time) == Catch::Approx(1 / 3600.0)
+    );
+    REQUIRE(highway_speed.value() == Catch::Approx(72.0));
+    REQUIRE(highway_speed.baseValue() == Catch::Approx(72.0 / 3.6));
+    REQUIRE(highway_speed_mps.baseValue() == Catch::Approx(72.0));
     REQUIRE(highway_speed_mps.value() == Catch::Approx(20.0));
 
     REQUIRE(Length<m>{1.0} == Length<cm>{100.0});
@@ -103,9 +107,6 @@ TEST_CASE("quantity conversions and comparisons", "[units]")
 
 TEST_CASE("quantity arithmetic for compatible units", "[units]")
 {
-    using namespace mstd;
-    using namespace mstd::literals;
-
     const Length<m>      a{2.0};
     const Length<m, int> b{3};
     const auto           sum_same = a + b;
@@ -152,9 +153,6 @@ TEST_CASE("quantity arithmetic for compatible units", "[units]")
 
 TEST_CASE("quantity interaction with scalars", "[units]")
 {
-    using namespace mstd;
-    using namespace mstd::literals;
-
     const Length<m> base_length{1.5};
     const auto      stretched = base_length * 2;
     STATIC_REQUIRE(
@@ -196,8 +194,6 @@ TEST_CASE("quantity interaction with scalars", "[units]")
 
 TEST_CASE("quantity division", "[units]")
 {
-    using namespace mstd;
-    using namespace mstd::literals;
     auto length = Length<km>{1.0};
     auto vel    = Velocity<m_per_s>{10.0};
 
@@ -216,9 +212,6 @@ TEST_CASE("quantity division", "[units]")
 
 TEST_CASE("quantity inverse", "[units]")
 {
-    using namespace mstd;
-    using namespace mstd::literals;
-
     const Time<s> time{10.0};
     using per_s  = unit_div_t<unitless, s>;
     using _per_s = Unit<dim_inv_time>;
@@ -244,9 +237,6 @@ TEST_CASE("quantity inverse", "[units]")
 
 TEST_CASE("Quantity multiplication", "[units]")
 {
-    using namespace mstd;
-    using namespace mstd::literals;
-
     using per_s = unit_div_t<unitless, s>;
     const Time<per_s> inv_time{0.1};
     const Time<s>     time{10.0};

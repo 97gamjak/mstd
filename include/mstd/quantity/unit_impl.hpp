@@ -138,8 +138,9 @@ namespace mstd
             Unit<dim_time, time_dim_ratio<RationalPower<Rational<__Y_TO_S__>>>>;
         using d =
             Unit<dim_time, time_dim_ratio<RationalPower<Rational<__D_TO_S__>>>>;
-        using h =
-            Unit<dim_time, time_dim_ratio<RationalPower<Rational<__H_TO_S__>>>>;
+        using h = Unit<
+            dim_time,
+            time_dim_ratio<RationalPower<Rational<__MIN_TO_S__>, Rational<2>>>>;
         using min = Unit<
             dim_time,
             time_dim_ratio<RationalPower<Rational<__MIN_TO_S__>>>>;

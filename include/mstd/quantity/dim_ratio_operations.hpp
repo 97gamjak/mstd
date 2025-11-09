@@ -25,6 +25,7 @@
 
 #include "dim_ratio.hpp"
 #include "dim_ratio_details.hpp"
+#include "mstd/math.hpp"
 
 namespace mstd
 {
@@ -67,19 +68,21 @@ namespace mstd
         RationalType      D2>
     struct dim_ratio_mul_type_entry
     {
-        using mul      = mul_type_t<R1, R2>;
-        using mul_base = mul::base;
-        using mul_exp  = mul::exp;
+        using R1_pow   = pow_type_t<R1, D1>;
+        using R2_pow   = pow_type_t<R2, D2>;
+        using mul      = mul_type_t<R1_pow, R2_pow>;
+        using mul_base = typename mul::base;
+        using mul_exp  = typename mul::exp;
         using exp      = add_type_t<D1, D2>;
-        using R1_base  = R1::base;
+        using R1_base  = typename R1::base;
 
-        using remaining_exp   = sub_type_t<exp, mul_exp>;
+        using remaining_exp   = sub_type_t<mul_exp, exp>;
         using remaining_base1 = div_type_t<mul_base, R1_base>;
 
         using remainder = mul_type_t<
             RationalPower<remaining_base1, exp>,
             RationalPower<mul_base, remaining_exp>>;
-        using type = RationalPower<mul_base, exp>;
+        using type = RationalPower<mul_base, Rational<1, 1>>;
     };
 
     template <
@@ -89,13 +92,15 @@ namespace mstd
         RationalType      D2>
     struct dim_ratio_div_type_entry
     {
-        using div      = div_type<R1, R2>;
-        using div_base = div::base;
-        using div_exp  = div::exp;
+        using R1_pow   = pow_type_t<R1, D1>;
+        using R2_pow   = pow_type_t<R2, D2>;
+        using div      = div_type_t<R1_pow, R2_pow>;
+        using div_base = typename div::base;
+        using div_exp  = typename div::exp;
         using exp      = sub_type_t<D1, D2>;
-        using R1_base  = R1::base;
+        using R1_base  = typename R1::base;
 
-        using remaining_exp   = sub_type_t<exp, div_exp>;
+        using remaining_exp   = sub_type_t<div_exp, exp>;
         using remaining_base1 = div_type_t<div_base, R1_base>;
 
         using remainder = div_type_t<
@@ -149,18 +154,18 @@ namespace mstd
         using dim_e2   = D2::ex;
 
         using type_si =
-            zip_type_t<dimRatioMul_t, ratio_s1, dim_s1, ratio_s2, dim_s2>;
+            zip4_type_t<dimRatioMul_t, ratio_s1, dim_s1, ratio_s2, dim_s2>;
         using type_ex =
-            zip_type_t<dimRatioMul_t, ratio_e1, dim_e1, ratio_e2, dim_e2>;
+            zip4_type_t<dimRatioMul_t, ratio_e1, dim_e1, ratio_e2, dim_e2>;
         using type = DimRatio<type_si, type_ex>;
 
-        using remainder_pack_si = zip_type_t<
+        using remainder_pack_si = zip4_type_t<
             dimRatioMul_remainder_t,
             ratio_s1,
             dim_s1,
             ratio_s2,
             dim_s2>;
-        using remainder_pack_ex = zip_type_t<
+        using remainder_pack_ex = zip4_type_t<
             dimRatioMul_remainder_t,
             ratio_e1,
             dim_e1,
@@ -184,18 +189,18 @@ namespace mstd
         using dim_e2   = D2::ex;
 
         using type_si =
-            zip_type_t<dimRatioDiv_t, ratio_s1, dim_s1, ratio_s2, dim_s2>;
+            zip4_type_t<dimRatioDiv_t, ratio_s1, dim_s1, ratio_s2, dim_s2>;
         using type_ex =
-            zip_type_t<dimRatioDiv_t, ratio_e1, dim_e1, ratio_e2, dim_e2>;
+            zip4_type_t<dimRatioDiv_t, ratio_e1, dim_e1, ratio_e2, dim_e2>;
         using type = DimRatio<type_si, type_ex>;
 
-        using remainder_pack_si = zip_type_t<
+        using remainder_pack_si = zip4_type_t<
             dimRatioDiv_remainder_t,
             ratio_s1,
             dim_s1,
             ratio_s2,
             dim_s2>;
-        using remainder_pack_ex = zip_type_t<
+        using remainder_pack_ex = zip4_type_t<
             dimRatioDiv_remainder_t,
             ratio_e1,
             dim_e1,

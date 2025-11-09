@@ -102,19 +102,38 @@ namespace mstd
     constexpr bool is_rational_pack_v = RationalPackType<T>;
 
     template <
-        template <typename...> typename F,
+        template <class, class> typename F,
         typename Pack0,
-        typename... Packs>
+        typename Pack1>
     struct zip_type
     {
         MSTD_COMPILE_FAIL("zip_type not implemented for the given types");
     };
 
     template <
-        template <typename...> typename F,
+        template <class, class> typename F,
         typename Pack0,
-        typename... Packs>
-    using zip_type_t = typename zip_type<F, Pack0, Packs...>::type;
+        typename Pack1>
+    using zip_type_t = typename zip_type<F, Pack0, Pack1>::type;
+
+    template <
+        template <class, class, class, class> typename F,
+        typename Pack0,
+        typename Pack1,
+        typename Pack2,
+        typename Pack3>
+    struct zip4_type
+    {
+        MSTD_COMPILE_FAIL("zip4_type not implemented for the given types");
+    };
+
+    template <
+        template <class, class, class, class> typename F,
+        typename Pack0,
+        typename Pack1,
+        typename Pack2,
+        typename Pack3>
+    using zip4_type_t = typename zip4_type<F, Pack0, Pack1, Pack2, Pack3>::type;
 
     template <
         template <typename, typename> typename F,

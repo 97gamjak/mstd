@@ -40,8 +40,9 @@ namespace mstd
         static constexpr intmax_t rawNum = Num;
         static constexpr intmax_t rawDen = Den;
 
+        // Den == 0 cannot happen at this point, but just to be safe!
         static constexpr intmax_t gcd =
-            Num == 0 || Den == 0 ? 1 : std::gcd(Num, Den);
+            (Num == 0 || Den == 0) ? 1 : std::gcd(Num, Den);
 
         static constexpr intmax_t num = rawNum / gcd;
         static constexpr intmax_t den = rawDen / gcd;
@@ -52,18 +53,7 @@ namespace mstd
         );
 
         static_assert(
-            []
-            {
-                // TODO: implement nice generic solution for static_assert with
-                // values
-                if constexpr (std::gcd(num, den) != 1)
-                {
-                    print_error<num, den>{};
-                    return false;
-                }
-                else
-                    return true;
-            }(),
+            std::gcd(num, den) == 1 || num == 0,
             "PowRatio exp numerator num and denominator den must be co-prime"
         );
 
@@ -255,6 +245,13 @@ namespace mstd
             typename R::exp>;
     };
 
+    template <RationalPowerType R, RationalType S>
+    struct pow_type<R, S>
+    {
+        using type =
+            RationalPower<typename R::base, mul_type_t<typename R::exp, S>>;
+    };
+
     template <RationalPowerType R, IntegralConstantType I>
     struct pow_type<R, I>
     {
@@ -342,24 +339,198 @@ namespace mstd
     template <RationalType R, RationalType S>
     using lcm_t = typename lcm<R, S>::type;
 
+    constexpr bool will_overflow_mul(intmax_t a, intmax_t b)
+    {
+        if (a == 0 || b == 0)
+            return false;
+        if (a == -1)
+            return b == INTMAX_MIN;
+        if (b == -1)
+            return a == INTMAX_MIN;
+        return (a > 0 && b > 0 && a > INTMAX_MAX / b) ||
+               (a < 0 && b < 0 && a < INTMAX_MAX / b) ||
+               (a > 0 && b < 0 && b < INTMAX_MIN / a) ||
+               (a < 0 && b > 0 && a < INTMAX_MIN / b);
+    }
+
+    template <intmax_t A, intmax_t B>
+    struct safe_mul
+    {
+        static constexpr bool overflow = []
+        {
+            if constexpr (A == 0 || B == 0)
+                return false;
+            if constexpr (A == -1)
+                return B == INTMAX_MIN;
+            if constexpr (B == -1)
+                return A == INTMAX_MIN;
+
+            // All other cases: check bounds
+            if constexpr (A > 0 && B > 0)
+                return A > INTMAX_MAX / B;
+            if constexpr (A < 0 && B < 0)
+                return A < INTMAX_MAX / B;
+            if constexpr (A > 0 && B < 0)
+                return B < INTMAX_MIN / A;
+            if constexpr (A < 0 && B > 0)
+                return A < INTMAX_MIN / B;
+
+            return false;
+        }();
+
+        static_assert(!overflow, "Rational overflow in RationalPower multiply");
+
+        static constexpr intmax_t value = A * B;
+    };
+
+    constexpr intmax_t cabs(intmax_t x) noexcept { return x < 0 ? -x : x; }
+
+    template <class R>
+    struct ratio_simplify;
+
+    template <intmax_t N, intmax_t D>
+    struct ratio_simplify<Rational<N, D>>
+    {
+        static_assert(D != 0);
+        static constexpr intmax_t sN = (D < 0 ? -N : N);
+        static constexpr intmax_t sD = (D < 0 ? -D : D);
+        static constexpr intmax_t g =
+            std::gcd(sN == 0 ? intmax_t(1) : cabs(sN), sD);
+        using type = Rational<sN / g, sD / g>;
+    };
+
+    template <class R1, class R2>
+    struct ratio_mul_simplified
+    {
+        // Like std::ratio_multiply but with gcd to shrink intermediates.
+        static constexpr intmax_t g1 = std::gcd(cabs(R1::num), R2::den);
+        static constexpr intmax_t g2 = std::gcd(cabs(R2::num), R1::den);
+
+        static constexpr intmax_t n1 = R1::num / g1;
+        static constexpr intmax_t d1 = R1::den / g2;
+        static constexpr intmax_t n2 = R2::num / g2;
+        static constexpr intmax_t d2 = R2::den / g1;
+
+        static constexpr intmax_t num = safe_mul<n1, n2>::value;
+        static constexpr intmax_t den = safe_mul<d1, d2>::value;
+
+        using type = typename ratio_simplify<Rational<num, den>>::type;
+    };
+
+    // Slight tweak for negative E to avoid re-using impl incorrectly:
+    template <class R>
+    struct invert_ratio
+    {
+        using type = typename ratio_simplify<Rational<R::den, R::num>>::type;
+    };
+
+    // Forward declaration
+    template <class R, intmax_t E>
+    struct ratio_pow_nonneg;
+
+    // E == 0 -> 1
+    template <class R>
+    struct ratio_pow_nonneg<R, 0>
+    {
+        using type = Rational<1, 1>;
+    };
+
+    // E == 1 -> R   (crucial: no squaring here)
+    template <class R>
+    struct ratio_pow_nonneg<R, 1>
+    {
+        using type = R;
+    };
+
+    // E >= 2: exponentiation by squaring
+    template <class R, intmax_t E>
+    struct ratio_pow_nonneg
+    {
+        static_assert(E >= 2, "ratio_pow_nonneg requires E >= 0");
+
+        using half    = typename ratio_pow_nonneg<R, (E / 2)>::type;
+        using half_sq = typename ratio_mul_simplified<half, half>::type;
+
+        using type = std::conditional_t<
+            (E % 2 == 0),
+            // even: R^E = (R^(E/2))^2
+            half_sq,
+            // odd:  R^E = R * (R^((E-1)/2))^2
+            typename ratio_mul_simplified<R, half_sq>::type>;
+    };
+
+    // Main entry: handles negative exponents by inverting the base.
+    template <class R, intmax_t E>
+    struct ratio_pow_int
+    {
+       private:
+        static constexpr bool neg = (E < 0);
+        using base_pos =
+            std::conditional_t<neg, typename invert_ratio<R>::type, R>;
+        static constexpr intmax_t exp_pos = neg ? -E : E;
+
+       public:
+        using type = typename ratio_pow_nonneg<base_pos, exp_pos>::type;
+    };
+
+    template <class R, intmax_t E>
+    using ratio_pow_int_fixed = typename ratio_pow_int<R, E>::type;
+
     template <RationalPowerType R, RationalPowerType S>
     struct mul_type<R, S>
     {
-        using common_exp = gcd_t<typename R::exp, typename S::exp>;
-        using expR       = div_type_t<typename R::exp, common_exp>;
-        using expS       = div_type_t<typename S::exp, common_exp>;
+        using B1 = typename R::base;   // Rational<a1,b1>
+        using E1 = typename R::exp;    // Rational<n1,d1>
+        using B2 = typename S::base;   // Rational<a2,b2>
+        using E2 = typename S::exp;    // Rational<n2,d2>
 
-        using _R = pow_type_t<typename R::base, IntegralConst<expR::num>>;
-        using _S = pow_type_t<typename S::base, IntegralConst<expS::num>>;
+        static constexpr intmax_t n1 = E1::num;
+        static constexpr intmax_t d1 = E1::den;
+        static constexpr intmax_t n2 = E2::num;
+        static constexpr intmax_t d2 = E2::den;
 
-        using base = mul_type_t<_R, _S>;
+        // Common denominator of the exponents
+        static constexpr intmax_t L = std::lcm(d1, d2);
 
-        static_assert(
-            common_exp::den != 0,
-            "RationalPower exponent denominator must not be zero"
-        );
+        // Integerized exponents
+        static constexpr intmax_t k1 = n1 * (L / d1);
+        static constexpr intmax_t k2 = n2 * (L / d2);
 
-        using type = RationalPower<base, common_exp>;
+        // Handle degenerate case: one exponent zero etc.
+        // (You might want extra branches here if desired.)
+
+        // Factor out gcd to keep new exponent small
+        static constexpr intmax_t t = std::gcd(cabs(k1), cabs(k2));
+        // If both zero, t = 0; treat separately:
+        static constexpr bool all_zero = (k1 == 0 && k2 == 0);
+
+        static constexpr intmax_t u1 = all_zero ? 0 : k1 / t;
+        static constexpr intmax_t u2 = all_zero ? 0 : k2 / t;
+
+        // New exponent before simplification: t / L
+        static constexpr intmax_t gexp  = all_zero ? 1 : std::gcd(cabs(t), L);
+        static constexpr intmax_t n_exp = all_zero ? 0 : (t / gexp);
+        static constexpr intmax_t d_exp = all_zero ? 1 : (L / gexp);
+
+        // Base = (B1^u1) * (B2^u2)
+        using B1u = ratio_pow_int_fixed<B1, u1>;
+        using B2u = ratio_pow_int_fixed<B2, u2>;
+        using B   = typename ratio_mul_simplified<B1u, B2u>::type;
+
+        using Exp = Rational<n_exp, d_exp>;
+
+        using type = std::conditional_t<
+            all_zero,
+            // (anything)^0 = 1
+            RationalPower<Rational<1, 1>, Rational<0, 1>>,
+            RationalPower<B, Exp>>;
+    };
+
+    template <RationalPowerType R, RationalPowerType S>
+    requires(R::exp::num == 0 && S::exp::num == 0)
+    struct mul_type<R, S>
+    {
+        using type = RatioPower<>;
     };
 
     template <RationalPowerType R, RationalPowerType S>
@@ -374,11 +545,6 @@ namespace mstd
 
         using base = div_type_t<_R, _S>;
 
-        static_assert(
-            common_exp::den != 0,
-            "RationalPower exponent denominator must not be zero"
-        );
-
         using type = RationalPower<base, common_exp>;
     };
 
@@ -386,8 +552,21 @@ namespace mstd
     requires(R::exp::num == 0 && S::exp::num == 0)
     struct div_type<R, S>
     {
-        // return 1 as a RatioPower
         using type = RatioPower<>;
+    };
+
+    template <RationalPowerType R, RationalPowerType S>
+    requires(R::exp::num != 0 && S::exp::num == 0)
+    struct div_type<R, S>
+    {
+        using type = div_type_t<R, RatioPower<>>;
+    };
+
+    template <RationalPowerType R, RationalPowerType S>
+    requires(R::exp::num == 0 && S::exp::num != 0)
+    struct div_type<R, S>
+    {
+        using type = div_type_t<RatioPower<>, S>;
     };
 
     template <RationalType R>

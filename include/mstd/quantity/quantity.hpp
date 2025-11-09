@@ -101,6 +101,13 @@ namespace mstd
          * @return The base value in SI units.
          */
         constexpr Rep baseValue() const { return _baseValue; }
+
+        template <typename T>
+        constexpr Rep dimRatioSi(T I) const
+        {
+            const auto i = static_cast<size_t>(I);
+            return static_cast<Rep>(unit::dimRatio::si::vals[i]);
+        }
     };
 
     /**

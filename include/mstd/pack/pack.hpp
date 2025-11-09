@@ -5,23 +5,23 @@ namespace mstd
 {
     template <
         std::size_t I,
-        template <class...> class F,
-        class Pack0,
-        class... Packs>
+        template <class...> typename F,
+        typename Pack0,
+        typename... Packs>
     using zip_at_t =
         F<typename Pack0::template type_at<I>,
           typename Packs::template type_at<I>...>;
 
-    template <class Pack, class... Us>
+    template <typename Pack, typename... Us>
     struct pack_rebind;
 
-    template <template <class...> class P, class... Ts, class... Us>
+    template <template <typename...> typename P, typename... Ts, typename... Us>
     struct pack_rebind<P<Ts...>, Us...>
     {
         using type = P<Us...>;
     };
 
-    template <class Pack, class... Us>
+    template <typename Pack, typename... Us>
     using pack_rebind_t = typename pack_rebind<Pack, Us...>::type;
 
 }   // namespace mstd

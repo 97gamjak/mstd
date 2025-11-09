@@ -24,6 +24,7 @@
 #define __MSTD_RATIO_PACK_OPERATIONS_HPP__
 
 #include "mstd/error.hpp"
+#include "mstd/math.hpp"
 #include "rational_pack.hpp"
 #include "rational_pack_details.hpp"
 
@@ -43,19 +44,33 @@ namespace mstd
         );
 
     template <
-        template <typename...> typename F,
+        template <class, class> typename F,
         typename Pack0,
-        typename... Packs>
-    requires((RationalPackType<Packs> || RationalPowerPackType<Packs>) && ...
-            ) &&
-            (RationalPackType<Pack0> || RationalPowerPackType<Pack0>)
-    struct zip_type<F, Pack0, Packs...>
+        typename Pack1>
+    requires(
+        (RationalPackType<Pack0> && RationalPackType<Pack1>) ||
+        (RationalPowerPackType<Pack0> && RationalPowerPackType<Pack1>)
+    )
+    struct zip_type<F, Pack0, Pack1>
     {
-        using type = details::ratio_pack_zip_impl<
-            F,
-            Pack0,
-            std::make_index_sequence<Pack0::size>,
-            Packs...>::type;
+        using type = details::ratio_pack_zip_t<F, Pack0, Pack1>;
+    };
+
+    template <
+        template <class, class, class, class> typename F,
+        typename Pack0,
+        typename Pack1,
+        typename Pack2,
+        typename Pack3>
+    requires(
+        (RationalPackType<Pack0> || RationalPowerPackType<Pack0>) &&
+        (RationalPackType<Pack1> || RationalPowerPackType<Pack1>) &&
+        (RationalPackType<Pack2> || RationalPowerPackType<Pack2>) &&
+        (RationalPackType<Pack3> || RationalPowerPackType<Pack3>)
+    )
+    struct zip4_type<F, Pack0, Pack1, Pack2, Pack3>
+    {
+        using type = details::ratio_pack_zip4_t<F, Pack0, Pack1, Pack2, Pack3>;
     };
 
     // Specialization of reduce_type for the (F, Pack) form:
