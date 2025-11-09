@@ -29,6 +29,7 @@
 #include <tuple>
 
 #include "mstd/math.hpp"
+#include "pack.hpp"
 
 /**
  * @file ratio_pack_details.hpp
@@ -45,21 +46,66 @@ namespace mstd::details
      * Pack algorithms  *
      *                 *
      *******************/
-    template <class A, class B, template <class, class> class F, size_t... I>
-    constexpr auto ratio_pack_zip_impl(std::index_sequence<I...>)
+    template <
+        template <class...> class F,
+        class Pack0,
+        class IndexSeq,
+        class... Packs>
+    struct ratio_pack_zip_impl;
+
+    // Specialization for std::index_sequence
+    template <
+        template <class...> class F,
+        class Pack0,
+        std::size_t... Is,
+        class... Packs>
+    struct ratio_pack_zip_impl<F, Pack0, std::index_sequence<Is...>, Packs...>
     {
-        static_assert(A::size == B::size, "RationalPack size mismatch");
-        return RationalPack<
-            F<typename A::template type_at<I>,
-              typename B::template type_at<I>>...>{};
-    }
+        static constexpr std::size_t size = Pack0::size;
 
-    template <class A, class B, template <class, class> class F>
-    using ratio_pack_zip_t = decltype(ratio_pack_zip_impl<A, B, F>(
-        std::make_index_sequence<A::size>{}
-    ));
+        static_assert(
+            ((Packs::size == size) && ...),
+            "zip_type_t: all packs must have same size"
+        );
 
-    template <RatioPackType Pack, IntegerPackType IntPack>
+        using type = pack_rebind_t<Pack0, zip_at_t<Is, F, Pack0, Packs...>...>;
+    };
+
+    template <
+        template <typename, typename> typename F,
+        typename Init,
+        typename Pack,
+        typename IndexSeq>
+    struct ratio_pack_reduce_impl;
+
+    // Specialization for std::index_sequence
+    template <
+        template <typename, typename> typename F,
+        typename Init,
+        typename Pack,
+        std::size_t... Is>
+    struct ratio_pack_reduce_impl<F, Init, Pack, std::index_sequence<Is...>>
+    {
+        static_assert(
+            Pack::size > 0,
+            "ratio_pack_reduce: cannot reduce empty pack"
+        );
+
+        using type =
+            reduce_type_t<F, Init, typename Pack::template type_at<Is>...>;
+    };
+
+    template <
+        template <typename, typename> typename F,
+        typename Init,
+        typename Pack>
+    using ratio_pack_reduce_t = typename ratio_pack_reduce_impl<
+        F,
+        Init,
+        Pack,
+        std::make_index_sequence<Pack::size>>::type;
+
+    template <RationalPackType Pack, IntegerPackType IntPack>
     struct ratio_pack_pow_impl
     {
         static_assert(
@@ -113,7 +159,8 @@ namespace mstd::details
      *                   *
      *********************/
 
-    template <size_t N, RationalType rational = Rational<>>
+    template <size_t N, typename rational = Rational<>>
+    requires(RationalType<rational> || RationalPowerType<rational>)
     struct make_rational_pack
     {
         /**
@@ -164,10 +211,10 @@ namespace mstd::details
     };
 
     template <
-        std::size_t  N,
-        std::size_t  Ix,
-        RationalType I,
-        RationalType Default>
+        std::size_t       N,
+        std::size_t       Ix,
+        RationalPowerType I,
+        RationalPowerType Default>
     struct make_single_rational_pow_pack
     {
         /**
@@ -184,7 +231,7 @@ namespace mstd::details
             template <size_t i>
             using repeat_t = std::conditional_t<i == Ix, I, Default>;
 
-            using type = RationalPack<to_pow_rational_t<repeat_t<Is>>...>;
+            using type = RationalPack<repeat_t<Is>...>;
         };
 
         using type = typename _impl<std::make_index_sequence<N>>::type;
@@ -216,7 +263,7 @@ namespace mstd::details
         );
     };
 
-    // template <RatioPackType R, IntegerPackType I, size_t... Is>
+    // template <RationalPackType R, IntegerPackType I, size_t... Is>
     // requires(
     //     I::size == R::size && I::size > 0 &&
     //     is_pow_ratio_v<typename R::type_at<0>>

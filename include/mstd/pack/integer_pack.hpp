@@ -53,10 +53,11 @@ namespace mstd
     template <int... Es>
     struct IntegerPack
     {
-        static constexpr std::array<int, sizeof...(Es)> vals{Es...};
-
         static constexpr size_t size = sizeof...(Es);
 
+        static_assert(size > 0, "IntegerPack must contain at least one value");
+
+        static constexpr std::array<int, size> vals{Es...};
         /**
          * @brief Get the value at the specified index.
          *

@@ -48,6 +48,15 @@ namespace mstd
     template <typename T, typename U>
     using convert_t = typename convert<T, U>::type;
 
+    template <typename T, typename U>
+    struct is_same
+    {
+        static constexpr bool value = std::is_same_v<T, U>;
+    };
+
+    template <typename T, typename U>
+    constexpr bool is_same_v = is_same<T, U>::value;
+
 }   // namespace mstd
 
 #endif   // __TYPE_TRAITS__TYPE_TRAITS_HPP__

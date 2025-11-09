@@ -57,12 +57,14 @@ namespace mstd
     requires((is_convertible_to_rational_power_v<Rs>) || ...)
     struct RationalPack
     {
+        /** Number of ratios stored. */
+        static constexpr size_t size = sizeof...(Rs);
+
+        static_assert(size > 0, "RationalPack must contain at least one ratio");
+
         // store actual ratio values as long double so we can index them
         static constexpr std::array<long double, sizeof...(Rs)> vals{Rs::value(
         )...};
-
-        /** Number of ratios stored. */
-        static constexpr size_t size = sizeof...(Rs);
 
         /**
          * @brief Ratio type at a given index.
@@ -111,9 +113,43 @@ namespace mstd
 
             return -1;
         }
+
+        static constexpr long double value()
+        {
+            long double r = 1.0L;
+            for (size_t i = 0; i < size; ++i)
+                r *= vals[i];
+            return r;
+        }
+    };
+
+    template <typename Pack>
+    struct pack_utils
+    {
+        static constexpr std::size_t count_non_zero()
+        {
+            return count_non_zero_impl(std::make_index_sequence<Pack::size>{});
+        }
+
+       private:
+        template <std::size_t... Is>
+        static consteval std::size_t count_non_zero_impl(
+            std::index_sequence<Is...>
+        )
+        {
+            return (
+                (!(Pack::template type_at<Is>::is_zero) ? 1u : 0u) + ... + 0u
+            );
+        }
+    };
+
+    template <typename A>
+    requires RationalPackType<A> || RationalPowerPackType<A>
+    struct ratio_v_impl<A>
+    {
+        static constexpr long double value = A::value();
     };
 
 }   // namespace mstd
 
 #endif   // __MSTD__PACK__RATIONAL_PACK_HPP__
-`

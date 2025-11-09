@@ -33,12 +33,12 @@ TEST_CASE("quantity construction and accessors", "[units]")
     using namespace mstd::literals;
 
     constexpr Length<m> one_meter{1.0};
-    STATIC_REQUIRE(one_meter.value() == 1.0);
-    STATIC_REQUIRE(one_meter.baseValue() == 1.0);
+    MSTD_STATIC_REQUIRE(one_meter.value() == 1.0);
+    MSTD_STATIC_REQUIRE(one_meter.baseValue() == 1.0);
 
     constexpr Length<cm> hundred_centimetres{100.0};
-    STATIC_REQUIRE(hundred_centimetres.value() == 100.0);
-    STATIC_REQUIRE(hundred_centimetres.baseValue() == 1.0);
+    MSTD_STATIC_REQUIRE(hundred_centimetres.value() == 100.0);
+    MSTD_STATIC_REQUIRE(hundred_centimetres.baseValue() == 1.0);
 
     const Length<cm> from_base{Length<cm>::from_base_tag, 2.0};
     REQUIRE(from_base.baseValue() == Catch::Approx(2.0));

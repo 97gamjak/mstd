@@ -40,11 +40,11 @@ namespace mstd
      * @tparam F The real factor of the unit (default: 1.0L)
      */
     template <
-        DimType      Dim      = Dim<>,
-        DimRatioType DimRatio = DimRatio<>,
-        RationalType Global   = Rational<1, 1>,
-        RationalType Exp      = Rational<1, 1>,
-        long double  F        = 1.0L>
+        DimType           Dim      = Dim<>,
+        DimRatioType      DimRatio = DimRatio<>,
+        RationalPowerType Global   = RatioPower<>,
+        RationalType      Exp      = Rational<1, 1>,
+        long double       F        = 1.0L>
     struct Unit
     {
         using dim                             = Dim;

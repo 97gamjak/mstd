@@ -24,7 +24,6 @@
 #define __MSTD_TYPE_TRAITS_QUANTITY_TRAITS_HPP__
 
 #include "pack_traits.hpp"
-#include "ratio_traits.hpp"
 
 /**
  * @file quantity_traits.hpp
@@ -64,7 +63,7 @@ namespace mstd
 
     template <typename T>
     concept UnitType = DimRatioType<typename T::dimRatio> &&
-                       RatioType<typename T::global> && requires {
+                       RationalPowerType<typename T::global> && requires {
                            { T::factor_v } -> std::convertible_to<long double>;
                        } && (T::factor_v != 0.0L);
 

@@ -40,7 +40,7 @@ namespace mstd
     using default_si_ratio_pack = make_ratio_pack_t<SIDimIdMeta::size>;
 
     using default_si_power_ratio_pack =
-        make_pow_ratio_pack_t<SIDimIdMeta::size>;
+        make_pow_ratio_pack_t<SIDimIdMeta::size, RatioPower<>>;
 
     /**
      * @brief default_extra_ratio_pack, which is a RatioPack of all Extra
@@ -49,7 +49,7 @@ namespace mstd
     using default_extra_ratio_pack = make_ratio_pack_t<ExtraDimIdMeta::size>;
 
     using default_extra_power_ratio_pack =
-        make_pow_ratio_pack_t<ExtraDimIdMeta::size>;
+        make_pow_ratio_pack_t<ExtraDimIdMeta::size, RatioPower<>>;
 
     /***********************
      *                     *
@@ -83,11 +83,17 @@ namespace mstd
             ExtraRatioPack::size == ExtraDimIdMeta::size,
             "DimRatio ExtraRatioPack size mismatch"
         );
-        // TODO: activate this as soon as rework is done
-        // static_assert(
-        //     is_pow_ratio_v<typename SiRatioPack::template type_at<0>>,
-        //     "DimRatio SiRatioPack first entry must be a pow ratio"
-        // );
+        // static assertion that all ratios in the packs are non-zero
+        // (to avoid division by zero in ratio operations)
+        static_assert(
+            pack_utils<SiRatioPack>::count_non_zero() == SiRatioPack::size,
+            "DimRatio SiRatioPack contains zero ratio(s)"
+        );
+        static_assert(
+            pack_utils<ExtraRatioPack>::count_non_zero() ==
+                ExtraRatioPack::size,
+            "DimRatio ExtraRatioPack contains zero ratio(s)"
+        );
 
         using si = SiRatioPack;
         using ex = ExtraRatioPack;

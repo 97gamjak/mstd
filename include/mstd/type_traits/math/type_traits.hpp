@@ -54,7 +54,7 @@ namespace mstd
     template <typename T>
     concept RationalPowerType = requires {
         typename T::base;
-        typename T::exponent;
+        typename T::exp;
     };
 
     /**

@@ -117,6 +117,16 @@
         "__split_buffer": "cpp",
         "queue": "cpp",
         "stack": "cpp",
-        "source_location": "cpp"
+        "source_location": "cpp",
+        "__config": "cpp",
+        "__bit_reference": "cpp",
+        "__functional_03": "cpp",
+        "__mutex_base": "cpp",
+        "__node_handle": "cpp",
+        "__threading_support": "cpp",
+        "__memory": "cpp",
+        "filesystem": "cpp",
+        "ios": "cpp",
+        "locale": "cpp"
     },
 }

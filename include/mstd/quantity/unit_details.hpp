@@ -61,17 +61,17 @@ namespace mstd::details
     template <class U1, class U2>
     struct unit_mul_impl
     {
-        using _D1    = typename U1::dim;
-        using _D2    = typename U2::dim;
-        using _R1    = typename U1::ratio;
-        using _R2    = typename U2::ratio;
-        using dim    = mul_type_t<_D1, _D2>;
-        using ratio  = mul_type_t<_R1, _R2>;
-        using global = mul_type_t<typename U1::global, typename U2::global>;
-        using exp    = mul_type_t<typename U1::exp, typename U2::exp>;
+        using _D1      = typename U1::dim;
+        using _D2      = typename U2::dim;
+        using _R1      = typename U1::dimRatio;
+        using _R2      = typename U2::dimRatio;
+        using dim      = mul_type_t<_D1, _D2>;
+        using dimRatio = dim_ratio_mul_type<_R1, _D1, _R2, _D2>::type;
+        using global   = mul_type_t<typename U1::global, typename U2::global>;
+        using exp      = mul_type_t<typename U1::exp, typename U2::exp>;
 
         static constexpr long double f = U1::factor_v * U2::factor_v;
-        using type                     = Unit<dim, ratio, global, exp, f>;
+        using type                     = Unit<dim, dimRatio, global, exp, f>;
     };
 
     /**
@@ -130,8 +130,12 @@ namespace mstd::details
     template <class U1, class U2>
     struct unit_div_impl
     {
-        using dim    = div_type_t<typename U1::dim, typename U2::dim>;
-        using ratio  = div_type_t<typename U1::dimRatio, typename U2::dimRatio>;
+        using dim   = div_type_t<typename U1::dim, typename U2::dim>;
+        using ratio = dim_ratio_div_type<
+            typename U1::dimRatio,
+            typename U1::dim,
+            typename U2::dimRatio,
+            typename U2::dim>::type;
         using global = div_type_t<typename U1::global, typename U2::global>;
         using exp    = div_type_t<typename U1::exp, typename U2::exp>;
 
@@ -227,7 +231,7 @@ namespace mstd::details
         using rule2 = std::conditional_t<none, Unit1, void>;
 
         // rule 3: both factors == 1 → pick smallest ratio (finer); tie → LHS
-        static constexpr long double r1 = 1.0L;   // TODO: ratio_v<Unit1>;
+        static constexpr long double r1 = ratio_v<Unit1>;
         static constexpr long double r2 = 1.0L;   // TODO: ratio_v<Unit2>;
 
         using rule3 = std::conditional_t<

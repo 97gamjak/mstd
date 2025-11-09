@@ -24,7 +24,6 @@
 #define __MSTD_PACK_TRAITS_HPP__
 
 #include "math_traits.hpp"
-#include "ratio_traits.hpp"
 
 /**
  * @file pack_traits.hpp
@@ -75,20 +74,79 @@ namespace mstd
      * a member template `get<Index>()` returning the `std::ratio` at
      * position `Index`.
      */
-    template <typename T>
-    concept RatioPackType = requires {
-        { T::size } -> std::convertible_to<std::size_t>;
-    } && details::is_ratio_pack_ok<T>(std::make_index_sequence<T::size>{});
+    // template <typename T>
+    // concept RatioPackType = requires {
+    //     { T::size } -> std::convertible_to<std::size_t>;
+    // } && details::is_ratio_pack_ok<T>(std::make_index_sequence<T::size>{});
+    // TODO: check if this trait makes even sense, and if so use it without
+    // allowing 0s
 
     template <typename T>
     concept RationalPackType = requires {
         { T::size } -> std::convertible_to<std::size_t>;
+    } && requires {
+        typename T::template type_at<0>;
     } && details::is_ratio_pack_ok<T>(std::make_index_sequence<T::size>{});
 
     template <typename T>
     concept RationalPowerPackType = requires {
         { T::size } -> std::convertible_to<std::size_t>;
+    } && requires {
+        typename T::template type_at<0>;
     } && details::is_pow_ratio_pack_ok<T>(std::make_index_sequence<T::size>{});
+
+    template <typename T>
+    constexpr bool is_integer_pack_v = IntegerPackType<T>;
+
+    template <typename T>
+    constexpr bool is_rational_pack_v = RationalPackType<T>;
+
+    template <
+        template <typename...> typename F,
+        typename Pack0,
+        typename... Packs>
+    struct zip_type
+    {
+        MSTD_COMPILE_FAIL("zip_type not implemented for the given types");
+    };
+
+    template <
+        template <typename...> typename F,
+        typename Pack0,
+        typename... Packs>
+    using zip_type_t = typename zip_type<F, Pack0, Packs...>::type;
+
+    template <
+        template <typename, typename> typename F,
+        typename Init,
+        typename... Ts>
+    struct reduce_type
+    {
+        MSTD_COMPILE_FAIL("reduce_type not implemented for the given types");
+    };
+
+    template <template <typename, typename> typename F, typename Init>
+    struct reduce_type<F, Init>
+    {
+        using type = Init;
+    };
+
+    // Step: fold left
+    template <
+        template <typename, typename> typename F,
+        typename Init,
+        typename T0,
+        typename... Ts>
+    struct reduce_type<F, Init, T0, Ts...>
+    {
+        using type = typename reduce_type<F, F<Init, T0>, Ts...>::type;
+    };
+
+    template <
+        template <typename, typename> typename F,
+        typename Init,
+        typename... Ts>
+    using reduce_type_t = typename reduce_type<F, Init, Ts...>::type;
 
 }   // namespace mstd
 

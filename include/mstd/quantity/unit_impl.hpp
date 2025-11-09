@@ -92,9 +92,10 @@ namespace mstd
     namespace literals
     {
         static constexpr long double   __AMU_TO_KG__    = 1.66053906660e-27L;
-        static constexpr long long int __M_IN_ANG_EXP__ = 1E10;
+        static constexpr long long int __M_IN_ANG_EXP__ = 10;
 
-        using __ANG_IN_M_RATIO__ = Rational<1, __M_IN_ANG_EXP__>;
+        using __ANG_IN_M_RATIO__ =
+            RationalPower<Rational<10>, Rational<__M_IN_ANG_EXP__>>;
 
         static constexpr int __MIN_TO_S__ = 60;
         static constexpr int __H_TO_MIN__ = 60;
@@ -125,7 +126,7 @@ namespace mstd
         using Ang = Unit<dim_length, length_dim_ratio<__ANG_IN_M_RATIO__>>;
 
         using t   = Unit<dim_mass, mass_dim_ratio<kilo>>;
-        using kg  = Unit<dim_mass, mass_dim_ratio<Rational<1>>>;
+        using kg  = Unit<dim_mass, mass_dim_ratio<>>;
         using g   = Unit<dim_mass, mass_dim_ratio<milli>>;
         using mg  = Unit<dim_mass, mass_dim_ratio<micro>>;
         using ug  = Unit<dim_mass, mass_dim_ratio<nano>>;
@@ -133,16 +134,21 @@ namespace mstd
         using pg  = Unit<dim_mass, mass_dim_ratio<femto>>;
         using amu = scaled_unit_t<kg, __AMU_TO_KG__>;
 
-        using y   = Unit<dim_time, time_dim_ratio<Rational<__Y_TO_S__>>>;
-        using d   = Unit<dim_time, time_dim_ratio<Rational<__D_TO_S__>>>;
-        using h   = Unit<dim_time, time_dim_ratio<Rational<__H_TO_S__>>>;
-        using min = Unit<dim_time, time_dim_ratio<Rational<__MIN_TO_S__>>>;
-        using s   = Unit<dim_time, time_dim_ratio<>>;
-        using ms  = Unit<dim_time, time_dim_ratio<milli>>;
-        using us  = Unit<dim_time, time_dim_ratio<micro>>;
-        using ns  = Unit<dim_time, time_dim_ratio<nano>>;
-        using ps  = Unit<dim_time, time_dim_ratio<pico>>;
-        using fs  = Unit<dim_time, time_dim_ratio<femto>>;
+        using y =
+            Unit<dim_time, time_dim_ratio<RationalPower<Rational<__Y_TO_S__>>>>;
+        using d =
+            Unit<dim_time, time_dim_ratio<RationalPower<Rational<__D_TO_S__>>>>;
+        using h =
+            Unit<dim_time, time_dim_ratio<RationalPower<Rational<__H_TO_S__>>>>;
+        using min = Unit<
+            dim_time,
+            time_dim_ratio<RationalPower<Rational<__MIN_TO_S__>>>>;
+        using s  = Unit<dim_time, time_dim_ratio<>>;
+        using ms = Unit<dim_time, time_dim_ratio<milli>>;
+        using us = Unit<dim_time, time_dim_ratio<micro>>;
+        using ns = Unit<dim_time, time_dim_ratio<nano>>;
+        using ps = Unit<dim_time, time_dim_ratio<pico>>;
+        using fs = Unit<dim_time, time_dim_ratio<femto>>;
 
         using A  = Unit<dim_current, current_dim_ratio<>>;
         using mA = Unit<dim_current, current_dim_ratio<milli>>;
@@ -174,9 +180,9 @@ namespace mstd
         using rad = Unit<dim_angle, angle_dim_ratio<>>;
         using deg = scaled_unit_t<rad, __RAD_TO_DEG__>;
 
-        using m_per_s   = div_type_t<m, s>;
-        using km_per_h  = div_type_t<km, h>;
-        using Ang_per_s = div_type_t<Ang, s>;
+        using m_per_s   = unit_div_t<m, s>;
+        using km_per_h  = unit_div_t<km, h>;
+        using Ang_per_s = unit_div_t<Ang, s>;
         using c         = scaled_unit_t<m_per_s, __SPEED_OF_LIGHT_TO_MPS__>;
 
         using m_per_s2 = unit_div_t<m_per_s, s>;

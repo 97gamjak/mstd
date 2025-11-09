@@ -81,22 +81,27 @@ namespace mstd
      * @tparam Extra Pack of extra exponents; defaults to all zeros.
      */
     template <
-        RationalPackType SI    = default_si_pack,
-        RationalPackType Extra = default_extra_pack>
+        typename SI    = default_si_pack,
+        typename Extra = default_extra_pack>
+    requires(RationalPackType<SI> || IntegerPackType<SI>) &&
+            (RationalPackType<Extra> || IntegerPackType<Extra>)
     struct Dim
     {
         static_assert(SI::size == SIDimIdMeta::size, "si size mismatch");
         static_assert(Extra::size == ExtraDimIdMeta::size, "ex size mismatch");
 
-        /** Pack of SI exponents. */
-        using si = SI;
-        /** Pack of extra exponents. */
-        using ex = Extra;
+        // pack of SI exponents
+        // NOTE: convert IntegerPack to RationalPack if needed
+        using si = convert_to_rational_pack_t<SI>;
+
+        // pack of extra exponents
+        // NOTE: convert IntegerPack to RationalPack if needed
+        using ex = convert_to_rational_pack_t<Extra>;
 
         /** Number of SI dimensions represented. */
-        static constexpr size_t si_size = SI::size;
+        static constexpr size_t si_size = si::size;
         /** Number of extra dimensions represented. */
-        static constexpr size_t ex_size = Extra::size;
+        static constexpr size_t ex_size = ex::size;
 
         /**
          * @brief Exponent of a specific SI dimension.
@@ -104,7 +109,7 @@ namespace mstd
          * @tparam ID Enum value identifying the SI dimension.
          */
         template <SIDimId ID>
-        static constexpr int si_exp = SI::template get<ID>;
+        static constexpr long double si_exp_v = si::template get<ID>();
 
         /**
          * @brief Exponent of a specific extra dimension.
@@ -112,7 +117,15 @@ namespace mstd
          * @tparam ID Enum value identifying the extra dimension.
          */
         template <ExtraDimId ID>
-        static constexpr int ex_exp = Extra::template get<ID>;
+        static constexpr long double ex_exp_v = ex::template get<ID>();
+    };
+
+    template <DimType D1, DimType D2>
+    struct is_same<D1, D2>
+    {
+        static constexpr bool value =
+            std::is_same_v<typename D1::si, typename D2::si> &&
+            std::is_same_v<typename D1::ex, typename D2::ex>;
     };
 
 }   // namespace mstd

@@ -23,6 +23,7 @@
 #ifndef __MSTD_UNIT_OPERATIONS_HPP__
 #define __MSTD_UNIT_OPERATIONS_HPP__
 
+#include "mstd/math.hpp"
 #include "mstd/pack.hpp"
 #include "unit_details.hpp"
 
@@ -82,9 +83,13 @@ namespace mstd
      * @tparam Unit Unit to query
      */
     template <UnitType Unit>
-    inline constexpr long double ratio_v<Unit> =
-        ratio_pack_v<typename Unit::ratio::si> *
-        ratio_pack_v<typename Unit::ratio::ex> * ratio_v<typename Unit::global>;
+    struct ratio_v_impl<Unit>
+    {
+        static constexpr long double value =
+            ratio_v<typename Unit::dimRatio::si> *
+            ratio_v<typename Unit::dimRatio::ex> *
+            ratio_v<typename Unit::global>;
+    };
 
     /**
      * @brief Real scaling factor attached to a unit.

@@ -27,15 +27,18 @@
 
 namespace mstd
 {
-    // clang-format off
     /**
      * @brief a struct that is always false
-     * 
-     * @tparam T 
+     *
+     * @tparam T
      */
-    template <typename ...T>
-    struct always_false : std::false_type{};
-    // clang-format on
+    template <typename... T>
+    struct always_false : std::false_type
+    {
+    };
+
+    template <int... T>
+    struct print_error;
 
 }   // namespace mstd
 
