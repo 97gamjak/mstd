@@ -8,16 +8,16 @@ All notable changes to this project will be documented in this file.
 
 #### Units
 
-- add velocity Unit Angstrom per seconds
-- add force Unit kcal per mole Angstrom
+- This functionality is at the moment faulty - DO NOT USE IT
 
 #### Quantities
 
-- add possibility to multiply and divide more than two Units with one call (see unit_mul, unit_div)
+- This functionality is at the moment faulty - DO NOT USE IT
 
 #### Type Traits
 
 - introducing new type_traits library
+- introducing type traits for arithmetic operations, i.e. +,-,*,/
 
 ### Breaking Changes
 
