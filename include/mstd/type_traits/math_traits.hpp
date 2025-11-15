@@ -20,12 +20,9 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_TYPE_TRAITS_HPP__
-#define __MSTD_TYPE_TRAITS_HPP__
+#ifndef __MSTD__TYPE_TRAITS__MATH_TRAITS_HPP__
+#define __MSTD__TYPE_TRAITS__MATH_TRAITS_HPP__
 
-#include "type_traits/math_traits.hpp"       // IWYU pragma: export
-#include "type_traits/pack_traits.hpp"       // IWYU pragma: export
-#include "type_traits/quantity_traits.hpp"   // IWYU pragma: export
-#include "type_traits/ratio_traits.hpp"      // IWYU pragma: export
+#include "math/arithmetic_traits.hpp"   // IWYU pragma: export
 
-#endif   // __MSTD_TYPE_TRAITS_HPP__
+#endif   // __MSTD__TYPE_TRAITS__MATH_TRAITS_HPP__
