@@ -23,8 +23,45 @@
 #ifndef __MSTD_MATH_POWER_HPP__
 #define __MSTD_MATH_POWER_HPP__
 
+#include <ratio>
+
 namespace mstd
 {
+
+    template <typename T, intmax_t N>
+    requires(N < 0)
+    T cpow(const T base)
+    {
+        return static_cast<T>(1) / cpow<T, -N>(base);
+    }
+
+    template <typename T, intmax_t N>
+    requires(N % 2 == 0)
+    T cpow(const T base)
+    {
+        return cpow<T, N / 2>(base) * cpow<T, N / 2>(base);
+    }
+
+    template <typename T, intmax_t N>
+    requires(N % 2 == 1)
+    T cpow(const T base)
+    {
+        return cpow<T, N / 2>(base) * cpow<T, N / 2>(base) * base;
+    }
+
+    template <typename T, intmax_t N>
+    requires(N == 1)
+    T cpow(const T base)
+    {
+        return base;
+    }
+
+    template <typename T, intmax_t N>
+    requires(N == 0)
+    T cpow(const T base)
+    {
+        return static_cast<T>(1);
+    }
 
     template <typename T>
     T power(T base, int exponent)

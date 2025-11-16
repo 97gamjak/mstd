@@ -20,3 +20,9 @@
 <GPL_HEADER>
 ******************************************************************************/
 
+#ifndef __MSTD__PHYSICS__POTENTIALS_HPP__
+#define __MSTD__PHYSICS__POTENTIALS_HPP__
+
+#include "potentials/lie_potential.hpp"   // IWYU pragma: export
+
+#endif   // __MSTD__PHYSICS__POTENTIALS_HPP__
