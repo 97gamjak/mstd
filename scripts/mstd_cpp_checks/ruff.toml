@@ -1,0 +1,28 @@
+
+[lint]
+select = ["ALL"]
+ignore = [
+    "D203",   # blank line before docstring of class (conflict with other rule)
+    "D213",   # multiline summary second line (conflict with other rule) 
+    "COM812", # trailing comma missing (conflict with other rule)
+    "FIX002", # missing TODO - already solved by other rules which force linking author and github issue
+]
+exclude = ["examples/*.ipynb", "scripts/*.py"]
+typing-modules = ["molartrader.type_checking"]
+
+[lint.per-file-ignores]
+"tests/*.py" = [
+    "S101",    # assert used
+    "PLR2004", # magic value used in comparison
+    "TID252",  # relative imports not allowed (tests is not a separate package)
+    "ARG001",  # unused function argument, because of pytest fixtures
+]
+
+[lint.flake8-type-checking]
+runtime-evaluated-base-classes = [
+    "molartrader.dtos.base.BaseDTO", # pydantic model needs runtime type checking
+]
+
+[lint.isort]
+# Our own generated __version__.py file is first-party
+known-first-party = ["__version__"]
