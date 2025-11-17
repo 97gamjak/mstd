@@ -20,10 +20,9 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#include "mstd/enum.hpp"         // IWYU pragma: keep
-#include "mstd/functional.hpp"   // IWYU pragma: keep
-#include "mstd/math.hpp"         // IWYU pragma: keep
-#include "mstd/pack.hpp"         // IWYU pragma: keep
-#include "mstd/physics.hpp"      // IWYU pragma: keep
-#include "mstd/quantity.hpp"     // IWYU pragma: keep
-#include "mstd/ratio.hpp"        // IWYU pragma: keep
+#ifndef __MSTD__PHYSICS_HPP__
+#define __MSTD__PHYSICS_HPP__
+
+#include "physics/potentials.hpp"   // IWYU pragma: export
+
+#endif   // __MSTD__PHYSICS_HPP__
