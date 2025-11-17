@@ -28,43 +28,41 @@
 namespace mstd
 {
 
-    template <typename T, intmax_t N>
-    requires(N < 0)
+    /**
+     * @brief constexpr power helper using exponentiation by squaring.
+     *
+     * The exponent is a template argument which allows the compiler to fold the
+     * entire expression whenever `base` is also `constexpr`. Special cases are
+     * handled explicitly to avoid unnecessary recursion.
+     *
+     * @tparam N compile-time exponent (can be negative).
+     * @tparam T arithmetic type supporting multiplication and reciprocal.
+     * @param base value raised to the power @p N.
+     */
+    template <intmax_t N, typename T>
     T cpow(const T base)
     {
-        return static_cast<T>(1) / cpow<T, -N>(base);
+        if constexpr (N == -1)
+            return static_cast<T>(1) / cpow<-N>(base);
+        else if constexpr (N == 1)
+            return base;
+        else if constexpr (N == 0)
+            return static_cast<T>(1);
+        else if constexpr (N % 2 == 0)
+            return cpow<N / 2>(base) * cpow<N / 2>(base);
+        else   // (N % 2 == 1)
+            return cpow<N / 2>(base) * cpow<N / 2>(base) * base;
     }
 
-    template <typename T, intmax_t N>
-    requires(N % 2 == 0)
-    T cpow(const T base)
-    {
-        return cpow<T, N / 2>(base) * cpow<T, N / 2>(base);
-    }
-
-    template <typename T, intmax_t N>
-    requires(N % 2 == 1)
-    T cpow(const T base)
-    {
-        return cpow<T, N / 2>(base) * cpow<T, N / 2>(base) * base;
-    }
-
-    template <typename T, intmax_t N>
-    requires(N == 1)
-    T cpow(const T base)
-    {
-        return base;
-    }
-
-    template <typename T, intmax_t N>
-    requires(N == 0)
-    T cpow(const T base)
-    {
-        return static_cast<T>(1);
-    }
-
+    /**
+     * @brief Runtime variant of cpow for integral exponents.
+     *
+     * Provides a lightweight alternative to `std::pow` while keeping the
+     * implementation dependency free. Negative exponents are supported by
+     * inverting the base.
+     */
     template <typename T>
-    T power(T base, int exponent)
+    [[deprecated]] T power(T base, int exponent)
     {
         T result = static_cast<T>(1);
 

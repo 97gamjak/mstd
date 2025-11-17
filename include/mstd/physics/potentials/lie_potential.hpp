@@ -23,10 +23,18 @@
 #ifndef __MSTD__PHYSICS__POTENTIALS__LIE_POTENTIAL_HPP__
 #define __MSTD__PHYSICS__POTENTIALS__LIE_POTENTIAL_HPP__
 
+#include "lie_potential_impl.hpp"
 #include "mstd/math.hpp"
 
 namespace mstd
 {
+    /**
+     * @brief Generalized Lennard-Jones-like pair potential.
+     *
+     * The template parameters define the attractive (\f$M\f$) and repulsive
+     * (\f$N\f$) exponents of the potential. The representation type @p Rep is
+     * typically `double`, but any floating-point type is acceptable.
+     */
     template <size_t M, size_t N, typename Rep = double>
     class LiePotential
     {
@@ -38,72 +46,40 @@ namespace mstd
         Rep _coeff2{};
 
        public:
+        /// @brief Constructs the potential with prefactors for the attractive
+        ///        and repulsive terms.
         constexpr LiePotential(Rep c1, Rep c2) : _coeff1(c1), _coeff2(c2) {}
 
-        virtual Rep evalEnergy(const Rep r)
+        /// @brief Evaluates only the potential energy at a distance @p r.
+        virtual Rep evalEnergy(const Rep r) const
         {
             return -_coeff1 / cpow<_M>(r) + _coeff2 / cpow<_N>(r);
         }
 
-        virtual Rep evalEnergy(const Rep r)
-        requires(_M == 6 && _N == 12)
-        {
-            const auto r2        = r * r;
-            const auto r6        = r2 * r2 * r2;
-            const auto r12       = r6 * r6;
-            const auto coeff1r6  = _coeff1 / r6;
-            const auto coeff2r12 = _coeff2 / r12;
-            return -coeff1r6 + coeff2r12;
-        }
-
-        virtual Rep evalForce(const Rep r)
+        /// @brief Evaluates only the force magnitude at a distance @p r.
+        virtual Rep evalForce(const Rep r) const
         {
             return _M * _coeff1 / r / cpow<_M>(r) -
                    _N * _coeff2 / r / cpow<_N>(r);
         }
 
-        virtual Rep evalForce(const Rep r)
-        requires(_M == 6 && _N == 12)
+        /// @brief Returns both energy and force evaluated at @p r.
+        virtual std::pair<Rep, Rep> eval(const Rep r) const
         {
-            const auto r2        = r * r;
-            const auto r6        = r2 * r2 * r2;
-            const auto r12       = r6 * r6;
-            const auto coeff1r6  = _coeff1 / r6;
-            const auto coeff2r12 = _coeff2 / r12;
-            return 6 * coeff1r6 / r - 12 * coeff2r12 / r;
-        }
-
-        virtual std::pair<Rep, Rep> eval(const Rep r)
-        {
-            const auto rm = cpow<_M>(r);
-            const auto rn = cpow<_N>(r);
-
-            const auto coeff1rm = _coeff1 / rm;
-            const auto coeff2rn = _coeff2 / rn;
-            const auto energy   = -coeff1rm + coeff2rn;
-            const auto force    = _M * coeff1rm / r - _N * coeff2rn / r;
-
-            return {energy, force};
-        }
-
-        virtual std::pair<Rep, Rep> eval(const Rep r)
-        requires(_M == 6 && _N == 12)
-        {
-            const auto r2        = r * r;
-            const auto r6        = r2 * r2 * r2;
-            const auto r12       = r6 * r6;
-            const auto coeff1r6  = _coeff1 / r6;
-            const auto coeff2r12 = _coeff2 / r12;
-            const auto energy    = -coeff1r6 + coeff2r12;
-            const auto force     = 6 * coeff1r6 / r - 12 * coeff2r12 / r;
-
-            return {energy, force};
+            return liePotential<M, N, Rep>(_coeff1, _coeff2, r);
         }
     };
 
     template <typename Rep = double>
     using LJPotential = LiePotential<6, 12, Rep>;
 
+    /**
+     * @brief Shifted variant that enforces zero energy/force at a cutoff.
+     *
+     * The constructor precomputes the energy and force at the radial cutoff so
+     * that subsequent evaluations simply subtract the shift, yielding a smooth
+     * truncation suitable for molecular dynamics simulations.
+     */
     template <size_t M, size_t N, typename Rep = double>
     class LieShiftedPotential : public LiePotential<M, N, Rep>
     {
@@ -111,27 +87,32 @@ namespace mstd
         using _Base = LiePotential<M, N, Rep>;
 
         Rep _radialCutoff{};
-        Rep _energyCutoff{};
+       Rep _energyCutoff{};
         Rep _forceCutoff{};
 
        public:
+        /// @brief Builds the shifted potential from coefficients and cutoff
+        ///        radius.
         constexpr LieShiftedPotential(Rep c1, Rep c2, Rep rc)
             : LiePotential<N, M, Rep>(c1, c2), _radialCutoff(rc)
         {
             _energyCutoff, _forceCutoff = this->eval(_radialCutoff);
         }
 
-        Rep evalEnergy(const Rep r) override
+        /// @brief Energy corrected so that it vanishes at the cutoff.
+        Rep evalEnergy(const Rep r) const override
         {
             return _Base::evalEnergy(r) - _energyCutoff +
                    _forceCutoff(r - _radialCutoff);
         }
 
-        Rep evalForce(const Rep r)
+        /// @brief Force corrected so that it vanishes at the cutoff.
+        Rep evalForce(const Rep r) const override
         {
             return _Base::evalForce(r) - _forceCutoff;
         }
 
+        /// @brief Returns the shifted energy/force pair evaluated at @p r.
         std::pair<Rep, Rep> eval(const Rep r) override
         {
             const auto energy = evalEnergy(r);
