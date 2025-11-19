@@ -87,23 +87,23 @@ namespace mstd
         using _Base = LiePotential<M, N, Rep>;
 
         Rep _radialCutoff{};
-       Rep _energyCutoff{};
+        Rep _energyCutoff{};
         Rep _forceCutoff{};
 
        public:
         /// @brief Builds the shifted potential from coefficients and cutoff
         ///        radius.
         constexpr LieShiftedPotential(Rep c1, Rep c2, Rep rc)
-            : LiePotential<N, M, Rep>(c1, c2), _radialCutoff(rc)
+            : LiePotential<M, N, Rep>(c1, c2), _radialCutoff(rc)
         {
-            _energyCutoff, _forceCutoff = this->eval(_radialCutoff);
+            std::tie(_energyCutoff, _forceCutoff) = eval(_radialCutoff);
         }
 
         /// @brief Energy corrected so that it vanishes at the cutoff.
         Rep evalEnergy(const Rep r) const override
         {
             return _Base::evalEnergy(r) - _energyCutoff +
-                   _forceCutoff(r - _radialCutoff);
+                   _forceCutoff * (r - _radialCutoff);
         }
 
         /// @brief Force corrected so that it vanishes at the cutoff.
@@ -113,7 +113,7 @@ namespace mstd
         }
 
         /// @brief Returns the shifted energy/force pair evaluated at @p r.
-        std::pair<Rep, Rep> eval(const Rep r) override
+        std::pair<Rep, Rep> eval(const Rep r) const override
         {
             const auto energy = evalEnergy(r);
             const auto force  = evalForce(r);
