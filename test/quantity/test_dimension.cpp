@@ -26,9 +26,8 @@
 #include "mstd/quantity.hpp"
 #include "test_utils.hpp"
 
-using namespace mstd::units;
-using namespace mstd::units::details;
-using namespace mstd::pack;
+using namespace mstd;
+using namespace mstd::details;
 
 // Small helper for cleaner static type asserts
 template <class A, class B>
@@ -36,8 +35,7 @@ constexpr bool same = std::is_same_v<A, B>;
 
 TEST_CASE("Enum indexing works for packs and dims")
 {
-    using d =
-        dim<integer_pack<1, 2, 3, 4, 5, 6, 7>, integer_pack<8, 9, 10, 11>>;
+    using d = Dim<IntegerPack<1, 2, 3, 4, 5, 6, 7>, IntegerPack<8, 9, 10, 11>>;
 
     MSTD_STATIC_REQUIRE(d::si_exp<SIDimId::Length> == 1);
     MSTD_STATIC_REQUIRE(d::si_exp<SIDimId::Mass> == 2);
@@ -64,19 +62,13 @@ TEST_CASE("dim_mul_t basic cases")
     using LC = dim_mul_t<L, CUR>;   // L C
 
     MSTD_STATIC_REQUIRE(
-        same<
-            LT,
-            dim<integer_pack<1, 0, 1, 0, 0, 0, 0>, integer_pack<0, 0, 0, 0>>>
+        same<LT, Dim<IntegerPack<1, 0, 1, 0, 0, 0, 0>, IntegerPack<0, 0, 0, 0>>>
     );
     MSTD_STATIC_REQUIRE(
-        same<
-            LA,
-            dim<integer_pack<1, 0, 0, 0, 0, 0, 0>, integer_pack<1, 0, 0, 0>>>
+        same<LA, Dim<IntegerPack<1, 0, 0, 0, 0, 0, 0>, IntegerPack<1, 0, 0, 0>>>
     );
     MSTD_STATIC_REQUIRE(
-        same<
-            LC,
-            dim<integer_pack<1, 0, 0, 0, 0, 0, 0>, integer_pack<0, 1, 0, 0>>>
+        same<LC, Dim<IntegerPack<1, 0, 0, 0, 0, 0, 0>, IntegerPack<0, 1, 0, 0>>>
     );
 }
 
@@ -90,14 +82,12 @@ TEST_CASE("dim_div_t basic cases")
     using inv = dim_div_t<dim_scalar, L>;
 
     MSTD_STATIC_REQUIRE(
-        same<
-            V,
-            dim<integer_pack<1, 0, -1, 0, 0, 0, 0>, integer_pack<0, 0, 0, 0>>>
+        same<V, Dim<IntegerPack<1, 0, -1, 0, 0, 0, 0>, IntegerPack<0, 0, 0, 0>>>
     );
     MSTD_STATIC_REQUIRE(
         same<
             inv,
-            dim<integer_pack<-1, 0, 0, 0, 0, 0, 0>, integer_pack<0, 0, 0, 0>>>
+            Dim<IntegerPack<-1, 0, 0, 0, 0, 0, 0>, IntegerPack<0, 0, 0, 0>>>
     );
 
     using A_over_T  = dim_div_t<A, T>;          // A T^-1
@@ -115,9 +105,7 @@ TEST_CASE("dim_pow_t powers and identities")
     // Square length -> area
     using L2 = dim_pow_t<L, 2>;
     MSTD_STATIC_REQUIRE(
-        same<
-            L2,
-            dim<integer_pack<2, 0, 0, 0, 0, 0, 0>, integer_pack<0, 0, 0, 0>>>
+        same<L2, Dim<IntegerPack<2, 0, 0, 0, 0, 0, 0>, IntegerPack<0, 0, 0, 0>>>
     );
 
     // Negative power -> reciprocal
@@ -125,7 +113,7 @@ TEST_CASE("dim_pow_t powers and identities")
     MSTD_STATIC_REQUIRE(
         same<
             invT,
-            dim<integer_pack<0, 0, -1, 0, 0, 0, 0>, integer_pack<0, 0, 0, 0>>>
+            Dim<IntegerPack<0, 0, -1, 0, 0, 0, 0>, IntegerPack<0, 0, 0, 0>>>
     );
 
     // Zero power -> scalar

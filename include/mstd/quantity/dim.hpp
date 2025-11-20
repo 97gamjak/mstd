@@ -37,7 +37,7 @@
  * and provides utilities to combine and transform them at compile time.
  */
 
-namespace mstd::units
+namespace mstd
 {
 
     /*************************
@@ -49,18 +49,17 @@ namespace mstd::units
     /**
      * @brief Integer pack covering all SI base dimensions.
      *
-     * Alias of `pack::make_default_integer_pack_t<SIDimIdMeta::size>`.
+     * Alias of `make_default_integer_pack_t<SIDimIdMeta::size>`.
      */
-    using default_si_pack =
-        pack::make_default_integer_pack_t<SIDimIdMeta::size>;
+    using default_si_pack = make_default_integer_pack_t<SIDimIdMeta::size>;
 
     /**
      * @brief Integer pack covering all extra (non-SI) dimensions.
      *
-     * Alias of `pack::make_default_integer_pack_t<ExtraDimIdMeta::size>`.
+     * Alias of `make_default_integer_pack_t<ExtraDimIdMeta::size>`.
      */
     using default_extra_pack =
-        pack::make_default_integer_pack_t<ExtraDimIdMeta::size>;
+        make_default_integer_pack_t<ExtraDimIdMeta::size>;
 
     /***********************
      *                     *
@@ -76,16 +75,16 @@ namespace mstd::units
      *   temperature, amount of substance, luminous intensity
      * - Extra dimensions (4 entries): angle, currency, information, count
      *
-     * Packs are `pack::details::integer_pack` specializations providing
+     * Packs are `details::` specializations providing
      * compile-time sequence access and arithmetic.
      *
      * @tparam SI Pack of SI exponents; defaults to all zeros.
      * @tparam Extra Pack of extra exponents; defaults to all zeros.
      */
     template <
-        pack::details::IntegerPack SI    = default_si_pack,
-        pack::details::IntegerPack Extra = default_extra_pack>
-    struct dim
+        IntegerPackType SI    = default_si_pack,
+        IntegerPackType Extra = default_extra_pack>
+    struct Dim
     {
         static_assert(SI::size == SIDimIdMeta::size, "si size mismatch");
         static_assert(Extra::size == ExtraDimIdMeta::size, "ex size mismatch");
@@ -119,45 +118,6 @@ namespace mstd::units
             Extra::template get<static_cast<size_t>(ID)>();
     };
 
-    /*****************************
-     *                           *
-     * Dimension operations API  *
-     *                           *
-     *****************************/
-
-    /**
-     * @brief Combine dimensions by adding exponents (multiplication of units).
-     *
-     * @tparam Dim1 Left operand dimension.
-     * @tparam Dim2 Right operand dimension.
-     */
-    template <details::DimType Dim1, details::DimType Dim2>
-    using dim_mul_t =
-        dim<pack::pack_add_t<typename Dim1::si, typename Dim2::si>,
-            pack::pack_add_t<typename Dim1::ex, typename Dim2::ex>>;
-
-    /**
-     * @brief Combine dimensions by subtracting exponents (division of units).
-     *
-     * @tparam Dim1 Numerator dimension.
-     * @tparam Dim2 Denominator dimension.
-     */
-    template <details::DimType Dim1, details::DimType Dim2>
-    using dim_div_t =
-        dim<pack::pack_sub_t<typename Dim1::si, typename Dim2::si>,
-            pack::pack_sub_t<typename Dim1::ex, typename Dim2::ex>>;
-
-    /**
-     * @brief Raise a dimension to an integer power.
-     *
-     * @tparam Dim Base dimension.
-     * @tparam Exp Integer exponent (can be negative).
-     */
-    template <details::DimType Dim, int Exp>
-    using dim_pow_t =
-        dim<pack::pack_scale_t<typename Dim::si, Exp>,
-            pack::pack_scale_t<typename Dim::ex, Exp>>;
-
-}   // namespace mstd::units
+}   // namespace mstd
 
 #endif   // __MSTD_UNITS_DIMENSION_HPP__

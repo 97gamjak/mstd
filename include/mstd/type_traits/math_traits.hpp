@@ -20,26 +20,9 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_ERROR_HPP__
-#define __MSTD_ERROR_HPP__
+#ifndef __MSTD__TYPE_TRAITS__MATH_TRAITS_HPP__
+#define __MSTD__TYPE_TRAITS__MATH_TRAITS_HPP__
 
-#include <type_traits>
+#include "math/arithmetic_traits.hpp"   // IWYU pragma: export
 
-namespace mstd
-{
-    // clang-format off
-    /**
-     * @brief a struct that is always false
-     * 
-     * @tparam T 
-     */
-    template <typename T>
-    struct always_false : std::false_type{};
-    // clang-format on
-
-}   // namespace mstd
-
-#define MSTD_COMPILE_FAIL(msg) \
-    static_assert(::mstd::always_false<void>::value, msg)
-
-#endif   // __MSTD_ERROR_HPP__
+#endif   // __MSTD__TYPE_TRAITS__MATH_TRAITS_HPP__

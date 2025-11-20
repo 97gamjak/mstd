@@ -26,7 +26,7 @@
 #include "quantity.hpp"
 #include "unit_impl.hpp"
 
-namespace mstd::units
+namespace mstd
 {
     /***************************
      *                         *
@@ -35,62 +35,62 @@ namespace mstd::units
      ***************************/
 
     template <length_unit U, class Rep = double>
-    using Length = quantity<U, Rep>;
+    using Length = Quantity<U, Rep>;
 
     template <mass_unit U, class Rep = double>
-    using Mass = quantity<U, Rep>;
+    using Mass = Quantity<U, Rep>;
 
     template <time_unit U, class Rep = double>
-    using Time = quantity<U, Rep>;
+    using Time = Quantity<U, Rep>;
 
     template <current_unit U, class Rep = double>
-    using Current = quantity<U, Rep>;
+    using Current = Quantity<U, Rep>;
 
     template <temperature_unit U, class Rep = double>
-    using Temperature = quantity<U, Rep>;
+    using Temperature = Quantity<U, Rep>;
 
     template <amount_unit U, class Rep = double>
-    using Amount = quantity<U, Rep>;
+    using Amount = Quantity<U, Rep>;
 
     template <luminous_unit U, class Rep = double>
-    using LuminousIntensity = quantity<U, Rep>;
+    using LuminousIntensity = Quantity<U, Rep>;
 
     template <angle_unit U, class Rep = double>
-    using Angle = quantity<U, Rep>;
+    using Angle = Quantity<U, Rep>;
 
     template <currency_unit U, class Rep = double>
-    using Currency = quantity<U, Rep>;
+    using Currency = Quantity<U, Rep>;
 
     template <info_unit U, class Rep = double>
-    using Info = quantity<U, Rep>;
+    using Info = Quantity<U, Rep>;
 
     template <scalar_unit U, class Rep = double>
-    using Scalar = quantity<U, Rep>;
+    using Scalar = Quantity<U, Rep>;
 
     template <dimensionless_unit U, class Rep = double>
-    using Dimensionless = quantity<U, Rep>;
+    using Dimensionless = Quantity<U, Rep>;
 
     template <area_unit U, class Rep = double>
-    using Area = quantity<U, Rep>;
+    using Area = Quantity<U, Rep>;
 
     template <volume_unit U, class Rep = double>
-    using Volume = quantity<U, Rep>;
+    using Volume = Quantity<U, Rep>;
 
     template <density_unit U, class Rep = double>
-    using Density = quantity<U, Rep>;
+    using Density = Quantity<U, Rep>;
 
     template <velocity_unit U, class Rep = double>
-    using Velocity = quantity<U, Rep>;
+    using Velocity = Quantity<U, Rep>;
 
     template <acceleration_unit U, class Rep = double>
-    using Acceleration = quantity<U, Rep>;
+    using Acceleration = Quantity<U, Rep>;
 
     template <force_unit U, class Rep = double>
-    using Force = quantity<U, Rep>;
+    using Force = Quantity<U, Rep>;
 
     template <energy_unit U, class Rep = double>
-    using Energy = quantity<U, Rep>;
+    using Energy = Quantity<U, Rep>;
 
-}   // namespace mstd::units
+}   // namespace mstd
 
 #endif   // __MSTD_UNITS_QUANTITY_IMPL_HPP__

@@ -20,26 +20,34 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_ERROR_HPP__
-#define __MSTD_ERROR_HPP__
+#ifndef __MSTD_RATIO_TRAITS_HPP__
+#define __MSTD_RATIO_TRAITS_HPP__
 
-#include <type_traits>
+/**
+ * @file ratio_traits.hpp
+ * @brief Concepts for std::ratio types.
+ *
+ * Provides concepts to check if a type conforms to the expected interface
+ * of std::ratio types.
+ */
 
 namespace mstd
 {
-    // clang-format off
+
     /**
-     * @brief a struct that is always false
-     * 
-     * @tparam T 
+     * @brief Concept for std::ratio types.
+     *
+     * @details A ratio type must provide two static members `num` and `den`.
      */
     template <typename T>
-    struct always_false : std::false_type{};
-    // clang-format on
+    concept RatioType = requires {
+        T::num;
+        T::den;
+    };
+
+    template <typename T>
+    constexpr bool is_ratio_v = RatioType<T>;
 
 }   // namespace mstd
 
-#define MSTD_COMPILE_FAIL(msg) \
-    static_assert(::mstd::always_false<void>::value, msg)
-
-#endif   // __MSTD_ERROR_HPP__
+#endif   // __MSTD_RATIO_TRAITS_HPP__

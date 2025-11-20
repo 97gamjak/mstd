@@ -20,26 +20,16 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_ERROR_HPP__
-#define __MSTD_ERROR_HPP__
+#include <catch2/catch_test_macros.hpp>
 
-#include <type_traits>
+#include "mstd/quantity.hpp"
+#include "mstd/type_traits.hpp"
+#include "test_utils.hpp"
 
-namespace mstd
+TEST_CASE("type_trait", "[units]")
 {
-    // clang-format off
-    /**
-     * @brief a struct that is always false
-     * 
-     * @tparam T 
-     */
-    template <typename T>
-    struct always_false : std::false_type{};
-    // clang-format on
-
-}   // namespace mstd
-
-#define MSTD_COMPILE_FAIL(msg) \
-    static_assert(::mstd::always_false<void>::value, msg)
-
-#endif   // __MSTD_ERROR_HPP__
+    using namespace mstd;
+    MSTD_STATIC_REQUIRE(is_unit_v<literals::cm>);
+    MSTD_STATIC_REQUIRE(is_unit_v<literals::m>);
+    MSTD_STATIC_REQUIRE(is_unit_v<literals::kg>);
+}

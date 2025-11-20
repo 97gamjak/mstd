@@ -24,8 +24,9 @@
 #define __MSTD_DIMENSION_IMPL_HPP__
 
 #include "dim.hpp"
+#include "dim_operations.hpp"
 
-namespace mstd::units
+namespace mstd
 {
     /********************************************
      *                                          *
@@ -33,51 +34,51 @@ namespace mstd::units
      *                                          *
      ********************************************/
 
-    using si_one = pack::make_default_integer_pack_t<SIDimIdMeta::size>;
+    using si_one = make_default_integer_pack_t<SIDimIdMeta::size>;
 
-    using si_length = pack::make_single_integer_pack_t<
+    using si_length = make_single_integer_pack_t<
         SIDimIdMeta::size,
         SIDimIdMeta::to_underlying(SIDimId::Length)>;
 
-    using si_mass = pack::make_single_integer_pack_t<
+    using si_mass = make_single_integer_pack_t<
         SIDimIdMeta::size,
         SIDimIdMeta::to_underlying(SIDimId::Mass)>;
 
-    using si_time = pack::make_single_integer_pack_t<
+    using si_time = make_single_integer_pack_t<
         SIDimIdMeta::size,
         SIDimIdMeta::to_underlying(SIDimId::Time)>;
 
-    using si_current = pack::make_single_integer_pack_t<
+    using si_current = make_single_integer_pack_t<
         SIDimIdMeta::size,
         SIDimIdMeta::to_underlying(SIDimId::Current)>;
 
-    using si_temperature = pack::make_single_integer_pack_t<
+    using si_temperature = make_single_integer_pack_t<
         SIDimIdMeta::size,
         SIDimIdMeta::to_underlying(SIDimId::Temperature)>;
 
-    using si_amount = pack::make_single_integer_pack_t<
+    using si_amount = make_single_integer_pack_t<
         SIDimIdMeta::size,
         SIDimIdMeta::to_underlying(SIDimId::Amount)>;
 
-    using si_luminous = pack::make_single_integer_pack_t<
+    using si_luminous = make_single_integer_pack_t<
         SIDimIdMeta::size,
         SIDimIdMeta::to_underlying(SIDimId::Luminous)>;
 
-    using ex_one = pack::make_default_integer_pack_t<ExtraDimIdMeta::size>;
+    using ex_one = make_default_integer_pack_t<ExtraDimIdMeta::size>;
 
-    using ex_angle = pack::make_single_integer_pack_t<
+    using ex_angle = make_single_integer_pack_t<
         ExtraDimIdMeta::size,
         ExtraDimIdMeta::to_underlying(ExtraDimId::Angle)>;
 
-    using ex_currency = pack::make_single_integer_pack_t<
+    using ex_currency = make_single_integer_pack_t<
         ExtraDimIdMeta::size,
         ExtraDimIdMeta::to_underlying(ExtraDimId::Currency)>;
 
-    using ex_info = pack::make_single_integer_pack_t<
+    using ex_info = make_single_integer_pack_t<
         ExtraDimIdMeta::size,
         ExtraDimIdMeta::to_underlying(ExtraDimId::Info)>;
 
-    using ex_count = pack::make_single_integer_pack_t<
+    using ex_count = make_single_integer_pack_t<
         ExtraDimIdMeta::size,
         ExtraDimIdMeta::to_underlying(ExtraDimId::Count)>;
 
@@ -87,15 +88,15 @@ namespace mstd::units
      *                    *
      **********************/
 
-    using dim_one      = dim<si_one, ex_one>;
+    using dim_one      = Dim<si_one, ex_one>;
     using dim_scalar   = dim_one;
-    using dim_length   = dim<si_length, ex_one>;
-    using dim_mass     = dim<si_mass, ex_one>;
-    using dim_time     = dim<si_time, ex_one>;
-    using dim_current  = dim<si_current, ex_one>;
-    using dim_temp     = dim<si_temperature, ex_one>;
-    using dim_amount   = dim<si_amount, ex_one>;
-    using dim_luminous = dim<si_luminous, ex_one>;
+    using dim_length   = Dim<si_length, ex_one>;
+    using dim_mass     = Dim<si_mass, ex_one>;
+    using dim_time     = Dim<si_time, ex_one>;
+    using dim_current  = Dim<si_current, ex_one>;
+    using dim_temp     = Dim<si_temperature, ex_one>;
+    using dim_amount   = Dim<si_amount, ex_one>;
+    using dim_luminous = Dim<si_luminous, ex_one>;
 
     /********************
      *                  *
@@ -103,9 +104,9 @@ namespace mstd::units
      *                  *
      ********************/
 
-    using dim_angle    = dim<si_one, ex_angle>;
-    using dim_currency = dim<si_one, ex_currency>;
-    using dim_info     = dim<si_one, ex_info>;
+    using dim_angle    = Dim<si_one, ex_angle>;
+    using dim_currency = Dim<si_one, ex_currency>;
+    using dim_info     = Dim<si_one, ex_info>;
 
     /************************
      *                      *
@@ -122,6 +123,6 @@ namespace mstd::units
     using dim_energy       = dim_mul_t<dim_force, dim_length>;
     using dim_power        = dim_div_t<dim_energy, dim_time>;
 
-}   // namespace mstd::units
+}   // namespace mstd
 
 #endif   // __MSTD_DIMENSION_IMPL_HPP__
