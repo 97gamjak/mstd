@@ -1,4 +1,4 @@
-for i in $(find test/ include/ scripts/mstd_cpp_checks -regex ".*\.\(hpp\|cpp\|c\|h\|py\)$"); do
+for i in $(find test/ include/ -regex ".*\.\(hpp\|cpp\|c\|h\)$"); do
 
     if ! grep -q Copyright $i; then
 
