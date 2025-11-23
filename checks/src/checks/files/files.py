@@ -18,6 +18,18 @@ class FileType(Enum):
     CPPSource = 2
     CMakeLists = 3
 
+    @classmethod
+    def all_types(cls) -> set[FileType]:
+        """Get a set of all defined file types.
+
+        Returns
+        -------
+        set[FileType]:
+            A set containing all file types.
+
+        """
+        return set(cls)
+
 
 def determine_file_type(filename: str | Path) -> FileType:
     """Determine the file type based on the filename extension.
