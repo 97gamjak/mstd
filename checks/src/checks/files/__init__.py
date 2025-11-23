@@ -1,6 +1,15 @@
 """Top level package for file operations in mstd checks."""
 
-from .files import __BASE_DIR__, FileType, get_files_in_dirs, get_staged_files, determine_file_type
+from pathlib import Path
 
-__all__ = ["__BASE_DIR__", "FileType", "get_files_in_dirs",
-           "get_staged_files", "determine_file_type"]
+from .files import FileType, determine_file_type, get_files_in_dirs, get_staged_files
+
+__EXECUTION_DIR__ = Path.cwd()
+
+__all__ = [
+    "__EXECUTION_DIR__",
+    "FileType",
+    "determine_file_type",
+    "get_files_in_dirs",
+    "get_staged_files"
+]

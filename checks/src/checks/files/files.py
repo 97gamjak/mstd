@@ -3,10 +3,11 @@
 from __future__ import annotations
 
 import subprocess
+import typing
 from enum import Enum
-from pathlib import Path
 
-__BASE_DIR__ = Path(__file__).parent.parent.parent.resolve()
+if typing.TYPE_CHECKING:
+    from pathlib import Path
 
 
 class FileType(Enum):
