@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from checks.results import ResultType, ResultTypeEnum
+from checks.rules import ResultType, ResultTypeEnum
 
 
 def check_key_sequence_ordered(key_sequence: list[str], line: str) -> ResultType:

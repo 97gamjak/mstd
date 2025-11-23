@@ -1,7 +1,7 @@
 """C++ rules for mstd checks."""
 
 from checks.files import FileType
-from checks.results import ResultType
+from checks.rules import ResultType
 from checks.utils import check_key_sequence_ordered
 
 
