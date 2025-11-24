@@ -5,19 +5,21 @@ from __future__ import annotations
 from checks.rules import ResultType, ResultTypeEnum
 
 
-def check_key_sequence_ordered(key_sequence: list[str], line: str) -> ResultType:
+def check_key_sequence_ordered(
+    key_sequence: str,
+    line: str,
+    key_delimiter: str = " "
+) -> ResultType:
     """Check if keys in key_sequence appear in order on the given line.
 
     Parameters
     ----------
-    key_sequence: list[str]
-        The sequence of keys to check for order.
+    key_sequence: str
+        The sequence of keys to check for order as a string.
     line: str
         The line of text to check.
-    filename: str
-        The name of the file containing the line.
-    linenumber: int
-        The line number in the file.
+    key_delimiter: str
+        The delimiter used to find the keys
 
     Returns
     -------
@@ -25,11 +27,9 @@ def check_key_sequence_ordered(key_sequence: list[str], line: str) -> ResultType
         Result of the check, Warning if keys are out of order, Ok otherwise
 
     """
-    if not isinstance(key_sequence, list):
-        msg = f"key_sequence {key_sequence} must be a list"
-        raise TypeError(msg)
+    key_sequence = key_sequence.split(key_delimiter)
 
-    line_elements = line.split()
+    line_elements = line.split(key_delimiter)
     indices = [
         line_elements.index(key)
         for key in key_sequence

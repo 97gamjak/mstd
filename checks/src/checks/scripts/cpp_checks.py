@@ -10,6 +10,7 @@ from checks.files import (
     get_staged_files,
 )
 from checks.logger import cpp_check_logger
+from checks.rules import Rule, filter_line_rules
 
 __CPP_DIRS__ = ["include", "test"]
 __OTHER_DIRS__ = ["scripts"]
@@ -19,7 +20,11 @@ __EXCLUDE_FILES__ = [".gitignore"]
 __DIRS__ = __CPP_DIRS__ + __OTHER_DIRS__
 
 
-def run_checks(rules: list[set[FileType], callable]) -> None:
+def run_line_checks(rules: list[Rule]) -> None:
+    line_rules = filter_line_rules(rules)
+
+
+def run_checks(rules: list[Rule]) -> None:
     """Run C++ checks based on the provided rules."""
     if "full" in sys.argv:
         cpp_check_logger.info("Running full checks...")
