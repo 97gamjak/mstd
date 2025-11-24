@@ -33,7 +33,7 @@ class FileType(Enum):
     @classmethod
     def cpp_types(cls) -> set[FileType]:
         """Get a set of all CPP related file types."""
-        return set(FileType.CPPHeader, FileType.CPPSource)
+        return {FileType.CPPHeader, FileType.CPPSource}
 
 
 def determine_file_type(filename: str | Path) -> FileType:

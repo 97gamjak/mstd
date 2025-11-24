@@ -7,3 +7,4 @@ ignore = [
     "FIX002", # missing TODO - already solved by other rules which force linking author and github issue
     "S607",   # relative paths are not allowed by this rule in subprocess commands
 ]
+pylint.max-args = 6 # TODO: remove this in future versions

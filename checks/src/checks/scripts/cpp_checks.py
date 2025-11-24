@@ -1,11 +1,12 @@
 """Module defining C++ check rules."""
 
 import sys
+from pathlib import Path
 
-from checks.cpp_rules import cpp_rules
+from checks.cpp import cpp_rules
 from checks.files import (
     __EXECUTION_DIR__,
-    FileType,
+    determine_file_type,
     get_files_in_dirs,
     get_staged_files,
 )
@@ -20,8 +21,29 @@ __EXCLUDE_FILES__ = [".gitignore"]
 __DIRS__ = __CPP_DIRS__ + __OTHER_DIRS__
 
 
-def run_line_checks(rules: list[Rule]) -> None:
+def run_line_checks(rules: list[Rule], file: Path) -> None:
+    """Run line-based C++ checks on a given file.
+
+    Parameters
+    ----------
+    rules: list[Rule]
+        The list of rules to apply.
+    file: Path
+        The file to check.
+
+    """
     line_rules = filter_line_rules(rules)
+    with Path(file).open("r", encoding="utf-8") as f:
+        for line in f:
+            for rule in line_rules:
+                if determine_file_type(file) not in rule.file_types:
+                    continue
+
+                result = rule.apply(line)
+                if result.value:
+                    cpp_check_logger.info(
+                        f"Line check result in {file}: {result.description}"
+                    )
 
 
 def run_checks(rules: list[Rule]) -> None:
@@ -40,8 +62,8 @@ def run_checks(rules: list[Rule]) -> None:
         return
 
     for filename in files:
-        cpp_check_logger.info(
-            f"Checking file: {filename}, rules: {len(rules)}")
+        cpp_check_logger.debug(f"Checking file: {filename}")
+        run_line_checks(rules, filename)
 
 
 def main() -> None:
