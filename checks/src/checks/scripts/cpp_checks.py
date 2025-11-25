@@ -11,7 +11,7 @@ from checks.files import (
     get_staged_files,
 )
 from checks.logger import cpp_check_logger
-from checks.rules import ResultType, Rule, filter_line_rules
+from checks.rules import ResultType, ResultTypeEnum, Rule, filter_line_rules
 
 __CPP_DIRS__ = ["include", "test"]
 __OTHER_DIRS__ = ["scripts"]
@@ -37,18 +37,18 @@ def run_line_checks(rules: list[Rule], file: Path) -> list[ResultType]:
         The list of results from the checks.
 
     """
+    results = []
+
     with Path(file).open("r", encoding="utf-8") as f:
         line_rules = filter_line_rules(rules)
-        results = []
         for line in f:
             for rule in line_rules:
                 if determine_file_type(file) not in rule.file_types:
                     continue
 
-                result = rule.apply(line)
-                results.append(result)
+                results.append(rule.apply(line))
 
-        return results
+    return results
 
 
 def run_checks(rules: list[Rule]) -> None:
@@ -68,7 +68,18 @@ def run_checks(rules: list[Rule]) -> None:
 
     for filename in files:
         cpp_check_logger.debug(f"Checking file: {filename}")
-        run_line_checks(rules, filename)
+        file_results = run_line_checks(rules, filename)
+        if any(result.value != ResultTypeEnum.Ok for result in file_results):
+            filtered_results = [
+                res
+                for res in file_results
+                if res.value != ResultTypeEnum.Ok
+            ]
+            for res in filtered_results:
+                cpp_check_logger.error(
+                    f"Line check result in {filename}: {res.description}"
+                )
+            return
 
 
 def main() -> None:
