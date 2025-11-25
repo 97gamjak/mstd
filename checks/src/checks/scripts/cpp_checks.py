@@ -11,7 +11,7 @@ from checks.files import (
     get_staged_files,
 )
 from checks.logger import cpp_check_logger
-from checks.rules import Rule, filter_line_rules
+from checks.rules import ResultType, Rule, filter_line_rules
 
 __CPP_DIRS__ = ["include", "test"]
 __OTHER_DIRS__ = ["scripts"]
@@ -21,7 +21,7 @@ __EXCLUDE_FILES__ = [".gitignore"]
 __DIRS__ = __CPP_DIRS__ + __OTHER_DIRS__
 
 
-def run_line_checks(rules: list[Rule], file: Path) -> None:
+def run_line_checks(rules: list[Rule], file: Path) -> list[ResultType]:
     """Run line-based C++ checks on a given file.
 
     Parameters
@@ -31,19 +31,24 @@ def run_line_checks(rules: list[Rule], file: Path) -> None:
     file: Path
         The file to check.
 
+    Returns
+    -------
+    list[ResultType]
+        The list of results from the checks.
+
     """
-    line_rules = filter_line_rules(rules)
     with Path(file).open("r", encoding="utf-8") as f:
+        line_rules = filter_line_rules(rules)
+        results = []
         for line in f:
             for rule in line_rules:
                 if determine_file_type(file) not in rule.file_types:
                     continue
 
                 result = rule.apply(line)
-                if result.value:
-                    cpp_check_logger.info(
-                        f"Line check result in {file}: {result.description}"
-                    )
+                results.append(result)
+
+        return results
 
 
 def run_checks(rules: list[Rule]) -> None:
