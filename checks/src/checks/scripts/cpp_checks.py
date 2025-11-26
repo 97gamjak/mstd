@@ -38,12 +38,13 @@ def run_line_checks(rules: list[Rule], file: Path) -> list[ResultType]:
 
     """
     results = []
+    file_type = determine_file_type(file)
 
     with Path(file).open("r", encoding="utf-8") as f:
         line_rules = filter_line_rules(rules)
         for line in f:
             for rule in line_rules:
-                if determine_file_type(file) not in rule.file_types:
+                if file_type not in rule.file_types:
                     continue
 
                 results.append(rule.apply(line))
