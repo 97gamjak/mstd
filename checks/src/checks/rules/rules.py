@@ -138,7 +138,7 @@ class Rule:
             The result of applying the rule.
 
         """
-        if type(args) is str:
+        if isinstance(args, str):
             args = (args,)
         return self.func(*args)
 
