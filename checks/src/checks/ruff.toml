@@ -6,5 +6,6 @@ ignore = [
     "COM812", # trailing comma missing (conflict with other rule)
     "FIX002", # missing TODO - already solved by other rules which force linking author and github issue
     "S607",   # relative paths are not allowed by this rule in subprocess commands
+    "ANN401", # allow Any type annotations for now
 ]
 pylint.max-args = 6 # TODO: remove this in future versions

@@ -2,7 +2,32 @@
 
 from __future__ import annotations
 
+import typing
+
+from checks.logger import utils_logger
 from checks.rules import ResultType, ResultTypeEnum
+
+if typing.TYPE_CHECKING:
+    from typing import Any
+
+
+def find_indices(list_to_search: list[Any], element: Any) -> list[int]:
+    """Find all indices of an element in a list.
+
+    Parameters
+    ----------
+    list_to_search: list[Any]
+        The list to search through.
+    element: Any
+        The element to find in the list.
+
+    Returns
+    -------
+    list[int]
+        A list of indices where the element is found.
+
+    """
+    return [index for index, value in enumerate(list_to_search) if value == element]
 
 
 def check_key_sequence_ordered(
@@ -30,17 +55,36 @@ def check_key_sequence_ordered(
     key_sequence = key_sequence.split(key_delimiter)
 
     line_elements = line.split(key_delimiter)
+
+    # If not all keys are present, return Ok
+    if (set(key_sequence).union(set(line_elements)) != set(key_sequence)):
+        return ResultType(ResultTypeEnum.Ok)
+
     indices = [
-        line_elements.index(key)
+        find_indices(line_elements, key)
         for key in key_sequence
-        if key in line_elements
     ]
 
-    if len(indices) == len(key_sequence) and sorted(indices) != indices:
-        return ResultType(
-            ResultTypeEnum.Warning,
-            f"key_sequence {key_sequence} not ordered correctly "
-            f"in line {line}."
-        )
+    found_indices = 1
+    for index in indices[0]:
+        for i in range(1, len(indices)):
+            if index+i in indices[i]:
+                found_indices += 1
+                continue
+            found_indices = 1
+            break
 
-    return ResultType(ResultTypeEnum.Ok)
+    if found_indices == len(key_sequence):
+        utils_logger.debug(
+            "All keys from key_sequence %s are present "
+            "in line %s and ordered correctly.",
+            key_sequence,
+            line
+        )
+        return ResultType(ResultTypeEnum.Ok)
+
+    return ResultType(
+        ResultTypeEnum.Warning,
+        f"key_sequence {key_sequence} not ordered correctly "
+        f"in line {line}."
+    )
