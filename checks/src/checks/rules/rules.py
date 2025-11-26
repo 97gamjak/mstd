@@ -26,7 +26,7 @@ class RuleType(StrEnum):
             A set containing the C++ related rule types.
 
         """
-        return set(RuleType.CPP_STYLE)
+        return {RuleType.CPP_STYLE}
 
 
 class RuleInputType(StrEnum):
