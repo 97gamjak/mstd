@@ -7,6 +7,8 @@ from checks.enums import StrEnum
 from checks.files import FileType
 
 if typing.TYPE_CHECKING:
+    from typing import Callable
+
     from .result_type import ResultType
 
 
@@ -101,7 +103,7 @@ class Rule:
     def __init__(
         self,
         name: str,
-        func: callable,
+        func: Callable,
         rule_type: RuleType = RuleType.GENERAL,
         rule_input_type: RuleInputType = RuleInputType.NONE,
         file_types: set[FileType] | None = None,
