@@ -53,11 +53,10 @@ def check_key_sequence_ordered(
 
     """
     key_sequence = key_sequence.split(key_delimiter)
-
     line_elements = line.split(key_delimiter)
 
     # If not all keys are present, return Ok
-    if (set(key_sequence).union(set(line_elements)) != set(key_sequence)):
+    if (set(key_sequence).intersection(set(line_elements)) != set(key_sequence)):
         return ResultType(ResultTypeEnum.Ok)
 
     indices = [
@@ -84,7 +83,7 @@ def check_key_sequence_ordered(
         return ResultType(ResultTypeEnum.Ok)
 
     return ResultType(
-        ResultTypeEnum.Warning,
+        ResultTypeEnum.Error,
         f"key_sequence {key_sequence} not ordered correctly "
         f"in line {line}."
     )
