@@ -61,6 +61,60 @@ class TestCheckKeySeqOrder:
         result = rule.apply(line)
         assert result.value == ResultTypeEnum.Error
 
+    def test_rule_initialization(self):
+        """Test that CheckKeySeqOrder is initialized correctly."""
+        rule = CheckKeySeqOrder("static inline constexpr")
+
+        assert rule.name == "static inline constexpr"
+        assert rule.rule_type == RuleType.CPP_STYLE
+        assert rule.rule_input_type == RuleInputType.LINE
+        assert rule.description == 'Use "static inline constexpr" only in this given order.'
+
+    def test_rule_initialization_custom_key_sequence(self):
+        """Test CheckKeySeqOrder with a different key sequence."""
+        rule = CheckKeySeqOrder("const static")
+
+        assert rule.name == "const static"
+        assert rule.rule_type == RuleType.CPP_STYLE
+        assert rule.rule_input_type == RuleInputType.LINE
+        assert rule.description == 'Use "const static" only in this given order.'
+
+    def test_apply_correct_order(self):
+        """Test that rule passes when keys are in correct order."""
+        rule = CheckKeySeqOrder("static inline constexpr")
+        result = rule.apply("static inline constexpr int x = 42;")
+
+        assert result.value == ResultTypeEnum.Ok
+
+    def test_apply_incorrect_order(self):
+        """Test that rule fails when keys are out of order."""
+        rule = CheckKeySeqOrder("static inline constexpr")
+        result = rule.apply("inline static constexpr int x = 42;")
+
+        assert result.value == ResultTypeEnum.Error
+
+    def test_apply_partial_keys_present(self):
+        """Test that rule passes when only some keys are present."""
+        rule = CheckKeySeqOrder("static inline constexpr")
+        # Only "static" and "constexpr" are present, missing "inline"
+        result = rule.apply("static constexpr int x = 42;")
+
+        assert result.value == ResultTypeEnum.Ok
+
+    def test_apply_no_keys_present(self):
+        """Test that rule passes when no keys are present."""
+        rule = CheckKeySeqOrder("static inline constexpr")
+        result = rule.apply("int x = 42;")
+
+        assert result.value == ResultTypeEnum.Ok
+
+    def test_apply_single_key_present(self):
+        """Test that rule passes when only a single key is present."""
+        rule = CheckKeySeqOrder("static inline constexpr")
+        result = rule.apply("static int x = 42;")
+
+        assert result.value == ResultTypeEnum.Ok
+
 
 class TestCppStyleRulesModule:
     """Tests for cpp_style_rules module."""
@@ -135,68 +189,6 @@ class TestStaticInlineConstexprRule:
             result = rule.apply(line)
             assert result.value == ResultTypeEnum.Ok, f"Expected Ok for: {
                 line}"
-
-
-class TestCheckKeySeqOrder:
-    """Test suite for CheckKeySeqOrder rule class."""
-
-    def test_rule_initialization(self):
-        """Test that CheckKeySeqOrder is initialized correctly."""
-        rule = CheckKeySeqOrder("static inline constexpr")
-
-        assert rule.name == "static inline constexpr"
-        assert rule.rule_type == RuleType.CPP_STYLE
-        assert rule.rule_input_type == RuleInputType.LINE
-        assert rule.description == 'Use "static inline constexpr" only in this given order.'
-
-    def test_rule_initialization_custom_key_sequence(self):
-        """Test CheckKeySeqOrder with a different key sequence."""
-        rule = CheckKeySeqOrder("const static")
-
-        assert rule.name == "const static"
-        assert rule.rule_type == RuleType.CPP_STYLE
-        assert rule.rule_input_type == RuleInputType.LINE
-        assert rule.description == 'Use "const static" only in this given order.'
-
-    def test_apply_correct_order(self):
-        """Test that rule passes when keys are in correct order."""
-        rule = CheckKeySeqOrder("static inline constexpr")
-        result = rule.apply("static inline constexpr int x = 42;")
-
-        assert result.value == ResultTypeEnum.Ok
-
-    def test_apply_incorrect_order(self):
-        """Test that rule fails when keys are out of order."""
-        rule = CheckKeySeqOrder("static inline constexpr")
-        result = rule.apply("inline static constexpr int x = 42;")
-
-        assert result.value == ResultTypeEnum.Error
-
-    def test_apply_partial_keys_present(self):
-        """Test that rule passes when only some keys are present."""
-        rule = CheckKeySeqOrder("static inline constexpr")
-        # Only "static" and "constexpr" are present, missing "inline"
-        result = rule.apply("static constexpr int x = 42;")
-
-        assert result.value == ResultTypeEnum.Ok
-
-    def test_apply_no_keys_present(self):
-        """Test that rule passes when no keys are present."""
-        rule = CheckKeySeqOrder("static inline constexpr")
-        result = rule.apply("int x = 42;")
-
-        assert result.value == ResultTypeEnum.Ok
-
-    def test_apply_single_key_present(self):
-        """Test that rule passes when only a single key is present."""
-        rule = CheckKeySeqOrder("static inline constexpr")
-        result = rule.apply("static int x = 42;")
-
-        assert result.value == ResultTypeEnum.Ok
-
-
-class TestStaticInlineConstexprRule:
-    """Test suite for the 'static inline constexpr' rule (rule01)."""
 
     def test_rule01_exists_and_configured(self):
         """Test that rule01 is properly configured."""
