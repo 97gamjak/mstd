@@ -1,1 +1,1 @@
-"""Unit tests for cpp module."""
+"""Test module for C++ style rules."""
