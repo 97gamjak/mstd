@@ -7,8 +7,6 @@ from checks.enums import StrEnum
 from checks.files import FileType
 
 if typing.TYPE_CHECKING:
-    from typing import Callable
-
     from .result_type import ResultType
 
 
