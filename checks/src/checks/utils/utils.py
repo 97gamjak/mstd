@@ -49,7 +49,7 @@ def check_key_sequence_ordered(
     Returns
     -------
     ResultType:
-        Result of the check, Warning if keys are out of order, Ok otherwise
+        Result of the check, Error if keys are out of order, Ok otherwise
 
     """
     key_sequence = key_sequence.split(key_delimiter)
