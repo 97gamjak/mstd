@@ -56,7 +56,7 @@ def check_key_sequence_ordered(
     line_elements = line.split(key_delimiter)
 
     # If not all keys are present, return Ok
-    if (set(key_sequence).intersection(set(line_elements)) != set(key_sequence)):
+    if set(key_sequence).intersection(set(line_elements)) != set(key_sequence):
         return ResultType(ResultTypeEnum.Ok)
 
     indices = [
