@@ -1,8 +1,8 @@
 """Unit tests for file-related functionality in mstd checks."""
 
+from checks.files import FileType
 
 def test_get_all_file_types():
-    from checks.files import FileType
 
     expected_types = {
         FileType.CPPHeader,
