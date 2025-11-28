@@ -64,8 +64,8 @@ def check_key_sequence_ordered(
         for key in key_sequence
     ]
 
-    found_indices = 1
     for index in indices[0]:
+        found_indices = 1
         for i in range(1, len(indices)):
             if index + i in indices[i]:
                 found_indices += 1
