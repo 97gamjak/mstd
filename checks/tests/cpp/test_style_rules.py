@@ -186,8 +186,7 @@ class TestStaticInlineConstexprRule:
         ]
         for line in test_cases:
             result = rule.apply(line)
-            assert result.value == ResultTypeEnum.Ok, f"Expected Ok for: {
-                line}"
+            assert result.value == ResultTypeEnum.Ok, f"Expected Ok for: {line}"
 
     def test_rule01_exists_and_configured(self):
         """Test that rule01 is properly configured."""
