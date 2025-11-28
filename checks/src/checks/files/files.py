@@ -102,12 +102,12 @@ def get_files_in_dirs(
     return all_files
 
 
-def get_staged_files() -> list[str]:
+def get_staged_files() -> list[Path]:
     """Get the list of staged files in the git repository.
 
     Returns
     -------
-    list[str]:
+    list[Path]:
         List of staged file paths.
 
     """
@@ -118,6 +118,5 @@ def get_staged_files() -> list[str]:
         check=True
     )
 
-
     files = result.stdout.strip().split("\n")
-    return [file for file in files if file]
+    return [Path(file) for file in files if file]
