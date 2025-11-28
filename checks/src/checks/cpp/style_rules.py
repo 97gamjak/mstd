@@ -30,7 +30,4 @@ class CheckKeySeqOrder(Rule):
 
 rule01 = CheckKeySeqOrder("static inline constexpr")
 
-cpp_style_rules = []
-cpp_style_rules.append(
-    rule01
-)
+cpp_style_rules = [rule01]
