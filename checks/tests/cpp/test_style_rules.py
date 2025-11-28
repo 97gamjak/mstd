@@ -172,8 +172,7 @@ class TestStaticInlineConstexprRule:
         ]
         for line in test_cases:
             result = rule.apply(line)
-            assert result.value == ResultTypeEnum.Error, f"Expected Error for: {
-                line}"
+            assert result.value == ResultTypeEnum.Error, f"Expected Error for: {line}"
 
     def test_static_inline_constexpr_partial_present(self):
         """Test lines with only some keywords present."""
