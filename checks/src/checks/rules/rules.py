@@ -142,9 +142,8 @@ class Rule:
         """
         if isinstance(args, str):
             args = (args,)
-        if len(args) > 1:
-            raise TypeError("Rule function expects at most one argument, but got multiple.")
-        return self.func(args[0]) if args else self.func()
+
+        return self.func(*args) if args else self.func()
 
 
 def filter_cpp_rules(rules: list[Rule]) -> list[Rule]:
