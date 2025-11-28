@@ -118,9 +118,6 @@ def get_staged_files() -> list[str]:
         check=True
     )
 
-    if result.returncode != 0:
-        msg = "Failed to get staged files from git."
-        raise RuntimeError(msg)
 
     files = result.stdout.strip().split("\n")
     return [file for file in files if file]
