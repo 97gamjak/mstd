@@ -65,7 +65,8 @@ def determine_file_type(filename: str | Path) -> FileType:
 def get_files_in_dirs(
     paths: list[Path],
     exclude_dirs: list[str] | None = None,
-    exclude_files: list[str] | None = None
+    exclude_files: list[str] | None = None,
+    max_recursion: int = 20
 ) -> list[Path]:
     """Get all files in the specified directories.
 
@@ -77,6 +78,9 @@ def get_files_in_dirs(
         List of directory names to exclude from the search. Defaults to None.
     exclude_files: list[str] | None
         List of file names to exclude from the search. Defaults to None.
+    max_recursion: int
+        Number of maximum recursion through dirs to avoid infinite recursion,
+        default 10
 
     Returns
     -------
@@ -91,10 +95,19 @@ def get_files_in_dirs(
         exclude_files = []
 
     all_files = []
+
+    if max_recursion == 0:
+        return all_files
+
     for path in paths:
         if path.is_dir() and path.name not in exclude_dirs:
             all_files.extend(
-                get_files_in_dirs(path.iterdir(), exclude_dirs, exclude_files)
+                get_files_in_dirs(
+                    path.iterdir(),
+                    exclude_dirs,
+                    exclude_files,
+                    max_recursion - 1
+                )
             )
         elif path.is_file() and path.name not in exclude_files:
             all_files.append(path)
