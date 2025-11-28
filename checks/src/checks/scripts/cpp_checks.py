@@ -53,7 +53,16 @@ def run_line_checks(rules: list[Rule], file: Path) -> list[ResultType]:
 
 
 def run_checks(rules: list[Rule]) -> None:
-    """Run C++ checks based on the provided rules."""
+    """Run C++ checks based on the provided rules.
+
+    Returns immediately after encountering the first file with errors.
+
+    Parameters
+    ----------
+    rules: list[Rule]
+        The list of rules to apply.
+
+    """
     if "full" in sys.argv:
         cpp_check_logger.info("Running full checks...")
         cpp_check_logger.debug(f"Checking directories: {__DIRS__}")
