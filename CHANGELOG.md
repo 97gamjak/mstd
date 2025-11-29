@@ -6,8 +6,8 @@ All notable changes to this project will be documented in this file.
 
 ### MSTD-CHECKS
 
-- add checks python library first version for all kind of custom static code analysis
-- add "static inline constexpr" as key sequence order cpp rule
+- Add checks python library first version for all kind of custom static code analysis
+- Add "static inline constexpr" as key sequence order cpp rule
 
 <!-- insertion marker -->
 ## [0.0.2](https://github.com/97gamjak/mstd/releases/tag/0.0.2) - 2025-11-20
