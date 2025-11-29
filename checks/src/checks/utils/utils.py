@@ -44,7 +44,7 @@ def check_key_sequence_ordered(
     line: str
         The line of text to check.
     key_delimiter: str
-        The delimiter used to find the keys
+        The delimiter used to find the keys.
 
     Returns
     -------
