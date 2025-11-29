@@ -6,6 +6,7 @@ import typing
 
 from checks.logger import utils_logger
 from checks.rules import ResultType, ResultTypeEnum
+from checks.config import __MSTD_ISSUES_PAGE__
 
 if typing.TYPE_CHECKING:
     from typing import Any
@@ -64,6 +65,13 @@ def check_key_sequence_ordered(
         for key in key_sequence
     ]
 
+    if len(indices) != len(key_sequence):
+        msg = f"Expected {len(key_sequence)} indices, but got {len(indices)}. "
+        msg += "This indicates an internal error. "
+        msg += f"Please report this issue at {__MSTD_ISSUES_PAGE__}."
+        raise ValueError(msg)
+
+    found_indices = 0
     for index in indices[0]:
         found_indices = 1
         for i in range(1, len(indices)):
