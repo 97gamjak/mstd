@@ -3,3 +3,4 @@ build
 .cache
 checks.egg-info/
 __pycache__/
+.venv
