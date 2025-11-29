@@ -78,7 +78,6 @@ def check_key_sequence_ordered(
             if index + i in indices[i]:
                 found_indices += 1
                 continue
-            found_indices = 1
             break
 
     if found_indices == len(key_sequence):
