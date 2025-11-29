@@ -2,7 +2,7 @@
 
 from checks.files import FileType
 
-def test_get_all_file_types():
+def test_all_types():
 
     expected_types = {
         FileType.CPPHeader,
