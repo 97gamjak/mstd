@@ -74,4 +74,4 @@ def update_changelog(version: str, changelog_path: Path = __CHANGELOG_PATH__) ->
         msg = "Could not find '## Next Release' in CHANGELOG.md"
         raise MSTDChangelogError(msg)
 
-    changelog_path.write_text("".join(updated) + "\n", encoding="utf-8")
+    changelog_path.write_text("".join(updated) + "\n", encoding=__DEFAULT_ENCODING__)
