@@ -40,7 +40,7 @@ namespace mstd
      * @param base value raised to the power @p N.
      */
     template <intmax_t N, typename T>
-    inline static constexpr T cpow(const T base)
+    static inline constexpr T cpow(const T base)
     {
         if constexpr (N < 0)
             return static_cast<T>(1) / cpow<-N>(base);
