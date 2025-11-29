@@ -126,12 +126,12 @@ class Rule:
 
         self.rule_identifier = Rule.increment_rule_counter(rule_type)
 
-    def apply(self, args: tuple) -> ResultType:
+    def apply(self, *args: typing.Any) -> ResultType:
         """Apply the rule on a specific line.
 
         Parameters
         ----------
-        args: tuple
+        args: typing.Any
             The arguments to pass to the rule function.
 
         Returns
