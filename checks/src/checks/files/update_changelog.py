@@ -57,6 +57,7 @@ def update_changelog(version: str, changelog_path: Path = __CHANGELOG_PATH__) ->
         # Find the "## Next Release" heading
         if not marker_moved and re.match(r"^##\s+Next Release", line):
             # Ensure marker comes right after "Next Release"
+            # For formatting consistency, add newline characters to all appended lines
             updated.append(line + "\n")
             updated.append(__CHANGELOG_INSERTION_MARKER__ + "\n")
             updated.append(new_entry + "\n")
