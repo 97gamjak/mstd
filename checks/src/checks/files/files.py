@@ -11,6 +11,15 @@ if typing.TYPE_CHECKING:
     from collections.abc import Iterable
 
 
+class MSTDFileNotFoundError(Exception):
+    """Exception raised when a specified file is not found."""
+
+    def __init__(self, filepath: Path) -> None:
+        """Initialize the exception with the missing file path."""
+        super().__init__(f"File not found: {filepath}")
+        self.filepath = filepath
+
+
 class FileType(Enum):
     """Enumeration of file types for mstd checks."""
 
