@@ -5,9 +5,10 @@ from __future__ import annotations
 import subprocess
 import typing
 from enum import Enum
+from pathlib import Path
 
 if typing.TYPE_CHECKING:
-    from pathlib import Path
+    from collections.abc import Iterable
 
 
 class FileType(Enum):
@@ -63,7 +64,7 @@ def determine_file_type(filename: str | Path) -> FileType:
 
 
 def get_files_in_dirs(
-    paths: list[Path],
+    paths: Iterable[Path],
     exclude_dirs: list[str] | None = None,
     exclude_files: list[str] | None = None,
     max_recursion: int = 20
@@ -72,7 +73,7 @@ def get_files_in_dirs(
 
     Parameters
     ----------
-    paths: list[Path]
+    paths: Iterable[Path]
         List of directory paths to search for files.
     exclude_dirs: list[str] | None
         List of directory names to exclude from the search. Defaults to None.
@@ -122,6 +123,11 @@ def get_staged_files() -> list[Path]:
     -------
     list[Path]:
         List of staged file paths.
+
+    Raises
+    ------
+    subprocess.CalledProcessError
+        If the git command fails.
 
     """
     result = subprocess.run(
