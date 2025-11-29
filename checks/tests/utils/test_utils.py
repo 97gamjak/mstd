@@ -44,8 +44,9 @@ def test_check_key_sequence_ordered_keys_multiple_positions():
 def test_check_key_sequence_ordered_keys_multiple_positions_wrong_order():
     """Test when keys appear multiple times but never in correct sequence."""
     keys = "static inline constexpr"
-    # Multiple occurrences but never the correct consecutive sequence
-    line = "inline static inline constexpr static int x;"
+    # 'static' at positions 0, 3; 'inline' at 1; 'constexpr' at 4
+    # No consecutive sequence of 'static inline constexpr' exists
+    line = "static inline int static constexpr x;"
     result = check_key_sequence_ordered(keys, line)
     # Should be Error because the exact sequence isn't in correct consecutive order
     assert result.value == ResultTypeEnum.Error
