@@ -80,7 +80,7 @@ def get_files_in_dirs(
         List of file names to exclude from the search. Defaults to None.
     max_recursion: int
         Number of maximum recursion through dirs to avoid infinite recursion,
-        default 10
+        default 20
 
     Returns
     -------
