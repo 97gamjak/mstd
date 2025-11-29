@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import typing
 
-from checks.config import __MSTD_ISSUES_PAGE__
+from checks.github import __MSTD_ISSUES_PAGE__
 from checks.logger import utils_logger
 from checks.rules import ResultType, ResultTypeEnum
 
