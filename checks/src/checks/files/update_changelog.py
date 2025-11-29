@@ -63,7 +63,7 @@ def update_changelog(version: str, changelog_path: Path = __CHANGELOG_PATH__) ->
             marker_moved = True
 
         # Skip the old insertion marker wherever it was
-        elif __CHANGELOG_INSERTION_MARKER__ in line and marker_moved:
+        elif __CHANGELOG_INSERTION_MARKER__ in line:
             continue
 
         else:
