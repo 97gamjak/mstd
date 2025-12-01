@@ -32,16 +32,14 @@ endif()
 
 if(MSTD_BUILD_DOCS)
     find_package(Doxygen REQUIRED)
-    if(DOXYGEN_FOUND)
-        set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile)
-        add_custom_target(docs
-            COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_IN}
-            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-            COMMENT "Generating API documentation with Doxygen"
-            VERBATIM
-        )
-        message(STATUS "Doxygen found. Use 'make docs' to build documentation.")
-    endif()
+    set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile)
+    add_custom_target(docs
+        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_IN}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        COMMENT "Generating API documentation with Doxygen"
+        VERBATIM
+    )
+    message(STATUS "Doxygen found. Use 'make docs' to build documentation.")
 else()
     message(STATUS "Documentation is disabled. Set MSTD_BUILD_DOCS to ON to enable it.")
 endif()
