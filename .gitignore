@@ -4,3 +4,4 @@ build
 checks.egg-info/
 __pycache__/
 .venv
+docs/output/

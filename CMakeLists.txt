@@ -9,6 +9,7 @@ project(mstd
 )
 
 option(MSTD_BUILD_TESTS "Build mstd test" ON)
+option(MSTD_BUILD_DOCS "Build mstd documentation" OFF)
 
 add_library(mstd INTERFACE)
 target_include_directories(mstd
@@ -27,4 +28,20 @@ if(MSTD_BUILD_TESTS)
     add_subdirectory(test)
 else()
     message(STATUS "Tests are disabled. Set MSTD_BUILD_TESTS to ON to enable them.")
+endif()
+
+if(MSTD_BUILD_DOCS)
+    find_package(Doxygen REQUIRED)
+    if(DOXYGEN_FOUND)
+        set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile)
+        add_custom_target(docs
+            COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_IN}
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+            COMMENT "Generating API documentation with Doxygen"
+            VERBATIM
+        )
+        message(STATUS "Doxygen found. Use 'make docs' to build documentation.")
+    endif()
+else()
+    message(STATUS "Documentation is disabled. Set MSTD_BUILD_DOCS to ON to enable it.")
 endif()
