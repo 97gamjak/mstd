@@ -27,6 +27,7 @@ jobs:
           cppcheck --enable=all \
                    --error-exitcode=1 \
                    --suppressions-list=.cppcheck.suppress \
+                   --suppress=missingIncludeSystem \
                    --inline-suppr \
                    -I include \
                    include test
