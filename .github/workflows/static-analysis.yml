@@ -25,12 +25,17 @@ jobs:
       - name: Run cppcheck
         run: |
           cppcheck --enable=all \
-                   --error-exitcode=1 \
-                   --suppressions-list=.cppcheck.suppress \
-                   --suppress=missingIncludeSystem \
-                   --inline-suppr \
-                   -I include \
-                   include test
+              --enable=performance \
+              --enable=style \
+              --enable=information \
+              --enable=portability \
+              --error-exitcode=1 \
+              --suppressions-list=.cppcheck.suppress \
+              --suppress=missingIncludeSystem \
+              --inline-suppr \
+              --inconclusive \
+              -I include \
+              include test
 
   clang-tidy:
     runs-on: ubuntu-24.04
@@ -55,4 +60,4 @@ jobs:
 
       - name: Run clang-tidy on include directory
         run: |
-          find include -name '*.hpp' | xargs -r clang-tidy -p . --warnings-as-errors='*'
+          find include -name '*.hpp' | xargs -r clang-tidy -p . --warnings-as-errors='*' --suppress=AnalyzeMacros

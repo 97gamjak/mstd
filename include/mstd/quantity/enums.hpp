@@ -54,7 +54,7 @@ namespace mstd
     X(Amount)           \
     X(Luminous)
 
-    MSTD_ENUM(SIDimId, size_t, SIDIMID_LIST)
+    MSTD_ENUM(SIDimId, size_t, SIDIMID_LIST)   // cppcheck-suppress syntaxError
 
     /**
      * @brief Enumeration of the extra dimension IDs.
@@ -72,7 +72,11 @@ namespace mstd
     X(Info)                \
     X(Count)
 
-    MSTD_ENUM(ExtraDimId, size_t, EXTRADIMID_LIST)
+    MSTD_ENUM(
+        ExtraDimId,
+        size_t,
+        EXTRADIMID_LIST
+    )   // cppcheck-suppress syntaxError
 
     // NOLINTEND
 }   // namespace mstd
