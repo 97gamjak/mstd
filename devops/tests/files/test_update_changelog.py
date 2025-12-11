@@ -5,8 +5,8 @@ from unittest.mock import patch
 
 import pytest
 
-from checks.files.files import MSTDFileNotFoundError
-from checks.files.update_changelog import (
+from devops.files.files import MSTDFileNotFoundError
+from devops.files.update_changelog import (
     MSTDChangelogError,
     __CHANGELOG_INSERTION_MARKER__,
     update_changelog,
@@ -31,7 +31,7 @@ class TestMSTDChangelogError:
 class TestUpdateChangelog:
     """Tests for update_changelog function."""
 
-    @patch("checks.files.update_changelog.get_github_repo")
+    @patch("devops.files.update_changelog.get_github_repo")
     def test_update_changelog_success(self, mock_get_repo, tmp_path):
         """Test successful changelog update with new version."""
         mock_get_repo.return_value = "https://github.com/test/repo"
@@ -62,7 +62,7 @@ class TestUpdateChangelog:
         new_version_pos = content.find("## [1.1.0]")
         assert next_release_pos < marker_pos < new_version_pos
 
-    @patch("checks.files.update_changelog.get_github_repo")
+    @patch("devops.files.update_changelog.get_github_repo")
     def test_update_changelog_with_date(self, mock_get_repo, tmp_path):
         """Test that changelog entry includes today's date."""
         mock_get_repo.return_value = "https://github.com/test/repo"
@@ -82,7 +82,8 @@ class TestUpdateChangelog:
 
         content = changelog.read_text()
         today = datetime.now(tz=UTC).date().isoformat()
-        assert f"## [2.0.0](https://github.com/test/repo/releases/tag/2.0.0) - {today}" in content
+        assert f"## [2.0.0](https://github.com/test/repo/releases/tag/2.0.0) - {
+            today}" in content
 
     def test_update_changelog_file_not_found(self, tmp_path):
         """Test that MSTDFileNotFoundError is raised when file doesn't exist."""
@@ -93,7 +94,7 @@ class TestUpdateChangelog:
 
         assert exc_info.value.filepath == non_existent
 
-    @patch("checks.files.update_changelog.get_github_repo")
+    @patch("devops.files.update_changelog.get_github_repo")
     def test_update_changelog_missing_next_release(self, mock_get_repo, tmp_path):
         """Test that MSTDChangelogError is raised when Next Release marker missing."""
         mock_get_repo.return_value = "https://github.com/test/repo"
@@ -112,7 +113,7 @@ class TestUpdateChangelog:
 
         assert "Next Release" in exc_info.value.message
 
-    @patch("checks.files.update_changelog.get_github_repo")
+    @patch("devops.files.update_changelog.get_github_repo")
     def test_update_changelog_removes_old_marker(self, mock_get_repo, tmp_path):
         """Test that old insertion marker is removed and new one is placed."""
         mock_get_repo.return_value = "https://github.com/test/repo"
@@ -142,7 +143,7 @@ class TestUpdateChangelog:
         marker_pos = content.find(__CHANGELOG_INSERTION_MARKER__)
         assert next_release_pos < marker_pos
 
-    @patch("checks.files.update_changelog.get_github_repo")
+    @patch("devops.files.update_changelog.get_github_repo")
     def test_update_changelog_no_existing_marker(self, mock_get_repo, tmp_path):
         """Test changelog update when no insertion marker exists."""
         mock_get_repo.return_value = "https://github.com/test/repo"
@@ -164,7 +165,7 @@ class TestUpdateChangelog:
         assert __CHANGELOG_INSERTION_MARKER__ in content
         assert "## [1.1.0]" in content
 
-    @patch("checks.files.update_changelog.get_github_repo")
+    @patch("devops.files.update_changelog.get_github_repo")
     def test_update_changelog_preserves_content(self, mock_get_repo, tmp_path):
         """Test that changelog update preserves existing content."""
         mock_get_repo.return_value = "https://github.com/test/repo"
@@ -205,7 +206,7 @@ class TestUpdateChangelog:
         assert "- Initial release" in content
         assert "## [1.0.0]" in content
 
-    @patch("checks.files.update_changelog.get_github_repo")
+    @patch("devops.files.update_changelog.get_github_repo")
     def test_update_changelog_next_release_regex_variations(
         self, mock_get_repo, tmp_path
     ):
@@ -229,7 +230,7 @@ class TestUpdateChangelog:
         content = changelog.read_text()
         assert "## [1.0.0]" in content
 
-    @patch("checks.files.update_changelog.get_github_repo")
+    @patch("devops.files.update_changelog.get_github_repo")
     def test_update_changelog_empty_next_release(self, mock_get_repo, tmp_path):
         """Test changelog update when Next Release section is empty."""
         mock_get_repo.return_value = "https://github.com/test/repo"

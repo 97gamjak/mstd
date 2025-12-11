@@ -1,5 +1,5 @@
-from checks.utils import check_key_sequence_ordered
-from checks.rules import ResultTypeEnum
+from devops.utils import check_key_sequence_ordered
+from devops.rules import ResultTypeEnum
 
 
 def test_check_key_sequence_ordered():

@@ -3,8 +3,8 @@ from __future__ import annotations
 
 import typing
 
-from checks.enums import StrEnum
-from checks.files import FileType
+from devops.enums import StrEnum
+from devops.files import FileType
 
 if typing.TYPE_CHECKING:
     from collections.abc import Callable

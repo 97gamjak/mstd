@@ -3,15 +3,15 @@
 import sys
 from pathlib import Path
 
-from checks.cpp import cpp_rules
-from checks.files import (
+from devops.cpp import cpp_rules
+from devops.files import (
     __EXECUTION_DIR__,
     determine_file_type,
     get_files_in_dirs,
     get_staged_files,
 )
-from checks.logger import cpp_check_logger
-from checks.rules import ResultType, ResultTypeEnum, Rule, filter_line_rules
+from devops.logger import cpp_check_logger
+from devops.rules import ResultType, ResultTypeEnum, Rule, filter_line_rules
 
 __CPP_DIRS__ = ["include", "test"]
 __OTHER_DIRS__ = ["scripts"]
