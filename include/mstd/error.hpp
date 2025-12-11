@@ -56,16 +56,16 @@ namespace mstd
     namespace mstd::buggy                                                 \
     {                                                                     \
         [[deprecated("Buggy library: " library_name " — don't use it!")]] \
-        inline int _  = 0;                                                \
-        inline int __ = _;                                                \
+        inline int buggy_marker  = 0;                                     \
+        inline int buggy_marker_alias = buggy_marker;                     \
     }   // namespace mstd::buggy
 
 #define MSTD_WARN_BUGGY_HEADER(header_file)                             \
     namespace mstd::buggy                                               \
     {                                                                   \
         [[deprecated("Buggy header: " header_file " — don't use it!")]] \
-        inline int _  = 0;                                              \
-        inline int __ = _;                                              \
+        inline int buggy_marker  = 0;                                   \
+        inline int buggy_marker_alias = buggy_marker;                   \
     }   // namespace mstd::buggy
 
 #endif
