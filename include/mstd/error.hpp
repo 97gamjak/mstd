@@ -52,6 +52,9 @@ namespace mstd
 #undef MSTD_WARN_BUGGY_LIBRARY
 #undef MSTD_WARN_BUGGY_HEADER
 
+/**
+ * @brief Warn about a buggy library
+ */
 #define MSTD_WARN_BUGGY_LIBRARY(library_name)                             \
     namespace mstd::buggy                                                 \
     {                                                                     \
@@ -60,6 +63,9 @@ namespace mstd
         inline int __ = _;                                                \
     }   // namespace mstd::buggy
 
+/**
+ * @brief Warn about a buggy header
+ */
 #define MSTD_WARN_BUGGY_HEADER(header_file)                             \
     namespace mstd::buggy                                               \
     {                                                                   \

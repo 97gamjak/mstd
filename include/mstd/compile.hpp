@@ -23,7 +23,16 @@
 #ifndef __MSTD_COMPILE_HPP__
 #define __MSTD_COMPILE_HPP__
 
-// ignore the exact value of MSTD_IGNORE_BUGGY_CODE
+/**
+ * @brief Ignore buggy code
+ *
+ * Define this macro to ignore code that is known to be buggy in certain
+ * environments/libraries/compilers.
+ *
+ * @note at the moment the exact value of this macro does not matter
+ * as long as it is defined or not defined
+ *
+ */
 #ifdef MSTD_IGNORE_BUGGY_CODE
 #undef MSTD_IGNORE_BUGGY_CODE
 #define MSTD_IGNORE_BUGGY_CODE 1
