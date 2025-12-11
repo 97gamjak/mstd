@@ -42,7 +42,7 @@ namespace mstd
 }   // namespace mstd
 
 #define MSTD_COMPILE_FAIL(msg) \
-    static_assert(::mstd::always_false<void>::value, msg);
+    static_assert(::mstd::always_false<void>::value, msg)
 
 #define MSTD_WARN_BUGGY_LIBRARY(library_name)
 #define MSTD_WARN_BUGGY_HEADER(header_file)
@@ -59,8 +59,8 @@ namespace mstd
     namespace mstd::buggy                                                 \
     {                                                                     \
         [[deprecated("Buggy library: " library_name " — don't use it!")]] \
-        inline int _  = 0;                                                \
-        inline int __ = _;                                                \
+        inline int buggy_marker  = 0;                                     \
+        inline int buggy_marker_alias = buggy_marker;                     \
     }   // namespace mstd::buggy
 
 /**
@@ -70,8 +70,8 @@ namespace mstd
     namespace mstd::buggy                                               \
     {                                                                   \
         [[deprecated("Buggy header: " header_file " — don't use it!")]] \
-        inline int _  = 0;                                              \
-        inline int __ = _;                                              \
+        inline int buggy_marker  = 0;                                   \
+        inline int buggy_marker_alias = buggy_marker;                   \
     }   // namespace mstd::buggy
 
 #endif
