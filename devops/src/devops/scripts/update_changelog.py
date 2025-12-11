@@ -4,9 +4,9 @@ import sys
 
 import typer
 
-from checks.files import update_changelog
-from checks.files.update_changelog import MSTDChangelogError
-from checks.utils import mstd_print
+from devops.files import update_changelog
+from devops.files.update_changelog import MSTDChangelogError
+from devops.utils import mstd_print
 
 app = typer.Typer()
 
@@ -27,6 +27,7 @@ def main(version: str) -> None:
     except MSTDChangelogError as e:
         mstd_print(f"❌ Error updating changelog: {e}")
         sys.exit(1)
+
 
 if __name__ == "__main__":
     app()

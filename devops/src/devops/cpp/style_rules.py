@@ -1,7 +1,7 @@
-"""C++ rules for mstd checks."""
+"""C++ rules for mstd devops."""
 
-from checks.rules import Rule, RuleInputType, RuleType
-from checks.utils import check_key_sequence_ordered
+from devops.rules import Rule, RuleInputType, RuleType
+from devops.utils import check_key_sequence_ordered
 
 
 class CheckKeySeqOrder(Rule):

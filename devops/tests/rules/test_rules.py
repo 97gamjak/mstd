@@ -1,7 +1,7 @@
 """Unit tests for Rule class and related functionality."""
 
-from checks.files import FileType
-from checks.rules import (
+from devops.files import FileType
+from devops.rules import (
     ResultType,
     ResultTypeEnum,
     Rule,

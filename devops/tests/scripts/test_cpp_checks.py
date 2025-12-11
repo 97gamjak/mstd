@@ -2,9 +2,9 @@
 
 from unittest.mock import patch
 
-from checks.files import FileType
-from checks.rules import ResultType, ResultTypeEnum, Rule, RuleInputType, RuleType
-from checks.scripts.cpp_checks import main, run_checks, run_line_checks
+from devops.files import FileType
+from devops.rules import ResultType, ResultTypeEnum, Rule, RuleInputType, RuleType
+from devops.scripts.cpp_checks import main, run_checks, run_line_checks
 
 
 class TestRunLineChecks:
@@ -38,7 +38,8 @@ class TestRunLineChecks:
 
         rule = Rule(
             name="cpp_only_rule",
-            func=lambda line: ResultType(ResultTypeEnum.Error, "Should not run"),
+            func=lambda line: ResultType(
+                ResultTypeEnum.Error, "Should not run"),
             rule_type=RuleType.CPP_STYLE,
             rule_input_type=RuleInputType.LINE,
             file_types={FileType.CPPSource},
@@ -96,7 +97,8 @@ class TestRunLineChecks:
         )
         file_rule = Rule(
             name="file_rule",
-            func=lambda line: ResultType(ResultTypeEnum.Error, "Should not run"),
+            func=lambda line: ResultType(
+                ResultTypeEnum.Error, "Should not run"),
             rule_type=RuleType.CPP_STYLE,
             rule_input_type=RuleInputType.FILE,
         )
@@ -137,8 +139,8 @@ class TestRunChecks:
         Rule.cpp_style_rule_counter = 0
         Rule.general_rule_counter = 0
 
-    @patch("checks.scripts.cpp_checks.get_staged_files")
-    @patch("checks.scripts.cpp_checks.cpp_check_logger")
+    @patch("devops.scripts.cpp_checks.get_staged_files")
+    @patch("devops.scripts.cpp_checks.cpp_check_logger")
     def test_run_checks_no_files(self, mock_logger, mock_get_staged):
         """Test run_checks logs warning when no files to check."""
         mock_get_staged.return_value = []
@@ -155,8 +157,8 @@ class TestRunChecks:
 
         mock_logger.warning.assert_called_once_with("No files to check.")
 
-    @patch("checks.scripts.cpp_checks.get_staged_files")
-    @patch("checks.scripts.cpp_checks.cpp_check_logger")
+    @patch("devops.scripts.cpp_checks.get_staged_files")
+    @patch("devops.scripts.cpp_checks.cpp_check_logger")
     def test_run_checks_staged_mode(self, mock_logger, mock_get_staged, tmp_path):
         """Test run_checks in staged files mode."""
         test_file = tmp_path / "test.cpp"
@@ -174,10 +176,11 @@ class TestRunChecks:
             with patch.object(Rule, "general_rule_counter", 0):
                 run_checks([rule])
 
-        mock_logger.info.assert_called_with("Running checks on staged files...")
+        mock_logger.info.assert_called_with(
+            "Running checks on staged files...")
 
-    @patch("checks.scripts.cpp_checks.get_files_in_dirs")
-    @patch("checks.scripts.cpp_checks.cpp_check_logger")
+    @patch("devops.scripts.cpp_checks.get_files_in_dirs")
+    @patch("devops.scripts.cpp_checks.cpp_check_logger")
     @patch("sys.argv", ["cpp_checks", "full"])
     def test_run_checks_full_mode(self, mock_logger, mock_get_files, tmp_path):
         """Test run_checks in full mode."""
@@ -198,8 +201,8 @@ class TestRunChecks:
 
         mock_logger.info.assert_called_with("Running full checks...")
 
-    @patch("checks.scripts.cpp_checks.get_staged_files")
-    @patch("checks.scripts.cpp_checks.cpp_check_logger")
+    @patch("devops.scripts.cpp_checks.get_staged_files")
+    @patch("devops.scripts.cpp_checks.cpp_check_logger")
     def test_run_checks_with_errors(self, mock_logger, mock_get_staged, tmp_path):
         """Test run_checks logs errors when rule fails."""
         test_file = tmp_path / "test.cpp"
@@ -219,8 +222,8 @@ class TestRunChecks:
 
         assert mock_logger.error.called
 
-    @patch("checks.scripts.cpp_checks.get_staged_files")
-    @patch("checks.scripts.cpp_checks.cpp_check_logger")
+    @patch("devops.scripts.cpp_checks.get_staged_files")
+    @patch("devops.scripts.cpp_checks.cpp_check_logger")
     def test_run_checks_stops_on_first_file_with_errors(
         self, mock_logger, mock_get_staged, tmp_path
     ):
@@ -260,17 +263,17 @@ class TestMain:
         Rule.cpp_style_rule_counter = 0
         Rule.general_rule_counter = 0
 
-    @patch("checks.scripts.cpp_checks.run_checks")
+    @patch("devops.scripts.cpp_checks.run_checks")
     def test_main_calls_run_checks(self, mock_run_checks):
         """Test main function calls run_checks with cpp_rules."""
-        from checks.cpp import cpp_rules
+        from devops.cpp import cpp_rules
 
         main()
 
         mock_run_checks.assert_called_once_with(cpp_rules)
 
-    @patch("checks.scripts.cpp_checks.get_staged_files")
-    @patch("checks.scripts.cpp_checks.cpp_check_logger")
+    @patch("devops.scripts.cpp_checks.get_staged_files")
+    @patch("devops.scripts.cpp_checks.cpp_check_logger")
     def test_main_integration(self, mock_logger, mock_get_staged, tmp_path):
         """Test main function integration."""
         test_file = tmp_path / "test.cpp"

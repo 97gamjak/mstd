@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import typing
 
-from checks.github import __MSTD_ISSUES_PAGE__
-from checks.logger import utils_logger
-from checks.rules import ResultType, ResultTypeEnum
+from devops.github import __MSTD_ISSUES_PAGE__
+from devops.logger import utils_logger
+from devops.rules import ResultType, ResultTypeEnum
 
 if typing.TYPE_CHECKING:
     from typing import Any

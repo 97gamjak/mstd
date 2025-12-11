@@ -1,6 +1,7 @@
 """Unit tests for file-related functionality in mstd checks."""
 
-from checks.files import FileType
+from devops.files import FileType
+
 
 def test_all_types():
 

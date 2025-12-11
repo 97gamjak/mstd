@@ -1,8 +1,8 @@
 """Unit tests for C++ style rules."""
 
-from checks.cpp.style_rules import CheckKeySeqOrder, cpp_style_rules, rule01
-from checks.files import FileType
-from checks.rules import ResultTypeEnum, Rule, RuleInputType, RuleType
+from devops.cpp.style_rules import CheckKeySeqOrder, cpp_style_rules, rule01
+from devops.files import FileType
+from devops.rules import ResultTypeEnum, Rule, RuleInputType, RuleType
 
 
 class TestCheckKeySeqOrder:
@@ -172,7 +172,8 @@ class TestStaticInlineConstexprRule:
         ]
         for line in test_cases:
             result = rule.apply(line)
-            assert result.value == ResultTypeEnum.Error, f"Expected Error for: {line}"
+            assert result.value == ResultTypeEnum.Error, f"Expected Error for: {
+                line}"
 
     def test_static_inline_constexpr_partial_present(self):
         """Test lines with only some keywords present."""
@@ -186,7 +187,8 @@ class TestStaticInlineConstexprRule:
         ]
         for line in test_cases:
             result = rule.apply(line)
-            assert result.value == ResultTypeEnum.Ok, f"Expected Ok for: {line}"
+            assert result.value == ResultTypeEnum.Ok, f"Expected Ok for: {
+                line}"
 
     def test_rule01_exists_and_configured(self):
         """Test that rule01 is properly configured."""

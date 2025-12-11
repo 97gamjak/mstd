@@ -4,8 +4,8 @@ import re
 from datetime import UTC, datetime
 from pathlib import Path
 
-from checks.files.files import MSTDFileNotFoundError
-from checks.github import get_github_repo
+from devops.files.files import MSTDFileNotFoundError
+from devops.github import get_github_repo
 
 from .config import __DEFAULT_ENCODING__
 
@@ -74,4 +74,5 @@ def update_changelog(version: str, changelog_path: Path = __CHANGELOG_PATH__) ->
         msg = "Could not find '## Next Release' in CHANGELOG.md"
         raise MSTDChangelogError(msg)
 
-    changelog_path.write_text("".join(updated) + "\n", encoding=__DEFAULT_ENCODING__)
+    changelog_path.write_text("".join(updated) + "\n",
+                              encoding=__DEFAULT_ENCODING__)
