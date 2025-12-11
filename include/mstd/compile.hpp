@@ -20,20 +20,15 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_UNITS_HPP__
-#define __MSTD_UNITS_HPP__
+#ifndef __MSTD_COMPILE_HPP__
+#define __MSTD_COMPILE_HPP__
 
-#include "mstd/error.hpp"   // IWYU pragma: export
+// ignore the exact value of MSTD_IGNORE_BUGGY_CODE
+#ifdef MSTD_IGNORE_BUGGY_CODE
+#undef MSTD_IGNORE_BUGGY_CODE
+#define MSTD_IGNORE_BUGGY_CODE 1
+#else
+#define MSTD_IGNORE_BUGGY_CODE 0
+#endif
 
-MSTD_WARN_BUGGY_LIBRARY("mstd/quantity.hpp")
-
-#include "mstd/type_traits/quantity_traits.hpp"   // IWYU pragma: export
-#include "quantity/dim.hpp"                       // IWYU pragma: export
-#include "quantity/dim_impl.hpp"                  // IWYU pragma: export
-#include "quantity/quantity.hpp"                  // IWYU pragma: export
-#include "quantity/quantity_impl.hpp"             // IWYU pragma: export
-#include "quantity/unit.hpp"                      // IWYU pragma: export
-#include "quantity/unit_impl.hpp"                 // IWYU pragma: export
-#include "quantity/unit_operations.hpp"           // IWYU pragma: export
-
-#endif   // __MSTD_UNITS_HPP__
+#endif   // __MSTD_COMPILE_HPP__
