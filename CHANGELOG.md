@@ -20,6 +20,10 @@ All notable changes to this project will be documented in this file.
 - Add exhaustive error flags for compilation
 - Add checking of doxygen comments via building docs (no docs is building for gh pages - yet)
 
+### Cleanup
+
+- Cleanup header guards to follow common rule with folder and file structure
+
 <!-- insertion marker -->
 ## [0.0.2](https://github.com/97gamjak/mstd/releases/tag/0.0.2) - 2025-11-20
 
