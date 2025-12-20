@@ -41,6 +41,9 @@ namespace mstd
 
 }   // namespace mstd
 
+#define MSTD_CAT(a, b)  a##b
+#define MSTD_CAT2(a, b) MSTD_CAT(a, b)
+
 #define MSTD_COMPILE_FAIL(msg) \
     static_assert(::mstd::always_false<void>::value, msg)
 
@@ -56,7 +59,7 @@ namespace mstd
  * @brief Warn about a buggy library
  */
 #define MSTD_WARN_BUGGY_LIBRARY(library_name)                             \
-    namespace mstd::buggy##library_name                                   \
+    namespace MSTD_CAT2(mstd::buggy, __COUNTER__)                         \
     {                                                                     \
         [[deprecated("Buggy library: " library_name " — don't use it!")]] \
         inline int buggy_marker       = 0;                                \
@@ -67,7 +70,7 @@ namespace mstd
  * @brief Warn about a buggy header
  */
 #define MSTD_WARN_BUGGY_HEADER(header_file)                             \
-    namespace mstd::buggy##header_file                                  \
+    namespace MSTD_CAT2(mstd::buggy, __COUNTER__)                       \
     {                                                                   \
         [[deprecated("Buggy header: " header_file " — don't use it!")]] \
         inline int buggy_marker       = 0;                              \
