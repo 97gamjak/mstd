@@ -4,11 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
-### DevOps
+### CI
 
 - Add devops python library first version for all kind of custom static code analysis
-- Add "static inline constexpr" as key sequence order cpp rule
-- Add "update_changelog.py" script to update CHANGELOG.md automatically based on version input
+- Add `update_changelog` from devops package to create_tag CI
+- Add hotfix branch release handling to auto increment version patch aka `major.minor.patch`
 
 ### Error Handling
 
