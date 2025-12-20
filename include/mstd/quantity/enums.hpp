@@ -20,8 +20,8 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_UNITS_ENUMS_HPP__
-#define __MSTD_UNITS_ENUMS_HPP__
+#ifndef __MSTD__QUANTITY__ENUMS_HPP__
+#define __MSTD__QUANTITY__ENUMS_HPP__
 
 #include "mstd/error.hpp"
 
@@ -85,4 +85,4 @@ namespace mstd
     // NOLINTEND
 }   // namespace mstd
 
-#endif   // __MSTD_UNITS_ENUMS_HPP__
+#endif   // __MSTD__QUANTITY__ENUMS_HPP__

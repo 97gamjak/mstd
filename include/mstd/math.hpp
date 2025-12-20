@@ -20,9 +20,9 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_MATH_HPP__
-#define __MSTD_MATH_HPP__
+#ifndef __MSTD__MATH_HPP__
+#define __MSTD__MATH_HPP__
 
 #include "math/power.hpp"   // IWYU pragma: export
 
-#endif   // __MSTD_MATH_HPP__
+#endif   // __MSTD__MATH_HPP__

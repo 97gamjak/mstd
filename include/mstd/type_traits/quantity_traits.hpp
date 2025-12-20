@@ -20,8 +20,8 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_TYPE_TRAITS_QUANTITY_TRAITS_HPP__
-#define __MSTD_TYPE_TRAITS_QUANTITY_TRAITS_HPP__
+#ifndef __MSTD__TYPE_TRAITS__QUANTITY_TRAITS_HPP__
+#define __MSTD__TYPE_TRAITS__QUANTITY_TRAITS_HPP__
 
 #include "pack_traits.hpp"
 #include "ratio_traits.hpp"
@@ -125,4 +125,4 @@ namespace mstd
 
 }   // namespace mstd
 
-#endif   // __MSTD_TYPE_TRAITS_QUANTITY_TRAITS_HPP__
+#endif   // __MSTD__TYPE_TRAITS__QUANTITY_TRAITS_HPP__

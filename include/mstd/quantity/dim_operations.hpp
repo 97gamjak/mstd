@@ -20,8 +20,8 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_DIM_OPERATIONS_HPP__
-#define __MSTD_DIM_OPERATIONS_HPP__
+#ifndef __MSTD__QUANTITY__DIM_OPERATIONS_HPP__
+#define __MSTD__QUANTITY__DIM_OPERATIONS_HPP__
 
 #include "mstd/error.hpp"
 
@@ -75,4 +75,4 @@ namespace mstd
 
 }   // namespace mstd
 
-#endif   // __MSTD_DIM_OPERATIONS_HPP__
+#endif   // __MSTD__QUANTITY__DIM_OPERATIONS_HPP__

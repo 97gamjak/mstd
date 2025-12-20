@@ -20,8 +20,8 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_TEST_UTILS_HPP__
-#define __MSTD_TEST_UTILS_HPP__
+#ifndef __QUANTITY__TEST_UTILS_HPP__
+#define __QUANTITY__TEST_UTILS_HPP__
 
 #include <catch2/catch_test_macros.hpp>
 
@@ -30,4 +30,4 @@
     STATIC_REQUIRE(__VA_ARGS__)  \
     /* NOLINTEND */
 
-#endif   // __MSTD_TEST_UTILS_HPP__
+#endif   // __QUANTITY__TEST_UTILS_HPP__

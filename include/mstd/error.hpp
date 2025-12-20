@@ -20,8 +20,8 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_ERROR_HPP__
-#define __MSTD_ERROR_HPP__
+#ifndef __MSTD__ERROR_HPP__
+#define __MSTD__ERROR_HPP__
 
 #include <type_traits>
 
@@ -79,4 +79,4 @@ namespace mstd
 
 #endif
 
-#endif   // __MSTD_ERROR_HPP__
+#endif   // __MSTD__ERROR_HPP__

@@ -20,8 +20,8 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_MATH_POWER_HPP__
-#define __MSTD_MATH_POWER_HPP__
+#ifndef __MSTD__MATH__POWER_HPP__
+#define __MSTD__MATH__POWER_HPP__
 
 #include <ratio>
 
@@ -80,4 +80,4 @@ namespace mstd
 
 }   // namespace mstd
 
-#endif   // __MSTD_MATH_POWER_HPP__
+#endif   // __MSTD__MATH__POWER_HPP__

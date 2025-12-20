@@ -20,8 +20,8 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_DIM_RATIO_IMPL_HPP__
-#define __MSTD_DIM_RATIO_IMPL_HPP__
+#ifndef __MSTD__QUANTITY__DIM_RATIO_IMPL_HPP__
+#define __MSTD__QUANTITY__DIM_RATIO_IMPL_HPP__
 
 #include "mstd/error.hpp"
 
@@ -115,4 +115,4 @@ namespace mstd
     using angle_dim_ratio = typename angle_dim_ratio_impl<R1>::type;
 }   // namespace mstd
 
-#endif   // __MSTD_DIM_RATIO_IMPL_HPP__
+#endif   // __MSTD__QUANTITY__DIM_RATIO_IMPL_HPP__

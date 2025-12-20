@@ -20,8 +20,8 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_ENUM_HPP__
-#define __MSTD_ENUM_HPP__
+#ifndef __MSTD__ENUM_HPP__
+#define __MSTD__ENUM_HPP__
 
 #include <array>         // IWYU pragma: keep
 #include <cstddef>       // IWYU pragma: keep
@@ -100,4 +100,4 @@
         }                                                                   \
     };
 
-#endif   // __MSTD_ENUM_HPP__
+#endif   // __MSTD__ENUM_HPP__

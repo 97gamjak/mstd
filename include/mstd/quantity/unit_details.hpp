@@ -20,8 +20,8 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_UNITS_DETAILS_HPP__
-#define __MSTD_UNITS_DETAILS_HPP__
+#ifndef __MSTD__QUANTITY__UNIT_DETAILS_HPP__
+#define __MSTD__QUANTITY__UNIT_DETAILS_HPP__
 
 #include "mstd/error.hpp"
 
@@ -238,4 +238,4 @@ namespace mstd::details
 
 }   // namespace mstd::details
 
-#endif   // __MSTD_UNITS_DETAILS_HPP__
+#endif   // __MSTD__QUANTITY__UNIT_DETAILS_HPP__
