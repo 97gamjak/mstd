@@ -93,7 +93,7 @@ namespace mstd
                 if (vals[i] != 0)
                     return i;
 
-            return -1;
+            return static_cast<size_t>(-1);
         }
     };
 
