@@ -20,8 +20,8 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_COMPILE_HPP__
-#define __MSTD_COMPILE_HPP__
+#ifndef __MSTD__COMPILE_HPP__
+#define __MSTD__COMPILE_HPP__
 
 /**
  * @brief Ignore buggy code
@@ -40,4 +40,4 @@
 #define MSTD_IGNORE_BUGGY_CODE 0
 #endif
 
-#endif   // __MSTD_COMPILE_HPP__
+#endif   // __MSTD__COMPILE_HPP__

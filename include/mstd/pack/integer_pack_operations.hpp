@@ -20,8 +20,8 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_INTEGER_PACK_OPERATIONS_HPP__
-#define __MSTD_INTEGER_PACK_OPERATIONS_HPP__
+#ifndef __MSTD__PACK__INTEGER_PACK_OPERATIONS_HPP__
+#define __MSTD__PACK__INTEGER_PACK_OPERATIONS_HPP__
 
 #include "integer_pack.hpp"
 #include "integer_pack_details.hpp"
@@ -60,4 +60,4 @@ namespace mstd
 
 }   // namespace mstd
 
-#endif   // __MSTD_INTEGER_PACK_OPERATIONS_HPP__
+#endif   // __MSTD__PACK__INTEGER_PACK_OPERATIONS_HPP__

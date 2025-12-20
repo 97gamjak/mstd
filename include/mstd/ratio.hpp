@@ -20,8 +20,8 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_UNITS_RATIO_HPP__
-#define __MSTD_UNITS_RATIO_HPP__
+#ifndef __MSTD__RATIO_HPP__
+#define __MSTD__RATIO_HPP__
 
 #include <concepts>
 #include <ratio>
@@ -120,4 +120,4 @@ namespace mstd
 
 }   // namespace mstd
 
-#endif   // __MSTD_UNITS_RATIO_HPP__
+#endif   // __MSTD__RATIO_HPP__

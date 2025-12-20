@@ -10,3 +10,5 @@ cppcheck --enable=all \
     --inconclusive \
     -I include \
     include test
+
+cpp_checks --dirs include --dirs test

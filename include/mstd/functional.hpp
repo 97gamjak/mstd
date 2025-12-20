@@ -20,8 +20,8 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __FUNCTIONAL_HPP__
-#define __FUNCTIONAL_HPP__
+#ifndef __MSTD__FUNCTIONAL_HPP__
+#define __MSTD__FUNCTIONAL_HPP__
 
 namespace mstd
 {
@@ -56,4 +56,4 @@ namespace mstd
 
 }   // namespace mstd
 
-#endif   // __FUNCTIONAL_HPP__
+#endif   // __MSTD__FUNCTIONAL_HPP__

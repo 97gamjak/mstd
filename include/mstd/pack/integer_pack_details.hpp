@@ -20,8 +20,8 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_INTEGER_PACK_DETAILS_HPP__
-#define __MSTD_INTEGER_PACK_DETAILS_HPP__
+#ifndef __MSTD__PACK__INTEGER_PACK_DETAILS_HPP__
+#define __MSTD__PACK__INTEGER_PACK_DETAILS_HPP__
 
 #include <array>
 #include <cstddef>
@@ -114,9 +114,9 @@ namespace mstd
          * @tparam F The function to apply.
          */
         template <class A, class B, class F>
-        using pack_zip_t = decltype(pack_zip_impl<A, B, F>(
-            std::make_index_sequence<A::size>{}
-        ));
+        using pack_zip_t =
+            decltype(pack_zip_impl<A, B, F>(std::make_index_sequence<A::size>{})
+            );
 
         /*********************
          *                   *
@@ -158,4 +158,4 @@ namespace mstd
 
 }   // namespace mstd
 
-#endif   // __MSTD_INTEGER_PACK_DETAILS_HPP__
+#endif   // __MSTD__PACK__INTEGER_PACK_DETAILS_HPP__
