@@ -1,4 +1,4 @@
-name: BUILD
+name: DOCS
 
 on:
   pull_request:
@@ -20,6 +20,11 @@ jobs:
           sudo apt update
           sudo apt install -y gcc-14 g++-14
         shell: bash
+
+      - name: Install Doxygen
+        run: |
+          sudo apt update
+          sudo apt install -y doxygen
 
       - name: Build and Test Project
         run: |
