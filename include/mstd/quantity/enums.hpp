@@ -23,6 +23,10 @@
 #ifndef __MSTD_UNITS_ENUMS_HPP__
 #define __MSTD_UNITS_ENUMS_HPP__
 
+#include "mstd/error.hpp"
+
+MSTD_WARN_BUGGY_HEADER("mstd/quantity/enums.hpp")
+
 #include <cstddef>
 
 #include "mstd/enum.hpp"
@@ -54,7 +58,7 @@ namespace mstd
     X(Amount)           \
     X(Luminous)
 
-    MSTD_ENUM(SIDimId, size_t, SIDIMID_LIST)
+    MSTD_ENUM(SIDimId, size_t, SIDIMID_LIST)   // cppcheck-suppress syntaxError
 
     /**
      * @brief Enumeration of the extra dimension IDs.
@@ -72,7 +76,11 @@ namespace mstd
     X(Info)                \
     X(Count)
 
-    MSTD_ENUM(ExtraDimId, size_t, EXTRADIMID_LIST)
+    MSTD_ENUM(
+        ExtraDimId,
+        size_t,
+        EXTRADIMID_LIST
+    )   // cppcheck-suppress syntaxError
 
     // NOLINTEND
 }   // namespace mstd

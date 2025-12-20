@@ -23,6 +23,10 @@
 #ifndef __MSTD_UNIT_OPERATIONS_HPP__
 #define __MSTD_UNIT_OPERATIONS_HPP__
 
+#include "mstd/error.hpp"
+
+MSTD_WARN_BUGGY_HEADER("mstd/quantity/unit_operations.hpp")
+
 #include "mstd/pack.hpp"
 #include "mstd/ratio.hpp"
 #include "unit_details.hpp"

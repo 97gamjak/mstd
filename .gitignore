@@ -5,3 +5,4 @@ checks.egg-info/
 __pycache__/
 .venv
 docs/output/
+compile_commands.json

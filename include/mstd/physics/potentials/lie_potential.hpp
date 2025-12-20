@@ -46,8 +46,16 @@ namespace mstd
         Rep _coeff2{};
 
        public:
-        /// @brief Constructs the potential with prefactors for the attractive
-        ///        and repulsive terms.
+        /**
+         * @brief Constructs the potential with prefactors for the attractive
+         *        and repulsive terms.
+         *
+         * @note The coefficients correspond to the terms
+         *       \f$-c_1 r^{-M} + c_2 r^{-N}\f$ in the potential expression.
+         *
+         * @param c1 Coefficient for the attractive term.
+         * @param c2 Coefficient for the repulsive term.
+         */
         constexpr LiePotential(Rep c1, Rep c2) : _coeff1(c1), _coeff2(c2) {}
 
         /// @brief Evaluates only the potential energy at a distance @p r.
@@ -96,7 +104,7 @@ namespace mstd
         constexpr LieShiftedPotential(Rep c1, Rep c2, Rep rc)
             : LiePotential<M, N, Rep>(c1, c2), _radialCutoff(rc)
         {
-            std::tie(_energyCutoff, _forceCutoff) = eval(_radialCutoff);
+            std::tie(_energyCutoff, _forceCutoff) = _Base::eval(rc);
         }
 
         /// @brief Energy corrected so that it vanishes at the cutoff.
