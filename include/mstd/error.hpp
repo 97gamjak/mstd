@@ -59,8 +59,8 @@ namespace mstd
     namespace mstd::buggy                                                 \
     {                                                                     \
         [[deprecated("Buggy library: " library_name " — don't use it!")]] \
-        inline int buggy_marker  = 0;                                     \
-        inline int buggy_marker_alias = buggy_marker;                     \
+        inline int buggy_marker##library_name       = 0;                  \
+        inline int buggy_marker_alias##library_name = buggy_marker;       \
     }   // namespace mstd::buggy
 
 /**
@@ -70,8 +70,8 @@ namespace mstd
     namespace mstd::buggy                                               \
     {                                                                   \
         [[deprecated("Buggy header: " header_file " — don't use it!")]] \
-        inline int buggy_marker  = 0;                                   \
-        inline int buggy_marker_alias = buggy_marker;                   \
+        inline int buggy_marker##header_file       = 0;                 \
+        inline int buggy_marker_alias##header_file = buggy_marker;      \
     }   // namespace mstd::buggy
 
 #endif
