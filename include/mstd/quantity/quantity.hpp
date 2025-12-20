@@ -71,7 +71,6 @@ namespace mstd
         /**
          * @brief Construct a Quantity from a base value (SI unit).
          *
-         * @param from_base_tag Tag to indicate base value construction.
          * @param base The base value in SI units.
          */
         constexpr Quantity(from_base_t, Rep base)   // base (SI) ctor
