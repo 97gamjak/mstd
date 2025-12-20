@@ -17,6 +17,7 @@ buggy_cpp_macros = ["MSTD_WARN_BUGGY_HEADER", "MSTD_WARN_BUGGY_LIBRARY"]
 #style_checks = true
 #license_header_check = true
 #check_only_staged_files = false
+license_header = "config/licenseHeader.txt"
 
 [file]
 #encoding = "utf-8"

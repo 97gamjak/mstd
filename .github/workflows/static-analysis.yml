@@ -57,18 +57,4 @@ jobs:
 
       - name: Install clang-tidy and dependencies
         run: |
-          sudo apt update
-          sudo apt install -y clang-tidy cmake g++
-
-      - name: Generate compile_commands.json
-        run: |
-          cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-          test -f build/compile_commands.json && cp build/compile_commands.json .
-
-      - name: Run clang-tidy on test directory
-        run: |
-          echo $(filter_buggy_cpp_files --dirs test) | xargs -r clang-tidy -p . --warnings-as-errors='*'
-
-      - name: Run clang-tidy on include directory
-        run: |
-          echo $(filter_buggy_cpp_files --dirs include) | xargs -r clang-tidy -p . --warnings-as-errors='*' --suppress=AnalyzeMacros
+          cpp_checks --dirs include --dirs test
