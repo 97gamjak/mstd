@@ -23,6 +23,10 @@
 #ifndef __MSTD_DIM_OPERATIONS_HPP__
 #define __MSTD_DIM_OPERATIONS_HPP__
 
+#include "mstd/error.hpp"
+
+MSTD_WARN_BUGGY_HEADER("mstd/quantity/dim_operations.hpp")
+
 #include "dim.hpp"
 #include "dim_details.hpp"
 

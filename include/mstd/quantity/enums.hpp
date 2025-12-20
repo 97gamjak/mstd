@@ -23,6 +23,10 @@
 #ifndef __MSTD_UNITS_ENUMS_HPP__
 #define __MSTD_UNITS_ENUMS_HPP__
 
+#include "mstd/error.hpp"
+
+MSTD_WARN_BUGGY_HEADER("mstd/quantity/enums.hpp")
+
 #include <cstddef>
 
 #include "mstd/enum.hpp"

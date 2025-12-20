@@ -23,6 +23,10 @@
 #ifndef __MSTD_UNITS_DIMENSION_HPP__
 #define __MSTD_UNITS_DIMENSION_HPP__
 
+#include "mstd/error.hpp"
+
+MSTD_WARN_BUGGY_HEADER("mstd/quantity/dim.hpp")
+
 #include <cstddef>
 
 #include "dim_details.hpp"

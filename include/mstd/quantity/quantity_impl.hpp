@@ -23,6 +23,10 @@
 #ifndef __MSTD_UNITS_QUANTITY_IMPL_HPP__
 #define __MSTD_UNITS_QUANTITY_IMPL_HPP__
 
+#include "mstd/error.hpp"
+
+MSTD_WARN_BUGGY_HEADER("mstd/quantity/quantity_impl.hpp")
+
 #include "quantity.hpp"
 #include "unit_impl.hpp"
 

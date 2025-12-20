@@ -23,6 +23,10 @@
 #ifndef __MSTD_DIM_RATIO_DETAILS_HPP__
 #define __MSTD_DIM_RATIO_DETAILS_HPP__
 
+#include "mstd/error.hpp"
+
+MSTD_WARN_BUGGY_HEADER("mstd/quantity/dim_ratio_details.hpp")
+
 #include "dim_details.hpp"
 #include "dim_ratio.hpp"
 #include "mstd/pack.hpp"
