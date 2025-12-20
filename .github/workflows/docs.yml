@@ -1,0 +1,30 @@
+name: BUILD
+
+on:
+  pull_request:
+    branches:
+      - '*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive  # ✅ ensure Catch2 is pulled in
+
+      - name: Install gcc14
+        run: |
+          sudo apt update
+          sudo apt install -y gcc-14 g++-14
+        shell: bash
+
+      - name: Build and Test Project
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DMSTD_BUILD_DOCS=ON
+          make docs # at the moment only building docs to verify no doc-related build issues
+        env:
+          CC: gcc-14
+          CXX: g++-14

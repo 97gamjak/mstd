@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 
 - Add Compile flag `MSTD_IGNORE_BUGGY_CODE` to ignore any kind of warnings for buggy libraries or headers
 - Add exhaustive error flags for compilation
+- Add checking of doxygen comments via building docs (no docs is building for gh pages - yet)
 
 <!-- insertion marker -->
 ## [0.0.2](https://github.com/97gamjak/mstd/releases/tag/0.0.2) - 2025-11-20
