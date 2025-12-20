@@ -46,6 +46,8 @@ namespace mstd
         Rep _coeff2{};
 
        public:
+        virtual ~LiePotential() = default;
+
         /**
          * @brief Constructs the potential with prefactors for the attractive
          *        and repulsive terms.

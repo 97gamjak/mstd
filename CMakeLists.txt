@@ -22,6 +22,40 @@ target_compile_features(mstd
     cxx_std_20
 )
 
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    target_compile_options(mstd INTERFACE
+        -Wall
+        -Wextra
+        -Wpedantic
+        -Werror
+
+        # correctness
+        -Wshadow
+        -Wconversion
+        -Wsign-conversion
+        -Wcast-align
+        -Wformat=2
+        -Wnull-dereference
+        -Wdouble-promotion
+        -Wimplicit-fallthrough
+        -Woverloaded-virtual
+        -Wnon-virtual-dtor
+        -Wold-style-cast
+        -Wuseless-cast
+        -Wduplicated-cond
+        -Wduplicated-branches
+        -Wlogical-op
+        -Wmisleading-indentation
+
+        # lifetime / safety
+        -Wuninitialized
+        -Wmaybe-uninitialized
+        -Winit-self
+
+        -Wno-error=deprecated-declarations
+    )
+endif()
+
 if(MSTD_BUILD_TESTS)
     include(CTest)
     enable_testing()
