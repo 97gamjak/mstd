@@ -22,12 +22,44 @@ jobs:
           fetch-depth: 0
           submodules: recursive
 
-      - name: Extract release version from PR
-        id: extract_version
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.13
+          cache: 'pip'
+      
+      - name: Install dependencies
         run: |
+          python -m pip install --upgrade pip
+          pip install -e external/devops
+
+      - name: Extract release version (Release-x.y.z OR hotfix bump)
+        id: extract_version
+        shell: bash
+        run: |
+          set -euo pipefail
+
           title="${{ github.event.pull_request.title }}"
           body="${{ github.event.pull_request.body }}"
+          head_ref="${{ github.head_ref }}"   # PR source branch name, e.g. hotfix/...
 
+          echo "PR source branch: $head_ref"
+          echo "PR title: $title"
+
+          # Hotfix: version = latest tag + 1 in patch
+          if [[ "$head_ref" == hotfix/* ]]; then
+            echo "✅ Hotfix PR detected. Deducing version from latest tag + patch bump..."
+
+            git fetch --tags --force
+
+            version="$(increase_latest_tag --patch)"
+
+            echo "✅ Hotfix release version: $version"
+            echo "version=$version" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Non-hotfix: expect Release-x.y.z in title/body
           regex='[Rr][Ee][Ll][Ee][Aa][Ss][Ee]-([0-9]+\.[0-9]+\.[0-9]+)'
 
           if [[ "$title" =~ $regex ]]; then
@@ -36,16 +68,18 @@ jobs:
             version="${BASH_REMATCH[1]}"
           else
             echo "❌ No valid release version found in PR title or description."
+            echo "   Expected: Release-x.y.z (e.g., Release-1.2.3)"
+            echo "   Or use a hotfix/* branch to auto-bump patch."
             exit 1
           fi
 
           echo "✅ Found release version: $version"
-          echo "version=$version" >> $GITHUB_OUTPUT
+          echo "version=$version" >> "$GITHUB_OUTPUT"
 
       - name: Update CHANGELOG.md
         run: |
           version="${{ steps.extract_version.outputs.version }}"
-          python3 scripts/update_changelog.py "$version"
+          update_changelog "$version"
 
       - name: Commit and push changelog update
         run: |
@@ -54,15 +88,20 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
           git add CHANGELOG.md
-          git commit -m "docs: update changelog for $version"
+          git commit -m "docs: update changelog for $version" || echo "No changes to commit"
           git push origin HEAD:main
 
       - name: Create Git tag
-        id: create_tag
         run: |
           version="${{ steps.extract_version.outputs.version }}"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Safety: don't fail if tag already exists (e.g., re-runs)
+          if git rev-parse -q --verify "refs/tags/$version" >/dev/null; then
+            echo "Tag $version already exists. Skipping tag creation."
+            exit 0
+          fi
 
           git tag "$version"
           git push origin "$version"
