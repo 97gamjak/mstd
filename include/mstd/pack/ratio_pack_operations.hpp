@@ -20,8 +20,8 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_RATIO_PACK_OPERATIONS_HPP__
-#define __MSTD_RATIO_PACK_OPERATIONS_HPP__
+#ifndef __MSTD__PACK__RATIO_PACK_OPERATIONS_HPP__
+#define __MSTD__PACK__RATIO_PACK_OPERATIONS_HPP__
 
 #include "ratio_pack.hpp"
 #include "ratio_pack_details.hpp"
@@ -82,4 +82,4 @@ namespace mstd
 
 }   // namespace mstd
 
-#endif   // __MSTD_RATIO_PACK_OPERATIONS_HPP__
+#endif   // __MSTD__PACK__RATIO_PACK_OPERATIONS_HPP__

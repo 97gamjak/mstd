@@ -20,14 +20,24 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __QUANTITY__TEST_UTILS_HPP__
-#define __QUANTITY__TEST_UTILS_HPP__
+#ifndef __MSTD__COMPILE_HPP__
+#define __MSTD__COMPILE_HPP__
 
-#include <catch2/catch_test_macros.hpp>
+/**
+ * @brief Ignore buggy code
+ *
+ * Define this macro to ignore code that is known to be buggy in certain
+ * environments/libraries/compilers.
+ *
+ * @note at the moment the exact value of this macro does not matter
+ * as long as it is defined or not defined
+ *
+ */
+#ifdef MSTD_IGNORE_BUGGY_CODE
+#undef MSTD_IGNORE_BUGGY_CODE
+#define MSTD_IGNORE_BUGGY_CODE 1
+#else
+#define MSTD_IGNORE_BUGGY_CODE 0
+#endif
 
-#define MSTD_STATIC_REQUIRE(...) \
-    /* NOLINTBEGIN */            \
-    STATIC_REQUIRE(__VA_ARGS__)  \
-    /* NOLINTEND */
-
-#endif   // __QUANTITY__TEST_UTILS_HPP__
+#endif   // __MSTD__COMPILE_HPP__

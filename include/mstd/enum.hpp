@@ -20,14 +20,17 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_ENUM_HPP__
-#define __MSTD_ENUM_HPP__
+#ifndef __MSTD__ENUM_HPP__
+#define __MSTD__ENUM_HPP__
 
 #include <array>         // IWYU pragma: keep
 #include <cstddef>       // IWYU pragma: keep
 #include <optional>      // IWYU pragma: keep
+#include <span>          // IWYU pragma: keep
 #include <string_view>   // IWYU pragma: keep
 #include <type_traits>   // IWYU pragma: keep
+
+#include "mstd/type_traits/enum_traits.hpp"   // IWYU pragma: keep
 
 //
 // Element expanders
@@ -60,6 +63,11 @@
         static constexpr auto values =                                      \
             std::to_array<EnumName>({LIST(MSTD_ENUM_MAKE_VALUE)});          \
                                                                             \
+        static constexpr std::span<const EnumName> values_view()            \
+        {                                                                   \
+            return values;                                                  \
+        }                                                                   \
+                                                                            \
         static constexpr auto names =                                       \
             std::to_array<std::string_view>({LIST(MSTD_ENUM_MAKE_STRING)}); \
                                                                             \
@@ -91,13 +99,15 @@
             return static_cast<underlying_type>(e);                         \
         }                                                                   \
                                                                             \
-        static constexpr std::size_t index(EnumName e)                      \
+        static constexpr std::optional<std::size_t> index(EnumName e)       \
         {                                                                   \
             for (std::size_t i = 0; i < size; ++i)                          \
                 if (values[i] == e)                                         \
                     return i;                                               \
-            return static_cast<std::size_t>(-1);                            \
+            return std::nullopt;                                            \
         }                                                                   \
-    };
+    };                                                                      \
+                                                                            \
+    static constexpr EnumName##Meta enum_meta(EnumName) { return {}; }
 
-#endif   // __MSTD_ENUM_HPP__
+#endif   // __MSTD__ENUM_HPP__

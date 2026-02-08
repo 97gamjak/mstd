@@ -20,8 +20,8 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_INTEGER_PACK_HPP__
-#define __MSTD_INTEGER_PACK_HPP__
+#ifndef __MSTD__PACK__INTEGER_PACK_HPP__
+#define __MSTD__PACK__INTEGER_PACK_HPP__
 
 #include <array>
 #include <cstddef>
@@ -93,10 +93,10 @@ namespace mstd
                 if (vals[i] != 0)
                     return i;
 
-            return -1;
+            return static_cast<size_t>(-1);
         }
     };
 
 }   // namespace mstd
 
-#endif   // __MSTD_INTEGER_PACK_HPP__
+#endif   // __MSTD__PACK__INTEGER_PACK_HPP__

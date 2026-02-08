@@ -4,6 +4,32 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### CI
+
+- Add devops python library first version for all kind of custom static code analysis
+- Add `update_changelog` from devops package to create_tag CI
+- Add hotfix branch release handling to auto increment version patch aka `major.minor.patch`
+
+### Error Handling
+
+- Add compile time warning macros for buggy libraries and buggy headers (used atm in quantity lib as long as it is not fixed)
+
+### Compilation
+
+- Add Compile flag `MSTD_IGNORE_BUGGY_CODE` to ignore any kind of warnings for buggy libraries or headers
+- Add exhaustive error flags for compilation
+- Add checking of doxygen comments via building docs (no docs is building for gh pages - yet)
+
+### Cleanup
+
+- Cleanup header guards to follow common rule with folder and file structure
+
+### Enums
+
+- Introduce type traits for mstd enums: `using EnumMeta = typename enum_meta<Enum>::type`
+- Make `EnumMeta::index` return std::optional instead of -1 in case of error
+- Add a `values_view` to `EnumMeta` returning a `std::span` for having a nicer API in special cases
+
 <!-- insertion marker -->
 ## [0.0.2](https://github.com/97gamjak/mstd/releases/tag/0.0.2) - 2025-11-20
 

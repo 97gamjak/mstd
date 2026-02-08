@@ -20,8 +20,12 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_UNITS_DIMENSION_HPP__
-#define __MSTD_UNITS_DIMENSION_HPP__
+#ifndef __MSTD__QUANTITY__DIM_HPP__
+#define __MSTD__QUANTITY__DIM_HPP__
+
+#include "mstd/error.hpp"
+
+MSTD_WARN_BUGGY_HEADER("mstd/quantity/dim.hpp")
 
 #include <cstddef>
 
@@ -120,4 +124,4 @@ namespace mstd
 
 }   // namespace mstd
 
-#endif   // __MSTD_UNITS_DIMENSION_HPP__
+#endif   // __MSTD__QUANTITY__DIM_HPP__

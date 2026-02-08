@@ -20,8 +20,12 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_DIM_RATIO_HPP__
-#define __MSTD_DIM_RATIO_HPP__
+#ifndef __MSTD__QUANTITY__DIM_RATIO_HPP__
+#define __MSTD__QUANTITY__DIM_RATIO_HPP__
+
+#include "mstd/error.hpp"
+
+MSTD_WARN_BUGGY_HEADER("mstd/quantity/dim_ratio.hpp")
 
 #include "enums.hpp"
 #include "mstd/pack.hpp"
@@ -107,4 +111,4 @@ namespace mstd
 
 }   // namespace mstd
 
-#endif   // __MSTD_DIM_RATIO_HPP__
+#endif   // __MSTD__QUANTITY__DIM_RATIO_HPP__

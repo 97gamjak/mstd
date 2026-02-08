@@ -20,8 +20,12 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_UNIT_OPERATIONS_HPP__
-#define __MSTD_UNIT_OPERATIONS_HPP__
+#ifndef __MSTD__QUANTITY__UNIT_OPERATIONS_HPP__
+#define __MSTD__QUANTITY__UNIT_OPERATIONS_HPP__
+
+#include "mstd/error.hpp"
+
+MSTD_WARN_BUGGY_HEADER("mstd/quantity/unit_operations.hpp")
 
 #include "mstd/pack.hpp"
 #include "mstd/ratio.hpp"
@@ -129,4 +133,4 @@ namespace mstd
 
 }   // namespace mstd
 
-#endif   // __MSTD_UNIT_OPERATIONS_HPP__
+#endif   // __MSTD__QUANTITY__UNIT_OPERATIONS_HPP__

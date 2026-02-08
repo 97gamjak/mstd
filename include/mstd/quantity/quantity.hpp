@@ -20,8 +20,12 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_UNITS_QUANTITY_HPP__
-#define __MSTD_UNITS_QUANTITY_HPP__
+#ifndef __MSTD__QUANTITY__QUANTITY_HPP__
+#define __MSTD__QUANTITY__QUANTITY_HPP__
+
+#include "mstd/error.hpp"
+
+MSTD_WARN_BUGGY_LIBRARY("mstd/quantity.hpp")
 
 #include <type_traits>
 
@@ -67,7 +71,6 @@ namespace mstd
         /**
          * @brief Construct a Quantity from a base value (SI unit).
          *
-         * @param from_base_tag Tag to indicate base value construction.
          * @param base The base value in SI units.
          */
         constexpr Quantity(from_base_t, Rep base)   // base (SI) ctor
@@ -362,4 +365,4 @@ namespace mstd
 
 }   // namespace mstd
 
-#endif   // __MSTD_UNITS_QUANTITY_HPP__
+#endif   // __MSTD__QUANTITY__QUANTITY_HPP__

@@ -20,8 +20,12 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_UNITS_HPP__
-#define __MSTD_UNITS_HPP__
+#ifndef __MSTD__QUANTITY_HPP__
+#define __MSTD__QUANTITY_HPP__
+
+#include "mstd/error.hpp"   // IWYU pragma: export
+
+MSTD_WARN_BUGGY_LIBRARY("mstd/quantity.hpp")
 
 #include "mstd/type_traits/quantity_traits.hpp"   // IWYU pragma: export
 #include "quantity/dim.hpp"                       // IWYU pragma: export
@@ -32,4 +36,4 @@
 #include "quantity/unit_impl.hpp"                 // IWYU pragma: export
 #include "quantity/unit_operations.hpp"           // IWYU pragma: export
 
-#endif   // __MSTD_UNITS_HPP__
+#endif   // __MSTD__QUANTITY_HPP__

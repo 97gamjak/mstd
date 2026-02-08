@@ -20,8 +20,8 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_RATIO_PACK_DETAILS_HPP__
-#define __MSTD_RATIO_PACK_DETAILS_HPP__
+#ifndef __MSTD__PACK__RATIO_PACK_DETAILS_HPP__
+#define __MSTD__PACK__RATIO_PACK_DETAILS_HPP__
 
 #include <array>
 #include <cstddef>
@@ -129,4 +129,4 @@ namespace mstd
 
 }   // namespace mstd
 
-#endif   // __MSTD_RATIO_PACK_DETAILS_HPP__
+#endif   // __MSTD__PACK__RATIO_PACK_DETAILS_HPP__

@@ -20,8 +20,12 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_DIMENSION_IMPL_HPP__
-#define __MSTD_DIMENSION_IMPL_HPP__
+#ifndef __MSTD__QUANTITY__DIM_IMPL_HPP__
+#define __MSTD__QUANTITY__DIM_IMPL_HPP__
+
+#include "mstd/error.hpp"
+
+MSTD_WARN_BUGGY_HEADER("mstd/quantity/dim_impl.hpp")
 
 #include "dim.hpp"
 #include "dim_operations.hpp"
@@ -125,4 +129,4 @@ namespace mstd
 
 }   // namespace mstd
 
-#endif   // __MSTD_DIMENSION_IMPL_HPP__
+#endif   // __MSTD__QUANTITY__DIM_IMPL_HPP__

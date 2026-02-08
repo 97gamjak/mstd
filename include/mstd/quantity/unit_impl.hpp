@@ -20,8 +20,12 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_UNIT_IMPL_HPP__
-#define __MSTD_UNIT_IMPL_HPP__
+#ifndef __MSTD__QUANTITY__UNIT_IMPL_HPP__
+#define __MSTD__QUANTITY__UNIT_IMPL_HPP__
+
+#include "mstd/error.hpp"
+
+MSTD_WARN_BUGGY_HEADER("mstd/quantity/unit_impl.hpp")
 
 #include <numbers>
 
@@ -204,4 +208,4 @@ namespace mstd
 
 }   // namespace mstd
 
-#endif   // __MSTD_UNIT_IMPL_HPP__
+#endif   // __MSTD__QUANTITY__UNIT_IMPL_HPP__

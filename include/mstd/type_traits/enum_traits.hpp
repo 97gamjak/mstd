@@ -20,14 +20,33 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __QUANTITY__TEST_UTILS_HPP__
-#define __QUANTITY__TEST_UTILS_HPP__
+#ifndef __MSTD__TYPE_TRAITS__ENUM_TRAITS_HPP__
+#define __MSTD__TYPE_TRAITS__ENUM_TRAITS_HPP__
 
-#include <catch2/catch_test_macros.hpp>
+#include <type_traits>
 
-#define MSTD_STATIC_REQUIRE(...) \
-    /* NOLINTBEGIN */            \
-    STATIC_REQUIRE(__VA_ARGS__)  \
-    /* NOLINTEND */
+namespace mstd
+{
+    /**
+     * @brief A helper type alias to extract the enum metadata type
+     *
+     * @tparam E The enum type
+     */
+    template <class E>
+    using enum_meta_t = decltype(enum_meta(std::declval<E>()));
 
-#endif   // __QUANTITY__TEST_UTILS_HPP__
+    /**
+     * @brief A concept to check if a type has enum metadata
+     *
+     * This concept checks if a type is an enum and has a corresponding
+     * enum_meta specialization, which is true for enums defined with MSTD_ENUM.
+     *
+     * @tparam E The type to check
+     */
+    template <typename E>
+    concept has_enum_meta =
+        std::is_enum_v<E> && requires { typename enum_meta_t<E>; };
+
+}   // namespace mstd
+
+#endif   // __MSTD__TYPE_TRAITS__ENUM_TRAITS_HPP__
