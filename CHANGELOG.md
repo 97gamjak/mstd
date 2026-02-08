@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+<!-- insertion marker -->
+## [0.0.3](https://github.com/repo/owner/releases/tag/0.0.3) - 2026-02-08
+
 ### CI
 
 - Add devops python library first version for all kind of custom static code analysis
@@ -30,7 +33,6 @@ All notable changes to this project will be documented in this file.
 - Make `EnumMeta::index` return std::optional instead of -1 in case of error
 - Add a `values_view` to `EnumMeta` returning a `std::span` for having a nicer API in special cases
 
-<!-- insertion marker -->
 ## [0.0.2](https://github.com/97gamjak/mstd/releases/tag/0.0.2) - 2025-11-20
 
 ### New Feature
@@ -76,4 +78,5 @@ All notable changes to this project will be documented in this file.
 ### Bug Fix
 
 - add permissions to create tag workflow
+
 
