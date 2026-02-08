@@ -24,6 +24,12 @@ All notable changes to this project will be documented in this file.
 
 - Cleanup header guards to follow common rule with folder and file structure
 
+### Enums
+
+- Introduce type traits for mstd enums: `using EnumMeta = typename enum_meta<Enum>::type`
+- Make `EnumMeta::index` return std::optional instead of -1 in case of error
+- Add a `values_view` to `EnumMeta` returning a `std::span` for having a nicer API in special cases
+
 <!-- insertion marker -->
 ## [0.0.2](https://github.com/97gamjak/mstd/releases/tag/0.0.2) - 2025-11-20
 
