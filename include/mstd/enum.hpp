@@ -108,10 +108,6 @@
         }                                                                   \
     };                                                                      \
                                                                             \
-    template <>                                                             \
-    struct mstd::enum_meta<EnumName>                                        \
-    {                                                                       \
-        using type = EnumName##Meta;                                        \
-    };
+    static constexpr EnumName##Meta enum_meta(EnumName) { return {}; }
 
 #endif   // __MSTD__ENUM_HPP__

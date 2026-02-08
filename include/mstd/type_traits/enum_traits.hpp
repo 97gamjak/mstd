@@ -28,23 +28,12 @@
 namespace mstd
 {
     /**
-     * @brief A traits class for enums defined with MSTD_ENUM
-     *
-     * This class is specialized for each enum defined with MSTD_ENUM, providing
-     * metadata about the enum such as its underlying type, values, and names.
-     *
-     * @tparam E The enum type
-     */
-    template <typename E>
-    struct enum_meta;
-
-    /**
      * @brief A helper type alias to extract the enum metadata type
      *
      * @tparam E The enum type
      */
-    template <typename E>
-    using enum_meta_t = typename enum_meta<E>::type;
+    template <class E>
+    using enum_meta_t = decltype(enum_meta(std::declval<E>()));
 
     /**
      * @brief A concept to check if a type has enum metadata
