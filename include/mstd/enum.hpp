@@ -109,7 +109,7 @@
     };                                                                      \
                                                                             \
     template <>                                                             \
-    struct enum_meta<EnumName>                                              \
+    struct mstd::enum_meta<EnumName>                                        \
     {                                                                       \
         using type = EnumName##Meta;                                        \
     };
