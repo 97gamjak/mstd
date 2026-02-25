@@ -110,4 +110,21 @@
                                                                             \
     static constexpr EnumName##Meta enum_meta(EnumName) { return {}; }
 
+#define MSTD_ENUM_BITFLAG(EnumName, Underlying, LIST)                   \
+    MSTD_ENUM(EnumName, Underlying, LIST)                               \
+                                                                        \
+    inline EnumName operator|(EnumName lhs, EnumName rhs)               \
+    {                                                                   \
+        return static_cast<EnumName>(                                   \
+            static_cast<Underlying>(lhs) | static_cast<Underlying>(rhs) \
+        );                                                              \
+    }                                                                   \
+                                                                        \
+    inline EnumName operator&(EnumName lhs, EnumName rhs)               \
+    {                                                                   \
+        return static_cast<EnumName>(                                   \
+            static_cast<Underlying>(lhs) & static_cast<Underlying>(rhs) \
+        );                                                              \
+    }
+
 #endif   // __MSTD__ENUM_HPP__
