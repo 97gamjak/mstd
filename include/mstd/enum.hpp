@@ -27,6 +27,7 @@
 #include <cstddef>       // IWYU pragma: keep
 #include <optional>      // IWYU pragma: keep
 #include <span>          // IWYU pragma: keep
+#include <string>        // IWYU pragma: keep
 #include <string_view>   // IWYU pragma: keep
 #include <type_traits>   // IWYU pragma: keep
 
@@ -81,6 +82,14 @@
             for (std::size_t i = 0; i < size; ++i)                          \
                 if (values[i] == e)                                         \
                     return names[i];                                        \
+            return {};                                                      \
+        }                                                                   \
+                                                                            \
+        static constexpr std::string toString(EnumName e)                   \
+        {                                                                   \
+            for (std::size_t i = 0; i < size; ++i)                          \
+                if (values[i] == e)                                         \
+                    return std::string(names[i]);                           \
             return {};                                                      \
         }                                                                   \
                                                                             \
