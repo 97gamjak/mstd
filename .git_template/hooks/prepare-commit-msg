@@ -1,0 +1,40 @@
+#!/usr/bin/env sh
+
+MSG_FILE="$1"
+COMMIT_SOURCE="${2:-}"
+
+# Skip merge or amend commits
+if [ "$COMMIT_SOURCE" = "merge" ] || [ "$COMMIT_SOURCE" = "commit" ]; then
+    exit 0
+fi
+
+# Extract branch name
+BRANCH_NAME=$(git symbolic-ref --quiet --short HEAD 2>/dev/null)
+
+# Extract ISSUE KEY (ABC-123)
+ISSUE_KEY=$(printf "%s" "$BRANCH_NAME" | grep -oE '[A-Z]{2,}-[0-9]+' | head -n1)
+
+# If no issue key found → do nothing
+if [ -z "$ISSUE_KEY" ]; then
+    exit 0
+fi
+
+# Skip fixup commits
+if grep -q '^fixup!' "$MSG_FILE"; then
+    exit 0
+fi
+
+# Only prepend if not already present
+FIRST_LINE=$(head -n1 "$MSG_FILE")
+case "$FIRST_LINE" in
+"$ISSUE_KEY"*) exit 0 ;;
+esac
+
+# Prepend issue key
+TMP_FILE=$(mktemp)
+{
+    echo "$ISSUE_KEY $FIRST_LINE"
+    tail -n +2 "$MSG_FILE"
+} >"$TMP_FILE"
+
+mv "$TMP_FILE" "$MSG_FILE"

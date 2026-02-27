@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### Enum
+
+- introduce `MSTD_ENUM_BITFLAG` for bitwise operations on enums
+
+### String
+
+- introduce new string library
+- add `join` function to concatenate string_view like ranges with a delimiter
+
+### Type Traits
+
+- add concept `joinable_range`
+
 <!-- insertion marker -->
 ## [0.0.3](https://github.com/repo/owner/releases/tag/0.0.3) - 2026-02-08
 

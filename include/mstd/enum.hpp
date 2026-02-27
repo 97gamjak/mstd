@@ -27,6 +27,7 @@
 #include <cstddef>       // IWYU pragma: keep
 #include <optional>      // IWYU pragma: keep
 #include <span>          // IWYU pragma: keep
+#include <string>        // IWYU pragma: keep
 #include <string_view>   // IWYU pragma: keep
 #include <type_traits>   // IWYU pragma: keep
 
@@ -84,6 +85,14 @@
             return {};                                                      \
         }                                                                   \
                                                                             \
+        static constexpr std::string toString(EnumName e)                   \
+        {                                                                   \
+            for (std::size_t i = 0; i < size; ++i)                          \
+                if (values[i] == e)                                         \
+                    return std::string(names[i]);                           \
+            return {};                                                      \
+        }                                                                   \
+                                                                            \
         static constexpr std::optional<EnumName> from_string(               \
             std::string_view s                                              \
         )                                                                   \
@@ -109,5 +118,22 @@
     };                                                                      \
                                                                             \
     static constexpr EnumName##Meta enum_meta(EnumName) { return {}; }
+
+#define MSTD_ENUM_BITFLAG(EnumName, Underlying, LIST)                   \
+    MSTD_ENUM(EnumName, Underlying, LIST)                               \
+                                                                        \
+    inline EnumName operator|(EnumName lhs, EnumName rhs)               \
+    {                                                                   \
+        return static_cast<EnumName>(                                   \
+            static_cast<Underlying>(lhs) | static_cast<Underlying>(rhs) \
+        );                                                              \
+    }                                                                   \
+                                                                        \
+    inline EnumName operator&(EnumName lhs, EnumName rhs)               \
+    {                                                                   \
+        return static_cast<EnumName>(                                   \
+            static_cast<Underlying>(lhs) & static_cast<Underlying>(rhs) \
+        );                                                              \
+    }
 
 #endif   // __MSTD__ENUM_HPP__
