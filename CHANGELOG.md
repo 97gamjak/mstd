@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+<!-- insertion marker -->
+## [0.1.0](https://github.com/repo/owner/releases/tag/0.1.0) - 2026-02-27
+
 ### Enum
 
 - introduce `MSTD_ENUM_BITFLAG` for bitwise operations on enums
@@ -17,7 +20,6 @@ All notable changes to this project will be documented in this file.
 
 - add concept `joinable_range`
 
-<!-- insertion marker -->
 ## [0.0.3](https://github.com/repo/owner/releases/tag/0.0.3) - 2026-02-08
 
 ### CI
@@ -91,5 +93,6 @@ All notable changes to this project will be documented in this file.
 ### Bug Fix
 
 - add permissions to create tag workflow
+
 
 
