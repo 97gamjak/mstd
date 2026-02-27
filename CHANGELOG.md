@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+- introduce `MSTD_ENUM_BITFLAG` for bitwise operations on enums
+
 <!-- insertion marker -->
 ## [0.0.3](https://github.com/repo/owner/releases/tag/0.0.3) - 2026-02-08
 
