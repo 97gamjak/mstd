@@ -20,14 +20,24 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD__TYPE_TRAITS_HPP__
-#define __MSTD__TYPE_TRAITS_HPP__
+#ifndef __MSTD__TYPE_TRAITS__RANGES_TRAITS_HPP__
+#define __MSTD__TYPE_TRAITS__RANGES_TRAITS_HPP__
 
-#include "type_traits/enum_traits.hpp"       // IWYU pragma: export
-#include "type_traits/math_traits.hpp"       // IWYU pragma: export
-#include "type_traits/pack_traits.hpp"       // IWYU pragma: export
-#include "type_traits/quantity_traits.hpp"   // IWYU pragma: export
-#include "type_traits/ranges_traits.hpp"     // IWYU pragma: export
-#include "type_traits/ratio_traits.hpp"      // IWYU pragma: export
+#include <ranges>
 
-#endif   // __MSTD__TYPE_TRAITS_HPP__
+namespace mstd
+{
+    /**
+     * @brief concept for ranges that can be joined into a string with a
+     * delimiter
+     *
+     * @tparam Range
+     */
+    template <typename Range>
+    concept joinable_range = std::ranges::input_range<Range> &&
+                             std::convertible_to<
+                                 std::ranges::range_reference_t<Range>,
+                                 std::string_view>;
+}   // namespace mstd
+
+#endif   // __MSTD__TYPE_TRAITS__RANGES_TRAITS_HPP__

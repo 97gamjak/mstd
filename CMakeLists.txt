@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.20)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 project(mstd
     VERSION 0.1.0
     LANGUAGES CXX
@@ -19,7 +22,7 @@ target_include_directories(mstd
 
 target_compile_features(mstd
     INTERFACE
-    cxx_std_20
+    cxx_std_23
 )
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
