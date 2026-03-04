@@ -18,13 +18,25 @@ if(NOT TARGET mstd)
 endif()
 
 if(NOT TARGET Catch2::Catch2WithMain)
-    add_subdirectory(
-        "${MSTD_ROOT_DIR}/external/Catch2"
-        "${CMAKE_CURRENT_BINARY_DIR}/external/Catch2"
-    )
+    set(MSTD_CATCH2_SOURCE_DIR "${MSTD_ROOT_DIR}/external/Catch2")
+    if(EXISTS "${MSTD_CATCH2_SOURCE_DIR}/CMakeLists.txt")
+        add_subdirectory(
+            "${MSTD_CATCH2_SOURCE_DIR}"
+            "${CMAKE_CURRENT_BINARY_DIR}/external/Catch2"
+        )
+    else()
+        include(FetchContent)
+        FetchContent_Declare(
+            Catch2
+            GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+            GIT_TAG v3.13.0
+        )
+        FetchContent_MakeAvailable(Catch2)
+        set(MSTD_CATCH2_SOURCE_DIR "${catch2_SOURCE_DIR}")
+    endif()
 endif()
 
-list(APPEND CMAKE_MODULE_PATH "${MSTD_ROOT_DIR}/external/Catch2/extras")
+list(APPEND CMAKE_MODULE_PATH "${MSTD_CATCH2_SOURCE_DIR}/extras")
 
 if(NOT TARGET mstd_test_support)
     add_library(mstd_test_support INTERFACE)
