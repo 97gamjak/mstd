@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+- Update test/CMakeLists.txt to implicitly take care of including the Catch2 submodule
+
 <!-- insertion marker -->
 ## [0.1.0](https://github.com/repo/owner/releases/tag/0.1.0) - 2026-02-27
 
