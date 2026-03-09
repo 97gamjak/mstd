@@ -4,13 +4,15 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+<!-- insertion marker -->
+## [0.1.1](https://github.com/repo/owner/releases/tag/0.1.1) - 2026-03-09
+
 - Update test/CMakeLists.txt to implicitly take care of including the Catch2 submodule
 
 ### Type Traits
 
 - Fix missing concept header in `arithmetic_traits.hpp`
 
-<!-- insertion marker -->
 ## [0.1.0](https://github.com/repo/owner/releases/tag/0.1.0) - 2026-02-27
 
 ### Enum
@@ -99,6 +101,7 @@ All notable changes to this project will be documented in this file.
 ### Bug Fix
 
 - add permissions to create tag workflow
+
 
 
 
