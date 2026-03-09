@@ -23,6 +23,8 @@
 #ifndef __MSTD__TYPE_TRAITS__MATH__ARITHMETIC_TRAITS_HPP__
 #define __MSTD__TYPE_TRAITS__MATH__ARITHMETIC_TRAITS_HPP__
 
+#include <concepts>
+
 namespace mstd
 {
     /**
