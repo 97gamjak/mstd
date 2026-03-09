@@ -18,13 +18,45 @@ if(NOT TARGET mstd)
 endif()
 
 if(NOT TARGET Catch2::Catch2WithMain)
-    add_subdirectory(
-        "${MSTD_ROOT_DIR}/external/Catch2"
-        "${CMAKE_CURRENT_BINARY_DIR}/external/Catch2"
-    )
+    set(MSTD_CATCH2_SOURCE_DIR "${MSTD_ROOT_DIR}/external/Catch2")
+    if(EXISTS "${MSTD_CATCH2_SOURCE_DIR}/CMakeLists.txt")
+        add_subdirectory(
+            "${MSTD_CATCH2_SOURCE_DIR}"
+            "${CMAKE_CURRENT_BINARY_DIR}/external/Catch2"
+        )
+    else()
+        find_package(Git QUIET)
+        if(GIT_FOUND)
+            message(STATUS "Catch2 submodule missing. Attempting initialization via git...")
+            execute_process(
+                COMMAND "${GIT_EXECUTABLE}" submodule update --init --recursive -- external/Catch2
+                WORKING_DIRECTORY "${MSTD_ROOT_DIR}"
+                RESULT_VARIABLE MSTD_CATCH2_SUBMODULE_RESULT
+                ERROR_VARIABLE MSTD_CATCH2_SUBMODULE_ERROR
+            )
+        else()
+            set(MSTD_CATCH2_SUBMODULE_RESULT 1)
+            set(MSTD_CATCH2_SUBMODULE_ERROR "Git executable was not found.")
+        endif()
+
+        if(EXISTS "${MSTD_CATCH2_SOURCE_DIR}/CMakeLists.txt")
+            add_subdirectory(
+                "${MSTD_CATCH2_SOURCE_DIR}"
+                "${CMAKE_CURRENT_BINARY_DIR}/external/Catch2"
+            )
+        else()
+            message(FATAL_ERROR
+                "Catch2 submodule is missing at '${MSTD_CATCH2_SOURCE_DIR}'.\n"
+                "Automatic submodule initialization failed (code: ${MSTD_CATCH2_SUBMODULE_RESULT}).\n"
+                "Details: ${MSTD_CATCH2_SUBMODULE_ERROR}\n"
+                "Please run manually and re-run CMake:\n"
+                "  git submodule update --init --recursive"
+            )
+        endif()
+    endif()
 endif()
 
-list(APPEND CMAKE_MODULE_PATH "${MSTD_ROOT_DIR}/external/Catch2/extras")
+list(APPEND CMAKE_MODULE_PATH "${MSTD_CATCH2_SOURCE_DIR}/extras")
 
 if(NOT TARGET mstd_test_support)
     add_library(mstd_test_support INTERFACE)
