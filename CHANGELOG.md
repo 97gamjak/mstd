@@ -4,11 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+<!-- insertion marker -->
+## [0.1.2](https://github.com/repo/owner/releases/tag/0.1.2) - 2026-05-07
+
 ### Enum
 
 - define only forward declaration if MOC_RUN compilation is processing enum definition
 
-<!-- insertion marker -->
 ## [0.1.1](https://github.com/repo/owner/releases/tag/0.1.1) - 2026-03-09
 
 - Update test/CMakeLists.txt to implicitly take care of including the Catch2 submodule
@@ -105,6 +107,7 @@ All notable changes to this project will be documented in this file.
 ### Bug Fix
 
 - add permissions to create tag workflow
+
 
 
 
