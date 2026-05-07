@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### Enum
+
+- define only forward declaration if MOC_RUN compilation is processing enum definition
+
 <!-- insertion marker -->
 ## [0.1.1](https://github.com/repo/owner/releases/tag/0.1.1) - 2026-03-09
 

@@ -49,6 +49,7 @@
 // ------------------------------------------------------------
 // Main macro
 // ------------------------------------------------------------
+#ifndef Q_MOC_RUN
 #define MSTD_ENUM(EnumName, Underlying, LIST)                               \
     enum class EnumName : Underlying                                        \
     {                                                                       \
@@ -118,6 +119,9 @@
     };                                                                      \
                                                                             \
     static constexpr EnumName##Meta enum_meta(EnumName) { return {}; }
+#else
+#define MSTD_ENUM(EnumName, Underlying, LIST) enum class EnumName : Underlying;
+#endif
 
 #define MSTD_ENUM_BITFLAG(EnumName, Underlying, LIST)                   \
     MSTD_ENUM(EnumName, Underlying, LIST)                               \
