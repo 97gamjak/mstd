@@ -4,11 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+<!-- insertion marker -->
+## [0.1.3](https://github.com/repo/owner/releases/tag/0.1.3) - 2026-06-13
+
 ### Enum
 
 - add `EnumNameStr` as a member of EnumMeta
 
-<!-- insertion marker -->
 ## [0.1.2](https://github.com/repo/owner/releases/tag/0.1.2) - 2026-05-07
 
 ### Enum
@@ -111,6 +113,7 @@ All notable changes to this project will be documented in this file.
 ### Bug Fix
 
 - add permissions to create tag workflow
+
 
 
 
