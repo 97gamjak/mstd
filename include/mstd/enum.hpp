@@ -61,6 +61,7 @@
         using type            = EnumName;                                   \
         using underlying_type = Underlying;                                 \
         using enum EnumName;                                                \
+        static constexpr std::string_view EnumNameStr = #EnumName;          \
                                                                             \
         static constexpr auto values =                                      \
             std::to_array<EnumName>({LIST(MSTD_ENUM_MAKE_VALUE)});          \
