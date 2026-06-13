@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### Enum
+
+- add `EnumNameStr` as a member of EnumMeta
+
 <!-- insertion marker -->
 ## [0.1.2](https://github.com/repo/owner/releases/tag/0.1.2) - 2026-05-07
 
