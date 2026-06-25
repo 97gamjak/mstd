@@ -11,6 +11,9 @@ project(mstd
     DESCRIPTION "mstd - header-only C++ library"
 )
 
+option(MSTD_USE_MP_UNITS "Enable vendored mp-units support" ON)
+set(MSTD_MP_UNITS_CONTRACTS "NONE" CACHE STRING "Contract checking mode for vendored mp-units: NONE, GSL-LITE, or MS-GSL")
+set_property(CACHE MSTD_MP_UNITS_CONTRACTS PROPERTY STRINGS NONE GSL-LITE MS-GSL)
 option(MSTD_BUILD_TESTS "Build mstd test" ON)
 option(MSTD_BUILD_DOCS "Build mstd documentation" OFF)
 
@@ -57,6 +60,29 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 
         -Wno-error=deprecated-declarations
     )
+endif()
+
+if(MSTD_USE_MP_UNITS)
+    if(CMAKE_VERSION VERSION_LESS "3.25")
+        message(FATAL_ERROR "MSTD_USE_MP_UNITS requires CMake 3.25 or newer")
+    endif()
+    set(MP_UNITS_API_CONTRACTS ${MSTD_MP_UNITS_CONTRACTS} CACHE STRING "Enable contract checking" FORCE)
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/external/mp-units/src/CMakeLists.txt")
+        add_subdirectory(
+            "${CMAKE_CURRENT_SOURCE_DIR}/external/mp-units/src"
+            "${CMAKE_CURRENT_BINARY_DIR}/external/mp-units"
+        )
+        if(TARGET mp-units)
+            add_library(mstd::mp-units ALIAS mp-units)
+        elseif(TARGET mp-units::mp-units)
+            get_target_property(_mp_units_target mp-units::mp-units ALIAS_TARGET)
+            add_library(mstd::mp-units ALIAS ${_mp_units_target})
+        else()
+            message(FATAL_ERROR "Could not find an mp-units target to alias")
+        endif()
+    else()
+        message(FATAL_ERROR "Vendored mp-units source not found in external/mp-units/src")
+    endif()
 endif()
 
 if(MSTD_BUILD_TESTS)
