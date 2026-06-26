@@ -20,8 +20,8 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD__LINALG__VECTOR3D_CLASS_TPP__
-#define __MSTD__LINALG__VECTOR3D_CLASS_TPP__
+#ifndef __MSTD__LINALG__VECTOR3DCLASS_TPP_HPP__
+#define __MSTD__LINALG__VECTOR3DCLASS_TPP_HPP__
 
 #include "vector3dClass.hpp"
 
@@ -71,4 +71,4 @@ namespace mstd
 
 }   // namespace mstd
 
-#endif   //  __MSTD__LINALG__VECTOR3D_CLASS_TPP__
+#endif   //  __MSTD__LINALG__VECTOR3DCLASS_TPP_HPP__
