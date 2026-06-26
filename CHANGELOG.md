@@ -8,6 +8,10 @@ All notable changes to this project will be documented in this file.
 
 - Add version 14.0 as minimum requirement for the gcc compiler
 
+### Feature
+
+- add mp-units library
+
 <!-- insertion marker -->
 ## [0.1.3](https://github.com/repo/owner/releases/tag/0.1.3) - 2026-06-13
 
