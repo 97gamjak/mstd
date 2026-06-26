@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### Compilation
+
+- Add version 14.0 as minimum requirement for the gcc compiler
+
 ### Feature
 
 - add mp-units library
