@@ -33,7 +33,7 @@ using namespace mp_units;
 using namespace mp_units::si::unit_symbols;
 using namespace mstd;
 
-TEST_CASE("Vector3D")
+TEST_CASE("Vector3d")
 {
     constexpr auto distance = Vector3d{1.0 * km, 2.0 * km, 3.0 * km};
     constexpr auto time     = Vector3d{4.0 * h, 5.0 * h, 6.0 * h};
@@ -44,4 +44,7 @@ TEST_CASE("Vector3D")
     STATIC_REQUIRE(speed == distance / time);
     STATIC_REQUIRE(distance == distanceMeter);
     STATIC_REQUIRE(area == distance * distance);
+    STATIC_REQUIRE(distance + distanceMeter == 2 * distance);
+    STATIC_REQUIRE(distance - distanceMeter == Vector3d{0 * m});
+    STATIC_REQUIRE(2 * distance == distance * 2);
 }

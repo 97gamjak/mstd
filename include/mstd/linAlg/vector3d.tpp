@@ -35,9 +35,50 @@ namespace mstd
     requires requires(const Vector3d<U> &lhs, const Vector3d<V> &rhs) {
         { lhs[0] == rhs[0] } -> std::convertible_to<bool>;
     }
-    constexpr bool operator==(const Vector3d<U> &lhs, const Vector3d<V> &rhs)
+    constexpr bool operator==(
+        const Vector3d<U> &lhs,
+        const Vector3d<V> &rhs
+    ) noexcept
     {
         return lhs[0] == rhs[0] && lhs[1] == rhs[1] && lhs[2] == rhs[2];
+    }
+
+    /*********************
+     * binary + operator *
+     *********************/
+
+    template <Vector3dConcept U, Vector3dConcept V>
+    requires requires(const U &lhs, const V &rhs) { lhs[0] + rhs[0]; } &&
+             (Vector3dDepthDifference_v<U, V> == 0)
+    constexpr auto operator+(const U &lhs, const V &rhs)
+        -> Vector3d<decltype(lhs[0] + rhs[0])>
+    {
+        using ResultType = decltype(lhs[0] + rhs[0]);
+
+        return Vector3d<ResultType>(
+            lhs[0] + rhs[0],
+            lhs[1] + rhs[1],
+            lhs[2] + rhs[2]
+        );
+    }
+
+    /*********************
+     * binary - operator *
+     *********************/
+
+    template <Vector3dConcept U, Vector3dConcept V>
+    requires requires(const U &lhs, const V &rhs) { lhs[0] - rhs[0]; } &&
+             (Vector3dDepthDifference_v<U, V> == 0)
+    constexpr auto operator-(const U &lhs, const V &rhs)
+        -> Vector3d<decltype(lhs[0] - rhs[0])>
+    {
+        using ResultType = decltype(lhs[0] - rhs[0]);
+
+        return Vector3d<ResultType>(
+            lhs[0] - rhs[0],
+            lhs[1] - rhs[1],
+            lhs[2] - rhs[2]
+        );
     }
 
     /*********************
@@ -45,7 +86,7 @@ namespace mstd
      *********************/
 
     template <Vector3dConcept U, Vector3dConcept V>
-    requires requires(const U &a, const V &b) { a[0] * b[0]; } &&
+    requires requires(const U &lhs, const V &rhs) { lhs[0] * rhs[0]; } &&
              (Vector3dDepthDifference_v<U, V> == 0)
     constexpr auto operator*(const U &lhs, const V &rhs)
         -> Vector3d<decltype(lhs[0] * rhs[0])>
@@ -59,12 +100,44 @@ namespace mstd
         );
     }
 
+    template <typename U, Vector3dConcept V>
+    requires requires(const U &scalar, const V &vector) {
+        scalar * vector[0];
+    } && (!Vector3dConcept<U>)
+    constexpr auto operator*(const U &scalar, const V &vector)
+        -> Vector3d<decltype(scalar * vector[0])>
+    {
+        using ResultType = decltype(scalar * vector[0]);
+
+        return Vector3d<ResultType>(
+            scalar * vector[0],
+            scalar * vector[1],
+            scalar * vector[2]
+        );
+    }
+
+    template <Vector3dConcept U, typename V>
+    requires requires(const U &vector, const V &scalar) {
+        vector[0] * scalar;
+    } && (!Vector3dConcept<V>)
+    constexpr auto operator*(const U &vector, const V &scalar)
+        -> Vector3d<decltype(vector[0] * scalar)>
+    {
+        using ResultType = decltype(vector[0] * scalar);
+
+        return Vector3d<ResultType>(
+            vector[0] * scalar,
+            vector[1] * scalar,
+            vector[2] * scalar
+        );
+    }
+
     /*********************
      * binary / operator *
      *********************/
 
     template <Vector3dConcept U, Vector3dConcept V>
-    requires requires(const U &a, const V &b) { a[0] / b[0]; } &&
+    requires requires(const U &lhs, const V &rhs) { lhs[0] / rhs[0]; } &&
              (Vector3dDepthDifference_v<U, V> == 0)
     constexpr auto operator/(const U &lhs, const V &rhs)
         -> Vector3d<decltype(lhs[0] / rhs[0])>
@@ -83,12 +156,12 @@ namespace mstd
      **************/
 
     template <Vector3dConcept U>
-    requires requires(std::ostream &os, const U &a) {
-        { os << a[0] } -> std::same_as<std::ostream &>;
+    requires requires(std::ostream &os, const U &vector) {
+        { os << vector[0] } -> std::same_as<std::ostream &>;
     }
-    std::ostream &operator<<(std::ostream &os, U const &v)
+    std::ostream &operator<<(std::ostream &os, const U &vector)
     {
-        return os << v[0] << " " << v[1] << " " << v[2];
+        return os << vector[0] << " " << vector[1] << " " << vector[2];
     }
 
 }   // namespace mstd
