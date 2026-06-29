@@ -26,6 +26,8 @@
 #include "concepts/vector3dConcepts.hpp"
 #include "vector3dClass.hpp"
 
+#include <ostream>
+
 namespace mstd
 {
     /************************

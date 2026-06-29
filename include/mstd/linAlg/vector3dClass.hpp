@@ -24,8 +24,6 @@
 #define __MSTD__LINALG__VECTOR3DCLASS_HPP__
 
 #include <array>
-#include <concepts>
-#include <ostream>
 
 namespace mstd
 {
@@ -54,8 +52,8 @@ namespace mstd
          * indexing operators *
          **********************/
 
-        constexpr T &operator[](const size_t index) noexcept;
-        [[nodiscard]] constexpr const T &operator[](const size_t index
+        constexpr T &operator[](const std::size_t index) noexcept;
+        [[nodiscard]] constexpr const T &operator[](const std::size_t index
         ) const noexcept;
     };
 

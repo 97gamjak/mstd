@@ -27,7 +27,6 @@
 
 #include <catch2/catch_approx.hpp>
 #include <catch2/catch_test_macros.hpp>
-#include <iostream>
 
 using namespace mp_units;
 using namespace mp_units::si::unit_symbols;
@@ -38,7 +37,7 @@ TEST_CASE("Vector3d")
     constexpr auto distance = Vector3d{1.0 * km, 2.0 * km, 3.0 * km};
     constexpr auto time     = Vector3d{4.0 * h, 5.0 * h, 6.0 * h};
     constexpr auto speed = Vector3d{0.25 * km / h, 0.4 * km / h, 0.5 * km / h};
-    constexpr auto distanceMeter = Vector3d{1000 * m, 2000 * m, 3000 * m};
+    constexpr auto distanceMeter = Vector3d{1000.0 * m, 2000.0 * m, 3000.0 * m};
     constexpr auto area          = Vector3d{1e6 * m2, 4e6 * m2, 9e6 * m2};
 
     STATIC_REQUIRE(speed == distance / time);
