@@ -36,29 +36,27 @@ namespace mstd
         std::array<T, 3> _xyz;
 
        public:
-        ~Vector3d() = default;
-
-        constexpr Vector3d() = default;
-        constexpr Vector3d(const T x, const T y, const T z) : _xyz{x, y, z} {}
-        constexpr Vector3d(const Vector3d<T> &xyz) = default;
-        constexpr explicit Vector3d(const T xyz) : _xyz{xyz, xyz, xyz} {}
+        // clang-format off
+        [[nodiscard]] constexpr  Vector3d()                               noexcept = default;
+                      constexpr ~Vector3d()                               noexcept = default;
+        [[nodiscard]] constexpr  Vector3d(const Vector3d<T> &)            noexcept = default;
+                      constexpr  Vector3d &operator=(const Vector3d<T> &) noexcept = default;
+        [[nodiscard]] constexpr  Vector3d(Vector3d<T> &&)                 noexcept = default;
+                      constexpr  Vector3d &operator=(Vector3d<T> &&)      noexcept = default;
+                      
+        [[nodiscard]] constexpr explicit Vector3d(const T &xyz)                       noexcept : _xyz{xyz, xyz, xyz} {}
+        [[nodiscard]] constexpr          Vector3d(const T &x, const T &y, const T &z) noexcept : _xyz{x, y, z} {}
+        // clang-format on
 
         using value_type = T;
-
-        /************************
-         * assignment operators *
-         ************************/
-
-        // copy assignment operators
-        constexpr Vector3d &operator=(Vector3d<T> &);
-        constexpr Vector3d &operator=(const Vector3d<T> &);
 
         /**********************
          * indexing operators *
          **********************/
 
-        constexpr T       &operator[](const size_t index);
-        constexpr const T &operator[](const size_t index) const;
+        constexpr T &operator[](const size_t index) noexcept;
+        [[nodiscard]] constexpr const T &operator[](const size_t index
+        ) const noexcept;
     };
 
 }   // namespace mstd

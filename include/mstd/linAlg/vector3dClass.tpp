@@ -27,30 +27,6 @@
 
 namespace mstd
 {
-    /************************
-     *                      *
-     * assignment operators *
-     *                      *
-     ************************/
-
-    /*******************
-     * copy assignment *
-     *******************/
-
-    template <typename T>
-    constexpr Vector3d<T> &Vector3d<T>::operator=(Vector3d<T> &rhs)
-    {
-        _xyz = rhs._xyz;
-        return *this;
-    }
-
-    template <typename T>
-    constexpr Vector3d<T> &Vector3d<T>::operator=(const Vector3d<T> &rhs)
-    {
-        _xyz = rhs._xyz;
-        return *this;
-    }
-
     /**********************
      *                    *
      * indexing operators *
@@ -58,13 +34,14 @@ namespace mstd
      **********************/
 
     template <typename T>
-    constexpr T &Vector3d<T>::operator[](const size_t index)
+    constexpr T &Vector3d<T>::operator[](const size_t index) noexcept
     {
         return _xyz[index];
     }
 
     template <typename T>
-    constexpr const T &Vector3d<T>::operator[](const size_t index) const
+    constexpr const T &Vector3d<T>::operator[](const size_t index
+    ) const noexcept
     {
         return _xyz[index];
     }
