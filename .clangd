@@ -1,2 +1,12 @@
 CompileFlags:
     CompilationDatabase: .build
+    Add:
+        - -Wno-c2y-extensions
+        - -Wno-double-promotion
+
+Diagnostics:
+    Suppress:
+        - c2y-extensions
+        - -Wc2y-extensions
+        - typecheck_expression_not_modifiable_lvalue
+        - pp_including_mainfile_in_preamble
