@@ -70,6 +70,6 @@ namespace mstd
 
 }   // namespace mstd
 
-#include "vector3d.tpp.hpp"
+#include "vector3d.tpp"
 
 #endif   //  __MSTD__LINALG__VECTOR3D_HPP__

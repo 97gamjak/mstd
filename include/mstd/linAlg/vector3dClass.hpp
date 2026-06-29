@@ -63,6 +63,6 @@ namespace mstd
 
 }   // namespace mstd
 
-#include "vector3dClass.tpp.hpp"
+#include "vector3dClass.tpp"
 
 #endif   //  __MSTD__LINALG__VECTOR3DCLASS_HPP__
