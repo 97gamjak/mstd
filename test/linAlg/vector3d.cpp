@@ -43,6 +43,9 @@ TEST_CASE("Vector3d")
 
     // clang-format off
     STATIC_REQUIRE(distance == distanceMeter);
+    STATIC_REQUIRE(+distance == distance);        
+    STATIC_REQUIRE(-distance == -1.0 * distance);
+    STATIC_REQUIRE(distance != 2 * distance);
     STATIC_REQUIRE(area == distance * distance);
     STATIC_REQUIRE(2 * distance == distance * 2);
     STATIC_REQUIRE(speed == distance / time);
@@ -51,6 +54,6 @@ TEST_CASE("Vector3d")
     STATIC_REQUIRE(distance + distanceMeter == 2 * distance);
     STATIC_REQUIRE(scalarMeter + distanceMeter == distanceMeter + scalarMeter);
     STATIC_REQUIRE(distance - distanceMeter == Vector3d{0 * m});
-    STATIC_REQUIRE(distanceMeter - scalarMeter == -1.0 * (scalarMeter - distanceMeter));
+    STATIC_REQUIRE(distanceMeter - scalarMeter == -(scalarMeter - distanceMeter));
     // clang-format on
 }

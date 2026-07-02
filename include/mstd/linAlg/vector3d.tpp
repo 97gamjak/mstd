@@ -43,6 +43,18 @@ namespace mstd
         return lhs[0] == rhs[0] && lhs[1] == rhs[1] && lhs[2] == rhs[2];
     }
 
+    template <typename U, typename V>
+    requires requires(const Vector3d<U> &lhs, const Vector3d<V> &rhs) {
+        { lhs[0] != rhs[0] } -> std::convertible_to<bool>;
+    }
+    constexpr bool operator!=(
+        const Vector3d<U> &lhs,
+        const Vector3d<V> &rhs
+    ) noexcept
+    {
+        return !(lhs == rhs);
+    }
+
     /*********************
      * binary + operator *
      *********************/

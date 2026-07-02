@@ -48,6 +48,13 @@ namespace mstd
 
         using value_type = T;
 
+        /***********************
+         * unary +/- operators *
+         ***********************/
+
+        [[nodiscard]] constexpr Vector3d<T> operator+() const;
+        [[nodiscard]] constexpr Vector3d<T> operator-() const;
+
         /**********************
          * indexing operators *
          **********************/

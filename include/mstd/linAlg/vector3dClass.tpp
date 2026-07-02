@@ -27,6 +27,24 @@
 
 namespace mstd
 {
+    /***********************
+     *                     *
+     * unary +/- operators *
+     *                     *
+     ***********************/
+
+    template <typename T>
+    constexpr Vector3d<T> Vector3d<T>::operator+() const
+    {
+        return *this;
+    }
+
+    template <typename T>
+    constexpr Vector3d<T> Vector3d<T>::operator-() const
+    {
+        return Vector3d<T>{-_xyz[0], -_xyz[1], -_xyz[2]};
+    }
+
     /**********************
      *                    *
      * indexing operators *
