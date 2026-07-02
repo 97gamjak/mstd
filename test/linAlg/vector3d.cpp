@@ -39,11 +39,18 @@ TEST_CASE("Vector3d")
     constexpr auto speed = Vector3d{0.25 * km / h, 0.4 * km / h, 0.5 * km / h};
     constexpr auto distanceMeter = Vector3d{1000.0 * m, 2000.0 * m, 3000.0 * m};
     constexpr auto area          = Vector3d{1e6 * m2, 4e6 * m2, 9e6 * m2};
+    constexpr auto scalarMeter   = 1.0 * m;
 
-    STATIC_REQUIRE(speed == distance / time);
+    // clang-format off
     STATIC_REQUIRE(distance == distanceMeter);
     STATIC_REQUIRE(area == distance * distance);
-    STATIC_REQUIRE(distance + distanceMeter == 2 * distance);
-    STATIC_REQUIRE(distance - distanceMeter == Vector3d{0 * m});
     STATIC_REQUIRE(2 * distance == distance * 2);
+    STATIC_REQUIRE(speed == distance / time);
+    STATIC_REQUIRE(distance / 2 == distance * 0.5);
+    STATIC_REQUIRE(1 / distance == Vector3d{1.0 * (1/km), 0.5 * (1/km), (1.0 / 3.0)  * (1/km)});
+    STATIC_REQUIRE(distance + distanceMeter == 2 * distance);
+    STATIC_REQUIRE(scalarMeter + distanceMeter == distanceMeter + scalarMeter);
+    STATIC_REQUIRE(distance - distanceMeter == Vector3d{0 * m});
+    STATIC_REQUIRE(distanceMeter - scalarMeter == -1.0 * (scalarMeter - distanceMeter));
+    // clang-format on
 }

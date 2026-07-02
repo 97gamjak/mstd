@@ -62,6 +62,38 @@ namespace mstd
         );
     }
 
+    template <typename U, Vector3dConcept V>
+    requires requires(const U &scalar, const V &vector) {
+        scalar + vector[0];
+    } && (!Vector3dConcept<U>)
+    constexpr auto operator+(const U &scalar, const V &vector)
+        -> Vector3d<decltype(scalar + vector[0])>
+    {
+        using ResultType = decltype(scalar + vector[0]);
+
+        return Vector3d<ResultType>(
+            scalar + vector[0],
+            scalar + vector[1],
+            scalar + vector[2]
+        );
+    }
+
+    template <Vector3dConcept U, typename V>
+    requires requires(const U &vector, const V &scalar) {
+        vector[0] + scalar;
+    } && (!Vector3dConcept<V>)
+    constexpr auto operator+(const U &vector, const V &scalar)
+        -> Vector3d<decltype(vector[0] + scalar)>
+    {
+        using ResultType = decltype(vector[0] + scalar);
+
+        return Vector3d<ResultType>(
+            vector[0] + scalar,
+            vector[1] + scalar,
+            vector[2] + scalar
+        );
+    }
+
     /*********************
      * binary - operator *
      *********************/
@@ -78,6 +110,38 @@ namespace mstd
             lhs[0] - rhs[0],
             lhs[1] - rhs[1],
             lhs[2] - rhs[2]
+        );
+    }
+
+    template <typename U, Vector3dConcept V>
+    requires requires(const U &scalar, const V &vector) {
+        scalar - vector[0];
+    } && (!Vector3dConcept<U>)
+    constexpr auto operator-(const U &scalar, const V &vector)
+        -> Vector3d<decltype(scalar - vector[0])>
+    {
+        using ResultType = decltype(scalar - vector[0]);
+
+        return Vector3d<ResultType>(
+            scalar - vector[0],
+            scalar - vector[1],
+            scalar - vector[2]
+        );
+    }
+
+    template <Vector3dConcept U, typename V>
+    requires requires(const U &vector, const V &scalar) {
+        vector[0] - scalar;
+    } && (!Vector3dConcept<V>)
+    constexpr auto operator-(const U &vector, const V &scalar)
+        -> Vector3d<decltype(vector[0] - scalar)>
+    {
+        using ResultType = decltype(vector[0] - scalar);
+
+        return Vector3d<ResultType>(
+            vector[0] - scalar,
+            vector[1] - scalar,
+            vector[2] - scalar
         );
     }
 
@@ -148,6 +212,38 @@ namespace mstd
             lhs[0] / rhs[0],
             lhs[1] / rhs[1],
             lhs[2] / rhs[2]
+        );
+    }
+
+    template <typename U, Vector3dConcept V>
+    requires requires(const U &scalar, const V &vector) {
+        scalar / vector[0];
+    } && (!Vector3dConcept<U>)
+    constexpr auto operator/(const U &scalar, const V &vector)
+        -> Vector3d<decltype(scalar / vector[0])>
+    {
+        using ResultType = decltype(scalar / vector[0]);
+
+        return Vector3d<ResultType>(
+            scalar / vector[0],
+            scalar / vector[1],
+            scalar / vector[2]
+        );
+    }
+
+    template <Vector3dConcept U, typename V>
+    requires requires(const U &vector, const V &scalar) {
+        vector[0] / scalar;
+    } && (!Vector3dConcept<V>)
+    constexpr auto operator/(const U &vector, const V &scalar)
+        -> Vector3d<decltype(vector[0] / scalar)>
+    {
+        using ResultType = decltype(vector[0] / scalar);
+
+        return Vector3d<ResultType>(
+            vector[0] / scalar,
+            vector[1] / scalar,
+            vector[2] / scalar
         );
     }
 
