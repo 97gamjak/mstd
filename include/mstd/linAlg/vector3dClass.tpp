@@ -23,6 +23,8 @@
 #ifndef __MSTD__LINALG__VECTOR3DCLASS_TPP__
 #define __MSTD__LINALG__VECTOR3DCLASS_TPP__
 
+#include <utility>   // for declval
+
 #include "vector3dClass.hpp"
 
 namespace mstd
@@ -43,6 +45,43 @@ namespace mstd
     constexpr Vector3d<T> Vector3d<T>::operator-() const
     {
         return Vector3d<T>{-_xyz[0], -_xyz[1], -_xyz[2]};
+    }
+
+    /*******************
+     * unit conversion *
+     *******************/
+
+    template <typename T>
+    template <typename U>
+    requires requires(const T &v, const U &unit) { v.in(unit); }
+    constexpr auto Vector3d<T>::in(const U &unit) const -> Vector3d<
+        decltype(std::declval<const T &>().in(std::declval<const U &>()))>
+    {
+        using ResultType =
+            decltype(std::declval<const T &>().in(std::declval<const U &>()));
+
+        return Vector3d<ResultType>{
+            _xyz[0].in(unit),
+            _xyz[1].in(unit),
+            _xyz[2].in(unit),
+        };
+    }
+
+    template <typename T>
+    template <typename U>
+    requires requires(const T &v, const U &unit) { v.force_in(unit); }
+    constexpr auto Vector3d<T>::force_in(const U &unit) const -> Vector3d<
+        decltype(std::declval<const T &>().force_in(std::declval<const U &>()))>
+    {
+        using ResultType = decltype(std::declval<const T &>().force_in(
+            std::declval<const U &>()
+        ));
+
+        return Vector3d<ResultType>{
+            _xyz[0].force_in(unit),
+            _xyz[1].force_in(unit),
+            _xyz[2].force_in(unit),
+        };
     }
 
     /**********************
