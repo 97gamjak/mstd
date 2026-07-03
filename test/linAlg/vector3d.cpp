@@ -46,6 +46,8 @@ TEST_CASE("Vector3d")
     STATIC_REQUIRE(distance == distanceMeter);
     STATIC_REQUIRE(distance.in(m) == distanceMeter);
     STATIC_REQUIRE(distanceInt.force_in(km) == Vector3d{0 * m});
+    STATIC_REQUIRE(distance.numerical_value_in(m) == Vector3d{1000.0, 2000.0, 3000.0});
+    STATIC_REQUIRE(distanceInt.force_numerical_value_in(km) == Vector3d{0.0});
     STATIC_REQUIRE(+distance == distance);
     STATIC_REQUIRE(-distance == -1.0 * distance);
     STATIC_REQUIRE(distance != 2 * distance);

@@ -23,8 +23,7 @@
 #ifndef __MSTD__LINALG__VECTOR3DCLASS_HPP__
 #define __MSTD__LINALG__VECTOR3DCLASS_HPP__
 
-#include <array>     // for array
-#include <utility>   // for declval
+#include <array>   // for std::array
 
 namespace mstd
 {
@@ -62,14 +61,25 @@ namespace mstd
 
         template <typename U>
         requires requires(const T &v, const U &unit) { v.in(unit); }
-        [[nodiscard]] constexpr auto in(const U &unit) const -> Vector3d<
-            decltype(std::declval<const T &>().in(std::declval<const U &>()))>;
+        [[nodiscard]] constexpr auto in(const U &unit) const;
 
         template <typename U>
         requires requires(const T &v, const U &unit) { v.force_in(unit); }
-        [[nodiscard]] constexpr auto force_in(const U &unit) const
-            -> Vector3d<decltype(std::declval<const T &>()
-                                     .force_in(std::declval<const U &>()))>;
+        [[nodiscard]] constexpr auto force_in(const U &unit) const;
+
+        template <typename U>
+        requires requires(const T &v, const U &unit) {
+            v.numerical_value_in(unit);
+        }
+        [[nodiscard]] constexpr auto numerical_value_in(const U &unit) const;
+
+        template <typename U>
+        requires requires(const T &v, const U &unit) {
+            v.force_numerical_value_in(unit);
+        }
+        [[nodiscard]] constexpr auto force_numerical_value_in(
+            const U &unit
+        ) const;
 
         /**********************
          * indexing operators *

@@ -23,7 +23,7 @@
 #ifndef __MSTD__LINALG__VECTOR3D_HPP__
 #define __MSTD__LINALG__VECTOR3D_HPP__
 
-#include <ostream>
+#include <ostream>   // for std::ostream
 
 #include "concepts/vector3dConcepts.hpp"
 #include "vector3dClass.hpp"
