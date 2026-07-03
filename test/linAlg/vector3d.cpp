@@ -35,12 +35,13 @@ using namespace mstd;
 TEST_CASE("Vector3d")
 {
     constexpr auto distance = Vector3d{1.0 * km, 2.0 * km, 3.0 * km};
-    constexpr auto time     = Vector3d{4.0 * h, 5.0 * h, 6.0 * h};
-    constexpr auto speed = Vector3d{0.25 * km / h, 0.4 * km / h, 0.5 * km / h};
+    constexpr auto time     = Vector3d{2.0 * h, 1.0 * h, 2.0 * h};
+    constexpr auto speed = Vector3d{0.5 * km / h, 2.0 * km / h, 1.5 * km / h};
     constexpr auto distanceMeter = Vector3d{1000.0 * m, 2000.0 * m, 3000.0 * m};
     constexpr auto area          = Vector3d{1e6 * m2, 4e6 * m2, 9e6 * m2};
     constexpr auto scalarMeter   = 1.0 * m;
     constexpr auto distanceInt   = Vector3d{1 * m, 2 * m, 3 * m};
+    constexpr auto dimlessVector = Vector3d{1.0, 2.0, 2.0};
 
     // clang-format off
     STATIC_REQUIRE(distance == distanceMeter);
@@ -60,5 +61,9 @@ TEST_CASE("Vector3d")
     STATIC_REQUIRE(scalarMeter + distanceMeter == distanceMeter + scalarMeter);
     STATIC_REQUIRE(distance - distanceMeter == Vector3d{0 * m});
     STATIC_REQUIRE(distanceMeter - scalarMeter == -(scalarMeter - distanceMeter));
+    STATIC_REQUIRE(normSquared(dimlessVector) == 9.0);
+    STATIC_REQUIRE(normSquared(time) == (9.0 * h * h));
+    REQUIRE(norm(dimlessVector) == 3.0);
+    REQUIRE(norm(time) == (3.0 * h));
     // clang-format on
 }

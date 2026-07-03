@@ -23,6 +23,10 @@
 #ifndef __MSTD__LINALG__VECTOR3D_TPP__
 #define __MSTD__LINALG__VECTOR3D_TPP__
 
+#include <mp-units/math.h>   // for mp_units::sqrt
+
+#include <cmath>   // for std::sqrt
+
 #include "vector3d.hpp"
 
 namespace mstd
@@ -257,6 +261,36 @@ namespace mstd
             vector[1] / scalar,
             vector[2] / scalar
         );
+    }
+
+    /******************
+     * norm functions *
+     ******************/
+
+    template <Vector3dConcept U>
+    requires requires(const U &vec) { std::sqrt(normSquared(vec)); }
+    [[nodiscard]] auto norm(const U &vec)
+        -> decltype(std::sqrt(normSquared(vec)))
+    {
+        return std::sqrt(normSquared(vec));
+    }
+
+    template <Vector3dConcept U>
+    requires requires(const U &vec) { mp_units::sqrt(normSquared(vec)); }
+    [[nodiscard]] auto norm(const U &vec)
+        -> decltype(mp_units::sqrt(normSquared(vec)))
+    {
+        return mp_units::sqrt(normSquared(vec));
+    }
+
+    template <Vector3dConcept U>
+    requires requires(const U &vec) {
+        vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2];
+    }
+    [[nodiscard]] constexpr auto normSquared(const U &vec)
+        -> decltype(vec[0] * vec[0])
+    {
+        return vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2];
     }
 
     /**************
