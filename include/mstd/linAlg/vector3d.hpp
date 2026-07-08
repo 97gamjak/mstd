@@ -29,7 +29,7 @@
 #include <ostream>   // for std::ostream
 
 #include "concepts/vector3dConcepts.hpp"
-#include "vector3dClass.hpp"
+#include "vector3dClass.hpp"   // IWYU pragma: export
 
 namespace mstd
 {

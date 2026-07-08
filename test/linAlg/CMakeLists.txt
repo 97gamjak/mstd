@@ -48,6 +48,7 @@ endif()
 
 add_executable(mstd_tests_linAlg
     vector3d.cpp
+    vector3d_mp-units.cpp
 )
 
 target_link_libraries(mstd_tests_linAlg
