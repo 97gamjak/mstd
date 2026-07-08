@@ -25,7 +25,8 @@
 
 #include <mp-units/math.h>   // for mp_units::sqrt
 
-#include <cmath>     // for std:sqrt
+#include <cmath>   // for std:sqrt
+#include <concepts>
 #include <ostream>   // for std::ostream
 
 #include "concepts/vector3dConcepts.hpp"
@@ -38,18 +39,14 @@ namespace mstd
      ************************/
 
     template <typename U, typename V>
-    requires requires(const Vector3d<U> &lhs, const Vector3d<V> &rhs) {
-        { lhs[0] == rhs[0] } -> std::convertible_to<bool>;
-    }
+    requires std::equality_comparable_with<U, V>
     [[nodiscard]] constexpr bool operator==(
         const Vector3d<U> &lhs,
         const Vector3d<V> &rhs
     ) noexcept;
 
     template <typename U, typename V>
-    requires requires(const Vector3d<U> &lhs, const Vector3d<V> &rhs) {
-        { lhs[0] != rhs[0] } -> std::convertible_to<bool>;
-    }
+    requires std::equality_comparable_with<U, V>
     [[nodiscard]] constexpr bool operator!=(
         const Vector3d<U> &lhs,
         const Vector3d<V> &rhs
