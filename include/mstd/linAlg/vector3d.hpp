@@ -28,6 +28,7 @@
 #include <cmath>   // for std:sqrt
 #include <concepts>
 #include <ostream>   // for std::ostream
+#include <utility>
 
 #include "concepts/vector3dConcepts.hpp"
 #include "vector3dClass.hpp"   // IWYU pragma: export
@@ -56,11 +57,12 @@ namespace mstd
      * binary + operator *
      *********************/
 
-    template <Vector3dConcept U, Vector3dConcept V>
-    requires requires(const U &lhs, const V &rhs) { lhs[0] + rhs[0]; } &&
-             (Vector3dDepthDifference_v<U, V> == 0)
-    [[nodiscard]] constexpr auto operator+(const U &lhs, const V &rhs)
-        -> Vector3d<decltype(lhs[0] + rhs[0])>;
+    template <typename U, typename V>
+    requires requires(const U &u, const V &v) { u + v; }
+    [[nodiscard]] constexpr auto operator+(
+        const Vector3d<U> &lhs,
+        const Vector3d<V> &rhs
+    ) -> Vector3d<decltype(std::declval<U>() + std::declval<V>())>;
 
     template <typename U, Vector3dConcept V>
     requires requires(const U &scalar, const V &vector) {
