@@ -157,12 +157,10 @@ namespace mstd
     [[nodiscard]] auto norm(const U &vec)
         -> decltype(mp_units::sqrt(normSquared(vec)));
 
-    template <Vector3dConcept U>
-    requires requires(const U &vec) {
-        vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2];
-    }
-    [[nodiscard]] constexpr auto normSquared(const U &vec)
-        -> decltype(vec[0] * vec[0]);
+    template <typename U>
+    requires requires(const U &u) { u * u + u * u; }
+    [[nodiscard]] constexpr auto normSquared(const Vector3d<U> &vec)
+        -> decltype(std::declval<U>() * std::declval<U>());
 
     /**************
      * ostream << *
