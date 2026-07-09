@@ -23,8 +23,6 @@
 #ifndef __MSTD__LINALG__CONCEPTS__VECTOR3DDEPTH_HPP__
 #define __MSTD__LINALG__CONCEPTS__VECTOR3DDEPTH_HPP__
 
-#include <concepts>
-
 namespace mstd
 {
     template <class T>

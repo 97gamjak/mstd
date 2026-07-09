@@ -58,97 +58,90 @@ namespace mstd
      *********************/
 
     template <typename U, typename V>
-    requires requires(const U &u, const V &v) { u + v; }
+    requires requires(const U &u, const V &v) { u + v; } &&
+             (Vector3dDepthDifference_v<U, V> == 0)
     [[nodiscard]] constexpr auto operator+(
         const Vector3d<U> &lhs,
         const Vector3d<V> &rhs
     ) -> Vector3d<decltype(std::declval<U>() + std::declval<V>())>;
 
-    template <typename U, Vector3dConcept V>
-    requires requires(const U &scalar, const V &vector) {
-        scalar + vector[0];
-    } && (!Vector3dConcept<U>)
-    [[nodiscard]] constexpr auto operator+(const U &scalar, const V &rhs)
-        -> Vector3d<decltype(scalar + rhs[0])>;
+    template <typename U, typename V>
+    requires requires(const U &u, const V &v) { u + v; }
+    [[nodiscard]] constexpr auto operator+(
+        const U           &scalar,
+        const Vector3d<V> &vector
+    ) -> Vector3d<decltype(std::declval<U>() + std::declval<V>())>;
 
-    template <Vector3dConcept U, typename V>
-    requires requires(const U &vector, const V &scalar) {
-        vector[0] + scalar;
-    } && (!Vector3dConcept<V>)
-    [[nodiscard]] constexpr auto operator+(const U &vector, const V &scalar)
-        -> Vector3d<decltype(vector[0] + scalar)>;
+    template <typename U, typename V>
+    requires requires(const U &u, const V &v) { u + v; }
+    [[nodiscard]] constexpr auto operator+(
+        const Vector3d<U> &vector,
+        const V           &scalar
+    ) -> Vector3d<decltype(std::declval<U>() + std::declval<V>())>;
 
     /*********************
      * binary - operator *
      *********************/
 
-    template <Vector3dConcept U, Vector3dConcept V>
-    requires requires(const U &lhs, const V &rhs) { lhs[0] - rhs[0]; } &&
+    template <typename U, typename V>
+    requires requires(const U &u, const V &v) { u - v; } &&
              (Vector3dDepthDifference_v<U, V> == 0)
-    [[nodiscard]] constexpr auto operator-(const U &lhs, const V &rhs)
-        -> Vector3d<decltype(lhs[0] - rhs[0])>;
+    [[nodiscard]] constexpr auto operator-(
+        const Vector3d<U> &lhs,
+        const Vector3d<V> &rhs
+    ) -> Vector3d<decltype(std::declval<U>() - std::declval<V>())>;
 
-    template <typename U, Vector3dConcept V>
-    requires requires(const U &scalar, const V &vector) {
-        scalar - vector[0];
-    } && (!Vector3dConcept<U>)
-    [[nodiscard]] constexpr auto operator-(const U &scalar, const V &rhs)
-        -> Vector3d<decltype(scalar - rhs[0])>;
-
-    template <Vector3dConcept U, typename V>
-    requires requires(const U &vector, const V &scalar) {
-        vector[0] - scalar;
-    } && (!Vector3dConcept<V>)
-    [[nodiscard]] constexpr auto operator-(const U &vector, const V &scalar)
-        -> Vector3d<decltype(vector[0] - scalar)>;
+    template <typename U, typename V>
+    requires requires(const U &u, const V &v) { u - v; }
+    [[nodiscard]] constexpr auto operator-(
+        const Vector3d<U> &vector,
+        const V           &scalar
+    ) -> Vector3d<decltype(std::declval<U>() - std::declval<V>())>;
 
     /*********************
      * binary * operator *
      *********************/
 
-    template <Vector3dConcept U, Vector3dConcept V>
-    requires requires(const U &lhs, const V &rhs) { lhs[0] * rhs[0]; } &&
+    template <typename U, typename V>
+    requires requires(const U &u, const V &v) { u * v; } &&
              (Vector3dDepthDifference_v<U, V> == 0)
-    [[nodiscard]] constexpr auto operator*(const U &lhs, const V &rhs)
-        -> Vector3d<decltype(lhs[0] * rhs[0])>;
+    [[nodiscard]] constexpr auto operator*(
+        const Vector3d<U> &lhs,
+        const Vector3d<V> &rhs
+    ) -> Vector3d<decltype(std::declval<U>() * std::declval<V>())>;
 
-    template <typename U, Vector3dConcept V>
-    requires requires(const U &scalar, const V &vector) {
-        scalar * vector[0];
-    } && (!Vector3dConcept<U>)
-    [[nodiscard]] constexpr auto operator*(const U &scalar, const V &rhs)
-        -> Vector3d<decltype(scalar * rhs[0])>;
+    template <typename U, typename V>
+    requires requires(const U &u, const V &v) { u * v; }
+    [[nodiscard]] constexpr auto operator*(
+        const U           &scalar,
+        const Vector3d<V> &vector
+    ) -> Vector3d<decltype(std::declval<U>() * std::declval<V>())>;
 
-    template <Vector3dConcept U, typename V>
-    requires requires(const U &vector, const V &scalar) {
-        vector[0] * scalar;
-    } && (!Vector3dConcept<V>)
-    [[nodiscard]] constexpr auto operator*(const U &vector, const V &scalar)
-        -> Vector3d<decltype(vector[0] * scalar)>;
+    template <typename U, typename V>
+    requires requires(const U &u, const V &v) { u * v; }
+    [[nodiscard]] constexpr auto operator*(
+        const Vector3d<U> &vector,
+        const V           &scalar
+    ) -> Vector3d<decltype(std::declval<U>() * std::declval<V>())>;
 
     /*********************
      * binary / operator *
      *********************/
 
-    template <Vector3dConcept U, Vector3dConcept V>
-    requires requires(const U &lhs, const V &rhs) { lhs[0] / rhs[0]; } &&
+    template <typename U, typename V>
+    requires requires(const U &u, const V &v) { u / v; } &&
              (Vector3dDepthDifference_v<U, V> == 0)
-    [[nodiscard]] constexpr auto operator/(const U &lhs, const V &rhs)
-        -> Vector3d<decltype(lhs[0] / rhs[0])>;
+    [[nodiscard]] constexpr auto operator/(
+        const Vector3d<U> &lhs,
+        const Vector3d<V> &rhs
+    ) -> Vector3d<decltype(std::declval<U>() / std::declval<V>())>;
 
-    template <typename U, Vector3dConcept V>
-    requires requires(const U &scalar, const V &vector) {
-        scalar / vector[0];
-    } && (!Vector3dConcept<U>)
-    [[nodiscard]] constexpr auto operator/(const U &scalar, const V &rhs)
-        -> Vector3d<decltype(scalar / rhs[0])>;
-
-    template <Vector3dConcept U, typename V>
-    requires requires(const U &vector, const V &scalar) {
-        vector[0] / scalar;
-    } && (!Vector3dConcept<V>)
-    [[nodiscard]] constexpr auto operator/(const U &vector, const V &scalar)
-        -> Vector3d<decltype(vector[0] / scalar)>;
+    template <typename U, typename V>
+    requires requires(const U &u, const V &v) { u / v; }
+    [[nodiscard]] constexpr auto operator/(
+        const Vector3d<U> &vector,
+        const V           &scalar
+    ) -> Vector3d<decltype(std::declval<U>() / std::declval<V>())>;
 
     /******************
      * norm functions *

@@ -52,29 +52,28 @@ TEST_CASE("Vector3d - Binary + and - Operators")
     constexpr auto distance      = Vector3d{1.0, 2.0, 3.0};
     constexpr auto distanceMeter = Vector3d{1000.0, 2000.0, 3000.0};
     constexpr auto distanceTwice = Vector3d{2.0, 4.0, 6.0};
+    constexpr auto distanceDiff  = Vector3d{999.0, 1999.0, 2999.0};
     constexpr auto scalarMeter   = 1.0;
 
     // clang-format off
     STATIC_REQUIRE(distance + distance == distanceTwice);
     STATIC_REQUIRE(scalarMeter + distanceMeter == distanceMeter + scalarMeter);
     STATIC_REQUIRE(distance - distance == Vector3d{0});
-    STATIC_REQUIRE(distanceMeter - scalarMeter == -(scalarMeter - distanceMeter));
+    STATIC_REQUIRE(distanceMeter - scalarMeter == distanceDiff);
     // clang-format on
 }
 
 TEST_CASE("Vector3d - Binary * and / Operators")
 {
-    constexpr auto distance    = Vector3d{1.0, 2.0, 4.0};
-    constexpr auto time        = Vector3d{2.0, 1.0, 4.0};
-    constexpr auto speed       = Vector3d{0.5, 2.0, 1.0};
-    constexpr auto area        = Vector3d{1.0, 4.0, 16.0};
-    constexpr auto invDistance = Vector3d{1.0, 0.5, 0.25};
+    constexpr auto distance = Vector3d{1.0, 2.0, 4.0};
+    constexpr auto time     = Vector3d{2.0, 1.0, 4.0};
+    constexpr auto speed    = Vector3d{0.5, 2.0, 1.0};
+    constexpr auto area     = Vector3d{1.0, 4.0, 16.0};
 
     STATIC_REQUIRE(area == distance * distance);
     STATIC_REQUIRE(2 * distance == distance * 2);
     STATIC_REQUIRE(speed == distance / time);
     STATIC_REQUIRE(distance / 2 == distance * 0.5);
-    STATIC_REQUIRE(1 / distance == invDistance);
 }
 
 TEST_CASE("Vector3d - Norm Functions")
@@ -83,4 +82,88 @@ TEST_CASE("Vector3d - Norm Functions")
 
     STATIC_REQUIRE(normSquared(time) == (49.0));
     REQUIRE(norm(time) == (7.0));
+}
+
+TEST_CASE("Vector3d - Nested Vector3d Binary +")
+{
+    constexpr auto pos1 = Vector3d{1, 2, 3};
+    constexpr auto pos2 = Vector3d{4, 5, 6};
+    constexpr auto pos3 = Vector3d{7, 8, 9};
+    constexpr auto pos  = Vector3d{pos1, pos2, pos3};
+
+    constexpr auto shift1 = Vector3d{10, 11, 12};
+    constexpr auto shift2 = Vector3d{13, 14, 15};
+    constexpr auto shift3 = Vector3d{16, 17, 18};
+    constexpr auto shift  = Vector3d{shift1, shift2, shift3};
+
+    constexpr auto pos1_shifted = Vector3d{11, 13, 15};
+    constexpr auto pos2_shifted = Vector3d{17, 19, 21};
+    constexpr auto pos3_shifted = Vector3d{23, 25, 27};
+    constexpr auto pos_shifted =
+        Vector3d{pos1_shifted, pos2_shifted, pos3_shifted};
+
+    STATIC_REQUIRE(pos + shift == pos_shifted);
+    STATIC_REQUIRE(shift + pos == pos_shifted);
+}
+
+TEST_CASE("Vector3d - Nested Vector3d Binary -")
+{
+    constexpr auto pos1 = Vector3d{10, 11, 12};
+    constexpr auto pos2 = Vector3d{13, 14, 15};
+    constexpr auto pos3 = Vector3d{16, 17, 18};
+    constexpr auto pos  = Vector3d{pos1, pos2, pos3};
+
+    constexpr auto shift1 = Vector3d{9, 8, 7};
+    constexpr auto shift2 = Vector3d{6, 5, 4};
+    constexpr auto shift3 = Vector3d{3, 2, 1};
+    constexpr auto shift  = Vector3d{shift1, shift2, shift3};
+
+    constexpr auto pos1_shifted = Vector3d{1, 3, 5};
+    constexpr auto pos2_shifted = Vector3d{7, 9, 11};
+    constexpr auto pos3_shifted = Vector3d{13, 15, 17};
+    constexpr auto pos_shifted =
+        Vector3d{pos1_shifted, pos2_shifted, pos3_shifted};
+
+    STATIC_REQUIRE(pos - shift == pos_shifted);
+}
+
+TEST_CASE("Vector3d - Nested Vector3d Binary *")
+{
+    constexpr auto pos1 = Vector3d{1, 2, 3};
+    constexpr auto pos2 = Vector3d{4, 5, 6};
+    constexpr auto pos3 = Vector3d{7, 8, 9};
+    constexpr auto pos  = Vector3d{pos1, pos2, pos3};
+
+    constexpr auto factor1 = Vector3d{10, 11, 12};
+    constexpr auto factor2 = Vector3d{13, 14, 15};
+    constexpr auto factor3 = Vector3d{16, 17, 18};
+    constexpr auto factor  = Vector3d{factor1, factor2, factor3};
+
+    constexpr auto pos1_scaled = Vector3d{10, 22, 36};
+    constexpr auto pos2_scaled = Vector3d{52, 70, 90};
+    constexpr auto pos3_scaled = Vector3d{112, 136, 162};
+    constexpr auto pos_scaled = Vector3d{pos1_scaled, pos2_scaled, pos3_scaled};
+
+    STATIC_REQUIRE(pos * factor == pos_scaled);
+    STATIC_REQUIRE(factor * pos == pos_scaled);
+}
+
+TEST_CASE("Vector3d - Nested Vector3d Binary /")
+{
+    constexpr auto num1 = Vector3d{1, 4, 9};
+    constexpr auto num2 = Vector3d{16, 25, 36};
+    constexpr auto num3 = Vector3d{49, 64, 81};
+    constexpr auto num  = Vector3d{num1, num2, num3};
+
+    constexpr auto den1 = Vector3d{1, 2, 3};
+    constexpr auto den2 = Vector3d{4, 5, 6};
+    constexpr auto den3 = Vector3d{7, 8, 9};
+    constexpr auto den  = Vector3d{den1, den2, den3};
+
+    constexpr auto quotient1 = Vector3d{1, 2, 3};
+    constexpr auto quotient2 = Vector3d{4, 5, 6};
+    constexpr auto quotient3 = Vector3d{7, 8, 9};
+    constexpr auto quotient  = Vector3d{quotient1, quotient2, quotient3};
+
+    STATIC_REQUIRE(num / den == quotient);
 }
