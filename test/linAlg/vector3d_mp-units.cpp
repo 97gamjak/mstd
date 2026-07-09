@@ -128,6 +128,16 @@ TEST_CASE("Vector3d mp-units - Norm Functions")
     REQUIRE(norm(time) == (7.0 * h));
 }
 
+TEST_CASE("Vector3d mp-units - ostream <<")
+{
+    constexpr auto distance = Vector3d{1 * km, 2 * km, 3 * km};
+
+    std::ostringstream oss;
+    oss << distance;
+
+    REQUIRE(oss.str() == "1 km 2 km 3 km");
+}
+
 TEST_CASE("Vector3d mp-units - Nested Vector3d Indexing Operator")
 {
     constexpr auto pos1 = Vector3d{1000 * m, 2000 * m, 3000 * m};

@@ -24,6 +24,7 @@
 
 #include <catch2/catch_approx.hpp>
 #include <catch2/catch_test_macros.hpp>
+#include <sstream>
 #include <utility>
 
 using namespace mstd;
@@ -136,6 +137,16 @@ TEST_CASE("Vector3d - Norm Functions")
 
     STATIC_REQUIRE(normSquared(time) == (49.0));
     REQUIRE(norm(time) == (7.0));
+}
+
+TEST_CASE("Vector3d - ostream <<")
+{
+    constexpr auto distance = Vector3d{1, 2, 3};
+
+    std::ostringstream oss;
+    oss << distance;
+
+    REQUIRE(oss.str() == "1 2 3");
 }
 
 TEST_CASE("Vector3d - Nested Vector3d Indexing Operator")

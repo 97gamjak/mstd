@@ -259,11 +259,11 @@ namespace mstd
      * ostream << *
      **************/
 
-    template <Vector3dConcept U>
-    requires requires(std::ostream &os, const U &vector) {
-        { os << vector[0] } -> std::same_as<std::ostream &>;
+    template <typename U>
+    requires requires(std::ostream &os, const U &u) {
+        { os << u } -> std::same_as<std::ostream &>;
     }
-    std::ostream &operator<<(std::ostream &os, const U &vector)
+    std::ostream &operator<<(std::ostream &os, const Vector3d<U> &vector)
     {
         return os << vector[0] << " " << vector[1] << " " << vector[2];
     }
