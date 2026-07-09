@@ -102,6 +102,18 @@ TEST_CASE("Vector3d mp-units - Norm Functions")
     REQUIRE(norm(time) == (7.0 * h));
 }
 
+TEST_CASE("Vector3d mp-units - Nested Vector3d Unary +/-")
+{
+    constexpr auto pos1        = Vector3d{1 * m, 2 * m, 3 * m};
+    constexpr auto pos2        = Vector3d{4 * m, 5 * m, 6 * m};
+    constexpr auto pos3        = Vector3d{7 * m, 8 * m, 9 * m};
+    constexpr auto pos         = Vector3d{pos1, pos2, pos3};
+    constexpr auto negativePos = Vector3d{-pos1, -pos2, -pos3};
+
+    STATIC_REQUIRE(+pos == pos);
+    STATIC_REQUIRE(-pos == negativePos);
+}
+
 TEST_CASE("Vector3d mp-units - Nested Vector3d Binary +")
 {
     constexpr auto pos1 = Vector3d{1 * m, 2 * m, 3 * m};

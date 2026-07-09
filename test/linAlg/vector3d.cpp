@@ -84,6 +84,18 @@ TEST_CASE("Vector3d - Norm Functions")
     REQUIRE(norm(time) == (7.0));
 }
 
+TEST_CASE("Vector3d - Nested Vector3d Unary +/-")
+{
+    constexpr auto pos1        = Vector3d{1, 2, 3};
+    constexpr auto pos2        = Vector3d{4, 5, 6};
+    constexpr auto pos3        = Vector3d{7, 8, 9};
+    constexpr auto pos         = Vector3d{pos1, pos2, pos3};
+    constexpr auto negativePos = Vector3d{-pos1, -pos2, -pos3};
+
+    STATIC_REQUIRE(+pos == pos);
+    STATIC_REQUIRE(-pos == negativePos);
+}
+
 TEST_CASE("Vector3d - Nested Vector3d Binary +")
 {
     constexpr auto pos1 = Vector3d{1, 2, 3};
