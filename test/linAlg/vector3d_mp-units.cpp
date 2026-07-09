@@ -32,13 +32,30 @@ using namespace mp_units;
 using namespace mp_units::si::unit_symbols;
 using namespace mstd;
 
-TEST_CASE("Vector3d mp-units - Indexing Operator")
+TEST_CASE("Vector3d mp-units - Parametrized Constructors")
+{
+    constexpr auto valueConstructed = Vector3d{1 * m, 2 * m, 3 * m};
+    STATIC_REQUIRE(valueConstructed == Vector3d{1 * m, 2 * m, 3 * m});
+
+    constexpr auto scalarConstructed = Vector3d{7 * m};
+    STATIC_REQUIRE(scalarConstructed == Vector3d{7 * m, 7 * m, 7 * m});
+}
+
+TEST_CASE("Vector3d mp-units - Indexing Operators")
 {
     constexpr auto distance = Vector3d{1000 * m, 2000 * m, 3000 * m};
 
     STATIC_REQUIRE(distance[0] == 1 * km);
     STATIC_REQUIRE(distance[1] == 2 * km);
     STATIC_REQUIRE(distance[2] == 3 * km);
+
+    auto position = Vector3d{0 * km};
+
+    position[0] = 1 * km;
+    position[1] = 2 * km;
+    position[2] = 3 * km;
+
+    REQUIRE(distance == position);
 }
 
 TEST_CASE("Vector3d mp-units - Comparison Operators")

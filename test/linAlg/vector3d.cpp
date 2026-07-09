@@ -24,16 +24,61 @@
 
 #include <catch2/catch_approx.hpp>
 #include <catch2/catch_test_macros.hpp>
+#include <utility>
 
 using namespace mstd;
 
-TEST_CASE("Vector3d - Indexing Operator")
+TEST_CASE("Vector3d - Default Constructor")
+{
+    constexpr Vector3d<int> defaultConstructed{};
+
+    STATIC_REQUIRE(defaultConstructed == Vector3d<int>{0, 0, 0});
+}
+
+TEST_CASE("Vector3d - Copy Constructors")
+{
+    constexpr Vector3d<int> copySource{1, 2, 3};
+    constexpr auto          copyConstructed{copySource};
+    constexpr auto          copyAssigned = copyConstructed;
+
+    STATIC_REQUIRE(copyConstructed == copySource);
+    STATIC_REQUIRE(copyAssigned == copySource);
+}
+
+TEST_CASE("Vector3d - Move Constructors")
+{
+    constexpr Vector3d<int> moveSource{4, 5, 6};
+    constexpr auto          moveConstructed{std::move(moveSource)};
+    constexpr auto          moveAssigned = std::move(moveConstructed);
+
+    STATIC_REQUIRE(moveConstructed == moveSource);
+    STATIC_REQUIRE(moveAssigned == moveSource);
+}
+
+TEST_CASE("Vector3d - Parametrized Constructors")
+{
+    constexpr auto valueConstructed = Vector3d<int>{1, 2, 3};
+    STATIC_REQUIRE(valueConstructed == Vector3d<int>{1, 2, 3});
+
+    constexpr auto scalarConstructed = Vector3d<int>{7};
+    STATIC_REQUIRE(scalarConstructed == Vector3d<int>{7, 7, 7});
+}
+
+TEST_CASE("Vector3d - Indexing Operators")
 {
     constexpr auto distance = Vector3d{1.0, 2.0, 3.0};
 
     STATIC_REQUIRE(distance[0] == 1.0);
     STATIC_REQUIRE(distance[1] == 2.0);
     STATIC_REQUIRE(distance[2] == 3.0);
+
+    auto position = Vector3d{0.0};
+
+    position[0] = 1.0;
+    position[1] = 2.0;
+    position[2] = 3.0;
+
+    REQUIRE(distance == position);
 }
 
 TEST_CASE("Vector3d - Comparison Operators")
