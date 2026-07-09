@@ -32,6 +32,15 @@ using namespace mp_units;
 using namespace mp_units::si::unit_symbols;
 using namespace mstd;
 
+TEST_CASE("Vector3d mp-units - Indexing Operator")
+{
+    constexpr auto distance = Vector3d{1000 * m, 2000 * m, 3000 * m};
+
+    STATIC_REQUIRE(distance[0] == 1 * km);
+    STATIC_REQUIRE(distance[1] == 2 * km);
+    STATIC_REQUIRE(distance[2] == 3 * km);
+}
+
 TEST_CASE("Vector3d mp-units - Comparison Operators")
 {
     constexpr auto distance      = Vector3d{1.0 * km, 2.0 * km, 3.0 * km};
@@ -100,6 +109,30 @@ TEST_CASE("Vector3d mp-units - Norm Functions")
 
     STATIC_REQUIRE(normSquared(time) == (49.0 * h * h));
     REQUIRE(norm(time) == (7.0 * h));
+}
+
+TEST_CASE("Vector3d mp-units - Nested Vector3d Indexing Operator")
+{
+    constexpr auto pos1 = Vector3d{1000 * m, 2000 * m, 3000 * m};
+    constexpr auto pos2 = Vector3d{4000 * m, 5000 * m, 6000 * m};
+    constexpr auto pos3 = Vector3d{7000 * m, 8000 * m, 9000 * m};
+    constexpr auto pos  = Vector3d{pos1, pos2, pos3};
+
+    STATIC_REQUIRE(pos[0] == pos1);
+    STATIC_REQUIRE(pos[1] == pos2);
+    STATIC_REQUIRE(pos[2] == pos3);
+
+    STATIC_REQUIRE(pos[0][0] == 1 * km);
+    STATIC_REQUIRE(pos[0][1] == 2 * km);
+    STATIC_REQUIRE(pos[0][2] == 3 * km);
+
+    STATIC_REQUIRE(pos[1][0] == 4 * km);
+    STATIC_REQUIRE(pos[1][1] == 5 * km);
+    STATIC_REQUIRE(pos[1][2] == 6 * km);
+
+    STATIC_REQUIRE(pos[2][0] == 7 * km);
+    STATIC_REQUIRE(pos[2][1] == 8 * km);
+    STATIC_REQUIRE(pos[2][2] == 9 * km);
 }
 
 TEST_CASE("Vector3d mp-units - Nested Vector3d Unary +/-")

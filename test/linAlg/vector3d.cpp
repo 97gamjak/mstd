@@ -27,6 +27,15 @@
 
 using namespace mstd;
 
+TEST_CASE("Vector3d - Indexing Operator")
+{
+    constexpr auto distance = Vector3d{1.0, 2.0, 3.0};
+
+    STATIC_REQUIRE(distance[0] == 1.0);
+    STATIC_REQUIRE(distance[1] == 2.0);
+    STATIC_REQUIRE(distance[2] == 3.0);
+}
+
 TEST_CASE("Vector3d - Comparison Operators")
 {
     constexpr auto distance        = Vector3d{1.0, 2.0, 3.0};
@@ -82,6 +91,30 @@ TEST_CASE("Vector3d - Norm Functions")
 
     STATIC_REQUIRE(normSquared(time) == (49.0));
     REQUIRE(norm(time) == (7.0));
+}
+
+TEST_CASE("Vector3d - Nested Vector3d Indexing Operator")
+{
+    constexpr auto pos1 = Vector3d{1, 2, 3};
+    constexpr auto pos2 = Vector3d{4, 5, 6};
+    constexpr auto pos3 = Vector3d{7, 8, 9};
+    constexpr auto pos  = Vector3d{pos1, pos2, pos3};
+
+    STATIC_REQUIRE(pos[0] == pos1);
+    STATIC_REQUIRE(pos[1] == pos2);
+    STATIC_REQUIRE(pos[2] == pos3);
+
+    STATIC_REQUIRE(pos[0][0] == 1);
+    STATIC_REQUIRE(pos[0][1] == 2);
+    STATIC_REQUIRE(pos[0][2] == 3);
+
+    STATIC_REQUIRE(pos[1][0] == 4);
+    STATIC_REQUIRE(pos[1][1] == 5);
+    STATIC_REQUIRE(pos[1][2] == 6);
+
+    STATIC_REQUIRE(pos[2][0] == 7);
+    STATIC_REQUIRE(pos[2][1] == 8);
+    STATIC_REQUIRE(pos[2][2] == 9);
 }
 
 TEST_CASE("Vector3d - Nested Vector3d Unary +/-")
