@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 ### Feature
 
 - add mp-units library
+- add `operator|=` for bitflag enums
 
 <!-- insertion marker -->
 ## [0.1.3](https://github.com/repo/owner/releases/tag/0.1.3) - 2026-06-13

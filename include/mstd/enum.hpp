@@ -133,6 +133,11 @@
             static_cast<Underlying>(lhs) | static_cast<Underlying>(rhs) \
         );                                                              \
     }                                                                   \
+    inline EnumName& operator|=(EnumName& lhs, EnumName rhs)            \
+    {                                                                   \
+        lhs = lhs | rhs;                                                \
+        return lhs;                                                     \
+    }                                                                   \
                                                                         \
     inline EnumName operator&(EnumName lhs, EnumName rhs)               \
     {                                                                   \
