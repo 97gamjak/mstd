@@ -4,3 +4,6 @@
 [submodule "external/devops"]
 	path = external/devops
 	url = https://github.com/97gamjak/devops
+[submodule "external/mp-units"]
+	path = external/mp-units
+	url = https://github.com/mpusz/mp-units.git

@@ -51,11 +51,13 @@ add_executable(mstd_tests_quantity
     test_dimension.cpp
     test_quantity.cpp
     test_traits.cpp
+    test_mp-units.cpp
 )
 
 target_link_libraries(mstd_tests_quantity
     PRIVATE
     "${MSTD_TEST_LINK_TARGET}"
+    mp-units::mp-units
 )
 
 target_compile_features(mstd_tests_quantity PRIVATE cxx_std_20)
