@@ -108,11 +108,17 @@ TEST_CASE("Vector3d - Compound Assignment Operators")
     constexpr auto anotherDistance = Vector3d{5.0, 5.0, 5.0};
     constexpr auto scalarDistance  = 5.0;
     constexpr auto distanceSum     = Vector3d{6.0, 7.0, 8.0};
+    constexpr auto distanceProduct = Vector3d{5.0, 10.0, 15.0};
 
     REQUIRE((distance += anotherDistance) == distanceSum);
     REQUIRE((distance -= anotherDistance) == distance);
     REQUIRE((distance += scalarDistance) == distanceSum);
     REQUIRE((distance -= scalarDistance) == distance);
+
+    REQUIRE((distance *= anotherDistance) == distanceProduct);
+    REQUIRE((distance /= anotherDistance) == distance);
+    REQUIRE((distance *= scalarDistance) == distanceProduct);
+    REQUIRE((distance /= scalarDistance) == distance);
 }
 
 TEST_CASE("Vector3d - Binary + and - Operators")
