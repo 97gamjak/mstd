@@ -25,6 +25,8 @@
 
 #include <array>   // for std::array
 
+#include "concepts/vector3dConcepts.hpp"
+
 namespace mstd
 {
     template <typename T>
@@ -54,6 +56,28 @@ namespace mstd
 
         [[nodiscard]] constexpr Vector3d<T> operator+() const;
         [[nodiscard]] constexpr Vector3d<T> operator-() const;
+
+        /*********************************
+         * compound assignment operators *
+         *********************************/
+
+        template <typename U>
+        requires requires(T &t, const U &u) { t += u; } &&
+                 (Vector3dDepthDifference_v<T, U> == 0)
+        constexpr Vector3d<T> &operator+=(const Vector3d<U> &rhs);
+
+        template <typename U>
+        requires requires(T &t, const U &u) { t += u; }
+        constexpr Vector3d<T> &operator+=(const U &rhs);
+
+        template <typename U>
+        requires requires(T &t, const U &u) { t -= u; } &&
+                 (Vector3dDepthDifference_v<T, U> == 0)
+        constexpr Vector3d<T> &operator-=(const Vector3d<U> &rhs);
+
+        template <typename U>
+        requires requires(T &t, const U &u) { t -= u; }
+        constexpr Vector3d<T> &operator-=(const U &rhs);
 
         /********************
          * unit conversions *

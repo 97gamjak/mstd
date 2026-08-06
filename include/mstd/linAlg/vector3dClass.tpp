@@ -25,6 +25,7 @@
 
 #include <utility>   // for std::declval
 
+#include "concepts/vector3dConcepts.hpp"
 #include "vector3dClass.hpp"
 
 namespace mstd
@@ -45,6 +46,62 @@ namespace mstd
     constexpr Vector3d<T> Vector3d<T>::operator-() const
     {
         return Vector3d<T>{-_xyz[0], -_xyz[1], -_xyz[2]};
+    }
+
+    /*********************************
+     *                               *
+     * compound assignment operators *
+     *                               *
+     *********************************/
+
+    template <typename T>
+    template <typename U>
+    requires requires(T &t, const U &u) { t += u; } &&
+             (Vector3dDepthDifference_v<T, U> == 0)
+    constexpr Vector3d<T> &Vector3d<T>::operator+=(const Vector3d<U> &rhs)
+    {
+        _xyz[0] += rhs[0];
+        _xyz[1] += rhs[1];
+        _xyz[2] += rhs[2];
+
+        return *this;
+    }
+
+    template <typename T>
+    template <typename U>
+    requires requires(T &t, const U &u) { t += u; }
+    constexpr Vector3d<T> &Vector3d<T>::operator+=(const U &rhs)
+    {
+        _xyz[0] += rhs;
+        _xyz[1] += rhs;
+        _xyz[2] += rhs;
+
+        return *this;
+    }
+
+    template <typename T>
+    template <typename U>
+    requires requires(T &t, const U &u) { t -= u; } &&
+             (Vector3dDepthDifference_v<T, U> == 0)
+    constexpr Vector3d<T> &Vector3d<T>::operator-=(const Vector3d<U> &rhs)
+    {
+        _xyz[0] -= rhs[0];
+        _xyz[1] -= rhs[1];
+        _xyz[2] -= rhs[2];
+
+        return *this;
+    }
+
+    template <typename T>
+    template <typename U>
+    requires requires(T &t, const U &u) { t -= u; }
+    constexpr Vector3d<T> &Vector3d<T>::operator-=(const U &rhs)
+    {
+        _xyz[0] -= rhs;
+        _xyz[1] -= rhs;
+        _xyz[2] -= rhs;
+
+        return *this;
     }
 
     /*******************
@@ -124,8 +181,7 @@ namespace mstd
     }
 
     template <typename T>
-    constexpr const T &Vector3d<T>::operator[](const std::size_t index
-    ) const
+    constexpr const T &Vector3d<T>::operator[](const std::size_t index) const
     {
         return _xyz[index];
     }
