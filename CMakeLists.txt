@@ -11,6 +11,14 @@ project(mstd
     DESCRIPTION "mstd - header-only C++ library"
 )
 
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+    if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 14.0)
+        message(FATAL_ERROR "Insufficient gcc version (need >= 14.0)")
+    endif()
+else()
+    message(WARNING "You are using an unsupported compiler! Compilation has only been tested with GNU.")
+endif()
+
 option(MSTD_USE_MP_UNITS "Enable vendored mp-units support" ON)
 set(MSTD_MP_UNITS_CONTRACTS "NONE" CACHE STRING "Contract checking mode for vendored mp-units: NONE, GSL-LITE, or MS-GSL")
 set_property(CACHE MSTD_MP_UNITS_CONTRACTS PROPERTY STRINGS NONE GSL-LITE MS-GSL)
