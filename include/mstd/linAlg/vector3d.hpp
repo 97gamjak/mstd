@@ -31,7 +31,7 @@
 #include <utility>
 
 #include "concepts/vector3dConcepts.hpp"
-#include "vector3dClass.hpp"   // IWYU pragma: export
+#include "vector3dClass.hpp"
 
 namespace mstd
 {
