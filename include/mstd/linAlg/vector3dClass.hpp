@@ -31,7 +31,7 @@ namespace mstd
     class Vector3d
     {
        private:
-        std::array<T, 3> _xyz;
+        std::array<T, 3> _xyz{};
 
        public:
         // clang-format off
