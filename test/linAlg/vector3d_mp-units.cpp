@@ -91,6 +91,19 @@ TEST_CASE("Vector3d mp-units - Unary +/- Operators")
     STATIC_REQUIRE(-distance == negativeDistance);
 }
 
+TEST_CASE("Vector3d mp-units - Compound Assignment Operators")
+{
+    auto           distance        = Vector3d{1.0 * km, 2.0 * km, 3.0 * km};
+    constexpr auto anotherDistance = Vector3d{5000.0 * m};
+    constexpr auto scalarDistance  = 5000.0 * m;
+    constexpr auto distanceSum     = Vector3d{6.0 * km, 7.0 * km, 8.0 * km};
+
+    REQUIRE((distance += anotherDistance) == distanceSum);
+    REQUIRE((distance -= anotherDistance) == distance);
+    REQUIRE((distance += scalarDistance) == distanceSum);
+    REQUIRE((distance -= scalarDistance) == distance);
+}
+
 TEST_CASE("Vector3d mp-units - Binary + and - Operators")
 {
     constexpr auto distance      = Vector3d{1.0 * km, 2.0 * km, 3.0 * km};
