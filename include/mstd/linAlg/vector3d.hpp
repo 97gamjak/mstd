@@ -44,14 +44,14 @@ namespace mstd
     [[nodiscard]] constexpr bool operator==(
         const Vector3d<U> &lhs,
         const Vector3d<V> &rhs
-    ) noexcept;
+    );
 
     template <typename U, typename V>
     requires std::equality_comparable_with<U, V>
     [[nodiscard]] constexpr bool operator!=(
         const Vector3d<U> &lhs,
         const Vector3d<V> &rhs
-    ) noexcept;
+    );
 
     /*********************
      * binary + operator *

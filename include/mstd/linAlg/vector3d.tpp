@@ -39,20 +39,14 @@ namespace mstd
 
     template <typename U, typename V>
     requires std::equality_comparable_with<U, V>
-    constexpr bool operator==(
-        const Vector3d<U> &lhs,
-        const Vector3d<V> &rhs
-    ) noexcept
+    constexpr bool operator==(const Vector3d<U> &lhs, const Vector3d<V> &rhs)
     {
         return lhs[0] == rhs[0] && lhs[1] == rhs[1] && lhs[2] == rhs[2];
     }
 
     template <typename U, typename V>
     requires std::equality_comparable_with<U, V>
-    constexpr bool operator!=(
-        const Vector3d<U> &lhs,
-        const Vector3d<V> &rhs
-    ) noexcept
+    constexpr bool operator!=(const Vector3d<U> &lhs, const Vector3d<V> &rhs)
     {
         return !(lhs == rhs);
     }

@@ -118,14 +118,14 @@ namespace mstd
      **********************/
 
     template <typename T>
-    constexpr T &Vector3d<T>::operator[](const std::size_t index) noexcept
+    constexpr T &Vector3d<T>::operator[](const std::size_t index)
     {
         return _xyz[index];
     }
 
     template <typename T>
     constexpr const T &Vector3d<T>::operator[](const std::size_t index
-    ) const noexcept
+    ) const
     {
         return _xyz[index];
     }

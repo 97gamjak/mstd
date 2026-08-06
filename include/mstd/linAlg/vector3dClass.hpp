@@ -35,15 +35,15 @@ namespace mstd
 
        public:
         // clang-format off
-        [[nodiscard]] constexpr  Vector3d()                               noexcept = default;
-                      constexpr ~Vector3d()                               noexcept = default;
-        [[nodiscard]] constexpr  Vector3d(const Vector3d<T> &)            noexcept = default;
-                      constexpr  Vector3d &operator=(const Vector3d<T> &) noexcept = default;
-        [[nodiscard]] constexpr  Vector3d(Vector3d<T> &&)                 noexcept = default;
-                      constexpr  Vector3d &operator=(Vector3d<T> &&)      noexcept = default;
+        [[nodiscard]] constexpr  Vector3d()                               = default;
+                      constexpr ~Vector3d()                               = default;
+        [[nodiscard]] constexpr  Vector3d(const Vector3d<T> &)            = default;
+                      constexpr  Vector3d &operator=(const Vector3d<T> &) = default;
+        [[nodiscard]] constexpr  Vector3d(Vector3d<T> &&)                 = default;
+                      constexpr  Vector3d &operator=(Vector3d<T> &&)      = default;
                       
-        [[nodiscard]] constexpr explicit Vector3d(const T &xyz)                       noexcept : _xyz{xyz, xyz, xyz} {}
-        [[nodiscard]] constexpr          Vector3d(const T &x, const T &y, const T &z) noexcept : _xyz{x, y, z} {}
+        [[nodiscard]] constexpr explicit Vector3d(const T &xyz)                       : _xyz{xyz, xyz, xyz} {}
+        [[nodiscard]] constexpr          Vector3d(const T &x, const T &y, const T &z) : _xyz{x, y, z} {}
         // clang-format on
 
         using value_type = T;
@@ -85,9 +85,9 @@ namespace mstd
          * indexing operators *
          **********************/
 
-        constexpr T &operator[](const std::size_t index) noexcept;
+        constexpr T                     &operator[](const std::size_t index);
         [[nodiscard]] constexpr const T &operator[](const std::size_t index
-        ) const noexcept;
+        ) const;
     };
 
 }   // namespace mstd
