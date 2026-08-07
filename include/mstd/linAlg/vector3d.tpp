@@ -223,6 +223,14 @@ namespace mstd
      * norm functions *
      ******************/
 
+    template <typename U>
+    requires requires(const U &u) { u * u + u * u; }
+    [[nodiscard]] constexpr auto normSquared(const Vector3d<U> &vec)
+        -> decltype(std::declval<U>() * std::declval<U>())
+    {
+        return vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2];
+    }
+
     template <Vector3dConcept U>
     requires requires(const U &vec) { std::sqrt(normSquared(vec)); }
     [[nodiscard]] auto norm(const U &vec)
@@ -240,11 +248,20 @@ namespace mstd
     }
 
     template <typename U>
-    requires requires(const U &u) { u * u + u * u; }
-    [[nodiscard]] constexpr auto normSquared(const Vector3d<U> &vec)
-        -> decltype(std::declval<U>() * std::declval<U>())
+    requires requires(const Vector3d<U> &vec) { vec[0] / norm(vec); }
+    [[nodiscard]] constexpr auto normalize(const Vector3d<U> &vec) -> Vector3d<
+        decltype(std::declval<U>() / norm(std::declval<const Vector3d<U> &>()))>
     {
-        return vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2];
+        using ResultType =
+            decltype(std::declval<U>() / norm(std::declval<const Vector3d<U> &>()));
+
+        const auto normValue = norm(vec);
+
+        return Vector3d<ResultType>(
+            vec[0] / normValue,
+            vec[1] / normValue,
+            vec[2] / normValue
+        );
     }
 
     /*********************
