@@ -162,11 +162,14 @@ TEST_CASE("Vector3d - Binary * and / Operators")
 
 TEST_CASE("Vector3d - Norm Functions")
 {
-    constexpr auto time = Vector3d{3.0, 4.0, 0.0};
+    constexpr auto time     = Vector3d{3.0, 4.0, 0.0};
+    auto           distance = Vector3d{3.0, 4.0, 0.0};
 
     STATIC_REQUIRE(normSquared(time) == (25.0));
     REQUIRE(norm(time) == (5.0));
     REQUIRE(normalize(time) == Vector3d{0.6, 0.8, 0.0});
+    normalize(distance);
+    REQUIRE(distance == Vector3d{0.6, 0.8, 0.0});
 }
 
 TEST_CASE("Vector3d - Product Functions")

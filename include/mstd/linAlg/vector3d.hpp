@@ -164,8 +164,12 @@ namespace mstd
 
     template <typename U>
     requires requires(const Vector3d<U> &vec) { vec[0] / norm(vec); }
-    [[nodiscard]] constexpr auto normalize(const Vector3d<U> &vec) -> Vector3d<
+    [[nodiscard]] auto normalize(const Vector3d<U> &vec) -> Vector3d<
         decltype(std::declval<U>() / norm(std::declval<const Vector3d<U> &>()))>;
+
+    template <typename U>
+    requires requires(Vector3d<U> &vec) { vec /= norm(vec); }
+    void normalize(Vector3d<U> &vec);
 
     /*********************
      * product functions *
