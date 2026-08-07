@@ -141,6 +141,16 @@ TEST_CASE("Vector3d mp-units - Norm Functions")
     REQUIRE(norm(time) == (7.0 * h));
 }
 
+TEST_CASE("Vector3d mp-units - Product Functions")
+{
+    constexpr auto length1 = Vector3d{1.0 * m, 2.0 * m, 3.0 * m};
+    constexpr auto length2 = Vector3d{4.0 * m, 5.0 * m, 6.0 * m};
+    constexpr auto length3 = Vector3d{-3.0 * m2, 6.0 * m2, -3.0 * m2};
+
+    STATIC_REQUIRE(dot(length1, length2) == (32.0 * m2));
+    STATIC_REQUIRE(cross(length1, length2) == length3);
+}
+
 TEST_CASE("Vector3d mp-units - ostream <<")
 {
     constexpr auto distance = Vector3d{1 * km, 2 * km, 3 * km};

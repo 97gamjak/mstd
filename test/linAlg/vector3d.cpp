@@ -168,6 +168,16 @@ TEST_CASE("Vector3d - Norm Functions")
     REQUIRE(norm(time) == (7.0));
 }
 
+TEST_CASE("Vector3d - Product Functions")
+{
+    constexpr auto length1 = Vector3d{1.0, 2.0, 3.0};
+    constexpr auto length2 = Vector3d{4.0, 5.0, 6.0};
+    constexpr auto length3 = Vector3d{-3.0, 6.0, -3.0};
+
+    STATIC_REQUIRE(dot(length1, length2) == (32.0));
+    STATIC_REQUIRE(cross(length1, length2) == length3);
+}
+
 TEST_CASE("Vector3d - ostream <<")
 {
     constexpr auto distance = Vector3d{1, 2, 3};

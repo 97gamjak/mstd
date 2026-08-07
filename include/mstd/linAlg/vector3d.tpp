@@ -247,6 +247,41 @@ namespace mstd
         return vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2];
     }
 
+    /*********************
+     * product functions *
+     *********************/
+
+    template <typename U, typename V>
+    requires requires(const U &u, const V &v) { u * v + u * v; } &&
+             (Vector3dDepthDifference_v<U, V> == 0)
+    [[nodiscard]] constexpr auto dot(
+        const Vector3d<U> &lhs,
+        const Vector3d<V> &rhs
+    ) -> decltype(std::declval<U>() * std::declval<V>() + std::declval<U>() * std::declval<V>())
+    {
+        return lhs[0] * rhs[0] + lhs[1] * rhs[1] + lhs[2] * rhs[2];
+    }
+
+    template <typename U, typename V>
+    requires requires(const U &u, const V &v) { u * v - u * v; } &&
+             (Vector3dDepthDifference_v<U, V> == 0)
+    [[nodiscard]] constexpr auto cross(
+        const Vector3d<U> &lhs,
+        const Vector3d<V> &rhs
+    )
+        -> Vector3d<
+            decltype(std::declval<U>() * std::declval<V>() - std::declval<U>() * std::declval<V>())>
+    {
+        using ResultType =
+            decltype(std::declval<U>() * std::declval<V>() - std::declval<U>() * std::declval<V>());
+        return Vector3d<ResultType>(
+            lhs[1] * rhs[2] - lhs[2] * rhs[1],
+            lhs[2] * rhs[0] - lhs[0] * rhs[2],
+            lhs[0] * rhs[1] - lhs[1] * rhs[0]
+
+        );
+    }
+
     /**************
      * ostream << *
      **************/
