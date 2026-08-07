@@ -130,6 +130,14 @@ namespace mstd
         constexpr T                     &operator[](const std::size_t index);
         [[nodiscard]] constexpr const T &operator[](const std::size_t index
         ) const;
+
+        /***********
+         * casting *
+         ***********/
+
+        template <typename U>
+        requires requires(const T &value) { static_cast<U>(value); }
+        constexpr operator Vector3d<U>() const;
     };
 
 }   // namespace mstd

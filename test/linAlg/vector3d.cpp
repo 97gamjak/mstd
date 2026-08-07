@@ -121,6 +121,16 @@ TEST_CASE("Vector3d - Compound Assignment Operators")
     REQUIRE((distance /= scalarDistance) == distance);
 }
 
+TEST_CASE("Vector3d - Static Cast")
+{
+    constexpr auto distance       = Vector3d{1.1, 2.2, 3.3};
+    constexpr auto distanceInt    = Vector3d{1, 2, 3};
+    constexpr auto distanceCasted = static_cast<Vector3d<int>>(distance);
+
+    STATIC_REQUIRE(distance != distanceInt);
+    STATIC_REQUIRE(distanceCasted == distanceInt);
+}
+
 TEST_CASE("Vector3d - Binary + and - Operators")
 {
     constexpr auto distance      = Vector3d{1.0, 2.0, 3.0};

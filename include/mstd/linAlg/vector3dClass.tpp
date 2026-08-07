@@ -236,6 +236,24 @@ namespace mstd
         return _xyz[index];
     }
 
+    /***********
+     *         *
+     * casting *
+     *         *
+     ***********/
+
+    template <typename T>
+    template <typename U>
+    requires requires(const T &value) { static_cast<U>(value); }
+    constexpr Vector3d<T>::operator Vector3d<U>() const
+    {
+        return Vector3d<U>{
+            static_cast<U>(_xyz[0]),
+            static_cast<U>(_xyz[1]),
+            static_cast<U>(_xyz[2]),
+        };
+    }
+
 }   // namespace mstd
 
 #endif   //  __MSTD__LINALG__VECTOR3DCLASS_TPP__
