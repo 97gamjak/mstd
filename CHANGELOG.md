@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### Enum
+
+- make enum.hpp clang-tidy compliant
+
 <!-- insertion marker -->
 ## [0.1.4](https://github.com/repo/owner/releases/tag/0.1.4) - 2026-07-26
 
