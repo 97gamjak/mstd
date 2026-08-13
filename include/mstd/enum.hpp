@@ -82,16 +82,16 @@
         static constexpr std::string_view name(EnumName e)                  \
         {                                                                   \
             for (std::size_t i = 0; i < size; ++i)                          \
-                if (values[i] == e)                                         \
-                    return names[i];                                        \
+                if (values.at(i) == e)                                      \
+                    return names.at(i);                                     \
             return {};                                                      \
         }                                                                   \
                                                                             \
         static constexpr std::string toString(EnumName e)                   \
         {                                                                   \
             for (std::size_t i = 0; i < size; ++i)                          \
-                if (values[i] == e)                                         \
-                    return std::string(names[i]);                           \
+                if (values.at(i) == e)                                      \
+                    return std::string(names.at(i));                        \
             return {};                                                      \
         }                                                                   \
                                                                             \
@@ -100,8 +100,8 @@
         )                                                                   \
         {                                                                   \
             for (std::size_t i = 0; i < size; ++i)                          \
-                if (names[i] == s)                                          \
-                    return values[i];                                       \
+                if (names.at(i) == s)                                       \
+                    return values.at(i);                                    \
             return std::nullopt;                                            \
         }                                                                   \
                                                                             \
@@ -113,7 +113,7 @@
         static constexpr std::optional<std::size_t> index(EnumName e)       \
         {                                                                   \
             for (std::size_t i = 0; i < size; ++i)                          \
-                if (values[i] == e)                                         \
+                if (values.at(i) == e)                                      \
                     return i;                                               \
             return std::nullopt;                                            \
         }                                                                   \
