@@ -65,7 +65,8 @@ namespace mstd
         // boolean and ordering
         //
 
-        [[nodiscard]] constexpr explicit operator bool() const noexcept
+        [[nodiscard]]
+        constexpr explicit operator bool() const noexcept
         requires(
             (Traits & StrongTypeTrait::BOOLEAN) && std::convertible_to<T, bool>
         );
