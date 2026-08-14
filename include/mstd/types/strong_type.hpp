@@ -25,8 +25,9 @@
 
 #include <compare>
 #include <concepts>
-#include <mstd/enum.hpp>
 #include <ostream>
+
+#include "mstd/enum.hpp"
 
 namespace mstd
 {
@@ -110,52 +111,52 @@ namespace mstd
         //
 
         constexpr StrongType &operator+=(const StrongType &other)
-        requires(Traits &StrongTypeTrait::ARITHMETIC && true);
+        requires(bool(Traits &StrongTypeTrait::ARITHMETIC));
 
         constexpr StrongType &operator-=(const StrongType &other)
-        requires(Traits &StrongTypeTrait::ARITHMETIC && true);
+        requires(bool(Traits &StrongTypeTrait::ARITHMETIC));
 
         constexpr StrongType &operator*=(const T &scalar)
-        requires(Traits &StrongTypeTrait::ARITHMETIC && true);
+        requires(bool(Traits &StrongTypeTrait::ARITHMETIC));
 
         constexpr StrongType &operator/=(const T &scalar)
-        requires(Traits &StrongTypeTrait::ARITHMETIC && true);
+        requires(bool(Traits &StrongTypeTrait::ARITHMETIC));
 
         [[nodiscard]]
         constexpr StrongType operator+(const StrongType &other) const
-        requires(Traits &StrongTypeTrait::ARITHMETIC && true);
+        requires(bool(Traits &StrongTypeTrait::ARITHMETIC));
 
         [[nodiscard]]
         constexpr StrongType operator-(const StrongType &other) const
-        requires(Traits &StrongTypeTrait::ARITHMETIC && true);
+        requires(bool(Traits &StrongTypeTrait::ARITHMETIC));
 
         [[nodiscard]]
         constexpr StrongType operator*(const T &scalar) const
-        requires(Traits &StrongTypeTrait::ARITHMETIC && true);
+        requires(bool(Traits &StrongTypeTrait::ARITHMETIC));
 
         [[nodiscard]]
         constexpr StrongType operator/(const T &scalar) const
-        requires(Traits &StrongTypeTrait::ARITHMETIC && true);
+        requires(bool(Traits &StrongTypeTrait::ARITHMETIC));
 
         [[nodiscard]]
         constexpr StrongType operator-() const
-        requires(Traits &StrongTypeTrait::ARITHMETIC && true);
+        requires(bool(Traits &StrongTypeTrait::ARITHMETIC));
 
         //
         // Increment / decrement
         //
 
         constexpr StrongType &operator++()
-        requires(Traits &StrongTypeTrait::INCREMENT && true);
+        requires(bool(Traits &StrongTypeTrait::INCREMENT));
 
         constexpr StrongType operator++(int)
-        requires(Traits &StrongTypeTrait::INCREMENT && true);
+        requires(bool(Traits &StrongTypeTrait::INCREMENT));
 
         constexpr StrongType &operator--()
-        requires(Traits &StrongTypeTrait::INCREMENT && true);
+        requires(bool(Traits &StrongTypeTrait::INCREMENT));
 
         constexpr StrongType operator--(int)
-        requires(Traits &StrongTypeTrait::INCREMENT && true);
+        requires(bool(Traits &StrongTypeTrait::INCREMENT));
 
        private:
         T _value{};

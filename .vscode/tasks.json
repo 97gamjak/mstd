@@ -16,6 +16,7 @@
                 "--suppress=missingIncludeSystem",
                 "--inline-suppr",
                 "--inconclusive",
+                "--std=c++23",
                 "-I",
                 "include",
                 "include",
