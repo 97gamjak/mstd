@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### Types
+
+- add convenient template for creating strong types easily
+
 <!-- insertion marker -->
 ## [0.1.5](https://github.com/repo/owner/releases/tag/0.1.5) - 2026-08-13
 

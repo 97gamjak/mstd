@@ -139,11 +139,30 @@
         return lhs;                                                     \
     }                                                                   \
                                                                         \
-    inline EnumName operator&(EnumName lhs, EnumName rhs)               \
+    struct EnumName##FlagTest                                           \
     {                                                                   \
-        return static_cast<EnumName>(                                   \
+        Underlying value;                                               \
+        constexpr  operator EnumName() const noexcept                   \
+        {                                                               \
+            return static_cast<EnumName>(value);                        \
+        }                                                               \
+                                                                        \
+        constexpr explicit operator bool() const noexcept               \
+        {                                                               \
+            return value != Underlying{0};                              \
+        }                                                               \
+    };                                                                  \
+                                                                        \
+    inline EnumName##FlagTest operator&(EnumName lhs, EnumName rhs)     \
+    {                                                                   \
+        return EnumName##FlagTest{static_cast<Underlying>(              \
             static_cast<Underlying>(lhs) & static_cast<Underlying>(rhs) \
-        );                                                              \
+        )};                                                             \
+    }                                                                   \
+                                                                        \
+    inline bool operator!(EnumName lhs)                                 \
+    {                                                                   \
+        return !static_cast<Underlying>(lhs);                           \
     }
 
 #endif   // __MSTD__ENUM_HPP__
