@@ -434,6 +434,28 @@ namespace mstd
         --_value;
         return tmp;
     }
+
+    /**
+     * @brief Convert StrongType to string.
+     *
+     * This function converts the StrongType to a string representation. It is
+     * only enabled if the Tag type provides a static toString function that
+     * accepts the underlying type T.
+     *
+     * @tparam T underlying value type
+     * @tparam Tag a unique tag type used only for disambiguation, e.g. `struct
+     * EnergyTag;`
+     * @tparam Traits bitwise-OR of StrongTypeTrait flags enabling specific
+     * operations
+     *
+     * @return a string representation of the StrongType
+     */
+    template <typename T, typename Tag, StrongTypeTrait Traits>
+    std::string StrongType<T, Tag, Traits>::toString() const
+    requires(Tag::toString(T{}))
+    {
+        return Tag::toString(_value);
+    }
 }   // namespace mstd
 
 #endif   // __MSTD__TYPES__STRONG_TYPE_TPP__

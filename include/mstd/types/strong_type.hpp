@@ -64,6 +64,9 @@ namespace mstd
         StrongTypeTrait Traits = StrongTypeTrait::NONE>
     class StrongType
     {
+       private:
+        T _value{};
+
        public:
         using ValueType                  = T;
         using TagType                    = Tag;
@@ -158,8 +161,8 @@ namespace mstd
         constexpr StrongType operator--(int)
         requires(bool(Traits &StrongTypeTrait::INCREMENT));
 
-       private:
-        T _value{};
+        std::string toString() const
+        requires(Tag::toString(T{}));
     };
 
 }   // namespace mstd
