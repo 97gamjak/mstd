@@ -452,7 +452,7 @@ namespace mstd
      */
     template <typename T, typename Tag, StrongTypeTrait Traits>
     std::string StrongType<T, Tag, Traits>::toString() const
-    requires(Tag::toString(T{}))
+    requires HasToString<Tag, T>
     {
         return Tag::toString(_value);
     }

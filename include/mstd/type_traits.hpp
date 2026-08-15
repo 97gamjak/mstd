@@ -29,5 +29,6 @@
 #include "type_traits/quantity_traits.hpp"   // IWYU pragma: export
 #include "type_traits/ranges_traits.hpp"     // IWYU pragma: export
 #include "type_traits/ratio_traits.hpp"      // IWYU pragma: export
+#include "type_traits/string.hpp"            // IWYU pragma: export
 
 #endif   // __MSTD__TYPE_TRAITS_HPP__

@@ -28,6 +28,7 @@
 #include <ostream>
 
 #include "mstd/enum.hpp"
+#include "mstd/type_traits/string.hpp"
 
 namespace mstd
 {
@@ -162,7 +163,7 @@ namespace mstd
         requires(bool(Traits &StrongTypeTrait::INCREMENT));
 
         std::string toString() const
-        requires(Tag::toString(T{}));
+        requires HasToString<Tag, T>;
     };
 
 }   // namespace mstd
