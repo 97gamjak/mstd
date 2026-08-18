@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+<!-- insertion marker -->
+## [0.2.0](https://github.com/repo/owner/releases/tag/0.2.0) - 2026-08-18
+
 ### Types
 
 - add convenient template for creating strong types easily
@@ -12,7 +15,6 @@ All notable changes to this project will be documented in this file.
 
 - Introduce new concept `HasToString`
 
-<!-- insertion marker -->
 ## [0.1.5](https://github.com/repo/owner/releases/tag/0.1.5) - 2026-08-13
 
 ### Enum
@@ -138,6 +140,7 @@ All notable changes to this project will be documented in this file.
 ### Bug Fix
 
 - add permissions to create tag workflow
+
 
 
 
