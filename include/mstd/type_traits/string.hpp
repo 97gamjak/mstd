@@ -20,15 +20,25 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD__TYPE_TRAITS_HPP__
-#define __MSTD__TYPE_TRAITS_HPP__
+#ifndef __MSTD__TYPE_TRAITS__STRING_HPP__
+#define __MSTD__TYPE_TRAITS__STRING_HPP__
 
-#include "type_traits/enum_traits.hpp"       // IWYU pragma: export
-#include "type_traits/math_traits.hpp"       // IWYU pragma: export
-#include "type_traits/pack_traits.hpp"       // IWYU pragma: export
-#include "type_traits/quantity_traits.hpp"   // IWYU pragma: export
-#include "type_traits/ranges_traits.hpp"     // IWYU pragma: export
-#include "type_traits/ratio_traits.hpp"      // IWYU pragma: export
-#include "type_traits/string.hpp"            // IWYU pragma: export
+#include <concepts>
+#include <string>
 
-#endif   // __MSTD__TYPE_TRAITS_HPP__
+namespace mstd
+{
+    /**
+     * @brief Concept checking whether Tag::toString(const T&) is a valid
+     * expression that returns something convertible to std::string.
+     *
+     * @tparam Tag the tag type expected to provide a static toString member
+     * @tparam T the value type passed to Tag::toString
+     */
+    template <typename Tag, typename T>
+    concept HasToString = requires(const T &value) {
+        { Tag::toString(value) } -> std::convertible_to<std::string>;
+    };
+}   // namespace mstd
+
+#endif   // __MSTD__TYPE_TRAITS__STRING_HPP__

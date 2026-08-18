@@ -124,26 +124,45 @@
 #define MSTD_ENUM(EnumName, Underlying, LIST) enum class EnumName : Underlying;
 #endif
 
-#define MSTD_ENUM_BITFLAG(EnumName, Underlying, LIST)                   \
-    MSTD_ENUM(EnumName, Underlying, LIST)                               \
-                                                                        \
-    inline EnumName operator|(EnumName lhs, EnumName rhs)               \
-    {                                                                   \
-        return static_cast<EnumName>(                                   \
-            static_cast<Underlying>(lhs) | static_cast<Underlying>(rhs) \
-        );                                                              \
-    }                                                                   \
-    inline EnumName& operator|=(EnumName& lhs, EnumName rhs)            \
-    {                                                                   \
-        lhs = lhs | rhs;                                                \
-        return lhs;                                                     \
-    }                                                                   \
-                                                                        \
-    inline EnumName operator&(EnumName lhs, EnumName rhs)               \
-    {                                                                   \
-        return static_cast<EnumName>(                                   \
-            static_cast<Underlying>(lhs) & static_cast<Underlying>(rhs) \
-        );                                                              \
+#define MSTD_ENUM_BITFLAG(EnumName, Underlying, LIST)                         \
+    MSTD_ENUM(EnumName, Underlying, LIST)                                     \
+                                                                              \
+    inline constexpr EnumName operator|(EnumName lhs, EnumName rhs)           \
+    {                                                                         \
+        return static_cast<EnumName>(                                         \
+            static_cast<Underlying>(lhs) | static_cast<Underlying>(rhs)       \
+        );                                                                    \
+    }                                                                         \
+    inline constexpr EnumName& operator|=(EnumName& lhs, EnumName rhs)        \
+    {                                                                         \
+        lhs = lhs | rhs;                                                      \
+        return lhs;                                                           \
+    }                                                                         \
+                                                                              \
+    struct EnumName##FlagTest                                                 \
+    {                                                                         \
+        Underlying value;                                                     \
+        constexpr  operator EnumName() const noexcept                         \
+        {                                                                     \
+            return static_cast<EnumName>(value);                              \
+        }                                                                     \
+                                                                              \
+        constexpr explicit operator bool() const noexcept                     \
+        {                                                                     \
+            return value != Underlying{0};                                    \
+        }                                                                     \
+    };                                                                        \
+                                                                              \
+    inline constexpr EnumName##FlagTest operator&(EnumName lhs, EnumName rhs) \
+    {                                                                         \
+        return EnumName##FlagTest{static_cast<Underlying>(                    \
+            static_cast<Underlying>(lhs) & static_cast<Underlying>(rhs)       \
+        )};                                                                   \
+    }                                                                         \
+                                                                              \
+    inline constexpr bool operator!(EnumName lhs)                             \
+    {                                                                         \
+        return !static_cast<Underlying>(lhs);                                 \
     }
 
 #endif   // __MSTD__ENUM_HPP__
