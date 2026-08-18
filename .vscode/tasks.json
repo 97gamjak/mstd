@@ -1,0 +1,109 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Cppcheck",
+            "type": "shell",
+            "command": "cppcheck",
+            "args": [
+                "--enable=all",
+                "--enable=performance",
+                "--enable=style",
+                "--enable=information",
+                "--enable=portability",
+                "--error-exitcode=1",
+                "--suppressions-list=.cppcheck.suppress",
+                "--suppress=missingIncludeSystem",
+                "--inline-suppr",
+                "--inconclusive",
+                "--std=c++23",
+                "-I",
+                "include",
+                "include",
+                "test"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": {
+                "owner": "cppcheck",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}"
+                ],
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error|style|performance|portability|information):\\s+(.*)\\s+\\[(\\w+)\\]$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5,
+                    "code": 6
+                }
+            },
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
+            }
+        },
+        {
+            "label": "Clang-Tidy (cpp_checks)",
+            "type": "shell",
+            "command": "cpp_checks",
+            "args": [
+                "--dirs",
+                "include",
+                "--dirs",
+                "test"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": {
+                "owner": "clang-tidy",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}"
+                ],
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)\\s+\\[([\\w,-]+)\\]$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5,
+                    "code": 6
+                }
+            },
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
+            }
+        },
+        {
+            "label": "Static Analysis: All",
+            "dependsOn": [
+                "Cppcheck",
+                "Clang-Tidy (cpp_checks)"
+            ],
+            "dependsOrder": "sequence",
+            "problemMatcher": [],
+            "group": "build"
+        },
+        {
+            "type": "cmake",
+            "label": "CMake: build",
+            "command": "build",
+            "targets": [
+                "all"
+            ],
+            "group": "build",
+            "problemMatcher": [],
+            "detail": "CMake template build task"
+        }
+    ]
+}

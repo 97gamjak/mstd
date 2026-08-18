@@ -17,10 +17,14 @@ jobs:
         with:
           submodules: recursive
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.13
+          cache: 'pip'
+
       - name: Install cppcheck
         run: |
-          sudo apt update
-          sudo apt install -y cppcheck
+          pip install --break-system-packages cppcheck
 
       - name: Run cppcheck
         run: |
