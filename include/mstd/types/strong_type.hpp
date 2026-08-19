@@ -100,13 +100,13 @@ namespace mstd
 
         [[nodiscard]]
         constexpr auto operator<=>(const StrongType &) const
-        requires(Traits &StrongTypeTrait::ORDERED &&
+        requires(static_cast<bool>(Traits &StrongTypeTrait::ORDERED) &&
                  std::three_way_comparable<T>)
         = default;
 
         [[nodiscard]]
         constexpr bool operator==(const StrongType &) const
-        requires(Traits &StrongTypeTrait::ORDERED &&
+        requires(static_cast<bool>(Traits &StrongTypeTrait::ORDERED) &&
                  std::equality_comparable<T>)
         = default;
 
@@ -178,7 +178,7 @@ std::ostream &operator<<(
     std::ostream                           &os,
     const mstd::StrongType<T, Tag, Traits> &strongType
 )
-requires(Traits &mstd::StrongTypeTrait::STREAMABLE && true)
+requires(static_cast<bool>(Traits &mstd::StrongTypeTrait::STREAMABLE) && true)
 {
     return os << strongType.get();
 }
