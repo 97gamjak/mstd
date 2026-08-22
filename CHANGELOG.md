@@ -4,11 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+<!-- insertion marker -->
+## [0.2.2](https://github.com/repo/owner/releases/tag/0.2.2) - 2026-08-22
+
 ### Enum
 
 - make mstd enum type clang-tidy conform
 
-<!-- insertion marker -->
 ## [0.2.1](https://github.com/repo/owner/releases/tag/0.2.1) - 2026-08-19
 
 ### Types
@@ -150,6 +152,7 @@ All notable changes to this project will be documented in this file.
 ### Bug Fix
 
 - add permissions to create tag workflow
+
 
 
 
