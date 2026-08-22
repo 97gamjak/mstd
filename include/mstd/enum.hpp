@@ -79,41 +79,41 @@
         static constexpr auto begin() { return values.begin(); }            \
         static constexpr auto end() { return values.end(); }                \
                                                                             \
-        static constexpr std::string_view name(EnumName e)                  \
+        static constexpr std::string_view name(EnumName enum_)              \
         {                                                                   \
             for (std::size_t i = 0; i < size; ++i)                          \
-                if (values.at(i) == e)                                      \
+                if (values.at(i) == enum_)                                  \
                     return names.at(i);                                     \
             return {};                                                      \
         }                                                                   \
                                                                             \
-        static constexpr std::string toString(EnumName e)                   \
+        static constexpr std::string toString(EnumName enum_)               \
         {                                                                   \
             for (std::size_t i = 0; i < size; ++i)                          \
-                if (values.at(i) == e)                                      \
+                if (values.at(i) == enum_)                                  \
                     return std::string(names.at(i));                        \
             return {};                                                      \
         }                                                                   \
                                                                             \
         static constexpr std::optional<EnumName> from_string(               \
-            std::string_view s                                              \
+            std::string_view str                                            \
         )                                                                   \
         {                                                                   \
             for (std::size_t i = 0; i < size; ++i)                          \
-                if (names.at(i) == s)                                       \
+                if (names.at(i) == str)                                     \
                     return values.at(i);                                    \
             return std::nullopt;                                            \
         }                                                                   \
                                                                             \
-        static constexpr underlying_type to_underlying(EnumName e)          \
+        static constexpr underlying_type to_underlying(EnumName enum_)      \
         {                                                                   \
-            return static_cast<underlying_type>(e);                         \
+            return static_cast<underlying_type>(enum_);                     \
         }                                                                   \
                                                                             \
-        static constexpr std::optional<std::size_t> index(EnumName e)       \
+        static constexpr std::optional<std::size_t> index(EnumName enum_)   \
         {                                                                   \
             for (std::size_t i = 0; i < size; ++i)                          \
-                if (values.at(i) == e)                                      \
+                if (values.at(i) == enum_)                                  \
                     return i;                                               \
             return std::nullopt;                                            \
         }                                                                   \
