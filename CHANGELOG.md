@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### Types
+
+- add `std::hash` function to strong type definition
+
 <!-- insertion marker -->
 ## [0.2.2](https://github.com/repo/owner/releases/tag/0.2.2) - 2026-08-22
 
