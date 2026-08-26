@@ -141,7 +141,7 @@ namespace mstd
     template <typename T, typename Tag, StrongTypeTrait Traits>
     constexpr StrongType<T, Tag, Traits> &StrongType<T, Tag, Traits>::
     operator+=(const StrongType &other)
-    requires(bool(Traits &StrongTypeTrait::ARITHMETIC))
+    requires(static_cast<bool>(Traits &StrongTypeTrait::ARITHMETIC))
     {
         _value += other._value;
         return *this;
@@ -166,7 +166,7 @@ namespace mstd
     template <typename T, typename Tag, StrongTypeTrait Traits>
     constexpr StrongType<T, Tag, Traits> &StrongType<T, Tag, Traits>::
     operator-=(const StrongType &other)
-    requires(bool(Traits &StrongTypeTrait::ARITHMETIC))
+    requires(static_cast<bool>(Traits &StrongTypeTrait::ARITHMETIC))
     {
         _value -= other._value;
         return *this;
@@ -190,7 +190,7 @@ namespace mstd
     template <typename T, typename Tag, StrongTypeTrait Traits>
     constexpr StrongType<T, Tag, Traits> &StrongType<T, Tag, Traits>::
     operator*=(const T &scalar)
-    requires(bool(Traits &StrongTypeTrait::ARITHMETIC))
+    requires(static_cast<bool>(Traits &StrongTypeTrait::ARITHMETIC))
     {
         _value *= scalar;
         return *this;
@@ -214,7 +214,7 @@ namespace mstd
     template <typename T, typename Tag, StrongTypeTrait Traits>
     constexpr StrongType<T, Tag, Traits> &StrongType<T, Tag, Traits>::
     operator/=(const T &scalar)
-    requires(bool(Traits &StrongTypeTrait::ARITHMETIC))
+    requires(static_cast<bool>(Traits &StrongTypeTrait::ARITHMETIC))
     {
         _value /= scalar;
         return *this;
@@ -239,7 +239,7 @@ namespace mstd
     constexpr StrongType<T, Tag, Traits> StrongType<T, Tag, Traits>::operator+(
         const StrongType &other
     ) const
-    requires(bool(Traits &StrongTypeTrait::ARITHMETIC))
+    requires(static_cast<bool>(Traits &StrongTypeTrait::ARITHMETIC))
     {
         return StrongType{_value + other._value};
     }
@@ -264,7 +264,7 @@ namespace mstd
     constexpr StrongType<T, Tag, Traits> StrongType<T, Tag, Traits>::operator-(
         const StrongType &other
     ) const
-    requires(bool(Traits &StrongTypeTrait::ARITHMETIC))
+    requires(static_cast<bool>(Traits &StrongTypeTrait::ARITHMETIC))
     {
         return StrongType{_value - other._value};
     }
@@ -288,7 +288,7 @@ namespace mstd
     constexpr StrongType<T, Tag, Traits> StrongType<T, Tag, Traits>::operator*(
         const T &scalar
     ) const
-    requires(bool(Traits &StrongTypeTrait::ARITHMETIC))
+    requires(static_cast<bool>(Traits &StrongTypeTrait::ARITHMETIC))
     {
         return StrongType{_value * scalar};
     }
@@ -312,7 +312,7 @@ namespace mstd
     constexpr StrongType<T, Tag, Traits> StrongType<T, Tag, Traits>::operator/(
         const T &scalar
     ) const
-    requires(bool(Traits &StrongTypeTrait::ARITHMETIC))
+    requires(static_cast<bool>(Traits &StrongTypeTrait::ARITHMETIC))
     {
         return StrongType{_value / scalar};
     }
@@ -334,7 +334,7 @@ namespace mstd
     template <typename T, typename Tag, StrongTypeTrait Traits>
     constexpr StrongType<T, Tag, Traits> StrongType<T, Tag, Traits>::operator-(
     ) const
-    requires(bool(Traits &StrongTypeTrait::ARITHMETIC))
+    requires(static_cast<bool>(Traits &StrongTypeTrait::ARITHMETIC))
     {
         return StrongType{-_value};
     }
@@ -356,7 +356,7 @@ namespace mstd
     template <typename T, typename Tag, StrongTypeTrait Traits>
     constexpr StrongType<T, Tag, Traits> &StrongType<T, Tag, Traits>::
     operator++()
-    requires(bool(Traits &StrongTypeTrait::INCREMENT))
+    requires(static_cast<bool>(Traits &StrongTypeTrait::INCREMENT))
     {
         ++_value;
         return *this;
@@ -380,7 +380,7 @@ namespace mstd
     constexpr StrongType<T, Tag, Traits> StrongType<T, Tag, Traits>::operator++(
         int
     )
-    requires(bool(Traits &StrongTypeTrait::INCREMENT))
+    requires(static_cast<bool>(Traits &StrongTypeTrait::INCREMENT))
     {
         auto tmp = *this;
         ++_value;
@@ -404,7 +404,7 @@ namespace mstd
     template <typename T, typename Tag, StrongTypeTrait Traits>
     constexpr StrongType<T, Tag, Traits> &StrongType<T, Tag, Traits>::
     operator--()
-    requires(bool(Traits &StrongTypeTrait::INCREMENT))
+    requires(static_cast<bool>(Traits &StrongTypeTrait::INCREMENT))
     {
         --_value;
         return *this;
@@ -428,7 +428,7 @@ namespace mstd
     constexpr StrongType<T, Tag, Traits> StrongType<T, Tag, Traits>::operator--(
         int
     )
-    requires(bool(Traits &StrongTypeTrait::INCREMENT))
+    requires(static_cast<bool>(Traits &StrongTypeTrait::INCREMENT))
     {
         auto tmp = *this;
         --_value;
