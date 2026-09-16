@@ -33,15 +33,17 @@
 namespace mstd
 {
 
+// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)sss
 #define STRONG_TYPE_TRAIT_LIST(X) \
     X(NONE, 0)                    \
-    X(ORDERED, 1u << 0)           \
-    X(ARITHMETIC, 1u << 1)        \
-    X(INCREMENT, 1u << 2)         \
-    X(HASHABLE, 1u << 3)          \
-    X(STREAMABLE, 1u << 4)        \
-    X(BOOLEAN, 1u << 5)
+    X(ORDERED, 1U << 0)           \
+    X(ARITHMETIC, 1U << 1)        \
+    X(INCREMENT, 1U << 2)         \
+    X(HASHABLE, 1U << 3)          \
+    X(STREAMABLE, 1U << 4)        \
+    X(BOOLEAN, 1U << 5)
 
+    // NOLINTNEXTLINE(hicpp-signed-bitwise)
     MSTD_ENUM_BITFLAG(StrongTypeTrait, unsigned, STRONG_TYPE_TRAIT_LIST);
 
     /**
@@ -115,52 +117,52 @@ namespace mstd
         //
 
         constexpr StrongType &operator+=(const StrongType &other)
-        requires(bool(Traits &StrongTypeTrait::ARITHMETIC));
+        requires(static_cast<bool>(Traits &StrongTypeTrait::ARITHMETIC));
 
         constexpr StrongType &operator-=(const StrongType &other)
-        requires(bool(Traits &StrongTypeTrait::ARITHMETIC));
+        requires(static_cast<bool>(Traits &StrongTypeTrait::ARITHMETIC));
 
         constexpr StrongType &operator*=(const T &scalar)
-        requires(bool(Traits &StrongTypeTrait::ARITHMETIC));
+        requires(static_cast<bool>(Traits &StrongTypeTrait::ARITHMETIC));
 
         constexpr StrongType &operator/=(const T &scalar)
-        requires(bool(Traits &StrongTypeTrait::ARITHMETIC));
+        requires(static_cast<bool>(Traits &StrongTypeTrait::ARITHMETIC));
 
         [[nodiscard]]
         constexpr StrongType operator+(const StrongType &other) const
-        requires(bool(Traits &StrongTypeTrait::ARITHMETIC));
+        requires(static_cast<bool>(Traits &StrongTypeTrait::ARITHMETIC));
 
         [[nodiscard]]
         constexpr StrongType operator-(const StrongType &other) const
-        requires(bool(Traits &StrongTypeTrait::ARITHMETIC));
+        requires(static_cast<bool>(Traits &StrongTypeTrait::ARITHMETIC));
 
         [[nodiscard]]
         constexpr StrongType operator*(const T &scalar) const
-        requires(bool(Traits &StrongTypeTrait::ARITHMETIC));
+        requires(static_cast<bool>(Traits &StrongTypeTrait::ARITHMETIC));
 
         [[nodiscard]]
         constexpr StrongType operator/(const T &scalar) const
-        requires(bool(Traits &StrongTypeTrait::ARITHMETIC));
+        requires(static_cast<bool>(Traits &StrongTypeTrait::ARITHMETIC));
 
         [[nodiscard]]
         constexpr StrongType operator-() const
-        requires(bool(Traits &StrongTypeTrait::ARITHMETIC));
+        requires(static_cast<bool>(Traits &StrongTypeTrait::ARITHMETIC));
 
         //
         // Increment / decrement
         //
 
         constexpr StrongType &operator++()
-        requires(bool(Traits &StrongTypeTrait::INCREMENT));
+        requires(static_cast<bool>(Traits &StrongTypeTrait::INCREMENT));
 
         constexpr StrongType operator++(int)
-        requires(bool(Traits &StrongTypeTrait::INCREMENT));
+        requires(static_cast<bool>(Traits &StrongTypeTrait::INCREMENT));
 
         constexpr StrongType &operator--()
-        requires(bool(Traits &StrongTypeTrait::INCREMENT));
+        requires(static_cast<bool>(Traits &StrongTypeTrait::INCREMENT));
 
         constexpr StrongType operator--(int)
-        requires(bool(Traits &StrongTypeTrait::INCREMENT));
+        requires(static_cast<bool>(Traits &StrongTypeTrait::INCREMENT));
 
         std::string toString() const
         requires HasToString<Tag, T>;
@@ -182,5 +184,25 @@ requires(static_cast<bool>(Traits &mstd::StrongTypeTrait::STREAMABLE) && true)
 {
     return os << strongType.get();
 }
+
+namespace std
+{
+    // NOLINTBEGIN(cert-dcl58-cpp)
+    template <typename T, typename Tag, mstd::StrongTypeTrait Traits>
+    struct hash<mstd::StrongType<T, Tag, Traits>>
+    {
+        [[nodiscard]] size_t operator()(
+            const mstd::StrongType<T, Tag, Traits> &value
+        ) const noexcept(noexcept(std::hash<T>{}(value.get())))
+        requires(
+            static_cast<bool>(Traits &mstd::StrongTypeTrait::HASHABLE) &&
+            requires(const T &t) { std::hash<T>{}(t); }
+        )
+        {
+            return std::hash<T>{}(value.get());
+        }
+    };
+    // NOLINTEND(cert-dcl58-cpp)
+}   // namespace std
 
 #endif   // __MSTD__TYPES__STRONG_TYPE_HPP__
