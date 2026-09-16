@@ -119,7 +119,8 @@
         }                                                                   \
     };                                                                      \
                                                                             \
-    static constexpr EnumName##Meta enum_meta(EnumName) { return {}; }
+    inline constexpr EnumName##Meta enum_meta(EnumName) { return {}; }
+
 #else
 #define MSTD_ENUM(EnumName, Underlying, LIST) enum class EnumName : Underlying;
 #endif
