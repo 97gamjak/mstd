@@ -9,6 +9,8 @@ All notable changes to this project will be documented in this file.
 ## Next Release
 
 <!-- insertion marker -->
+## [0.2.4](https://github.com/repo/owner/releases/tag/0.2.4) - 2026-09-16
+
 ## [0.2.3](https://github.com/repo/owner/releases/tag/0.2.3) - 2026-08-26
 
 ### Types
@@ -162,6 +164,7 @@ All notable changes to this project will be documented in this file.
 ### Bug Fix
 
 - add permissions to create tag workflow
+
 
 
 
