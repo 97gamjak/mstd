@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ### Enum
 
 - more clang-tidy fix for enum type
+- add operator~ and operator&=
 
 ## Next Release
 
