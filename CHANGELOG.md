@@ -2,14 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## Next Release
+
 ### Enum
 
-- more clang-tidy fix for enum type
-
-## Next Release
+- add operator~ and operator&=
 
 <!-- insertion marker -->
 ## [0.2.4](https://github.com/repo/owner/releases/tag/0.2.4) - 2026-09-16
+
+### Enum
+
+- more clang-tidy fix for enum type
 
 ## [0.2.3](https://github.com/repo/owner/releases/tag/0.2.3) - 2026-08-26
 

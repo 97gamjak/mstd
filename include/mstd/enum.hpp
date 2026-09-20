@@ -134,10 +134,16 @@
             static_cast<Underlying>(lhs) | static_cast<Underlying>(rhs)       \
         );                                                                    \
     }                                                                         \
+                                                                              \
     inline constexpr EnumName& operator|=(EnumName& lhs, EnumName rhs)        \
     {                                                                         \
         lhs = lhs | rhs;                                                      \
         return lhs;                                                           \
+    }                                                                         \
+                                                                              \
+    inline constexpr EnumName operator~(EnumName value)                       \
+    {                                                                         \
+        return static_cast<EnumName>(~static_cast<Underlying>(value));        \
     }                                                                         \
                                                                               \
     struct EnumName##FlagTest                                                 \
@@ -159,6 +165,12 @@
         return EnumName##FlagTest{static_cast<Underlying>(                    \
             static_cast<Underlying>(lhs) & static_cast<Underlying>(rhs)       \
         )};                                                                   \
+    }                                                                         \
+                                                                              \
+    inline constexpr EnumName& operator&=(EnumName& lhs, EnumName rhs)        \
+    {                                                                         \
+        lhs = lhs & rhs;                                                      \
+        return lhs;                                                           \
     }                                                                         \
                                                                               \
     inline constexpr bool operator!(EnumName lhs)                             \
