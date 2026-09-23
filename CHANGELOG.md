@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### Enum
+
+- add possiblity to use `from_stringCaseInsensitive` if the different enum values allow it (compile time checked)
+
 <!-- insertion marker -->
 ## [0.2.5](https://github.com/repo/owner/releases/tag/0.2.5) - 2026-09-20
 
