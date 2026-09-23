@@ -32,6 +32,7 @@
 #include <type_traits>   // IWYU pragma: keep
 
 #include "mstd/type_traits/enum_traits.hpp"   // IWYU pragma: keep
+#include "mstd/type_traits/string.hpp"        // IWYU pragma: keep
 
 //
 // Element expanders
@@ -50,75 +51,91 @@
 // Main macro
 // ------------------------------------------------------------
 #ifndef Q_MOC_RUN
-#define MSTD_ENUM(EnumName, Underlying, LIST)                               \
-    enum class EnumName : Underlying                                        \
-    {                                                                       \
-        LIST(MSTD_ENUM_MAKE_ENUM)                                           \
-    };                                                                      \
-                                                                            \
-    struct EnumName##Meta                                                   \
-    {                                                                       \
-        using type            = EnumName;                                   \
-        using underlying_type = Underlying;                                 \
-        using enum EnumName;                                                \
-        static constexpr std::string_view EnumNameStr = #EnumName;          \
-                                                                            \
-        static constexpr auto values =                                      \
-            std::to_array<EnumName>({LIST(MSTD_ENUM_MAKE_VALUE)});          \
-                                                                            \
-        static constexpr std::span<const EnumName> values_view()            \
-        {                                                                   \
-            return values;                                                  \
-        }                                                                   \
-                                                                            \
-        static constexpr auto names =                                       \
-            std::to_array<std::string_view>({LIST(MSTD_ENUM_MAKE_STRING)}); \
-                                                                            \
-        static constexpr std::size_t size = values.size();                  \
-                                                                            \
-        static constexpr auto begin() { return values.begin(); }            \
-        static constexpr auto end() { return values.end(); }                \
-                                                                            \
-        static constexpr std::string_view name(EnumName enum_)              \
-        {                                                                   \
-            for (std::size_t i = 0; i < size; ++i)                          \
-                if (values.at(i) == enum_)                                  \
-                    return names.at(i);                                     \
-            return {};                                                      \
-        }                                                                   \
-                                                                            \
-        static constexpr std::string toString(EnumName enum_)               \
-        {                                                                   \
-            for (std::size_t i = 0; i < size; ++i)                          \
-                if (values.at(i) == enum_)                                  \
-                    return std::string(names.at(i));                        \
-            return {};                                                      \
-        }                                                                   \
-                                                                            \
-        static constexpr std::optional<EnumName> from_string(               \
-            std::string_view str                                            \
-        )                                                                   \
-        {                                                                   \
-            for (std::size_t i = 0; i < size; ++i)                          \
-                if (names.at(i) == str)                                     \
-                    return values.at(i);                                    \
-            return std::nullopt;                                            \
-        }                                                                   \
-                                                                            \
-        static constexpr underlying_type to_underlying(EnumName enum_)      \
-        {                                                                   \
-            return static_cast<underlying_type>(enum_);                     \
-        }                                                                   \
-                                                                            \
-        static constexpr std::optional<std::size_t> index(EnumName enum_)   \
-        {                                                                   \
-            for (std::size_t i = 0; i < size; ++i)                          \
-                if (values.at(i) == enum_)                                  \
-                    return i;                                               \
-            return std::nullopt;                                            \
-        }                                                                   \
-    };                                                                      \
-                                                                            \
+#define MSTD_ENUM(EnumName, Underlying, LIST)                                \
+    enum class EnumName : Underlying                                         \
+    {                                                                        \
+        LIST(MSTD_ENUM_MAKE_ENUM)                                            \
+    };                                                                       \
+                                                                             \
+    struct EnumName##Meta                                                    \
+    {                                                                        \
+        using type            = EnumName;                                    \
+        using underlying_type = Underlying;                                  \
+        using enum EnumName;                                                 \
+        static constexpr std::string_view EnumNameStr = #EnumName;           \
+                                                                             \
+        static constexpr auto values =                                       \
+            std::to_array<EnumName>({LIST(MSTD_ENUM_MAKE_VALUE)});           \
+                                                                             \
+        static constexpr std::span<const EnumName> values_view()             \
+        {                                                                    \
+            return values;                                                   \
+        }                                                                    \
+                                                                             \
+        static constexpr auto names =                                        \
+            std::to_array<std::string_view>({LIST(MSTD_ENUM_MAKE_STRING)});  \
+                                                                             \
+        static constexpr std::size_t size = values.size();                   \
+                                                                             \
+        static constexpr auto begin() { return values.begin(); }             \
+        static constexpr auto end() { return values.end(); }                 \
+                                                                             \
+        static constexpr std::string_view name(EnumName enum_)               \
+        {                                                                    \
+            for (std::size_t i = 0; i < size; ++i)                           \
+                if (values.at(i) == enum_)                                   \
+                    return names.at(i);                                      \
+            return {};                                                       \
+        }                                                                    \
+                                                                             \
+        static constexpr std::string toString(EnumName enum_)                \
+        {                                                                    \
+            for (std::size_t i = 0; i < size; ++i)                           \
+                if (values.at(i) == enum_)                                   \
+                    return std::string(names.at(i));                         \
+            return {};                                                       \
+        }                                                                    \
+                                                                             \
+        static constexpr std::optional<EnumName> from_string(                \
+            std::string_view str                                             \
+        )                                                                    \
+        {                                                                    \
+            for (std::size_t i = 0; i < size; ++i)                           \
+                if (names.at(i) == str)                                      \
+                    return values.at(i);                                     \
+            return std::nullopt;                                             \
+        }                                                                    \
+                                                                             \
+        static constexpr std::optional<EnumName> from_stringCaseInsensitive( \
+            std::string_view str                                             \
+        )                                                                    \
+        {                                                                    \
+            static_assert(                                                   \
+                !mstd::hasCaseInsensitiveCollision<(size)>(names),           \
+                "from_stringCaseInsensitive is ambiguous: this enum has "    \
+                "enumerator names that differ only by case"                  \
+            );                                                               \
+                                                                             \
+            for (std::size_t i = 0; i < names.size(); ++i)                   \
+                if (mstd::iequals(names.at(i), str))                         \
+                    return values.at(i);                                     \
+            return std::nullopt;                                             \
+        }                                                                    \
+                                                                             \
+        static constexpr underlying_type to_underlying(EnumName enum_)       \
+        {                                                                    \
+            return static_cast<underlying_type>(enum_);                      \
+        }                                                                    \
+                                                                             \
+        static constexpr std::optional<std::size_t> index(EnumName enum_)    \
+        {                                                                    \
+            for (std::size_t i = 0; i < size; ++i)                           \
+                if (values.at(i) == enum_)                                   \
+                    return i;                                                \
+            return std::nullopt;                                             \
+        }                                                                    \
+    };                                                                       \
+                                                                             \
     inline constexpr EnumName##Meta enum_meta(EnumName) { return {}; }
 
 #else
