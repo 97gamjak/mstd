@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### File
+
+- add new (very thin) type `File` for type safe string handling 
+
 <!-- insertion marker -->
 ## [0.2.6](https://github.com/repo/owner/releases/tag/0.2.6) - 2026-09-23
 
