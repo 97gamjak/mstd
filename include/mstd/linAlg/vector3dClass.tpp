@@ -1,0 +1,259 @@
+/*****************************************************************************
+<GPL_HEADER>
+
+    mstd library
+    Copyright (C) 2025-now  Jakob Gamper
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+<GPL_HEADER>
+******************************************************************************/
+
+#ifndef __MSTD__LINALG__VECTOR3DCLASS_TPP__
+#define __MSTD__LINALG__VECTOR3DCLASS_TPP__
+
+#include <utility>   // for std::declval
+
+#include "concepts/vector3dConcepts.hpp"
+#include "vector3dClass.hpp"
+
+namespace mstd
+{
+    /***********************
+     *                     *
+     * unary +/- operators *
+     *                     *
+     ***********************/
+
+    template <typename T>
+    constexpr Vector3d<T> Vector3d<T>::operator+() const
+    {
+        return *this;
+    }
+
+    template <typename T>
+    constexpr Vector3d<T> Vector3d<T>::operator-() const
+    {
+        return Vector3d<T>{-_xyz[0], -_xyz[1], -_xyz[2]};
+    }
+
+    /*********************************
+     *                               *
+     * compound assignment operators *
+     *                               *
+     *********************************/
+
+    template <typename T>
+    template <typename U>
+    requires requires(T &t, const U &u) { t += u; } &&
+             (Vector3dDepthDifference_v<T, U> == 0)
+    constexpr Vector3d<T> &Vector3d<T>::operator+=(const Vector3d<U> &rhs)
+    {
+        _xyz[0] += rhs[0];
+        _xyz[1] += rhs[1];
+        _xyz[2] += rhs[2];
+
+        return *this;
+    }
+
+    template <typename T>
+    template <typename U>
+    requires requires(T &t, const U &u) { t += u; }
+    constexpr Vector3d<T> &Vector3d<T>::operator+=(const U &rhs)
+    {
+        _xyz[0] += rhs;
+        _xyz[1] += rhs;
+        _xyz[2] += rhs;
+
+        return *this;
+    }
+
+    template <typename T>
+    template <typename U>
+    requires requires(T &t, const U &u) { t -= u; } &&
+             (Vector3dDepthDifference_v<T, U> == 0)
+    constexpr Vector3d<T> &Vector3d<T>::operator-=(const Vector3d<U> &rhs)
+    {
+        _xyz[0] -= rhs[0];
+        _xyz[1] -= rhs[1];
+        _xyz[2] -= rhs[2];
+
+        return *this;
+    }
+
+    template <typename T>
+    template <typename U>
+    requires requires(T &t, const U &u) { t -= u; }
+    constexpr Vector3d<T> &Vector3d<T>::operator-=(const U &rhs)
+    {
+        _xyz[0] -= rhs;
+        _xyz[1] -= rhs;
+        _xyz[2] -= rhs;
+
+        return *this;
+    }
+
+    template <typename T>
+    template <typename U>
+    requires requires(T &t, const U &u) { t *= u; } &&
+             (Vector3dDepthDifference_v<T, U> == 0)
+    constexpr Vector3d<T> &Vector3d<T>::operator*=(const Vector3d<U> &rhs)
+    {
+        _xyz[0] *= rhs[0];
+        _xyz[1] *= rhs[1];
+        _xyz[2] *= rhs[2];
+
+        return *this;
+    }
+
+    template <typename T>
+    template <typename U>
+    requires requires(T &t, const U &u) { t *= u; }
+    constexpr Vector3d<T> &Vector3d<T>::operator*=(const U &rhs)
+    {
+        _xyz[0] *= rhs;
+        _xyz[1] *= rhs;
+        _xyz[2] *= rhs;
+
+        return *this;
+    }
+
+    template <typename T>
+    template <typename U>
+    requires requires(T &t, const U &u) { t /= u; } &&
+             (Vector3dDepthDifference_v<T, U> == 0)
+    constexpr Vector3d<T> &Vector3d<T>::operator/=(const Vector3d<U> &rhs)
+    {
+        _xyz[0] /= rhs[0];
+        _xyz[1] /= rhs[1];
+        _xyz[2] /= rhs[2];
+
+        return *this;
+    }
+
+    template <typename T>
+    template <typename U>
+    requires requires(T &t, const U &u) { t /= u; }
+    constexpr Vector3d<T> &Vector3d<T>::operator/=(const U &rhs)
+    {
+        _xyz[0] /= rhs;
+        _xyz[1] /= rhs;
+        _xyz[2] /= rhs;
+
+        return *this;
+    }
+
+    /*******************
+     * unit conversion *
+     *******************/
+
+    template <typename T>
+    template <typename U>
+    requires requires(const T &v, const U &unit) { v.in(unit); }
+    constexpr auto Vector3d<T>::in(const U &unit) const
+    {
+        using ResultType = decltype(std::declval<const T &>().in(unit));
+
+        return Vector3d<ResultType>{
+            _xyz[0].in(unit),
+            _xyz[1].in(unit),
+            _xyz[2].in(unit),
+        };
+    }
+
+    template <typename T>
+    template <typename U>
+    requires requires(const T &v, const U &unit) { v.force_in(unit); }
+    constexpr auto Vector3d<T>::force_in(const U &unit) const
+    {
+        using ResultType = decltype(std::declval<const T &>().force_in(unit));
+
+        return Vector3d<ResultType>{
+            _xyz[0].force_in(unit),
+            _xyz[1].force_in(unit),
+            _xyz[2].force_in(unit),
+        };
+    }
+
+    template <typename T>
+    template <typename U>
+    requires requires(const T &v, const U &unit) { v.numerical_value_in(unit); }
+    constexpr auto Vector3d<T>::numerical_value_in(const U &unit) const
+    {
+        using ResultType =
+            decltype(std::declval<const T &>().numerical_value_in(unit));
+
+        return Vector3d<ResultType>{
+            _xyz[0].numerical_value_in(unit),
+            _xyz[1].numerical_value_in(unit),
+            _xyz[2].numerical_value_in(unit),
+        };
+    }
+
+    template <typename T>
+    template <typename U>
+    requires requires(const T &v, const U &unit) {
+        v.force_numerical_value_in(unit);
+    }
+    constexpr auto Vector3d<T>::force_numerical_value_in(const U &unit) const
+    {
+        using ResultType =
+            decltype(std::declval<const T &>().force_numerical_value_in(unit));
+
+        return Vector3d<ResultType>{
+            _xyz[0].force_numerical_value_in(unit),
+            _xyz[1].force_numerical_value_in(unit),
+            _xyz[2].force_numerical_value_in(unit),
+        };
+    }
+
+    /**********************
+     *                    *
+     * indexing operators *
+     *                    *
+     **********************/
+
+    template <typename T>
+    constexpr T &Vector3d<T>::operator[](const std::size_t index)
+    {
+        return _xyz[index];
+    }
+
+    template <typename T>
+    constexpr const T &Vector3d<T>::operator[](const std::size_t index) const
+    {
+        return _xyz[index];
+    }
+
+    /***********
+     *         *
+     * casting *
+     *         *
+     ***********/
+
+    template <typename T>
+    template <typename U>
+    requires requires(const T &value) { static_cast<U>(value); }
+    constexpr Vector3d<T>::operator Vector3d<U>() const
+    {
+        return Vector3d<U>{
+            static_cast<U>(_xyz[0]),
+            static_cast<U>(_xyz[1]),
+            static_cast<U>(_xyz[2]),
+        };
+    }
+
+}   // namespace mstd
+
+#endif   //  __MSTD__LINALG__VECTOR3DCLASS_TPP__
