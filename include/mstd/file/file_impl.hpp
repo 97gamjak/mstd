@@ -20,8 +20,8 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD__FILE__FILE_IMPL__HPP__
-#define __MSTD__FILE__FILE_IMPL__HPP__
+#ifndef __MSTD__FILE__FILE_IMPL_HPP__
+#define __MSTD__FILE__FILE_IMPL_HPP__
 
 #include <filesystem>
 #include <fstream>
@@ -61,4 +61,4 @@ namespace mstd
     inline std::string File::fileName() const { return _fileName; }
 }   // namespace mstd
 
-#endif   // __MSTD__FILE__FILE_IMPL__HPP__
+#endif   // __MSTD__FILE__FILE_IMPL_HPP__
