@@ -22,6 +22,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 #include <cstdint>
+#include <iterator>
 #include <optional>
 #include <string>
 #include <string_view>
@@ -40,7 +41,7 @@ namespace
     X(Green)                    \
     X(Blue)
 
-    MSTD_ENUM(Color, int, MSTD_TEST_COLOR_LIST)
+    MSTD_ENUM(Color, int, MSTD_TEST_COLOR_LIST)   // cppcheck-suppress syntaxError
 
     // Mixed enum: some enumerators have explicit values (including gaps and
     // a non-zero start), others fall back to "previous value + 1", exactly
@@ -199,9 +200,10 @@ TEST_CASE(
     );
 
     // Also confirm the class is usable with range-based for via begin()/end().
-    std::size_t count = 0;
-    for ([[maybe_unused]] Color c : ColorMeta::values)
-        ++count;
+    const auto count = std::distance(
+        std::begin(ColorMeta::values),
+        std::end(ColorMeta::values)
+    );
     REQUIRE(count == 3);
 }
 

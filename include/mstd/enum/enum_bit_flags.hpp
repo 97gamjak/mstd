@@ -20,8 +20,8 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD__ENUM__ENUM_BIT_FLAGE_HPP__
-#define __MSTD__ENUM__ENUM_BIT_FLAGE_HPP__
+#ifndef __MSTD__ENUM__ENUM_BIT_FLAGS_HPP__
+#define __MSTD__ENUM__ENUM_BIT_FLAGS_HPP__
 
 #include "enum.hpp"
 
@@ -78,4 +78,4 @@
         return !static_cast<Underlying>(lhs);                                 \
     }
 
-#endif   // __MSTD__ENUM__ENUM_BIT_FLAGE_HPP__
+#endif   // __MSTD__ENUM__ENUM_BIT_FLAGS_HPP__
