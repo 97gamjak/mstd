@@ -31,7 +31,6 @@
 #include <string_view>   // IWYU pragma: keep
 #include <type_traits>   // IWYU pragma: keep
 
-#include "mstd/enum/enum_string.hpp"          // IWYU pragma: keep
 #include "mstd/type_traits/enum_traits.hpp"   // IWYU pragma: keep
 #include "mstd/type_traits/string.hpp"        // IWYU pragma: keep
 
