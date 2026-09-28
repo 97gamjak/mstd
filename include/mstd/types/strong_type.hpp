@@ -44,7 +44,7 @@ namespace mstd
     X(BOOLEAN, 1U << 5)
 
     // NOLINTNEXTLINE(hicpp-signed-bitwise)
-    MSTD_ENUM_BITFLAG(StrongTypeTrait, unsigned, STRONG_TYPE_TRAIT_LIST);
+    MSTD_ENUM_BITFLAG(StrongTypeTrait, unsigned, STRONG_TYPE_TRAIT_LIST);   // cppcheck-suppress syntaxError
 
     /**
      * @brief A generalized strong type wrapper.
