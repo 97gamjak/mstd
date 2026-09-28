@@ -41,7 +41,7 @@ namespace
     X(Green)                    \
     X(Blue)
 
-    MSTD_ENUM(Color, int, MSTD_TEST_COLOR_LIST)   // cppcheck-suppress syntaxError
+    MSTD_ENUM(Color, int, MSTD_TEST_COLOR_LIST)
 
     // Mixed enum: some enumerators have explicit values (including gaps and
     // a non-zero start), others fall back to "previous value + 1", exactly

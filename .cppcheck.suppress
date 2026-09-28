@@ -1,2 +1,5 @@
 unusedFunction
 duplInheritedMember
+useStlAlgorithm
+normalCheckLevelMaxBranches
+knownConditionTrueFalse:test/*
