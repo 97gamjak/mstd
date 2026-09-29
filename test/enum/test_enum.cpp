@@ -72,10 +72,10 @@ namespace
     // Power-of-two valued bitflag enum, exercising MSTD_ENUM_BITFLAG on top
     // of everything MSTD_ENUM already provides. A byte-sized underlying type
     // keeps the operator~ results easy to reason about in assertions.
-#define MSTD_TEST_PERMISSION_LIST(X)                                         \
-    X(None, 0)                                                               \
-    X(Read, 1)                                                               \
-    X(Write, 2)                                                              \
+#define MSTD_TEST_PERMISSION_LIST(X) \
+    X(None, 0)                       \
+    X(Read, 1)                       \
+    X(Write, 2)                      \
     X(Execute, 4)
 
     MSTD_ENUM_BITFLAG(Permission, std::uint8_t, MSTD_TEST_PERMISSION_LIST)
@@ -175,15 +175,16 @@ TEST_CASE(
     "[enum][meta]"
 )
 {
-    STATIC_REQUIRE(ColorMeta::names.size() == 3);
-    STATIC_REQUIRE(ColorMeta::names[0] == "Red");
-    STATIC_REQUIRE(ColorMeta::names[1] == "Green");
-    STATIC_REQUIRE(ColorMeta::names[2] == "Blue");
+    STATIC_REQUIRE(ColorMeta::names().size() == 3);
+    STATIC_REQUIRE(ColorMeta::names()[0] == "Red");
+    STATIC_REQUIRE(ColorMeta::names()[1] == "Green");
+    STATIC_REQUIRE(ColorMeta::names()[2] == "Blue");
 
-    STATIC_REQUIRE(StatusMeta::names[0] == "Ok");
-    STATIC_REQUIRE(StatusMeta::names[1] == "Warning");
-    STATIC_REQUIRE(StatusMeta::names[2] == "Error");
-    STATIC_REQUIRE(StatusMeta::names[3] == "Critical");
+    STATIC_REQUIRE(StatusMeta::names().size() == 4);
+    STATIC_REQUIRE(StatusMeta::names()[0] == "Ok");
+    STATIC_REQUIRE(StatusMeta::names()[1] == "Warning");
+    STATIC_REQUIRE(StatusMeta::names()[2] == "Error");
+    STATIC_REQUIRE(StatusMeta::names()[3] == "Critical");
 }
 
 TEST_CASE(
@@ -434,27 +435,20 @@ TEST_CASE(
 )
 {
     constexpr auto combined = Permission::Read | Permission::Write;
-    STATIC_REQUIRE(
-        PermissionMeta::to_underlying(combined) == 0b011
-    );
+    STATIC_REQUIRE(PermissionMeta::to_underlying(combined) == 0b011);
 
-    constexpr auto all = Permission::Read | Permission::Write
-        | Permission::Execute;
+    constexpr auto all =
+        Permission::Read | Permission::Write | Permission::Execute;
     STATIC_REQUIRE(PermissionMeta::to_underlying(all) == 0b111);
 
     // Combining with None is a no-op.
-    STATIC_REQUIRE(
-        (Permission::Read | Permission::None) == Permission::Read
-    );
+    STATIC_REQUIRE((Permission::Read | Permission::None) == Permission::Read);
 }
 
-TEST_CASE(
-    "operator|= mutates the left-hand side in place",
-    "[enum][bitflag]"
-)
+TEST_CASE("operator|= mutates the left-hand side in place", "[enum][bitflag]")
 {
-    auto flags = Permission::Read;
-    flags |= Permission::Write;
+    auto flags  = Permission::Read;
+    flags      |= Permission::Write;
     REQUIRE(PermissionMeta::to_underlying(flags) == 0b011);
 
     flags |= Permission::Execute;
@@ -470,15 +464,9 @@ TEST_CASE(
     "[enum][bitflag]"
 )
 {
-    STATIC_REQUIRE(
-        PermissionMeta::to_underlying(~Permission::None) == 0xFF
-    );
-    STATIC_REQUIRE(
-        PermissionMeta::to_underlying(~Permission::Read) == 0xFE
-    );
-    STATIC_REQUIRE(
-        PermissionMeta::to_underlying(~(~Permission::Read)) == 0x01
-    );
+    STATIC_REQUIRE(PermissionMeta::to_underlying(~Permission::None) == 0xFF);
+    STATIC_REQUIRE(PermissionMeta::to_underlying(~Permission::Read) == 0xFE);
+    STATIC_REQUIRE(PermissionMeta::to_underlying(~(~Permission::Read)) == 0x01);
 }
 
 TEST_CASE(
@@ -504,8 +492,9 @@ TEST_CASE(
     "[enum][bitflag]"
 )
 {
-    constexpr auto readWrite = Permission::Read | Permission::Write;
-    constexpr Permission shared = readWrite & (Permission::Write | Permission::Execute);
+    constexpr auto       readWrite = Permission::Read | Permission::Write;
+    constexpr Permission shared =
+        readWrite & (Permission::Write | Permission::Execute);
 
     STATIC_REQUIRE(shared == Permission::Write);
     STATIC_REQUIRE(PermissionMeta::to_underlying(shared) == 0b010);
@@ -516,8 +505,8 @@ TEST_CASE(
     "[enum][bitflag]"
 )
 {
-    auto flags = Permission::Read | Permission::Write | Permission::Execute;
-    flags &= (Permission::Write | Permission::Execute);
+    auto flags  = Permission::Read | Permission::Write | Permission::Execute;
+    flags      &= (Permission::Write | Permission::Execute);
     REQUIRE(PermissionMeta::to_underlying(flags) == 0b110);
 
     flags &= Permission::None;
@@ -548,4 +537,305 @@ TEST_CASE(
     REQUIRE(hasFlag(granted, Permission::Execute));
     REQUIRE_FALSE(hasFlag(granted, Permission::Write));
     REQUIRE_FALSE(hasFlag(granted, Permission::None));
+}
+
+// -----------------------------------------------------------------------
+// mstd::EnumAliases / mstd::EnumNames
+//
+// These customization points are specialized for an enum in the SAME
+// header, directly after its MSTD_ENUM(...) declaration -- see
+// mstd/enum_extras.hpp for the full contract and the compile-time clash
+// checks (mstd::makeAliases / mstd::makeNames) that guard them.
+// -----------------------------------------------------------------------
+
+namespace
+{
+    // An enum with BOTH an alias table and a name override, so the two
+    // customization points can be exercised together as well as in
+    // isolation via the enums below.
+#define MSTD_TEST_VIRIAL_LIST(X) \
+    X(Atomic)                    \
+    X(Molecular)
+
+    MSTD_ENUM(VirialType, int, MSTD_TEST_VIRIAL_LIST)
+}   // namespace
+
+template <>
+struct mstd::EnumAliases<VirialType>
+{
+    static constexpr auto value = mstd::makeAliases<VirialType>(
+        {{"mol", VirialType::Molecular}, {"atom", VirialType::Atomic}}
+    );
+};
+
+template <>
+struct mstd::EnumNames<VirialType>
+{
+    static constexpr auto value = mstd::makeNames<VirialType>(
+        {{VirialType::Molecular, "MolecularVirial"}}
+    );
+};
+
+namespace
+{
+    // Aliases only -- no EnumNames specialization at all.
+#define MSTD_TEST_MEASURE_LIST(X) \
+    X(Meter)                   \
+    X(Second)
+
+    MSTD_ENUM(MeasureType, int, MSTD_TEST_MEASURE_LIST)
+}   // namespace
+
+template <>
+struct mstd::EnumAliases<MeasureType>
+{
+    static constexpr auto value = mstd::makeAliases<MeasureType>(
+        {{"m", MeasureType::Meter}, {"metre", MeasureType::Meter}, {"s", MeasureType::Second}}
+    );
+};
+
+namespace
+{
+    // A name override only -- no EnumAliases specialization at all.
+#define MSTD_TEST_LEVEL_LIST(X) \
+    X(Low)                      \
+    X(Medium)                   \
+    X(High)
+
+    MSTD_ENUM(LevelType, int, MSTD_TEST_LEVEL_LIST)
+}   // namespace
+
+template <>
+struct mstd::EnumNames<LevelType>
+{
+    static constexpr auto value = mstd::makeNames<LevelType>(
+        {{LevelType::Medium, "Mid"}}
+    );
+};
+
+namespace
+{
+    // Neither customization point specialized -- the default, empty tables
+    // apply; behaviour must be identical to a plain MSTD_ENUM enum.
+#define MSTD_TEST_SHAKE_LIST(X) \
+    X(None)                     \
+    X(Shake)                    \
+    X(Rattle)
+
+    MSTD_ENUM(ShakeType, int, MSTD_TEST_SHAKE_LIST)
+}   // namespace
+
+TEST_CASE(
+    "Meta::originalNames holds the raw, macro-generated spelling for every "
+    "enumerator, regardless of any EnumNames override",
+    "[enum][alias][meta]"
+)
+{
+    STATIC_REQUIRE(VirialTypeMeta::originalNames[0] == "Atomic");
+    STATIC_REQUIRE(VirialTypeMeta::originalNames[1] == "Molecular");
+}
+
+TEST_CASE(
+    "Meta::names() equals Meta::originalNames when no EnumNames override is "
+    "registered for that enumerator",
+    "[enum][alias][meta]"
+)
+{
+    STATIC_REQUIRE(VirialTypeMeta::names()[0] == VirialTypeMeta::originalNames[0]);
+    STATIC_REQUIRE(ShakeTypeMeta::names()[0] == ShakeTypeMeta::originalNames[0]);
+    STATIC_REQUIRE(ShakeTypeMeta::names()[1] == ShakeTypeMeta::originalNames[1]);
+    STATIC_REQUIRE(ShakeTypeMeta::names()[2] == ShakeTypeMeta::originalNames[2]);
+}
+
+TEST_CASE(
+    "Meta::names() reflects an EnumNames override for the overridden "
+    "enumerator only, leaving the rest untouched",
+    "[enum][alias][meta]"
+)
+{
+    STATIC_REQUIRE(VirialTypeMeta::names()[0] == "Atomic");          // untouched
+    STATIC_REQUIRE(VirialTypeMeta::names()[1] == "MolecularVirial"); // overridden
+}
+
+TEST_CASE(
+    "Meta::name()/Meta::toString() use the EnumNames override when one is "
+    "registered, and fall back to the generated name otherwise",
+    "[enum][alias][meta]"
+)
+{
+    STATIC_REQUIRE(VirialTypeMeta::name(VirialType::Atomic) == "Atomic");
+    STATIC_REQUIRE(
+        VirialTypeMeta::name(VirialType::Molecular) == "MolecularVirial"
+    );
+
+    REQUIRE(
+        VirialTypeMeta::toString(VirialType::Molecular) ==
+        std::string("MolecularVirial")
+    );
+}
+
+TEST_CASE(
+    "Meta::from_string accepts the original name, the overridden name, and "
+    "an alias, all exact-case",
+    "[enum][alias][meta]"
+)
+{
+    STATIC_REQUIRE(
+        VirialTypeMeta::from_string("Molecular") == VirialType::Molecular
+    );
+    STATIC_REQUIRE(
+        VirialTypeMeta::from_string("MolecularVirial") == VirialType::Molecular
+    );
+    STATIC_REQUIRE(VirialTypeMeta::from_string("mol") == VirialType::Molecular);
+    STATIC_REQUIRE(VirialTypeMeta::from_string("Atomic") == VirialType::Atomic);
+}
+
+TEST_CASE(
+    "Meta::from_string stays exact-case for overridden names and aliases, "
+    "just as it does for generated names",
+    "[enum][alias][meta]"
+)
+{
+    STATIC_REQUIRE(VirialTypeMeta::from_string("molecularvirial") == std::nullopt);
+    STATIC_REQUIRE(VirialTypeMeta::from_string("MOL") == std::nullopt);
+}
+
+TEST_CASE(
+    "Meta::from_stringCaseInsensitive accepts the original name, the "
+    "overridden name, and an alias, regardless of case",
+    "[enum][alias][meta]"
+)
+{
+    STATIC_REQUIRE(
+        VirialTypeMeta::from_stringCaseInsensitive("molecular") ==
+        VirialType::Molecular
+    );
+    STATIC_REQUIRE(
+        VirialTypeMeta::from_stringCaseInsensitive("MOLECULARVIRIAL") ==
+        VirialType::Molecular
+    );
+    STATIC_REQUIRE(
+        VirialTypeMeta::from_stringCaseInsensitive("MOL") == VirialType::Molecular
+    );
+    STATIC_REQUIRE(
+        VirialTypeMeta::from_stringCaseInsensitive("ATOM") == VirialType::Atomic
+    );
+}
+
+TEST_CASE(
+    "an enum with no EnumAliases/EnumNames specialization behaves exactly "
+    "like a plain MSTD_ENUM enum",
+    "[enum][alias][no_extras]"
+)
+{
+    STATIC_REQUIRE(ShakeTypeMeta::from_string("Shake") == ShakeType::Shake);
+    STATIC_REQUIRE(
+        ShakeTypeMeta::from_stringCaseInsensitive("rattle") == ShakeType::Rattle
+    );
+    STATIC_REQUIRE(ShakeTypeMeta::from_string("shake") == std::nullopt);
+}
+
+TEST_CASE(
+    "an enum may register aliases without any EnumNames override",
+    "[enum][alias][only]"
+)
+{
+    // names()/name()/toString() are completely unaffected -- no override
+    STATIC_REQUIRE(MeasureTypeMeta::names()[0] == "Meter");
+    STATIC_REQUIRE(MeasureTypeMeta::name(MeasureType::Meter) == "Meter");
+
+    // but from_string/from_stringCaseInsensitive accept every alias, plus
+    // the original spelling
+    STATIC_REQUIRE(MeasureTypeMeta::from_string("m") == MeasureType::Meter);
+    STATIC_REQUIRE(MeasureTypeMeta::from_string("metre") == MeasureType::Meter);
+    STATIC_REQUIRE(MeasureTypeMeta::from_string("s") == MeasureType::Second);
+    STATIC_REQUIRE(MeasureTypeMeta::from_string("Meter") == MeasureType::Meter);
+}
+
+TEST_CASE(
+    "multiple aliases may resolve to the same enumerator value",
+    "[enum][alias][multiple]"
+)
+{
+    STATIC_REQUIRE(MeasureTypeMeta::from_string("m") == MeasureType::Meter);
+    STATIC_REQUIRE(MeasureTypeMeta::from_string("metre") == MeasureType::Meter);
+    STATIC_REQUIRE(
+        MeasureTypeMeta::from_string("m") == MeasureTypeMeta::from_string("metre")
+    );
+}
+
+TEST_CASE(
+    "an enum may register an EnumNames override without any aliases",
+    "[enum][override][only]"
+)
+{
+    // the override changes the display name for MEDIUM only...
+    STATIC_REQUIRE(LevelTypeMeta::names()[1] == "Mid");
+    STATIC_REQUIRE(LevelTypeMeta::name(LevelType::Medium) == "Mid");
+    // ...untouched enumerators keep their generated name
+    STATIC_REQUIRE(LevelTypeMeta::name(LevelType::Low) == "Low");
+    STATIC_REQUIRE(LevelTypeMeta::name(LevelType::High) == "High");
+
+    // from_string accepts both the original and the overridden spelling
+    STATIC_REQUIRE(LevelTypeMeta::from_string("Medium") == LevelType::Medium);
+    STATIC_REQUIRE(LevelTypeMeta::from_string("Mid") == LevelType::Medium);
+    STATIC_REQUIRE(LevelTypeMeta::from_string("mid") == std::nullopt);
+    STATIC_REQUIRE(
+        LevelTypeMeta::from_stringCaseInsensitive("mid") == LevelType::Medium
+    );
+}
+
+namespace
+{
+    // Dedicated enum for the "override re-cases its own name" check: FOO's
+    // override is a pure case change of its own original name, nothing else.
+#define MSTD_TEST_RECASE_LIST(X) \
+    X(FOO)                       \
+    X(BAR)
+
+    MSTD_ENUM(RecaseType, int, MSTD_TEST_RECASE_LIST)
+}   // namespace
+
+template <>
+struct mstd::EnumNames<RecaseType>
+{
+    static constexpr auto value = mstd::makeNames<RecaseType>(
+        {{RecaseType::FOO, "Foo"}}   // re-cases its OWN original name
+    );
+};
+
+TEST_CASE(
+    "an EnumNames override that only re-cases its own original name is not "
+    "flagged as a clash",
+    "[enum][override][self_recase]"
+)
+{
+    using M = RecaseTypeMeta;
+
+    STATIC_REQUIRE(M::originalNames[0] == "FOO");
+    STATIC_REQUIRE(M::name(RecaseType::FOO) == "Foo");
+    STATIC_REQUIRE(M::from_stringCaseInsensitive("foo") == RecaseType::FOO);
+    STATIC_REQUIRE(M::from_string("FOO") == RecaseType::FOO);   // original spelling still parses too
+}
+
+TEST_CASE(
+    "an alias and an EnumNames override may coexist for different "
+    "enumerators of the same enum without interfering with each other",
+    "[enum][alias][override][coexist]"
+)
+{
+    // Atomic has only an alias ("atom"), no override -- its generated name
+    // is untouched.
+    STATIC_REQUIRE(VirialTypeMeta::name(VirialType::Atomic) == "Atomic");
+    STATIC_REQUIRE(VirialTypeMeta::from_string("atom") == VirialType::Atomic);
+
+    // Molecular has both an alias ("mol") and an override
+    // ("MolecularVirial") -- all three spellings resolve to it.
+    STATIC_REQUIRE(
+        VirialTypeMeta::from_string("Molecular") == VirialType::Molecular
+    );
+    STATIC_REQUIRE(
+        VirialTypeMeta::from_string("MolecularVirial") == VirialType::Molecular
+    );
+    STATIC_REQUIRE(VirialTypeMeta::from_string("mol") == VirialType::Molecular);
 }
