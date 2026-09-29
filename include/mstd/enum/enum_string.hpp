@@ -182,30 +182,6 @@ namespace mstd
 
     namespace detail
     {
-        // alias equals (case-insensitively) another alias, an enumerator's
-        // original name, or an EnumNames override registered for a
-        // DIFFERENT value
-        template <typename Meta>
-        constexpr bool hasAliasClash()
-        {
-            constexpr auto& al = EnumAliases<typename Meta::type>::value;
-            constexpr auto& ov = EnumNames<typename Meta::type>::value;
-            for (std::size_t i = 0; i < al.size(); ++i)
-            {
-                for (std::size_t j = 0; j < i; ++j)
-                    if (iequals(al[i].text, al[j].text))
-                        return true;
-                for (const auto& name : Meta::originalNames)
-                    if (iequals(al[i].text, name))
-                        return true;
-                for (const auto& entry : ov)
-                    if (al[i].value != entry.value &&
-                        iequals(al[i].text, entry.text))
-                        return true;
-            }
-            return false;
-        }
-
         // both EnumAliases<E>::value and EnumNames<E>::value are of the
         // required checked type -- i.e. both were actually constructed via
         // mstd::makeAliases/mstd::makeNames, not a hand-written std::array
@@ -217,6 +193,46 @@ namespace mstd
                        decltype(EnumAliases<typename Meta::type>::value)> &&
                    is_name_table_v<
                        decltype(EnumNames<typename Meta::type>::value)>;
+        }
+
+        // alias equals (case-insensitively) another alias, an enumerator's
+        // original name, or an EnumNames override registered for a
+        // DIFFERENT value.
+        //
+        // Guarded by hasCheckedTables: if EnumAliases<E>::value or
+        // EnumNames<E>::value is not the checked table type (e.g. a
+        // hand-written std::array bypassing makeAliases/makeNames), the
+        // body below -- which assumes AliasEntry/NameEntry's .text/.value
+        // members -- is never instantiated. Without this guard, a
+        // mismatched type produces a pile of unrelated hard errors (no
+        // member named 'text' in 'std::pair<...>') on top of, and
+        // obscuring, the one actionable hasCheckedTables diagnostic.
+        template <typename Meta>
+        constexpr bool hasAliasClash()
+        {
+            if constexpr (!hasCheckedTables<Meta>())
+            {
+                return false;
+            }
+            else
+            {
+                constexpr auto& al = EnumAliases<typename Meta::type>::value;
+                constexpr auto& ov = EnumNames<typename Meta::type>::value;
+                for (std::size_t i = 0; i < al.size(); ++i)
+                {
+                    for (std::size_t j = 0; j < i; ++j)
+                        if (iequals(al[i].text, al[j].text))
+                            return true;
+                    for (const auto& name : Meta::originalNames)
+                        if (iequals(al[i].text, name))
+                            return true;
+                    for (const auto& entry : ov)
+                        if (al[i].value != entry.value &&
+                            iequals(al[i].text, entry.text))
+                            return true;
+                }
+                return false;
+            }
         }
 
     }   // namespace detail
