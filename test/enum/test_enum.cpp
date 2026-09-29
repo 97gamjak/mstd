@@ -571,16 +571,16 @@ struct mstd::EnumAliases<VirialType>
 template <>
 struct mstd::EnumNames<VirialType>
 {
-    static constexpr auto value = mstd::makeNames<VirialType>(
-        {{VirialType::Molecular, "MolecularVirial"}}
-    );
+    static constexpr auto value =
+        mstd::makeNames<VirialType>({{VirialType::Molecular, "MolecularVirial"}}
+        );
 };
 
 namespace
 {
     // Aliases only -- no EnumNames specialization at all.
 #define MSTD_TEST_MEASURE_LIST(X) \
-    X(Meter)                   \
+    X(Meter)                      \
     X(Second)
 
     MSTD_ENUM(MeasureType, int, MSTD_TEST_MEASURE_LIST)
@@ -590,7 +590,9 @@ template <>
 struct mstd::EnumAliases<MeasureType>
 {
     static constexpr auto value = mstd::makeAliases<MeasureType>(
-        {{"m", MeasureType::Meter}, {"metre", MeasureType::Meter}, {"s", MeasureType::Second}}
+        {{"m", MeasureType::Meter},
+         {"metre", MeasureType::Meter},
+         {"s", MeasureType::Second}}
     );
 };
 
@@ -608,9 +610,8 @@ namespace
 template <>
 struct mstd::EnumNames<LevelType>
 {
-    static constexpr auto value = mstd::makeNames<LevelType>(
-        {{LevelType::Medium, "Mid"}}
-    );
+    static constexpr auto value =
+        mstd::makeNames<LevelType>({{LevelType::Medium, "Mid"}});
 };
 
 namespace
@@ -641,10 +642,18 @@ TEST_CASE(
     "[enum][alias][meta]"
 )
 {
-    STATIC_REQUIRE(VirialTypeMeta::names()[0] == VirialTypeMeta::originalNames[0]);
-    STATIC_REQUIRE(ShakeTypeMeta::names()[0] == ShakeTypeMeta::originalNames[0]);
-    STATIC_REQUIRE(ShakeTypeMeta::names()[1] == ShakeTypeMeta::originalNames[1]);
-    STATIC_REQUIRE(ShakeTypeMeta::names()[2] == ShakeTypeMeta::originalNames[2]);
+    STATIC_REQUIRE(
+        VirialTypeMeta::names()[0] == VirialTypeMeta::originalNames[0]
+    );
+    STATIC_REQUIRE(
+        ShakeTypeMeta::names()[0] == ShakeTypeMeta::originalNames[0]
+    );
+    STATIC_REQUIRE(
+        ShakeTypeMeta::names()[1] == ShakeTypeMeta::originalNames[1]
+    );
+    STATIC_REQUIRE(
+        ShakeTypeMeta::names()[2] == ShakeTypeMeta::originalNames[2]
+    );
 }
 
 TEST_CASE(
@@ -653,8 +662,10 @@ TEST_CASE(
     "[enum][alias][meta]"
 )
 {
-    STATIC_REQUIRE(VirialTypeMeta::names()[0] == "Atomic");          // untouched
-    STATIC_REQUIRE(VirialTypeMeta::names()[1] == "MolecularVirial"); // overridden
+    STATIC_REQUIRE(VirialTypeMeta::names()[0] == "Atomic");   // untouched
+    STATIC_REQUIRE(
+        VirialTypeMeta::names()[1] == "MolecularVirial"
+    );   // overridden
 }
 
 TEST_CASE(
@@ -696,7 +707,9 @@ TEST_CASE(
     "[enum][alias][meta]"
 )
 {
-    STATIC_REQUIRE(VirialTypeMeta::from_string("molecularvirial") == std::nullopt);
+    STATIC_REQUIRE(
+        VirialTypeMeta::from_string("molecularvirial") == std::nullopt
+    );
     STATIC_REQUIRE(VirialTypeMeta::from_string("MOL") == std::nullopt);
 }
 
@@ -715,7 +728,8 @@ TEST_CASE(
         VirialType::Molecular
     );
     STATIC_REQUIRE(
-        VirialTypeMeta::from_stringCaseInsensitive("MOL") == VirialType::Molecular
+        VirialTypeMeta::from_stringCaseInsensitive("MOL") ==
+        VirialType::Molecular
     );
     STATIC_REQUIRE(
         VirialTypeMeta::from_stringCaseInsensitive("ATOM") == VirialType::Atomic
@@ -760,7 +774,8 @@ TEST_CASE(
     STATIC_REQUIRE(MeasureTypeMeta::from_string("m") == MeasureType::Meter);
     STATIC_REQUIRE(MeasureTypeMeta::from_string("metre") == MeasureType::Meter);
     STATIC_REQUIRE(
-        MeasureTypeMeta::from_string("m") == MeasureTypeMeta::from_string("metre")
+        MeasureTypeMeta::from_string("m") ==
+        MeasureTypeMeta::from_string("metre")
     );
 }
 
@@ -815,7 +830,9 @@ TEST_CASE(
     STATIC_REQUIRE(M::originalNames[0] == "FOO");
     STATIC_REQUIRE(M::name(RecaseType::FOO) == "Foo");
     STATIC_REQUIRE(M::from_stringCaseInsensitive("foo") == RecaseType::FOO);
-    STATIC_REQUIRE(M::from_string("FOO") == RecaseType::FOO);   // original spelling still parses too
+    STATIC_REQUIRE(
+        M::from_string("FOO") == RecaseType::FOO
+    );   // original spelling still parses too
 }
 
 TEST_CASE(
@@ -838,4 +855,25 @@ TEST_CASE(
         VirialTypeMeta::from_string("MolecularVirial") == VirialType::Molecular
     );
     STATIC_REQUIRE(VirialTypeMeta::from_string("mol") == VirialType::Molecular);
+}
+
+// -----------------------------------------------------------------------
+// Tables built only via mstd::makeAliases/mstd::makeNames are checked --
+// see compile_fail/raw_array_instead_of_make_aliases.cpp,
+// compile_fail/raw_array_instead_of_make_names.cpp, and
+// compile_fail/names_alone_catches_alias_clash.cpp for the corresponding
+// negative (must NOT compile) cases.
+// -----------------------------------------------------------------------
+
+TEST_CASE(
+    "EnumAliases<E>::value and EnumNames<E>::value built via "
+    "mstd::makeAliases/mstd::makeNames satisfy the checked-table "
+    "requirement, so every accessor -- including names() alone -- works",
+    "[enum][alias][override][checked_table]"
+)
+{
+    // VirialType's tables (declared above) both go through
+    // makeAliases/makeNames; names() alone touching them must be fine.
+    STATIC_REQUIRE(VirialTypeMeta::names()[1] == "MolecularVirial");
+    STATIC_REQUIRE(VirialTypeMeta::names().size() == VirialTypeMeta::size);
 }

@@ -84,6 +84,18 @@
         template <typename Self = EnumName##Meta>                              \
         static constexpr std::array<std::string_view, size> names()            \
         {                                                                      \
+            static_assert(                                                     \
+                mstd::detail::hasCheckedTables<Self>(),                        \
+                "EnumAliases<E>::value/EnumNames<E>::value must be "           \
+                "constructed via mstd::makeAliases/mstd::makeNames, not a "    \
+                "hand-written std::array, so clashes are actually checked"     \
+            );                                                                 \
+            static_assert(                                                     \
+                !mstd::detail::hasAliasClash<Self>(),                          \
+                "alias clashes with another alias, an enumerator name, or "    \
+                "an EnumNames override (compared case-insensitively)"          \
+            );                                                                 \
+                                                                               \
             std::array<std::string_view, size> out = originalNames;            \
             for (const auto& [value, text] :                                   \
                  mstd::EnumNames<typename Self::type>::value)                  \
@@ -99,6 +111,18 @@
         template <typename Self = EnumName##Meta>                              \
         static constexpr std::string_view name(EnumName enum_)                 \
         {                                                                      \
+            static_assert(                                                     \
+                mstd::detail::hasCheckedTables<Self>(),                        \
+                "EnumAliases<E>::value/EnumNames<E>::value must be "           \
+                "constructed via mstd::makeAliases/mstd::makeNames, not a "    \
+                "hand-written std::array, so clashes are actually checked"     \
+            );                                                                 \
+            static_assert(                                                     \
+                !mstd::detail::hasAliasClash<Self>(),                          \
+                "alias clashes with another alias, an enumerator name, or "    \
+                "an EnumNames override (compared case-insensitively)"          \
+            );                                                                 \
+                                                                               \
             for (const auto& [value, text] :                                   \
                  mstd::EnumNames<typename Self::type>::value)                  \
                 if (value == enum_)                                            \
@@ -124,9 +148,15 @@
         )                                                                      \
         {                                                                      \
             static_assert(                                                     \
+                mstd::detail::hasCheckedTables<Self>(),                        \
+                "EnumAliases<E>::value/EnumNames<E>::value must be "           \
+                "constructed via mstd::makeAliases/mstd::makeNames, not a "    \
+                "hand-written std::array, so clashes are actually checked"     \
+            );                                                                 \
+            static_assert(                                                     \
                 !mstd::detail::hasAliasClash<Self>(),                          \
-                "alias clashes with another alias or an enumerator name "      \
-                "(compared case-insensitively)"                                \
+                "alias clashes with another alias, an enumerator name, or "    \
+                "an EnumNames override (compared case-insensitively)"          \
             );                                                                 \
                                                                                \
             for (std::size_t i = 0; i < size; ++i)                             \
@@ -154,9 +184,15 @@
                 "enumerator names that differ only by case"                    \
             );                                                                 \
             static_assert(                                                     \
+                mstd::detail::hasCheckedTables<Self>(),                        \
+                "EnumAliases<E>::value/EnumNames<E>::value must be "           \
+                "constructed via mstd::makeAliases/mstd::makeNames, not a "    \
+                "hand-written std::array, so clashes are actually checked"     \
+            );                                                                 \
+            static_assert(                                                     \
                 !mstd::detail::hasAliasClash<Self>(),                          \
-                "alias clashes with another alias or an enumerator name "      \
-                "(compared case-insensitively)"                                \
+                "alias clashes with another alias, an enumerator name, or "    \
+                "an EnumNames override (compared case-insensitively)"          \
             );                                                                 \
                                                                                \
             for (std::size_t i = 0; i < originalNames.size(); ++i)             \
