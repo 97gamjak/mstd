@@ -961,6 +961,72 @@ TEST_CASE(
 }
 
 // -----------------------------------------------------------------------
+// Meta::aliasNames() -- just the alias texts, as a plain
+// std::array<std::string_view, N>, for when the enumerator each alias
+// belongs to doesn't matter (use aliases() when it does).
+// -----------------------------------------------------------------------
+
+TEST_CASE(
+    "Meta::aliasNames() returns a plain std::array<std::string_view, N> of "
+    "just the alias texts",
+    "[enum][alias][alias_names]"
+)
+{
+    STATIC_REQUIRE(VirialTypeMeta::aliasNames().size() == 2);
+    STATIC_REQUIRE(
+        std::is_same_v<
+            std::remove_cvref_t<decltype(VirialTypeMeta::aliasNames())>,
+            std::array<std::string_view, 2>>
+    );
+
+    bool foundMol = false, foundAtom = false;
+    for (auto text : VirialTypeMeta::aliasNames())
+    {
+        if (text == "mol")
+            foundMol = true;
+        if (text == "atom")
+            foundAtom = true;
+    }
+    REQUIRE(foundMol);
+    REQUIRE(foundAtom);
+}
+
+TEST_CASE(
+    "Meta::aliasNames() is empty for an enum with no EnumAliases "
+    "specialization",
+    "[enum][alias][alias_names]"
+)
+{
+    STATIC_REQUIRE(ShakeTypeMeta::aliasNames().size() == 0);
+    STATIC_REQUIRE(
+        LevelTypeMeta::aliasNames().size() == 0
+    );   // overrides, no aliases
+}
+
+TEST_CASE(
+    "Meta::aliasNames() matches the .text field of every Meta::aliases() "
+    "entry, in the same order",
+    "[enum][alias][alias_names]"
+)
+{
+    const auto  names = MeasureTypeMeta::aliasNames();
+    std::size_t i     = 0;
+    for (const auto& entry : MeasureTypeMeta::aliases())
+        REQUIRE(names[i++] == entry.text);
+    REQUIRE(i == names.size());
+}
+
+TEST_CASE(
+    "every string in Meta::aliasNames() round-trips through from_string to "
+    "its declared value",
+    "[enum][alias][alias_names][round_trip]"
+)
+{
+    for (auto text : VirialTypeMeta::aliasNames())
+        REQUIRE(VirialTypeMeta::from_string(text).has_value());
+}
+
+// -----------------------------------------------------------------------
 // Meta::spellings() -- every string from_string accepts, in one flat list:
 // each original name, each EnumNames override text, and each EnumAliases
 // alias. Unlike names(), an enumerator can appear more than once (its
