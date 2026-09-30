@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### Enum
+
+- split `enum.hpp` into `enum/enum.hpp`, `enum/enum_bit_flags.hpp` (renamed from `enum_bit_flage.hpp`) and `enum/enum_string.hpp`, with `mstd/enum.hpp` now re-exporting all three
+- move `EnumFromString`/`EnumToString` into namespace `mstd`, fixing a compile error in `from_string` which referenced `mstd::EnumFromString` on an undefined name
+- add extensive unit test coverage for `MSTD_ENUM` and `MSTD_ENUM_BITFLAG`
+- rename `EnumToString`/`EnumFromString` to `EnumNames`/`EnumAliases`, letting `EnumNames` override the generated spelling of individual enumerators (via `name()`/`toString()`) and `EnumAliases` register extra strings that `from_string`/`from_stringCaseInsensitive` accept, on top of the generated name; both are checked at compile time for case-insensitive clashes against each other and the generated names (`mstd::makeNames`/`mstd::makeAliases`)
+- turn `EnumName##Meta::names` from a static array into a `names()` member function, so it reflects any `EnumNames` override; the untouched, macro-generated spellings remain available as `EnumName##Meta::originalNames`
+
 <!-- insertion marker -->
 ## [0.3.0](https://github.com/repo/owner/releases/tag/0.3.0) - 2026-09-26
 
