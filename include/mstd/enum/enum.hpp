@@ -130,6 +130,50 @@
             return mstd::EnumAliases<typename Self::type>::value;              \
         }                                                                      \
                                                                                \
+        /* every string this enum's from_string will accept, in one flat   */  \
+        /* list: each original name, each EnumNames override text, and     */  \
+        /* each EnumAliases alias, as (text, value) entries. Unlike        */  \
+        /* names(), an enumerator may appear more than once here (its      */  \
+        /* original name, plus an override and/or aliases if it has any)   */  \
+        template <typename Self = EnumName##Meta>                              \
+        static constexpr auto spellings()                                      \
+        {                                                                      \
+            static_assert(                                                     \
+                mstd::detail::hasCheckedTables<Self>(),                        \
+                "EnumAliases<E>::value/EnumNames<E>::value must be "           \
+                "constructed via mstd::makeAliases/mstd::makeNames, not a "    \
+                "hand-written std::array, so clashes are actually checked"     \
+            );                                                                 \
+            static_assert(                                                     \
+                !mstd::detail::hasAliasClash<Self>(),                          \
+                "alias clashes with another alias, an enumerator name, or "    \
+                "an EnumNames override (compared case-insensitively)"          \
+            );                                                                 \
+                                                                               \
+            constexpr std::size_t overrideCount =                              \
+                mstd::EnumNames<typename Self::type>::value.size();            \
+            constexpr std::size_t aliasCount =                                 \
+                mstd::EnumAliases<typename Self::type>::value.size();          \
+            constexpr std::size_t total = size + overrideCount + aliasCount;   \
+                                                                               \
+            std::array<mstd::AliasEntry<EnumName>, total> out{};               \
+            std::size_t                                   k = 0;               \
+            for (std::size_t i = 0; i < size; ++i)                             \
+                out[k++] =                                                     \
+                    mstd::AliasEntry<EnumName>{originalNames[i], values[i]};   \
+            if constexpr (mstd::detail::hasCheckedTables<Self>())              \
+            {                                                                  \
+                for (const auto& entry :                                       \
+                     mstd::EnumNames<typename Self::type>::value)              \
+                    out[k++] =                                                 \
+                        mstd::AliasEntry<EnumName>{entry.text, entry.value};   \
+                for (const auto& entry :                                       \
+                     mstd::EnumAliases<typename Self::type>::value)            \
+                    out[k++] = entry;                                          \
+            }                                                                  \
+            return out;                                                        \
+        }                                                                      \
+                                                                               \
         static constexpr auto begin() { return values.begin(); }               \
         static constexpr auto end() { return values.end(); }                   \
                                                                                \

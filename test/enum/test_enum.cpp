@@ -959,3 +959,76 @@ TEST_CASE(
         );
     }
 }
+
+// -----------------------------------------------------------------------
+// Meta::spellings() -- every string from_string accepts, in one flat list:
+// each original name, each EnumNames override text, and each EnumAliases
+// alias. Unlike names(), an enumerator can appear more than once (its
+// original name plus an override and/or aliases).
+// -----------------------------------------------------------------------
+
+TEST_CASE(
+    "Meta::spellings() combines original names, EnumNames overrides, and "
+    "EnumAliases aliases into one flat list",
+    "[enum][alias][spellings]"
+)
+{
+    // VirialType: 2 enumerators, 1 override (Molecular), 2 aliases
+    // (mol, atom) -> 2 + 1 + 2 = 5 total spellings.
+    STATIC_REQUIRE(VirialTypeMeta::spellings().size() == 5);
+}
+
+TEST_CASE(
+    "Meta::spellings() equals just the original names for an enum with no "
+    "EnumAliases/EnumNames specialization",
+    "[enum][alias][spellings][no_extras]"
+)
+{
+    STATIC_REQUIRE(ShakeTypeMeta::spellings().size() == ShakeTypeMeta::size);
+
+    for (std::size_t i = 0; i < ShakeTypeMeta::size; ++i)
+    {
+        REQUIRE(
+            ShakeTypeMeta::spellings()[i].text ==
+            ShakeTypeMeta::originalNames[i]
+        );
+        REQUIRE(
+            ShakeTypeMeta::spellings()[i].value == ShakeTypeMeta::values[i]
+        );
+    }
+}
+
+TEST_CASE(
+    "every entry in Meta::spellings() round-trips through from_string and "
+    "from_stringCaseInsensitive to its declared value",
+    "[enum][alias][spellings][round_trip]"
+)
+{
+    for (const auto& entry : VirialTypeMeta::spellings())
+    {
+        REQUIRE(VirialTypeMeta::from_string(entry.text) == entry.value);
+        REQUIRE(
+            VirialTypeMeta::from_stringCaseInsensitive(entry.text) ==
+            entry.value
+        );
+    }
+}
+
+TEST_CASE(
+    "Meta::spellings() includes BOTH the original name and the override "
+    "text for an overridden enumerator -- it does not collapse to just one",
+    "[enum][alias][spellings][override]"
+)
+{
+    bool foundOriginal = false, foundOverride = false;
+    for (const auto& entry : VirialTypeMeta::spellings())
+    {
+        if (entry.text == "Molecular" && entry.value == VirialType::Molecular)
+            foundOriginal = true;
+        if (entry.text == "MolecularVirial" &&
+            entry.value == VirialType::Molecular)
+            foundOverride = true;
+    }
+    REQUIRE(foundOriginal);
+    REQUIRE(foundOverride);
+}
