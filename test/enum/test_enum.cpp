@@ -877,3 +877,85 @@ TEST_CASE(
     STATIC_REQUIRE(VirialTypeMeta::names()[1] == "MolecularVirial");
     STATIC_REQUIRE(VirialTypeMeta::names().size() == VirialTypeMeta::size);
 }
+
+// -----------------------------------------------------------------------
+// Meta::aliases() -- lists every registered alias for an enum. Unlike
+// names(), this is NOT indexed by enumerator: an enumerator can have zero,
+// one, or several aliases, so aliases() returns the EnumAliases<E>::value
+// table itself (an mstd::AliasTable<E, N>) rather than a per-enumerator
+// array.
+// -----------------------------------------------------------------------
+
+TEST_CASE(
+    "Meta::aliases() lists every registered alias as (text, value) entries",
+    "[enum][alias][aliases]"
+)
+{
+    STATIC_REQUIRE(VirialTypeMeta::aliases().size() == 2);
+
+    // find "mol" and check it maps to Molecular, without assuming order
+    bool foundMol = false, foundAtom = false;
+    for (const auto& entry : VirialTypeMeta::aliases())
+    {
+        if (entry.text == "mol")
+        {
+            foundMol = (entry.value == VirialType::Molecular);
+        }
+        if (entry.text == "atom")
+        {
+            foundAtom = (entry.value == VirialType::Atomic);
+        }
+    }
+    REQUIRE(foundMol);
+    REQUIRE(foundAtom);
+}
+
+TEST_CASE(
+    "Meta::aliases() is empty for an enum with no EnumAliases specialization",
+    "[enum][alias][aliases]"
+)
+{
+    STATIC_REQUIRE(ShakeTypeMeta::aliases().size() == 0);
+    STATIC_REQUIRE(
+        LevelTypeMeta::aliases().size() == 0
+    );   // has overrides, no aliases
+}
+
+TEST_CASE(
+    "Meta::aliases() reflects an aliases-only enum (no EnumNames override)",
+    "[enum][alias][aliases][only]"
+)
+{
+    STATIC_REQUIRE(MeasureTypeMeta::aliases().size() == 3);
+
+    bool foundM = false, foundMetre = false, foundS = false;
+    for (const auto& entry : MeasureTypeMeta::aliases())
+    {
+        if (entry.text == "m")
+            foundM = (entry.value == MeasureType::Meter);
+        if (entry.text == "metre")
+            foundMetre = (entry.value == MeasureType::Meter);
+        if (entry.text == "s")
+            foundS = (entry.value == MeasureType::Second);
+    }
+    REQUIRE(foundM);
+    REQUIRE(foundMetre);
+    REQUIRE(foundS);
+}
+
+TEST_CASE(
+    "Meta::aliases() entries are usable directly with from_string/"
+    "from_stringCaseInsensitive -- round-tripping every alias resolves to "
+    "its declared value",
+    "[enum][alias][aliases][round_trip]"
+)
+{
+    for (const auto& entry : VirialTypeMeta::aliases())
+    {
+        REQUIRE(VirialTypeMeta::from_string(entry.text) == entry.value);
+        REQUIRE(
+            VirialTypeMeta::from_stringCaseInsensitive(entry.text) ==
+            entry.value
+        );
+    }
+}

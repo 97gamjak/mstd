@@ -97,12 +97,37 @@
             );                                                                 \
                                                                                \
             std::array<std::string_view, size> out = originalNames;            \
-            for (const auto& [value, text] :                                   \
-                 mstd::EnumNames<typename Self::type>::value)                  \
-                for (std::size_t i = 0; i < size; ++i)                         \
-                    if (values.at(i) == value)                                 \
-                        out.at(i) = text;                                      \
+            if constexpr (mstd::detail::hasCheckedTables<Self>())              \
+                for (const auto& [value, text] :                               \
+                     mstd::EnumNames<typename Self::type>::value)              \
+                    for (std::size_t i = 0; i < size; ++i)                     \
+                        if (values.at(i) == value)                             \
+                            out.at(i) = text;                                  \
             return out;                                                        \
+        }                                                                      \
+                                                                               \
+        /* every registered alias for this enum, as (text, value) entries --   \
+         */                                                                    \
+        /* NOT indexed by enumerator (unlike names()): there can be zero,   */ \
+        /* one, or several aliases per enumerator, so this returns          */ \
+        /* EnumAliases<E>::value itself (an mstd::AliasTable<E, N>) rather */  \
+        /* than a per-enumerator array                                      */ \
+        template <typename Self = EnumName##Meta>                              \
+        static constexpr auto aliases()                                        \
+        {                                                                      \
+            static_assert(                                                     \
+                mstd::detail::hasCheckedTables<Self>(),                        \
+                "EnumAliases<E>::value/EnumNames<E>::value must be "           \
+                "constructed via mstd::makeAliases/mstd::makeNames, not a "    \
+                "hand-written std::array, so clashes are actually checked"     \
+            );                                                                 \
+            static_assert(                                                     \
+                !mstd::detail::hasAliasClash<Self>(),                          \
+                "alias clashes with another alias, an enumerator name, or "    \
+                "an EnumNames override (compared case-insensitively)"          \
+            );                                                                 \
+                                                                               \
+            return mstd::EnumAliases<typename Self::type>::value;              \
         }                                                                      \
                                                                                \
         static constexpr auto begin() { return values.begin(); }               \
@@ -123,10 +148,11 @@
                 "an EnumNames override (compared case-insensitively)"          \
             );                                                                 \
                                                                                \
-            for (const auto& [value, text] :                                   \
-                 mstd::EnumNames<typename Self::type>::value)                  \
-                if (value == enum_)                                            \
-                    return text;                                               \
+            if constexpr (mstd::detail::hasCheckedTables<Self>())              \
+                for (const auto& [value, text] :                               \
+                     mstd::EnumNames<typename Self::type>::value)              \
+                    if (value == enum_)                                        \
+                        return text;                                           \
                                                                                \
             for (std::size_t i = 0; i < size; ++i)                             \
                 if (values.at(i) == enum_)                                     \
@@ -162,14 +188,17 @@
             for (std::size_t i = 0; i < size; ++i)                             \
                 if (originalNames.at(i) == str)                                \
                     return values.at(i);                                       \
-            for (const auto& [value, text] :                                   \
-                 mstd::EnumNames<typename Self::type>::value)                  \
-                if (text == str)                                               \
-                    return value;                                              \
-            for (const auto& [alias, value] :                                  \
-                 mstd::EnumAliases<typename Self::type>::value)                \
-                if (alias == str)                                              \
-                    return value;                                              \
+            if constexpr (mstd::detail::hasCheckedTables<Self>())              \
+            {                                                                  \
+                for (const auto& [value, text] :                               \
+                     mstd::EnumNames<typename Self::type>::value)              \
+                    if (text == str)                                           \
+                        return value;                                          \
+                for (const auto& [alias, value] :                              \
+                     mstd::EnumAliases<typename Self::type>::value)            \
+                    if (alias == str)                                          \
+                        return value;                                          \
+            }                                                                  \
             return std::nullopt;                                               \
         }                                                                      \
                                                                                \
@@ -198,14 +227,17 @@
             for (std::size_t i = 0; i < originalNames.size(); ++i)             \
                 if (mstd::iequals(originalNames.at(i), str))                   \
                     return values.at(i);                                       \
-            for (const auto& [value, text] :                                   \
-                 mstd::EnumNames<typename Self::type>::value)                  \
-                if (mstd::iequals(text, str))                                  \
-                    return value;                                              \
-            for (const auto& [alias, value] :                                  \
-                 mstd::EnumAliases<typename Self::type>::value)                \
-                if (mstd::iequals(alias, str))                                 \
-                    return value;                                              \
+            if constexpr (mstd::detail::hasCheckedTables<Self>())              \
+            {                                                                  \
+                for (const auto& [value, text] :                               \
+                     mstd::EnumNames<typename Self::type>::value)              \
+                    if (mstd::iequals(text, str))                              \
+                        return value;                                          \
+                for (const auto& [alias, value] :                              \
+                     mstd::EnumAliases<typename Self::type>::value)            \
+                    if (mstd::iequals(alias, str))                             \
+                        return value;                                          \
+            }                                                                  \
             return std::nullopt;                                               \
         }                                                                      \
                                                                                \
