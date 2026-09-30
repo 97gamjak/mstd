@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+<!-- insertion marker -->
+## [0.4.0](https://github.com/repo/owner/releases/tag/0.4.0) - 2026-09-30
+
 ### Enum
 
 - split `enum.hpp` into `enum/enum.hpp`, `enum/enum_bit_flags.hpp` (renamed from `enum_bit_flage.hpp`) and `enum/enum_string.hpp`, with `mstd/enum.hpp` now re-exporting all three
@@ -12,7 +15,6 @@ All notable changes to this project will be documented in this file.
 - rename `EnumToString`/`EnumFromString` to `EnumNames`/`EnumAliases`, letting `EnumNames` override the generated spelling of individual enumerators (via `name()`/`toString()`) and `EnumAliases` register extra strings that `from_string`/`from_stringCaseInsensitive` accept, on top of the generated name; both are checked at compile time for case-insensitive clashes against each other and the generated names (`mstd::makeNames`/`mstd::makeAliases`)
 - turn `EnumName##Meta::names` from a static array into a `names()` member function, so it reflects any `EnumNames` override; the untouched, macro-generated spellings remain available as `EnumName##Meta::originalNames`
 
-<!-- insertion marker -->
 ## [0.3.0](https://github.com/repo/owner/releases/tag/0.3.0) - 2026-09-26
 
 ### File
@@ -190,6 +192,7 @@ All notable changes to this project will be documented in this file.
 ### Bug Fix
 
 - add permissions to create tag workflow
+
 
 
 
