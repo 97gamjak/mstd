@@ -63,9 +63,9 @@ namespace mstd
         requires(N == 0)
         = default;
 
-        constexpr auto        begin() const { return _entries.begin(); }
-        constexpr auto        end() const { return _entries.end(); }
-        constexpr std::size_t size() const { return N; }
+        constexpr auto               begin() const { return _entries.begin(); }
+        constexpr auto               end() const { return _entries.end(); }
+        static constexpr std::size_t size() { return N; }
         constexpr const AliasEntry<E>& operator[](std::size_t i) const
         {
             return _entries[i];
@@ -99,7 +99,7 @@ namespace mstd
 
         constexpr auto                begin() const { return _entries.begin(); }
         constexpr auto                end() const { return _entries.end(); }
-        constexpr std::size_t         size() const { return N; }
+        static constexpr std::size_t  size() { return N; }
         constexpr const NameEntry<E>& operator[](std::size_t i) const
         {
             return _entries[i];
