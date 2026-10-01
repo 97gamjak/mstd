@@ -54,7 +54,7 @@ namespace mstd
             delim
         );
 
-        return {joined.begin(), joined.end()};
+        return std::ranges::to<std::string>(joined);
     }
 
     /**
