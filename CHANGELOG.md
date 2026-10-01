@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+<!-- insertion marker -->
+## [0.5.0](https://github.com/repo/owner/releases/tag/0.5.0) - 2026-10-01
+
 ### Enum
 
 - add `EnumName##Meta::aliasNames()`, returning just the alias texts registered in `EnumAliases` as a plain `std::array<std::string_view, N>`, for callers that don't need to know which enumerator each alias belongs to (use `aliases()` for that)
@@ -13,7 +16,6 @@ All notable changes to this project will be documented in this file.
 
 - add an overload of `join` taking a `transform` function, letting each range element be converted to a string on the fly instead of requiring the range to already hold strings
 
-<!-- insertion marker -->
 ## [0.4.0](https://github.com/repo/owner/releases/tag/0.4.0) - 2026-09-30
 
 ### Enum
@@ -201,6 +203,7 @@ All notable changes to this project will be documented in this file.
 ### Bug Fix
 
 - add permissions to create tag workflow
+
 
 
 
