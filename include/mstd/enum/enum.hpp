@@ -110,7 +110,7 @@
          */                                                                    \
         /* NOT indexed by enumerator (unlike names()): there can be zero,   */ \
         /* one, or several aliases per enumerator, so this returns          */ \
-        /* EnumAliases<E>::value itself (an mstd::AliasTable<E, N>) rather */  \
+        /* EnumAliases<E>::value itself (an mstd::AliasTable<E, N>) rather */                                                                            \
         /* than a per-enumerator array                                      */ \
         template <typename Self = EnumName##Meta>                              \
         static constexpr auto aliases()                                        \
@@ -128,6 +128,37 @@
             );                                                                 \
                                                                                \
             return mstd::EnumAliases<typename Self::type>::value;              \
+        }                                                                      \
+                                                                               \
+        /* just the alias texts, as a plain std::array<std::string_view, N> */ \
+        /* -- for when you want a normal range of strings and don't care    */ \
+        /* which enumerator each one belongs to (use aliases() for that)    */ \
+        template <typename Self = EnumName##Meta>                              \
+        static constexpr auto aliasNames()                                     \
+        {                                                                      \
+            static_assert(                                                     \
+                mstd::detail::hasCheckedTables<Self>(),                        \
+                "EnumAliases<E>::value/EnumNames<E>::value must be "           \
+                "constructed via mstd::makeAliases/mstd::makeNames, not a "    \
+                "hand-written std::array, so clashes are actually checked"     \
+            );                                                                 \
+            static_assert(                                                     \
+                !mstd::detail::hasAliasClash<Self>(),                          \
+                "alias clashes with another alias, an enumerator name, or "    \
+                "an EnumNames override (compared case-insensitively)"          \
+            );                                                                 \
+                                                                               \
+            constexpr std::size_t aliasCount =                                 \
+                mstd::EnumAliases<typename Self::type>::value.size();          \
+            std::array<std::string_view, aliasCount> out{};                    \
+            if constexpr (mstd::detail::hasCheckedTables<Self>())              \
+            {                                                                  \
+                std::size_t k = 0;                                             \
+                for (const auto& entry :                                       \
+                     mstd::EnumAliases<typename Self::type>::value)            \
+                    out[k++] = entry.text;                                     \
+            }                                                                  \
+            return out;                                                        \
         }                                                                      \
                                                                                \
         /* every string this enum's from_string will accept, in one flat   */  \
@@ -170,6 +201,48 @@
                 for (const auto& entry :                                       \
                      mstd::EnumAliases<typename Self::type>::value)            \
                     out[k++] = entry;                                          \
+            }                                                                  \
+            return out;                                                        \
+        }                                                                      \
+                                                                               \
+        /* just the text of every entry in spellings(), as a plain          */ \
+        /* std::array<std::string_view, N> -- every string from_string     */  \
+        /* accepts, with no value pairing. This is what you want for       */  \
+        /* "possible values are: ..." error messages; aliasNames() alone   */  \
+        /* only lists the EXTRA alias spellings, not the enum's own names  */  \
+        template <typename Self = EnumName##Meta>                              \
+        static constexpr auto spellingNames()                                  \
+        {                                                                      \
+            static_assert(                                                     \
+                mstd::detail::hasCheckedTables<Self>(),                        \
+                "EnumAliases<E>::value/EnumNames<E>::value must be "           \
+                "constructed via mstd::makeAliases/mstd::makeNames, not a "    \
+                "hand-written std::array, so clashes are actually checked"     \
+            );                                                                 \
+            static_assert(                                                     \
+                !mstd::detail::hasAliasClash<Self>(),                          \
+                "alias clashes with another alias, an enumerator name, or "    \
+                "an EnumNames override (compared case-insensitively)"          \
+            );                                                                 \
+                                                                               \
+            constexpr std::size_t overrideCount =                              \
+                mstd::EnumNames<typename Self::type>::value.size();            \
+            constexpr std::size_t aliasCount =                                 \
+                mstd::EnumAliases<typename Self::type>::value.size();          \
+            constexpr std::size_t total = size + overrideCount + aliasCount;   \
+                                                                               \
+            std::array<std::string_view, total> out{};                         \
+            std::size_t                         k = 0;                         \
+            for (std::size_t i = 0; i < size; ++i)                             \
+                out[k++] = originalNames[i];                                   \
+            if constexpr (mstd::detail::hasCheckedTables<Self>())              \
+            {                                                                  \
+                for (const auto& entry :                                       \
+                     mstd::EnumNames<typename Self::type>::value)              \
+                    out[k++] = entry.text;                                     \
+                for (const auto& entry :                                       \
+                     mstd::EnumAliases<typename Self::type>::value)            \
+                    out[k++] = entry.text;                                     \
             }                                                                  \
             return out;                                                        \
         }                                                                      \

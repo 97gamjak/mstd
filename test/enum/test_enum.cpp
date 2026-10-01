@@ -961,6 +961,72 @@ TEST_CASE(
 }
 
 // -----------------------------------------------------------------------
+// Meta::aliasNames() -- just the alias texts, as a plain
+// std::array<std::string_view, N>, for when the enumerator each alias
+// belongs to doesn't matter (use aliases() when it does).
+// -----------------------------------------------------------------------
+
+TEST_CASE(
+    "Meta::aliasNames() returns a plain std::array<std::string_view, N> of "
+    "just the alias texts",
+    "[enum][alias][alias_names]"
+)
+{
+    STATIC_REQUIRE(VirialTypeMeta::aliasNames().size() == 2);
+    STATIC_REQUIRE(
+        std::is_same_v<
+            std::remove_cvref_t<decltype(VirialTypeMeta::aliasNames())>,
+            std::array<std::string_view, 2>>
+    );
+
+    bool foundMol = false, foundAtom = false;
+    for (auto text : VirialTypeMeta::aliasNames())
+    {
+        if (text == "mol")
+            foundMol = true;
+        if (text == "atom")
+            foundAtom = true;
+    }
+    REQUIRE(foundMol);
+    REQUIRE(foundAtom);
+}
+
+TEST_CASE(
+    "Meta::aliasNames() is empty for an enum with no EnumAliases "
+    "specialization",
+    "[enum][alias][alias_names]"
+)
+{
+    STATIC_REQUIRE(ShakeTypeMeta::aliasNames().size() == 0);
+    STATIC_REQUIRE(
+        LevelTypeMeta::aliasNames().size() == 0
+    );   // overrides, no aliases
+}
+
+TEST_CASE(
+    "Meta::aliasNames() matches the .text field of every Meta::aliases() "
+    "entry, in the same order",
+    "[enum][alias][alias_names]"
+)
+{
+    const auto  names = MeasureTypeMeta::aliasNames();
+    std::size_t i     = 0;
+    for (const auto& entry : MeasureTypeMeta::aliases())
+        REQUIRE(names[i++] == entry.text);
+    REQUIRE(i == names.size());
+}
+
+TEST_CASE(
+    "every string in Meta::aliasNames() round-trips through from_string to "
+    "its declared value",
+    "[enum][alias][alias_names][round_trip]"
+)
+{
+    for (auto text : VirialTypeMeta::aliasNames())
+        REQUIRE(VirialTypeMeta::from_string(text).has_value());
+}
+
+// -----------------------------------------------------------------------
 // Meta::spellings() -- every string from_string accepts, in one flat list:
 // each original name, each EnumNames override text, and each EnumAliases
 // alias. Unlike names(), an enumerator can appear more than once (its
@@ -1031,4 +1097,96 @@ TEST_CASE(
     }
     REQUIRE(foundOriginal);
     REQUIRE(foundOverride);
+}
+
+// -----------------------------------------------------------------------
+// Meta::spellingNames() -- just the text of every spellings() entry, as a
+// plain std::array<std::string_view, N>. This is the one to reach for when
+// building a "possible values are: ..." message: aliasNames() alone only
+// lists the EXTRA alias spellings, never the enum's own names, which is
+// easy to reach for by mistake since its name reads like the obvious tool
+// for the job.
+// -----------------------------------------------------------------------
+
+TEST_CASE(
+    "Meta::spellingNames() returns a plain std::array<std::string_view, N> "
+    "covering original names, overrides, and aliases together",
+    "[enum][alias][spelling_names]"
+)
+{
+    // VirialType: 2 original + 1 override + 2 aliases = 5
+    STATIC_REQUIRE(VirialTypeMeta::spellingNames().size() == 5);
+    STATIC_REQUIRE(
+        std::is_same_v<
+            std::remove_cvref_t<decltype(VirialTypeMeta::spellingNames())>,
+            std::array<std::string_view, 5>>
+    );
+}
+
+TEST_CASE(
+    "Meta::spellingNames() includes the enum's own names, unlike "
+    "aliasNames() alone -- this is the actual fix for a 'possible values' "
+    "message that was missing the enumerator names",
+    "[enum][alias][spelling_names]"
+)
+{
+    // aliasNames() alone would be missing Atomic/Molecular entirely.
+    bool hasAtomicViaAliasNames = false;
+    for (auto s : VirialTypeMeta::aliasNames())
+        if (s == "Atomic")
+            hasAtomicViaAliasNames = true;
+    REQUIRE_FALSE(hasAtomicViaAliasNames);
+
+    // spellingNames() has both the enum's own names AND the aliases.
+    bool hasAtomic = false, hasMolecularVirial = false, hasMol = false;
+    for (auto s : VirialTypeMeta::spellingNames())
+    {
+        if (s == "Atomic")
+            hasAtomic = true;
+        if (s == "MolecularVirial")
+            hasMolecularVirial = true;
+        if (s == "mol")
+            hasMol = true;
+    }
+    REQUIRE(hasAtomic);
+    REQUIRE(hasMolecularVirial);
+    REQUIRE(hasMol);
+}
+
+TEST_CASE(
+    "Meta::spellingNames() equals just the original names for an enum with "
+    "no EnumAliases/EnumNames specialization",
+    "[enum][alias][spelling_names][no_extras]"
+)
+{
+    STATIC_REQUIRE(
+        ShakeTypeMeta::spellingNames().size() == ShakeTypeMeta::size
+    );
+    for (std::size_t i = 0; i < ShakeTypeMeta::size; ++i)
+        REQUIRE(
+            ShakeTypeMeta::spellingNames()[i] == ShakeTypeMeta::originalNames[i]
+        );
+}
+
+TEST_CASE(
+    "Meta::spellingNames() matches the .text field of every "
+    "Meta::spellings() entry, in the same order",
+    "[enum][alias][spelling_names]"
+)
+{
+    const auto  names = VirialTypeMeta::spellingNames();
+    std::size_t i     = 0;
+    for (const auto& entry : VirialTypeMeta::spellings())
+        REQUIRE(names[i++] == entry.text);
+    REQUIRE(i == names.size());
+}
+
+TEST_CASE(
+    "every string in Meta::spellingNames() round-trips through "
+    "from_string to a valid value",
+    "[enum][alias][spelling_names][round_trip]"
+)
+{
+    for (auto text : VirialTypeMeta::spellingNames())
+        REQUIRE(VirialTypeMeta::from_string(text).has_value());
 }

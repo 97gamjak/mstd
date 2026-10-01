@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### Enum
+
+- add `EnumName##Meta::aliasNames()`, returning just the alias texts registered in `EnumAliases` as a plain `std::array<std::string_view, N>`, for callers that don't need to know which enumerator each alias belongs to (use `aliases()` for that)
+- add `EnumName##Meta::spellingNames()`, returning the text of every `spellings()` entry (original names, `EnumNames` overrides, and `EnumAliases` aliases together) as a plain `std::array<std::string_view, N>`, e.g. for building a "possible values are: ..." message; unlike `aliasNames()`, which only lists the extra alias spellings, this also includes the enum's own names
+
+### String
+
+- add an overload of `join` taking a `transform` function, letting each range element be converted to a string on the fly instead of requiring the range to already hold strings
+
 <!-- insertion marker -->
 ## [0.4.0](https://github.com/repo/owner/releases/tag/0.4.0) - 2026-09-30
 
