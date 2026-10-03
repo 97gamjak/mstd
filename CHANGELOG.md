@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### String
+
+- relax `join` to accept any `std::ranges::input_range` instead of requiring the custom `joinable_range` concept, and switch the default element-to-string conversion from `std::string(s)` to `std::format("{}", s)`, so `join` now works on ranges of any formattable element type, not just string-like ones
+
 <!-- insertion marker -->
 ## [0.5.0](https://github.com/repo/owner/releases/tag/0.5.0) - 2026-10-01
 
