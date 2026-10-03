@@ -23,6 +23,7 @@
 #ifndef __MSTD__STRING__JOIN_HPP__
 #define __MSTD__STRING__JOIN_HPP__
 
+#include <format>
 #include <functional>
 #include <ranges>
 #include <string>
@@ -42,7 +43,7 @@ namespace mstd
      * string
      * @return std::string
      */
-    template <joinable_range R>
+    template <std::ranges::input_range R>
     std::string join(
         R&&                                                       r,
         std::string_view                                          delim,
@@ -65,13 +66,13 @@ namespace mstd
      * @param delim
      * @return std::string
      */
-    template <joinable_range R>
+    template <std::ranges::input_range R>
     std::string join(R&& r, std::string_view delim)
     {
         return join(
             std::forward<R>(r),
             delim,
-            [](auto&& s) -> std::string { return std::string(s); }
+            [](auto&& s) -> std::string { return std::format("{}", s); }
         );
     }
 
@@ -82,7 +83,7 @@ namespace mstd
      * @param r
      * @return std::string
      */
-    template <joinable_range R>
+    template <std::ranges::input_range R>
     std::string join(R&& r)
     {
         return join(std::forward<R>(r), "");
