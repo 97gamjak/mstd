@@ -3,6 +3,7 @@ cppcheck --enable=all \
     --enable=style \
     --enable=information \
     --enable=portability \
+    --std=c++23 \
     --error-exitcode=1 \
     --suppressions-list=.cppcheck.suppress \
     --suppress=missingIncludeSystem \

@@ -62,9 +62,9 @@
                                                                               \
     inline constexpr EnumName##FlagTest operator&(EnumName lhs, EnumName rhs) \
     {                                                                         \
-        return EnumName##FlagTest{static_cast<Underlying>(                    \
-            static_cast<Underlying>(lhs) & static_cast<Underlying>(rhs)       \
-        )};                                                                   \
+        Underlying result =                                                   \
+            static_cast<Underlying>(lhs) & static_cast<Underlying>(rhs);      \
+        return EnumName##FlagTest{result};                                    \
     }                                                                         \
                                                                               \
     inline constexpr EnumName& operator&=(EnumName& lhs, EnumName rhs)        \

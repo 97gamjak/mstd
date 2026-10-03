@@ -19,6 +19,13 @@ buggy_cpp_macros = ["MSTD_WARN_BUGGY_HEADER", "MSTD_WARN_BUGGY_LIBRARY"]
 #check_only_staged_files = false
 license_header = "config/licenseHeader.txt"
 header_guards_according_to_filepath = true
+ast_check_compile_args = ["-std=c++23", "-Iinclude"]
+ast_check_compile_commands_db = "build"
+# The entire quantity/ module is marked buggy (MSTD_WARN_BUGGY_HEADER) and
+# not usable; libclang chokes while parsing its intentionally-broken
+# content, so exclude it from AST-based checks like the rest of the
+# toolchain already treats it as off-limits.
+exclude_dirs = ["quantity"]
 
 [file]
 #encoding = "utf-8"

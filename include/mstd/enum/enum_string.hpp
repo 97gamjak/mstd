@@ -58,6 +58,9 @@ namespace mstd
     template <typename E, std::size_t N>
     class AliasTable
     {
+       private:
+        std::array<AliasEntry<E>, N> _entries{};
+
        public:
         constexpr AliasTable()
         requires(N == 0)
@@ -81,8 +84,6 @@ namespace mstd
             : _entries(entries)
         {
         }
-
-        std::array<AliasEntry<E>, N> _entries{};
     };
 
     /**
@@ -92,6 +93,9 @@ namespace mstd
     template <typename E, std::size_t N>
     class NameTable
     {
+       private:
+        std::array<NameEntry<E>, N> _entries{};
+
        public:
         constexpr NameTable()
         requires(N == 0)
@@ -115,8 +119,6 @@ namespace mstd
             : _entries(entries)
         {
         }
-
-        std::array<NameEntry<E>, N> _entries{};
     };
 
     namespace detail

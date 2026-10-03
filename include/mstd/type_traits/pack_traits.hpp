@@ -23,6 +23,9 @@
 #ifndef __MSTD__TYPE_TRAITS__PACK_TRAITS_HPP__
 #define __MSTD__TYPE_TRAITS__PACK_TRAITS_HPP__
 
+#include <concepts>
+#include <cstddef>
+
 #include "ratio_traits.hpp"
 
 /**
