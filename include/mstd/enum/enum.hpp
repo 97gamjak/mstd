@@ -40,7 +40,18 @@
 //
 // X(Name)       -> Name,
 // X(Name, 42)   -> Name = 42,
-#define MSTD_ENUM_MAKE_ENUM(name, ...) name __VA_OPT__(= __VA_ARGS__),
+//
+// Dispatches on argument count instead of __VA_OPT__ (C++20), which
+// cppcheck's preprocessor does not expand and would otherwise choke on.
+#define MSTD_ENUM_MAKE_ENUM_1(name)        name,
+#define MSTD_ENUM_MAKE_ENUM_2(name, value) name = value,
+#define MSTD_ENUM_MAKE_ENUM_PICK(_1, _2, NAME, ...) NAME
+#define MSTD_ENUM_MAKE_ENUM(...)                                             \
+    MSTD_ENUM_MAKE_ENUM_PICK(                                                \
+        __VA_ARGS__,                                                        \
+        MSTD_ENUM_MAKE_ENUM_2,                                               \
+        MSTD_ENUM_MAKE_ENUM_1                                                \
+    )(__VA_ARGS__)
 
 // X(Name) or X(Name, 42) -> EnumName::Name,
 #define MSTD_ENUM_MAKE_VALUE(name, ...) name,
@@ -68,15 +79,15 @@
         static constexpr auto values =                                         \
             std::to_array<EnumName>({LIST(MSTD_ENUM_MAKE_VALUE)});             \
                                                                                \
-        static constexpr std::span<const EnumName> values_view()               \
-        {                                                                      \
-            return values;                                                     \
-        }                                                                      \
-                                                                               \
         static constexpr auto originalNames =                                  \
             std::to_array<std::string_view>({LIST(MSTD_ENUM_MAKE_STRING)});    \
                                                                                \
         static constexpr std::size_t size = values.size();                     \
+                                                                               \
+        static constexpr std::span<const EnumName> values_view()               \
+        {                                                                      \
+            return values;                                                     \
+        }                                                                      \
                                                                                \
         /* effective spellings: originalNames with EnumNames overrides    */   \
         /* applied -- a function, not a plain array, since EnumNames<E>   */   \

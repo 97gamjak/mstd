@@ -66,11 +66,14 @@ namespace mstd
        public:
         using type = T;
 
-        constexpr Ref(T &ref) noexcept;   // NOLINT(google-explicit-constructor)
-        Ref(T &&) = delete;               // forbid binding to rvalues
+        // cppcheck-suppress noExplicitConstructor
+        // NOLINTNEXTLINE(google-explicit-constructor)
+        constexpr Ref(T &ref) noexcept;
+        Ref(T &&) = delete;   // forbid binding to rvalues
 
         template <typename U>
         requires(!std::same_as<U, T> && std::is_convertible_v<U &, T &>)
+        // cppcheck-suppress noExplicitConstructor
         constexpr Ref(
             const Ref<U> &other   // NOLINT(google-explicit-constructor)
         ) noexcept;
