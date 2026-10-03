@@ -67,14 +67,15 @@ namespace mstd
         StrongTypeTrait Traits = StrongTypeTrait::NONE>
     class StrongType
     {
-       private:
-        T _value{};
-
        public:
         using ValueType                  = T;
         using TagType                    = Tag;
         static constexpr auto traitFlags = Traits;
 
+       private:
+        T _value{};
+
+       public:
         constexpr StrongType() = default;
 
         constexpr explicit StrongType(
@@ -95,6 +96,8 @@ namespace mstd
         //
 
         [[nodiscard]]
+        // cppcheck-suppress functionConst
+        // (already const; cppcheck misparses the trailing requires-clause)
         constexpr explicit operator bool() const noexcept
         requires(
             (Traits & StrongTypeTrait::BOOLEAN) && std::convertible_to<T, bool>

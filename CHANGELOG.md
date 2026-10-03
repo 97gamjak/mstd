@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### Types
+
+- add `mstd::Ref<T>`, a rebindable, non-null reference wrapper (and `mstd::ConstRef<T>` shorthand for `Ref<const T>`) intended to replace reference data members, which delete copy/move assignment; unlike `std::reference_wrapper` it provides `operator->`/`operator*`, cannot bind to rvalues, and converts implicitly from `Ref<U>` to `Ref<T>` wherever `U&` converts to `T&`
+
+### Enum
+
+- fix `operator&` on `MSTD_ENUM_BITFLAG` enums failing to compile under `-Werror` for some underlying types: the bitwise `&` of two `Underlying` operands promotes to `int`, which brace-initializing `EnumName##FlagTest` from directly triggered `-Werror=narrowing` for small underlying types (e.g. `uint8_t`); routing the result through a plain `Underlying result = ...;` first avoids that without triggering `-Werror=useless-cast` for `unsigned`-width underlying types
+
 <!-- insertion marker -->
 ## [0.5.1](https://github.com/repo/owner/releases/tag/0.5.1) - 2026-10-03
 
