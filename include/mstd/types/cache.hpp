@@ -46,7 +46,7 @@ namespace mstd
         Cache() = default;
         explicit Cache(const std::function<T()>& compute);
 
-        T get();
+        const T& get() const;
 
         void invalidate();
     };

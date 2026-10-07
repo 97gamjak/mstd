@@ -44,7 +44,7 @@ namespace mstd
      * @return The cached value of type T.
      */
     template <typename T>
-    T Cache<T>::get()
+    const T& Cache<T>::get() const
     {
         if (!_isValid && _compute.has_value())
         {
