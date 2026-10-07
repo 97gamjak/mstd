@@ -20,41 +20,33 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD__TYPES__CACHE_HPP__
-#define __MSTD__TYPES__CACHE_HPP__
+#ifndef __MSTD__EXCEPTIONS__BASE_HPP__
+#define __MSTD__EXCEPTIONS__BASE_HPP__
 
-#include <functional>
-#include <optional>
+#include <exception>
+
+#include "exception_types.hpp"
 
 namespace mstd
 {
-
     /**
-     * @brief A simple cache class that stores a value of type T and allows
-     * for lazy computation of the value using a registered compute function.
-     * (NOT thread-safe)
+     * @brief Base class for all exceptions in the mstd library.
      */
-    template <typename T>
-    class Cache
+    template <ExceptionType T>
+    class BaseException : public std::exception
     {
        private:
-        std::optional<std::function<T()>> _compute = std::nullopt;
-        mutable T                         _value;
-        mutable bool                      _isValid;
+        std::string _message;
 
        public:
-        Cache() = default;
-        explicit Cache(const std::function<T()>& compute);
+        explicit BaseException(const std::string& message);
 
-        T get();
-
-        void invalidate();
+        const char* what() const noexcept override;
     };
-
 }   // namespace mstd
 
-#ifndef __MSTD__TYPES__CACHE_TPP__
-#include "cache.tpp"
+#ifndef __MSTD__EXCEPTIONS__BASE_TPP__
+#include "base.tpp"
 #endif
 
-#endif   // __MSTD__TYPES__CACHE_HPP__
+#endif   // __MSTD__EXCEPTIONS__BASE_HPP__

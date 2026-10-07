@@ -20,41 +20,19 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD__TYPES__CACHE_HPP__
-#define __MSTD__TYPES__CACHE_HPP__
+#ifndef __MSTD__EXCEPTIONS__EXCEPTION_TYPES_HPP__
+#define __MSTD__EXCEPTIONS__EXCEPTION_TYPES_HPP__
 
-#include <functional>
-#include <optional>
+#include <cstdint>
+
+#include "mstd/enum.hpp"
 
 namespace mstd
 {
+#define EXCEPTION_TYPE_LIST(X) X(RuntimeError)
 
-    /**
-     * @brief A simple cache class that stores a value of type T and allows
-     * for lazy computation of the value using a registered compute function.
-     * (NOT thread-safe)
-     */
-    template <typename T>
-    class Cache
-    {
-       private:
-        std::optional<std::function<T()>> _compute = std::nullopt;
-        mutable T                         _value;
-        mutable bool                      _isValid;
-
-       public:
-        Cache() = default;
-        explicit Cache(const std::function<T()>& compute);
-
-        T get();
-
-        void invalidate();
-    };
+    MSTD_ENUM(ExceptionType, std::uint8_t, EXCEPTION_TYPE_LIST)
 
 }   // namespace mstd
 
-#ifndef __MSTD__TYPES__CACHE_TPP__
-#include "cache.tpp"
-#endif
-
-#endif   // __MSTD__TYPES__CACHE_HPP__
+#endif   // __MSTD__EXCEPTIONS__EXCEPTION_TYPES_HPP__

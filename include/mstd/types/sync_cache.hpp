@@ -20,41 +20,39 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD__TYPES__CACHE_HPP__
-#define __MSTD__TYPES__CACHE_HPP__
+#ifndef __MSTD__TYPES__SYNC_CACHE_HPP__
+#define __MSTD__TYPES__SYNC_CACHE_HPP__
 
 #include <functional>
 #include <optional>
+#include <shared_mutex>
 
 namespace mstd
 {
-
     /**
-     * @brief A simple cache class that stores a value of type T and allows
-     * for lazy computation of the value using a registered compute function.
-     * (NOT thread-safe)
+     * @brief Implementation of a thread-safe cache class template.
+     * (Thread-safe)
      */
     template <typename T>
-    class Cache
+    class SyncCache
     {
        private:
-        std::optional<std::function<T()>> _compute = std::nullopt;
+        std::optional<std::function<T()>> _compute;
         mutable T                         _value;
         mutable bool                      _isValid;
+        mutable std::shared_mutex         _mutex;
 
        public:
-        Cache() = default;
-        explicit Cache(const std::function<T()>& compute);
+        SyncCache(const std::function<T()>& compute);
 
         T get();
 
         void invalidate();
     };
-
 }   // namespace mstd
 
-#ifndef __MSTD__TYPES__CACHE_TPP__
-#include "cache.tpp"
+#ifndef __MSTD__TYPES__SYNC_CACHE_TPP__
+#include "sync_cache.tpp"
 #endif
 
-#endif   // __MSTD__TYPES__CACHE_HPP__
+#endif   // __MSTD__TYPES__SYNC_CACHE_HPP__

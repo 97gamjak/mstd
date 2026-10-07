@@ -20,41 +20,35 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD__TYPES__CACHE_HPP__
-#define __MSTD__TYPES__CACHE_HPP__
+#ifndef __MSTD__EXCEPTIONS__BASE_TPP__
+#define __MSTD__EXCEPTIONS__BASE_TPP__
 
-#include <functional>
-#include <optional>
+#include "base.hpp"
 
 namespace mstd
 {
+    /**
+     * @brief Constructs a new BaseException object with the given message.
+     *
+     * @param message The exception message.
+     */
+    template <ExceptionType T>
+    BaseException<T>::BaseException(const std::string& message)
+        : std::exception(), _message(message)
+    {
+    }
 
     /**
-     * @brief A simple cache class that stores a value of type T and allows
-     * for lazy computation of the value using a registered compute function.
-     * (NOT thread-safe)
+     * @brief Retrieves the exception message.
+     *
+     * @return The exception message as a C-style string.
      */
-    template <typename T>
-    class Cache
+    template <ExceptionType T>
+    const char* BaseException<T>::what() const noexcept
     {
-       private:
-        std::optional<std::function<T()>> _compute = std::nullopt;
-        mutable T                         _value;
-        mutable bool                      _isValid;
-
-       public:
-        Cache() = default;
-        explicit Cache(const std::function<T()>& compute);
-
-        T get();
-
-        void invalidate();
-    };
-
+        static const auto msg = ExceptionTypeMeta::toString(T) + _message;
+        return msg.c_str();
+    }
 }   // namespace mstd
 
-#ifndef __MSTD__TYPES__CACHE_TPP__
-#include "cache.tpp"
-#endif
-
-#endif   // __MSTD__TYPES__CACHE_HPP__
+#endif   // __MSTD__EXCEPTIONS__BASE_TPP__

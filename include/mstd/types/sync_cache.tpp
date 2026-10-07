@@ -20,33 +20,45 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD__TYPES__CACHE_TPP__
-#define __MSTD__TYPES__CACHE_TPP__
+#ifndef __MSTD__TYPES__SYNC_CACHE_TPP__
+#define __MSTD__TYPES__SYNC_CACHE_TPP__
 
-#include "cache.hpp"
-#include "mstd/exceptions.hpp"
+#include <mutex>
+
+#include "mstd/exceptions/exceptions.hpp"
+#include "sync_cache.hpp"
 
 namespace mstd
 {
-
     /**
-     * @brief Implementation of the Cache class template.
+     * @brief Construct a new Sync Cache object.
+     *
+     * @param compute The function to compute the value if it is not valid.
      */
     template <typename T>
-    Cache<T>::Cache(const std::function<T()>& compute)
-        : _compute(compute), _value(compute()), _isValid(true)
+    SyncCache<T>::SyncCache(const std::function<T()>& compute)
+        : _compute(compute), _isValid(false)
     {
     }
 
     /**
-     * @brief Retrieves the cached value, computing it if necessary.
-     *
-     * @return The cached value of type T.
+     * @brief Get the cached value.
+     * If the value is not valid and a compute function is set, it will compute
+     * the value. (Thread-safe)
      */
     template <typename T>
-    T Cache<T>::get()
+    T SyncCache<T>::get()
     {
-        if (!_isValid && _compute.has_value())
+        {
+            std::shared_lock lock(_mutex);
+            if (_isValid)
+            {
+                return _value;
+            }
+        }
+
+        std::unique_lock uniqueLock(_mutex);
+        if (!_isValid && _compute)
         {
             _value   = (*_compute)();
             _isValid = true;
@@ -59,13 +71,15 @@ namespace mstd
     }
 
     /**
-     * @brief Invalidates the cached value.
+     * @brief Invalidate the cached value.
+     * (Thread-safe)
      */
     template <typename T>
-    void Cache<T>::invalidate()
+    void SyncCache<T>::invalidate()
     {
+        std::unique_lock lock(_mutex);
         _isValid = false;
     }
 }   // namespace mstd
 
-#endif   // __MSTD__TYPES__CACHE_TPP__
+#endif   // __MSTD__TYPES__SYNC_CACHE_TPP__
