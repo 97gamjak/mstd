@@ -54,22 +54,22 @@ namespace mstd
     }
 
     /**
-     * @brief Constructs a CacheProperty with the given Cache value.
+     * @brief Retrieves the version of the CacheProperty.
      */
     template <typename T>
-    CacheProperty<T>::CacheProperty(const Cache<T>& cache)
-        : Property<Cache<T>>(cache)
+    size_t CacheProperty<T>::version() const noexcept
     {
+        return _version;
     }
 
     /**
      * @brief Sets the value of the CacheProperty and invalidates the cache.
      */
     template <typename T>
-    void CacheProperty<T>::set(const Cache<T>& cache)
+    void CacheProperty<T>::set(const T& value)
     {
-        cache.invalidate();
-        Property<Cache<T>>::set(cache);
+        _version++;
+        Property<T>::set(value);
     }
 }   // namespace mstd
 

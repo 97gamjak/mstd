@@ -28,29 +28,23 @@
 
 namespace mstd
 {
-
-    /**
-     * @brief Implementation of the Cache class template.
-     */
-    template <typename T>
-    Cache<T>::Cache(const std::function<T()>& compute)
-        : _compute(compute), _value(compute()), _isValid(true)
-    {
-    }
-
     /**
      * @brief Retrieves the cached value, computing it if necessary.
      *
      * @return The cached value of type T.
      */
     template <typename T>
-    const T& Cache<T>::get() const
+    template <typename P>
+    const T& Cache<T>::get(
+        const CacheProperty<P>&    source,
+        std::function<T(const P&)> compute
+    ) const
     {
-        if (!_isValid && _compute.has_value())
+        if (!_value.has_value() || _version != source.version())
         {
-            _value   = (*_compute)();
-            _isValid = true;
-            return _value;
+            _value   = compute(source.get());
+            _version = source.version();
+            return *_value;
         }
 
         throw mstd::RuntimeError(
@@ -58,14 +52,6 @@ namespace mstd
         );
     }
 
-    /**
-     * @brief Invalidates the cached value.
-     */
-    template <typename T>
-    void Cache<T>::invalidate()
-    {
-        _isValid = false;
-    }
 }   // namespace mstd
 
 #endif   // __MSTD__TYPES__CACHE_TPP__

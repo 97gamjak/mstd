@@ -23,7 +23,7 @@
 #ifndef __MSTD__TYPES__PROPERTY_HPP__
 #define __MSTD__TYPES__PROPERTY_HPP__
 
-#include "cache.hpp"
+#include <cstddef>
 
 namespace mstd
 {
@@ -45,16 +45,21 @@ namespace mstd
     };
 
     /**
-     * @brief A property class that encapsulates a Cache<T> value.
+     * @brief A property class that tracks the version of the value and allows
+     * cache invalidation.
      */
     template <typename T>
-    class CacheProperty : public Property<Cache<T>>
+    class CacheProperty : public Property<T>
     {
-       public:
-        CacheProperty() = default;
-        explicit CacheProperty(const Cache<T>& cache);
+       private:
+        size_t _version = 0;
 
-        void set(const Cache<T>& cache) override;
+       public:
+        using Property<T>::Property;
+
+        [[nodiscard]] size_t version() const noexcept;
+
+        void set(const T& value) override;
     };
 }   // namespace mstd
 

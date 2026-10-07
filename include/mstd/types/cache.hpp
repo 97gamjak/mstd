@@ -23,11 +23,14 @@
 #ifndef __MSTD__TYPES__CACHE_HPP__
 #define __MSTD__TYPES__CACHE_HPP__
 
+#include <cstddef>
 #include <functional>
 #include <optional>
 
 namespace mstd
 {
+    template <typename T>
+    class CacheProperty;   // forward declaration
 
     /**
      * @brief A simple cache class that stores a value of type T and allows
@@ -38,17 +41,17 @@ namespace mstd
     class Cache
     {
        private:
-        std::optional<std::function<T()>> _compute = std::nullopt;
-        mutable T                         _value;
-        mutable bool                      _isValid;
+        mutable std::optional<T> _value   = std::nullopt;
+        mutable size_t           _version = 0;
 
        public:
         Cache() = default;
-        explicit Cache(const std::function<T()>& compute);
 
-        const T& get() const;
-
-        void invalidate();
+        template <typename P>
+        const T& get(
+            const CacheProperty<P>&    source,
+            std::function<T(const P&)> compute
+        ) const;
     };
 
 }   // namespace mstd
