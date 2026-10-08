@@ -23,6 +23,8 @@
 #ifndef __MSTD__TYPES__CACHE_TPP__
 #define __MSTD__TYPES__CACHE_TPP__
 
+#include <functional>
+
 #include "cache.hpp"
 #include "mstd/exceptions.hpp"
 
@@ -42,7 +44,7 @@ namespace mstd
     {
         if (!_value.has_value() || !_isUpToDate(sources...))
         {
-            _value = compute();
+            _value = std::invoke(std::forward<F>(compute));
             _stamps.assign({sources.stamp()...});
             return *_value;
         }

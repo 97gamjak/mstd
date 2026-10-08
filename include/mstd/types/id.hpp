@@ -24,6 +24,8 @@ namespace mstd
         explicit Id(T v);
 
         static Id next();
+
+        constexpr bool operator==(const Id& other) const noexcept = default;
     };
 
 }   // namespace mstd
