@@ -30,4 +30,8 @@ namespace mstd
 
 }   // namespace mstd
 
+#ifndef __MSTD__TYPES__ID_TPP__
+#include "id.tpp"
+#endif
+
 #endif   // __MSTD__TYPES__ID_HPP__
