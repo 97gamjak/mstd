@@ -34,22 +34,39 @@ namespace mstd
      * @return The cached value of type T.
      */
     template <typename T>
-    template <typename P>
+    template <typename F, typename... Ps>
     const T& Cache<T>::get(
-        const CacheProperty<P>&    source,
-        std::function<T(const P&)> compute
+        F&& compute,
+        const CacheProperty<Ps>&... sources
     ) const
     {
-        if (!_value.has_value() || _version != source.version())
+        if (!_value.has_value() || !_isUpToDate(sources...))
         {
-            _value   = compute(source.get());
-            _version = source.version();
+            _value = compute();
+            _stamps.assign({sources.stamp()...});
             return *_value;
         }
 
         throw mstd::RuntimeError(
             "Cache value is not valid and no compute function is set."
         );
+    }
+
+    /**
+     * @brief Checks if the cached value is up-to-date with the given
+     * properties.
+     *
+     * @return true if the cached value is up-to-date, false otherwise.
+     */
+    template <typename T>
+    template <typename... Ps>
+    bool Cache<T>::_isUpToDate(const CacheProperty<Ps>&... properties) const
+    {
+        if (!_value || _stamps.size() != sizeof...(Ps))
+            return false;
+
+        std::size_t i = 0;
+        return ((_stamps[i++] == properties.stamp()) && ...);
     }
 
 }   // namespace mstd

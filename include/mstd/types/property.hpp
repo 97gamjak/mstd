@@ -24,6 +24,9 @@
 #define __MSTD__TYPES__PROPERTY_HPP__
 
 #include <cstddef>
+#include <cstdint>
+
+#include "mstd/types/stamp.hpp"
 
 namespace mstd
 {
@@ -52,12 +55,17 @@ namespace mstd
     class CacheProperty : public Property<T>
     {
        private:
-        size_t _version = 0;
+        using IdType = Id<std::uint64_t>;
+        IdType  _id;
+        Version _version{0U};
 
        public:
-        using Property<T>::Property;
+        explicit CacheProperty(const T& value);
 
-        [[nodiscard]] size_t version() const noexcept;
+        CacheProperty(const CacheProperty& other);
+        CacheProperty& operator=(const CacheProperty& other);
+
+        [[nodiscard]] Stamp<std::uint64_t> stamp() const noexcept;
 
         void set(const T& value) override;
     };

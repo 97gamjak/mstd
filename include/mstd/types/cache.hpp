@@ -23,9 +23,11 @@
 #ifndef __MSTD__TYPES__CACHE_HPP__
 #define __MSTD__TYPES__CACHE_HPP__
 
-#include <cstddef>
-#include <functional>
+#include <cstdint>
 #include <optional>
+#include <vector>
+
+#include "mstd/types/stamp.hpp"
 
 namespace mstd
 {
@@ -41,17 +43,16 @@ namespace mstd
     class Cache
     {
        private:
-        mutable std::optional<T> _value   = std::nullopt;
-        mutable size_t           _version = 0;
+        mutable std::optional<T>                  _value  = std::nullopt;
+        mutable std::vector<Stamp<std::uint64_t>> _stamps = {};
 
        public:
-        Cache() = default;
+        template <typename F, typename... Ps>
+        const T& get(F&& compute, const CacheProperty<Ps>&... sources) const;
 
-        template <typename P>
-        const T& get(
-            const CacheProperty<P>&    source,
-            std::function<T(const P&)> compute
-        ) const;
+       private:
+        template <typename... Ps>
+        bool _isUpToDate(const CacheProperty<Ps>&... properties) const;
     };
 
 }   // namespace mstd

@@ -54,12 +54,43 @@ namespace mstd
     }
 
     /**
+     * @brief
+     *
+     */
+    template <typename T>
+    CacheProperty<T>::CacheProperty(const T& value)
+        : Property<T>(value), _id(IdType::next()), _version(0U)
+    {
+    }
+
+    /**
+     * @brief Copy constructor for CacheProperty.
+     */
+    template <typename T>
+    CacheProperty<T>::CacheProperty(const CacheProperty& other)
+        : Property<T>(other.get()), _id(IdType::next()), _version(0U)
+    {
+    }
+
+    /**
+     * @brief Copy assignment operator for CacheProperty.
+     */
+    template <typename T>
+    CacheProperty<T>& CacheProperty<T>::operator=(const CacheProperty& other)
+    {
+        Property<T>::set(other.get());
+        _id      = other.next();
+        _version = Version{0U};
+        return *this;
+    }
+
+    /**
      * @brief Retrieves the version of the CacheProperty.
      */
     template <typename T>
-    size_t CacheProperty<T>::version() const noexcept
+    Stamp<std::uint64_t> CacheProperty<T>::stamp() const noexcept
     {
-        return _version;
+        return {_id, _version};
     }
 
     /**
