@@ -6,6 +6,8 @@
 
 namespace mstd
 {
+    using EpochValueType = std::uint64_t;
+
     /**
      * @brief A global epoch counter for a specific domain.
      *
@@ -16,16 +18,15 @@ namespace mstd
     template <typename Domain>
     struct GlobalEpoch
     {
-        using Underlying = std::uint64_t;
-
-        alignas(64) static inline std::atomic<Underlying> value{0};
+        alignas(64) static inline std::atomic<EpochValueType> value{0};
 
         /**
          * @brief Get the current global epoch.
          *
          * @return The current value of the global epoch counter.
          */
-        static Underlying now() noexcept
+        [[nodiscard]]
+        static EpochValueType now() noexcept
         {
             return value.load(std::memory_order_relaxed);
         }
@@ -35,7 +36,8 @@ namespace mstd
          *
          * @return The new value of the global epoch counter after incrementing.
          */
-        static Underlying advance() noexcept
+        [[nodiscard]]
+        static EpochValueType advance() noexcept
         {
             return value.fetch_add(1, std::memory_order_relaxed) + 1;
         }

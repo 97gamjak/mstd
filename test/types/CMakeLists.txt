@@ -48,6 +48,7 @@ endif()
 
 add_executable(mstd_tests_types
     test_ref.cpp
+    test_cache.cpp
 )
 
 target_link_libraries(mstd_tests_types

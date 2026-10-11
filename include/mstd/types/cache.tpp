@@ -29,19 +29,35 @@
 namespace mstd
 {
 
-    /**
-     * @brief Checks if there are duplicate domains among the sources.
-     *
-     * @tparam I The index of the current source.
-     * @tparam J The indices of the other sources to compare against.
-     * @return true if there is a duplicate domain, false otherwise.
-     */
-    template <typename T, Source... Sources>
-    template <std::size_t I, std::size_t... J>
-    constexpr bool Cache<T, Sources...>::_dupImpl(std::index_sequence<J...>)
+    namespace details
     {
-        return ((J < I && std::is_same_v<Dom<J>, Dom<I>>) || ...);
-    }
+        template <std::size_t I, typename... Sources>
+        using DomainOf =
+            typename std::tuple_element_t<I, std::tuple<Sources...>>::domain;
+
+        /**
+         * @brief Checks if the domain of the source at index I is duplicated
+         * among the sources.
+         *
+         * @tparam I The index of the current source.
+         * @tparam Sources The types of the sources.
+         * @return true if there is a duplicate domain, false otherwise.
+         */
+        template <std::size_t I, typename... Sources>
+        constexpr bool isDupDomain()
+        {
+            return []<std::size_t... J>(std::index_sequence<J...>)
+            {
+                return (
+                    (J < I && std::is_same_v<
+                                  DomainOf<J, Sources...>,
+                                  DomainOf<I, Sources...>>) ||
+                    ...
+                );
+            }(std::index_sequence_for<Sources...>{});
+        }
+
+    }   // namespace details
 
     /**
      * @brief Constructs a Cache object with the given compute function.
@@ -62,7 +78,7 @@ namespace mstd
     template <typename T, Source... Sources>
     const T& Cache<T, Sources...>::get(const Sources&... sources) const
     {
-        if (_isUpToDate(sources...) && _value)
+        if (_value && _isUpToDate())
             return *_value;
 
         _slow(sources...);
@@ -81,7 +97,12 @@ namespace mstd
         if (_compute)
         {
             _value    = _compute(sources.get()...);
-            _versions = {sources.version()...};
+            _versions = []<std::size_t... Is>(std::index_sequence<Is...>)
+            {
+                return std::array<EpochValueType, N>{
+                    GlobalEpoch<details::DomainOf<Is, Sources...>>::now()...
+                };
+            }(std::make_index_sequence<N>{});
         }
         else
         {
@@ -98,12 +119,17 @@ namespace mstd
      * @return true if the cached value is up-to-date, false otherwise.
      */
     template <typename T, Source... Sources>
-    template <size_t... Is>
-    bool Cache<T, Sources...>::_isUpToDate(const Sources&... properties) const
+    bool Cache<T, Sources...>::_isUpToDate() const
     {
-        return (
-            (_isDup<Is> || _versions[Is] == GlobalEpoch<Dom<Is>>::now()) && ...
-        );
+        return [this]<std::size_t... Is>(std::index_sequence<Is...>)
+        {
+            return (
+                (details::isDupDomain<Is, Sources...>() ||
+                 _versions[Is] ==
+                     GlobalEpoch<details::DomainOf<Is, Sources...>>::now()) &&
+                ...
+            );
+        }(std::make_index_sequence<N>{});
     }
 
 }   // namespace mstd

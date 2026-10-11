@@ -61,7 +61,7 @@ namespace mstd
      */
     template <typename T, typename Domain>
     CacheProperty<T, Domain>::CacheProperty(const T& value)
-        : Property<T>(value), _version(GlobalEpoch<Domain>::advance())
+        : Property<T>(value), _version{GlobalEpoch<Domain>::advance()}
     {
     }
 
@@ -70,7 +70,7 @@ namespace mstd
      */
     template <typename T, typename Domain>
     CacheProperty<T, Domain>::CacheProperty(const CacheProperty& other)
-        : Property<T>(other.get()), _version(GlobalEpoch<Domain>::advance())
+        : Property<T>(other.get()), _version{GlobalEpoch<Domain>::advance()}
     {
     }
 
@@ -82,19 +82,8 @@ namespace mstd
         const CacheProperty& other
     )
     {
-        Property<T>::set(other.get());
-        _version = GlobalEpoch<Domain>::advance();
+        set(other.get());
         return *this;
-    }
-
-    /**
-     * @brief Retrieves the version of the CacheProperty.
-     */
-    template <typename T, typename Domain>
-    GlobalEpoch<Domain>::Underlying CacheProperty<T, Domain>::stamp(
-    ) const noexcept
-    {
-        return _version;
     }
 
     /**
@@ -105,6 +94,15 @@ namespace mstd
     {
         _version = GlobalEpoch<Domain>::advance();
         Property<T>::set(value);
+    }
+
+    /**
+     * @brief Retrieves the version of the CacheProperty.
+     */
+    template <typename T, typename Domain>
+    const EpochValueType& CacheProperty<T, Domain>::version() const
+    {
+        return _version;
     }
 }   // namespace mstd
 

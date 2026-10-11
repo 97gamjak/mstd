@@ -23,11 +23,7 @@
 #ifndef __MSTD__TYPES__PROPERTY_HPP__
 #define __MSTD__TYPES__PROPERTY_HPP__
 
-#include <cstdint>
-
 #include "mstd/types/global_epoch.hpp"
-#include "mstd/types/stamp.hpp"
-
 namespace mstd
 {
     /**
@@ -40,6 +36,8 @@ namespace mstd
         T _value;
 
        public:
+        using value_type = T;
+
         Property() = default;
         explicit Property(const T& value);
         virtual ~Property() = default;
@@ -59,7 +57,7 @@ namespace mstd
         using domain = Domain;
 
        private:
-        GlobalEpoch<Domain>::Underlying _version;
+        EpochValueType _version{};
 
        public:
         explicit CacheProperty(const T& value);
@@ -67,9 +65,10 @@ namespace mstd
         CacheProperty(const CacheProperty& other);
         CacheProperty& operator=(const CacheProperty& other);
 
-        [[nodiscard]] GlobalEpoch<Domain>::Underlying stamp() const noexcept;
-
         void set(const T& value) override;
+
+        [[nodiscard]]
+        const EpochValueType& version() const;
     };
 }   // namespace mstd
 
