@@ -42,12 +42,14 @@ namespace mstd
         const CacheProperty<Ps>&... sources
     ) const
     {
-        if (!_value.has_value() || !_isUpToDate(sources...))
+        if (!_value || !_isUpToDate(sources...))
         {
             _value = std::invoke(std::forward<F>(compute));
             _stamps.assign({sources.stamp()...});
             return *_value;
         }
+        if (_value)
+            return *_value;
 
         throw mstd::RuntimeError(
             "Cache value is not valid and no compute function is set."
