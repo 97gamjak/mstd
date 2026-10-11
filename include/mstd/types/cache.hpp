@@ -23,11 +23,11 @@
 #ifndef __MSTD__TYPES__CACHE_HPP__
 #define __MSTD__TYPES__CACHE_HPP__
 
+#include <array>
 #include <cstdint>
 #include <optional>
-#include <vector>
 
-#include "mstd/types/stamp.hpp"
+#include "mstd/types/global_epoch.hpp"
 
 namespace mstd
 {
@@ -35,24 +35,60 @@ namespace mstd
     class CacheProperty;   // forward declaration
 
     /**
+     * @brief Concept to check if a type S satisfies the requirements of a
+     * source.
+     */
+    template <typename S>
+    concept Source = requires(const S& source) {
+        typename S::domain;
+        typename S::value_type;
+        {
+            source.version()
+        } -> std::convertible_to<
+            typename GlobalEpoch<typename S::domain>::Underlying>;
+        { source.get() } -> std::same_as<const typename S::value_type&>;
+    };
+
+    /**
      * @brief A simple cache class that stores a value of type T and allows
      * for lazy computation of the value using a registered compute function.
      * (NOT thread-safe)
      */
-    template <typename T>
+    template <typename T, Source... Sources>
     class Cache
     {
+       public:
+        using Func = T (*)(const typename Sources::value_type&...);
+
        private:
-        mutable std::optional<T>                  _value  = std::nullopt;
-        mutable std::vector<Stamp<std::uint64_t>> _stamps = {};
+        static constexpr std::size_t N = sizeof...(Sources);
+        static_assert(N > 0, "a Cache needs at least one source");
+
+        mutable std::optional<T> _value   = std::nullopt;
+        Func                     _compute = nullptr;
+
+        // TODO: find a way of eliminating uint here via globalepoch
+        mutable std::array<std::uint64_t, N> _versions{};
+
+        template <std::size_t I>
+        static constexpr bool _isDup =
+            _dupImpl<I>(std::make_index_sequence<N>{});
+
+        template <std::size_t I, typename... Ss>
+        using Dom = typename std::tuple_element_t<I, std::tuple<Ss...>>::domain;
 
        public:
-        template <typename F, typename... Ps>
-        const T& get(F&& compute, const CacheProperty<Ps>&... sources) const;
+        explicit Cache(Func compute);
+        const T& get(const Sources&... sources) const;
 
        private:
-        template <typename... Ps>
-        bool _isUpToDate(const CacheProperty<Ps>&... properties) const;
+        template <std::size_t... Is>
+        bool _isUpToDate(const Sources&... properties) const;
+
+        template <std::size_t I, std::size_t... J>
+        static constexpr bool _dupImpl(std::index_sequence<J...>);
+
+        void _slow(const Sources&... sources) const;
     };
 
 }   // namespace mstd

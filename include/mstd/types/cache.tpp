@@ -23,37 +23,72 @@
 #ifndef __MSTD__TYPES__CACHE_TPP__
 #define __MSTD__TYPES__CACHE_TPP__
 
-#include <functional>
-
 #include "cache.hpp"
 #include "mstd/exceptions.hpp"
 
 namespace mstd
 {
+
+    /**
+     * @brief Checks if there are duplicate domains among the sources.
+     *
+     * @tparam I The index of the current source.
+     * @tparam J The indices of the other sources to compare against.
+     * @return true if there is a duplicate domain, false otherwise.
+     */
+    template <typename T, Source... Sources>
+    template <std::size_t I, std::size_t... J>
+    constexpr bool Cache<T, Sources...>::_dupImpl(std::index_sequence<J...>)
+    {
+        return ((J < I && std::is_same_v<Dom<J>, Dom<I>>) || ...);
+    }
+
+    /**
+     * @brief Constructs a Cache object with the given compute function.
+     *
+     * @param compute The compute function used to lazily compute the cached
+     * value.
+     */
+    template <typename T, Source... Sources>
+    Cache<T, Sources...>::Cache(Func compute) : _compute(compute)
+    {
+    }
+
     /**
      * @brief Retrieves the cached value, computing it if necessary.
      *
      * @return The cached value of type T.
      */
-    template <typename T>
-    template <typename F, typename... Ps>
-    const T& Cache<T>::get(
-        F&& compute,
-        const CacheProperty<Ps>&... sources
-    ) const
+    template <typename T, Source... Sources>
+    const T& Cache<T, Sources...>::get(const Sources&... sources) const
     {
-        if (!_value || !_isUpToDate(sources...))
-        {
-            _value = std::invoke(std::forward<F>(compute));
-            _stamps.assign({sources.stamp()...});
-            return *_value;
-        }
-        if (_value)
+        if (_isUpToDate(sources...) && _value)
             return *_value;
 
-        throw mstd::RuntimeError(
-            "Cache value is not valid and no compute function is set."
-        );
+        _slow(sources...);
+
+        return *_value;
+    }
+
+    /**
+     * @brief Handles the slow path when the cached value is not up-to-date.
+     *
+     * @param sources The sources to use for recomputing the cached value.
+     */
+    template <typename T, Source... Sources>
+    void Cache<T, Sources...>::_slow(const Sources&... sources) const
+    {
+        if (_compute)
+        {
+            _value    = _compute(sources.get()...);
+            _versions = {sources.version()...};
+        }
+        else
+        {
+            throw mstd::RuntimeError(
+                "Cache value is not valid and no compute function is set."
+            );
+        }
     }
 
     /**
@@ -62,15 +97,13 @@ namespace mstd
      *
      * @return true if the cached value is up-to-date, false otherwise.
      */
-    template <typename T>
-    template <typename... Ps>
-    bool Cache<T>::_isUpToDate(const CacheProperty<Ps>&... properties) const
+    template <typename T, Source... Sources>
+    template <size_t... Is>
+    bool Cache<T, Sources...>::_isUpToDate(const Sources&... properties) const
     {
-        if (!_value || _stamps.size() != sizeof...(Ps))
-            return false;
-
-        std::size_t i = 0;
-        return ((_stamps[i++] == properties.stamp()) && ...);
+        return (
+            (_isDup<Is> || _versions[Is] == GlobalEpoch<Dom<Is>>::now()) && ...
+        );
     }
 
 }   // namespace mstd

@@ -23,6 +23,7 @@
 #ifndef __MSTD__TYPES__PROPERTY_TPP__
 #define __MSTD__TYPES__PROPERTY_TPP__
 
+#include "mstd/types/global_epoch.hpp"
 #include "property.hpp"
 
 namespace mstd
@@ -39,7 +40,7 @@ namespace mstd
      * @brief Retrieves the value of the Property.
      */
     template <typename T>
-    T Property<T>::get() const
+    const T& Property<T>::get() const
     {
         return _value;
     }
@@ -54,52 +55,55 @@ namespace mstd
     }
 
     /**
-     * @brief
+     * @brief Constructs a CacheProperty with the given value.
      *
+     * @param value The initial value for the CacheProperty.
      */
-    template <typename T>
-    CacheProperty<T>::CacheProperty(const T& value)
-        : Property<T>(value), _id(IdType::next()), _version(0U)
+    template <typename T, typename Domain>
+    CacheProperty<T, Domain>::CacheProperty(const T& value)
+        : Property<T>(value), _version(GlobalEpoch<Domain>::advance())
     {
     }
 
     /**
      * @brief Copy constructor for CacheProperty.
      */
-    template <typename T>
-    CacheProperty<T>::CacheProperty(const CacheProperty& other)
-        : Property<T>(other.get()), _id(IdType::next()), _version(0U)
+    template <typename T, typename Domain>
+    CacheProperty<T, Domain>::CacheProperty(const CacheProperty& other)
+        : Property<T>(other.get()), _version(GlobalEpoch<Domain>::advance())
     {
     }
 
     /**
      * @brief Copy assignment operator for CacheProperty.
      */
-    template <typename T>
-    CacheProperty<T>& CacheProperty<T>::operator=(const CacheProperty& other)
+    template <typename T, typename Domain>
+    CacheProperty<T, Domain>& CacheProperty<T, Domain>::operator=(
+        const CacheProperty& other
+    )
     {
         Property<T>::set(other.get());
-        _id      = other.next();
-        _version = Version{0U};
+        _version = GlobalEpoch<Domain>::advance();
         return *this;
     }
 
     /**
      * @brief Retrieves the version of the CacheProperty.
      */
-    template <typename T>
-    Stamp<std::uint64_t> CacheProperty<T>::stamp() const noexcept
+    template <typename T, typename Domain>
+    GlobalEpoch<Domain>::Underlying CacheProperty<T, Domain>::stamp(
+    ) const noexcept
     {
-        return {_id, _version};
+        return _version;
     }
 
     /**
      * @brief Sets the value of the CacheProperty and invalidates the cache.
      */
-    template <typename T>
-    void CacheProperty<T>::set(const T& value)
+    template <typename T, typename Domain>
+    void CacheProperty<T, Domain>::set(const T& value)
     {
-        _version++;
+        _version = GlobalEpoch<Domain>::advance();
         Property<T>::set(value);
     }
 }   // namespace mstd

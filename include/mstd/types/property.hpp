@@ -23,9 +23,9 @@
 #ifndef __MSTD__TYPES__PROPERTY_HPP__
 #define __MSTD__TYPES__PROPERTY_HPP__
 
-#include <cstddef>
 #include <cstdint>
 
+#include "mstd/types/global_epoch.hpp"
 #include "mstd/types/stamp.hpp"
 
 namespace mstd
@@ -42,8 +42,9 @@ namespace mstd
        public:
         Property() = default;
         explicit Property(const T& value);
+        virtual ~Property() = default;
 
-        T            get() const;
+        const T&     get() const;
         virtual void set(const T& value);
     };
 
@@ -51,13 +52,14 @@ namespace mstd
      * @brief A property class that tracks the version of the value and allows
      * cache invalidation.
      */
-    template <typename T>
+    template <typename T, typename Domain>
     class CacheProperty : public Property<T>
     {
+       public:
+        using domain = Domain;
+
        private:
-        using IdType = Id<std::uint64_t>;
-        IdType  _id;
-        Version _version{0U};
+        GlobalEpoch<Domain>::Underlying _version;
 
        public:
         explicit CacheProperty(const T& value);
@@ -65,7 +67,7 @@ namespace mstd
         CacheProperty(const CacheProperty& other);
         CacheProperty& operator=(const CacheProperty& other);
 
-        [[nodiscard]] Stamp<std::uint64_t> stamp() const noexcept;
+        [[nodiscard]] GlobalEpoch<Domain>::Underlying stamp() const noexcept;
 
         void set(const T& value) override;
     };
