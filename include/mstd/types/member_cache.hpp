@@ -1,10 +1,32 @@
+/*****************************************************************************
+<GPL_HEADER>
+
+    mstd library
+    Copyright (C) 2025-now  Jakob Gamper
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+<GPL_HEADER>
+******************************************************************************/
+
 #ifndef __MSTD__TYPES__MEMBER_CACHE_HPP__
 #define __MSTD__TYPES__MEMBER_CACHE_HPP__
 
 #include <optional>
 #include <type_traits>
 
-#include "mstd/types/cache.hpp"
+#include "cache.hpp"
 
 namespace mstd
 {
@@ -45,10 +67,7 @@ namespace mstd
          * get(owner).
          */
         template <typename Owner, typename S>
-        const typename S::value_type& readSource(
-            const Owner& owner,
-            const S&     source
-        );
+        decltype(auto) readSource(const Owner& owner, const S& source);
     }   // namespace detail
 
     /**
@@ -96,6 +115,7 @@ namespace mstd
         mutable typename domains::Epochs _epochs{};
 
        public:
+        MemberCache() = delete;
         explicit MemberCache(Func compute);
 
         [[nodiscard]] const T& get(const Owner& owner) const;

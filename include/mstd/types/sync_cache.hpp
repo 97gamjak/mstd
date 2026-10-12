@@ -23,32 +23,80 @@
 #ifndef __MSTD__TYPES__SYNC_CACHE_HPP__
 #define __MSTD__TYPES__SYNC_CACHE_HPP__
 
-#include <functional>
+#include <atomic>
+#include <mutex>
 #include <optional>
-#include <shared_mutex>
+#include <type_traits>
+
+#include "mstd/types/member_cache.hpp"
 
 namespace mstd
 {
     /**
-     * @brief Implementation of a thread-safe cache class template.
-     * (Thread-safe)
+     * @brief The thread-safe counterpart of MemberCache: it names its
+     * sources the same way and is valid as long as no domain of its sources
+     * advanced, but get() may be called from several threads at once.
+     *
+     * @details Concurrent get() calls are safe: a stale value is computed
+     * exactly once and all callers receive it. A hit is lock-free and only
+     * reads shared state, so it scales with the number of threads. The value
+     * is returned by copy, since a reference could be invalidated by another
+     * thread's recompute.
+     *
+     * The sources themselves are not protected: they must not be written
+     * while any thread reads (set the properties in a serial section, and
+     * separate it from the readers by a barrier, join or similar). The
+     * compute function must not call get() on its own cache. A SyncCache
+     * can be a source of a SyncCache or a MemberCache and vice versa.
+     *
+     * Copying an owner copies the cached state under the source's lock; the
+     * mutex itself is never copied, so the owner keeps its defaulted copy
+     * and assignment.
      */
-    template <typename T>
+    template <typename T, typename Owner, auto... Members>
     class SyncCache
     {
-       private:
-        std::optional<std::function<T()>> _compute;
-        mutable T                         _value;
-        mutable bool                      _isValid;
-        mutable std::shared_mutex         _mutex;
+        static_assert(
+            sizeof...(Members) > 0,
+            "a SyncCache needs at least one source"
+        );
+        static_assert(
+            (std::is_member_object_pointer_v<decltype(Members)> && ...),
+            "the sources of a SyncCache must be pointers to data members"
+        );
+        static_assert(
+            (detail::MemberSource<detail::MemberTypeT<Members>> && ...),
+            "every source needs domain(s) and value_type"
+        );
 
        public:
-        SyncCache(const std::function<T()>& compute);
+        using value_type = T;
+        using domains    = detail::DomainsOf<detail::MemberTypeT<Members>...>;
+        using Func =
+            T (*)(const typename detail::MemberTypeT<Members>::value_type&...);
 
-        T get();
+       private:
+        // _value is written only under _mutex and published by _filled and
+        // _epochs (release); a hit reads it after acquiring both
+        mutable std::optional<T>               _value   = std::nullopt;
+        Func                                   _compute = nullptr;
+        mutable std::atomic<bool>              _filled{false};
+        mutable typename domains::AtomicEpochs _epochs{};
+        mutable std::mutex                     _mutex;
 
-        void invalidate();
+       public:
+        explicit SyncCache(Func compute);
+
+        SyncCache(const SyncCache& other);
+        SyncCache& operator=(const SyncCache& other);
+        ~SyncCache() = default;
+
+        [[nodiscard]] T get(const Owner& owner) const;
+
+       private:
+        void _copyEpochs(const SyncCache& other);
     };
+
 }   // namespace mstd
 
 #ifndef __MSTD__TYPES__SYNC_CACHE_TPP__

@@ -23,62 +23,93 @@
 #ifndef __MSTD__TYPES__SYNC_CACHE_TPP__
 #define __MSTD__TYPES__SYNC_CACHE_TPP__
 
+#include <cstddef>
 #include <mutex>
 
-#include "mstd/exceptions/exceptions.hpp"
+#include "mstd/exceptions.hpp"
 #include "sync_cache.hpp"
 
 namespace mstd
 {
-    /**
-     * @brief Construct a new Sync Cache object.
-     *
-     * @param compute The function to compute the value if it is not valid.
-     */
-    template <typename T>
-    SyncCache<T>::SyncCache(const std::function<T()>& compute)
-        : _compute(compute), _isValid(false)
+    template <typename T, typename Owner, auto... Members>
+    SyncCache<T, Owner, Members...>::SyncCache(Func compute) : _compute(compute)
     {
     }
 
-    /**
-     * @brief Get the cached value.
-     * If the value is not valid and a compute function is set, it will compute
-     * the value. (Thread-safe)
-     */
-    template <typename T>
-    T SyncCache<T>::get()
+    template <typename T, typename Owner, auto... Members>
+    SyncCache<T, Owner, Members...>::SyncCache(const SyncCache& other)
+        : _compute(other._compute)
     {
-        {
-            std::shared_lock lock(_mutex);
-            if (_isValid)
-            {
-                return _value;
-            }
-        }
-
-        std::unique_lock uniqueLock(_mutex);
-        if (!_isValid && _compute)
-        {
-            _value   = (*_compute)();
-            _isValid = true;
-            return _value;
-        }
-
-        throw mstd::RuntimeError(
-            "Cache value is not valid and no compute function is set."
-        );
+        const std::lock_guard lock(other._mutex);
+        _value = other._value;
+        _copyEpochs(other);
+        _filled.store(other._filled.load(std::memory_order_relaxed));
     }
 
-    /**
-     * @brief Invalidate the cached value.
-     * (Thread-safe)
-     */
-    template <typename T>
-    void SyncCache<T>::invalidate()
+    template <typename T, typename Owner, auto... Members>
+    SyncCache<T, Owner, Members...>& SyncCache<T, Owner, Members...>::operator=(
+        const SyncCache& other
+    )
     {
-        std::unique_lock lock(_mutex);
-        _isValid = false;
+        if (this == &other)
+            return *this;
+
+        // never hold both locks at once
+        std::optional<T> value;
+        bool             filled = false;
+        {
+            const std::lock_guard lock(other._mutex);
+            value  = other._value;
+            filled = other._filled.load(std::memory_order_relaxed);
+        }
+
+        const std::lock_guard lock(_mutex);
+        _filled.store(false);   // readers go to the slow path meanwhile
+        _value   = std::move(value);
+        _compute = other._compute;
+        _copyEpochs(other);
+        _filled.store(filled);
+        return *this;
+    }
+
+    template <typename T, typename Owner, auto... Members>
+    void SyncCache<T, Owner, Members...>::_copyEpochs(const SyncCache& other)
+    {
+        for (std::size_t i = 0; i < _epochs.size(); ++i)
+        {
+            _epochs[i].store(
+                other._epochs[i].load(std::memory_order_relaxed),
+                std::memory_order_relaxed
+            );
+        }
+    }
+
+    template <typename T, typename Owner, auto... Members>
+    T SyncCache<T, Owner, Members...>::get(const Owner& owner) const
+    {
+        // lock-free hit: only reads
+        if (_filled.load(std::memory_order_acquire) &&
+            domains::isCurrent(_epochs))
+            return *_value;
+
+        const std::lock_guard lock(_mutex);
+
+        // another thread may have recomputed while we waited for the lock
+        if (_filled.load(std::memory_order_relaxed) &&
+            domains::isCurrent(_epochs))
+            return *_value;
+
+        if (!_compute)
+        {
+            throw mstd::RuntimeError(
+                "Cache value is not valid and no compute function is set."
+            );
+        }
+
+        _value = _compute(detail::readSource(owner, owner.*Members)...);
+        domains::publish(_epochs);
+        _filled.store(true, std::memory_order_release);
+        return *_value;
     }
 }   // namespace mstd
 
