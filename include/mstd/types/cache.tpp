@@ -24,6 +24,7 @@
 #define __MSTD__TYPES__CACHE_TPP__
 
 #include "cache.hpp"
+#include "mstd/debugging.hpp"
 #include "mstd/exceptions.hpp"
 
 namespace mstd
@@ -38,6 +39,8 @@ namespace mstd
     {
         if (_value && domains::isCurrent(_epochs))
             return *_value;
+
+        MSTD_ASSERT_NOT_HOT("Cache miss: value is not current");
 
         _slow(sources...);
         return *_value;
