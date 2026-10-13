@@ -19,6 +19,18 @@ else()
     message(WARNING "You are using an unsupported compiler! Compilation has only been tested with GNU.")
 endif()
 
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(_mstd_debug_default ON)
+else()
+    set(_mstd_debug_default OFF)
+endif()
+
+option(MSTD_DEBUG "Enable mstd debug checks" ${_mstd_debug_default})
+
+if(MSTD_DEBUG)
+    target_compile_definitions(mstd INTERFACE MSTD_DEBUG)
+endif()
+
 option(MSTD_USE_MP_UNITS "Enable vendored mp-units support" ON)
 set(MSTD_MP_UNITS_CONTRACTS "NONE" CACHE STRING "Contract checking mode for vendored mp-units: NONE, GSL-LITE, or MS-GSL")
 set_property(CACHE MSTD_MP_UNITS_CONTRACTS PROPERTY STRINGS NONE GSL-LITE MS-GSL)
