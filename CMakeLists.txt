@@ -26,11 +26,6 @@ else()
 endif()
 
 option(MSTD_DEBUG "Enable mstd debug checks" ${_mstd_debug_default})
-
-if(MSTD_DEBUG)
-    target_compile_definitions(mstd INTERFACE MSTD_DEBUG)
-endif()
-
 option(MSTD_USE_MP_UNITS "Enable vendored mp-units support" ON)
 set(MSTD_MP_UNITS_CONTRACTS "NONE" CACHE STRING "Contract checking mode for vendored mp-units: NONE, GSL-LITE, or MS-GSL")
 set_property(CACHE MSTD_MP_UNITS_CONTRACTS PROPERTY STRINGS NONE GSL-LITE MS-GSL)
@@ -47,6 +42,10 @@ target_compile_features(mstd
     INTERFACE
     cxx_std_23
 )
+
+if(MSTD_DEBUG)
+    target_compile_definitions(mstd INTERFACE MSTD_DEBUG)
+endif()
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     target_compile_options(mstd INTERFACE

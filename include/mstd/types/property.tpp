@@ -23,6 +23,7 @@
 #ifndef __MSTD__TYPES__PROPERTY_TPP__
 #define __MSTD__TYPES__PROPERTY_TPP__
 
+#include "mstd/debugging.hpp"
 #include "mstd/types/global_epoch.hpp"
 #include "property.hpp"
 
@@ -92,6 +93,7 @@ namespace mstd
     template <typename T, typename Domain>
     void CacheProperty<T, Domain>::set(const T& value)
     {
+        MSTD_ASSERT_NOT_HOT("CacheProperty::set");
         _version = GlobalEpoch<Domain>::advance();
         Property<T>::set(value);
     }
