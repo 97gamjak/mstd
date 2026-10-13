@@ -24,7 +24,7 @@
 #include <stdexcept>
 
 #include "mstd/exceptions.hpp"
-#include "mstd/types/cache.hpp"
+#include "mstd/types/cache/cache.hpp"
 #include "mstd/types/property.hpp"
 
 namespace

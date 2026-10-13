@@ -28,7 +28,7 @@
 #include <optional>
 #include <type_traits>
 
-#include "mstd/types/member_cache.hpp"
+#include "member_cache.hpp"
 
 namespace mstd
 {

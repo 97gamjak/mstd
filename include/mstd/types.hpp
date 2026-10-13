@@ -23,8 +23,8 @@
 #ifndef __MSTD__TYPES_HPP__
 #define __MSTD__TYPES_HPP__
 
-#include "types/cache.hpp"                 // IWYU pragma: export
-#include "types/member_cache.hpp"          // IWYU pragma: export
+#include "types/cache/cache.hpp"           // IWYU pragma: export
+#include "types/cache/member_cache.hpp"    // IWYU pragma: export
 #include "types/property.hpp"              // IWYU pragma: export
 #include "types/ref.hpp"                   // IWYU pragma: export
 #include "types/strong_type.hpp"           // IWYU pragma: export

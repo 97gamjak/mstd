@@ -26,7 +26,7 @@
 #include <utility>
 
 #include "mstd/exceptions.hpp"
-#include "mstd/types/member_cache.hpp"
+#include "mstd/types/cache/member_cache.hpp"
 #include "mstd/types/property.hpp"
 
 namespace

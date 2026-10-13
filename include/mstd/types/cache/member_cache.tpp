@@ -68,6 +68,8 @@ namespace mstd
         if (_value && domains::isCurrent(_epochs))
             return *_value;
 
+        MSTD_ASSERT_NOT_HOT("Cache miss: value is not current");
+
         _slow(owner);
         return *_value;
     }
