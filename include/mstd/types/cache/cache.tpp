@@ -29,11 +29,23 @@
 
 namespace mstd
 {
+    /**
+     * @brief Constructs a Cache with the given compute function.
+     *
+     * @param compute The compute function to use for the cache.
+     */
     template <typename T, Source... Sources>
     Cache<T, Sources...>::Cache(Func compute) : _compute(compute)
     {
     }
 
+    /**
+     * @brief Retrieves the cached value, computing it if necessary.
+     *
+     * @param sources The sources to use for computing the cache value if it is
+     * not current.
+     * @return The cached value.
+     */
     template <typename T, Source... Sources>
     const T& Cache<T, Sources...>::get(const Sources&... sources) const
     {
@@ -46,6 +58,14 @@ namespace mstd
         return *_value;
     }
 
+    /**
+     * @brief Slow path for computing the cache value.
+     *
+     * This function is called when the cache value is not current. It uses
+     * the compute function to update the value and the epochs.
+     *
+     * @param sources The sources to use for computing the cache value.
+     */
     template <typename T, Source... Sources>
     void Cache<T, Sources...>::_slow(const Sources&... sources) const
     {
@@ -59,6 +79,38 @@ namespace mstd
         _value  = _compute(sources.get()...);
         _epochs = domains::now();
     }
+
+    /**
+     * @brief Constructs a BoundCache with the given compute function and
+     * sources.
+     *
+     * @param compute The compute function to use for the cache.
+     * @param sources The sources to bind to the cache.
+     */
+    template <typename T, Source... Sources>
+    BoundCache<T, Sources...>::BoundCache(
+        Func compute,
+        const Sources&... sources
+    )
+        : _cache(compute), _sources(&sources...)
+    {
+    }
+
+    /**
+     * @brief Retrieves the cached value from the bound cache.
+     *
+     * @return The cached value.
+     */
+    template <typename T, Source... Sources>
+    const T& BoundCache<T, Sources...>::get() const
+    {
+        return std::apply(
+            [this](const Sources*... sources) -> const T&
+            { return _cache.get(*sources...); },
+            _sources
+        );
+    }
+
 }   // namespace mstd
 
 #endif   // __MSTD__TYPES__CACHE_TPP__

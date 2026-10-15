@@ -24,6 +24,7 @@
 #define __MSTD__TYPES__MEMBER_CACHE_TPP__
 
 #include "member_cache.hpp"
+#include "mstd/debugging.hpp"
 #include "mstd/exceptions.hpp"
 
 namespace mstd

@@ -31,11 +31,21 @@
 
 namespace mstd
 {
+    /**
+     * @brief Constructs a SyncCache with the given compute function.
+     *
+     * @param compute The compute function to use for the cache.
+     */
     template <typename T, typename Owner, auto... Members>
     SyncCache<T, Owner, Members...>::SyncCache(Func compute) : _compute(compute)
     {
     }
 
+    /**
+     * @brief Copy constructor for SyncCache.
+     *
+     * @param other The SyncCache to copy from.
+     */
     template <typename T, typename Owner, auto... Members>
     SyncCache<T, Owner, Members...>::SyncCache(const SyncCache& other)
         : _compute(other._compute)
@@ -46,6 +56,12 @@ namespace mstd
         _filled.store(other._filled.load(std::memory_order_relaxed));
     }
 
+    /**
+     * @brief Copy assignment operator for SyncCache.
+     *
+     * @param other The SyncCache to copy from.
+     * @return Reference to this SyncCache.
+     */
     template <typename T, typename Owner, auto... Members>
     SyncCache<T, Owner, Members...>& SyncCache<T, Owner, Members...>::operator=(
         const SyncCache& other
@@ -72,6 +88,11 @@ namespace mstd
         return *this;
     }
 
+    /**
+     * @brief Copies the epochs from another SyncCache.
+     *
+     * @param other The SyncCache to copy epochs from.
+     */
     template <typename T, typename Owner, auto... Members>
     void SyncCache<T, Owner, Members...>::_copyEpochs(const SyncCache& other)
     {
@@ -84,6 +105,13 @@ namespace mstd
         }
     }
 
+    /**
+     * @brief Retrieves the cached value, computing it if necessary.
+     *
+     * @param owner The owner object to use for computing the cache value if it
+     * is not current.
+     * @return The cached value.
+     */
     template <typename T, typename Owner, auto... Members>
     T SyncCache<T, Owner, Members...>::get(const Owner& owner) const
     {

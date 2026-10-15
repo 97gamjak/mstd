@@ -42,28 +42,16 @@ namespace mstd
     {
         alignas(64) static inline std::atomic<EpochValueType> value{0};
 
-        /**
-         * @brief Get the current global epoch.
-         *
-         * @return The current value of the global epoch counter.
-         */
         [[nodiscard]]
-        static EpochValueType now() noexcept
-        {
-            return value.load(std::memory_order_relaxed);
-        }
+        static EpochValueType now() noexcept;
 
-        /**
-         * @brief Advance the global epoch by one.
-         *
-         * @return The new value of the global epoch counter after incrementing.
-         */
         [[nodiscard]]
-        static EpochValueType advance() noexcept
-        {
-            return value.fetch_add(1, std::memory_order_relaxed) + 1;
-        }
+        static EpochValueType advance() noexcept;
     };
 }   // namespace mstd
+
+#ifndef __MSTD__TYPES__GLOBAL_EPOCH_TPP__
+#include "global_epoch.tpp"
+#endif   // __MSTD__TYPES__GLOBAL_EPOCH_TPP__
 
 #endif   // __MSTD__TYPES__GLOBAL_EPOCH_HPP__

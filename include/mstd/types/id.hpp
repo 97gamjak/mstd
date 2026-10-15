@@ -26,6 +26,9 @@
 namespace mstd
 {
 
+    /**
+     * @brief A default tag type used for the Id class.
+     */
     struct DefaultTag
     {
     };
