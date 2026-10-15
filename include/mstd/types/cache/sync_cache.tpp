@@ -20,8 +20,8 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD__TYPES__SYNC_CACHE_TPP__
-#define __MSTD__TYPES__SYNC_CACHE_TPP__
+#ifndef __MSTD__TYPES__CACHE__SYNC_CACHE_TPP__
+#define __MSTD__TYPES__CACHE__SYNC_CACHE_TPP__
 
 #include <cstddef>
 #include <mutex>
@@ -48,11 +48,11 @@ namespace mstd
      */
     template <typename T, typename Owner, auto... Members>
     SyncCache<T, Owner, Members...>::SyncCache(const SyncCache& other)
-        : _compute(other._compute)
+        : _compute(other._compute), _mutex()   // never copied: a fresh mutex
     {
         const std::lock_guard lock(other._mutex);
         _value = other._value;
-        _copyEpochs(other);
+        _copyEpochs(_epochs, other._epochs);
         _filled.store(other._filled.load(std::memory_order_relaxed));
     }
 
@@ -83,23 +83,27 @@ namespace mstd
         _filled.store(false);   // readers go to the slow path meanwhile
         _value   = std::move(value);
         _compute = other._compute;
-        _copyEpochs(other);
+        _copyEpochs(_epochs, other._epochs);
         _filled.store(filled);
         return *this;
     }
 
     /**
-     * @brief Copies the epochs from another SyncCache.
+     * @brief Copies the epochs from one AtomicEpochs object to another.
      *
-     * @param other The SyncCache to copy epochs from.
+     * @param to The destination AtomicEpochs object.
+     * @param from The source AtomicEpochs object.
      */
     template <typename T, typename Owner, auto... Members>
-    void SyncCache<T, Owner, Members...>::_copyEpochs(const SyncCache& other)
+    void SyncCache<T, Owner, Members...>::_copyEpochs(
+        typename domains::AtomicEpochs&       to,
+        const typename domains::AtomicEpochs& from
+    )
     {
-        for (std::size_t i = 0; i < _epochs.size(); ++i)
+        for (std::size_t i = 0; i < to.size(); ++i)
         {
-            _epochs[i].store(
-                other._epochs[i].load(std::memory_order_relaxed),
+            to[i].store(
+                from[i].load(std::memory_order_relaxed),
                 std::memory_order_relaxed
             );
         }
@@ -141,4 +145,4 @@ namespace mstd
     }
 }   // namespace mstd
 
-#endif   // __MSTD__TYPES__SYNC_CACHE_TPP__
+#endif   // __MSTD__TYPES__CACHE__SYNC_CACHE_TPP__

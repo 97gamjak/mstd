@@ -38,7 +38,6 @@ namespace mstd
        public:
         using value_type = T;
 
-        Property() = default;
         explicit Property(const T& value);
         virtual ~Property() = default;
 

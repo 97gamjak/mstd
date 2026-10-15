@@ -20,8 +20,8 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD__TYPES__SYNC_CACHE_HPP__
-#define __MSTD__TYPES__SYNC_CACHE_HPP__
+#ifndef __MSTD__TYPES__CACHE__SYNC_CACHE_HPP__
+#define __MSTD__TYPES__CACHE__SYNC_CACHE_HPP__
 
 #include <atomic>
 #include <mutex>
@@ -94,13 +94,16 @@ namespace mstd
         [[nodiscard]] T get(const Owner& owner) const;
 
        private:
-        void _copyEpochs(const SyncCache& other);
+        static void _copyEpochs(
+            typename domains::AtomicEpochs&       to,
+            const typename domains::AtomicEpochs& from
+        );
     };
 
 }   // namespace mstd
 
-#ifndef __MSTD__TYPES__SYNC_CACHE_TPP__
+#ifndef __MSTD__TYPES__CACHE__SYNC_CACHE_TPP__
 #include "sync_cache.tpp"
 #endif
 
-#endif   // __MSTD__TYPES__SYNC_CACHE_HPP__
+#endif   // __MSTD__TYPES__CACHE__SYNC_CACHE_HPP__

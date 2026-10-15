@@ -20,8 +20,8 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD__TYPES__MEMBER_CACHE_HPP__
-#define __MSTD__TYPES__MEMBER_CACHE_HPP__
+#ifndef __MSTD__TYPES__CACHE__MEMBER_CACHE_HPP__
+#define __MSTD__TYPES__CACHE__MEMBER_CACHE_HPP__
 
 #include <optional>
 #include <type_traits>
@@ -126,8 +126,8 @@ namespace mstd
 
 }   // namespace mstd
 
-#ifndef __MSTD__TYPES__MEMBER_CACHE_TPP__
+#ifndef __MSTD__TYPES__CACHE__MEMBER_CACHE_TPP__
 #include "member_cache.tpp"
 #endif
 
-#endif   // __MSTD__TYPES__MEMBER_CACHE_HPP__
+#endif   // __MSTD__TYPES__CACHE__MEMBER_CACHE_HPP__

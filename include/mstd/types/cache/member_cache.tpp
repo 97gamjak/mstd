@@ -20,8 +20,8 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD__TYPES__MEMBER_CACHE_TPP__
-#define __MSTD__TYPES__MEMBER_CACHE_TPP__
+#ifndef __MSTD__TYPES__CACHE__MEMBER_CACHE_TPP__
+#define __MSTD__TYPES__CACHE__MEMBER_CACHE_TPP__
 
 #include "member_cache.hpp"
 #include "mstd/debugging.hpp"
@@ -95,4 +95,4 @@ namespace mstd
     }
 }   // namespace mstd
 
-#endif   // __MSTD__TYPES__MEMBER_CACHE_TPP__
+#endif   // __MSTD__TYPES__CACHE__MEMBER_CACHE_TPP__

@@ -20,7 +20,9 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-// hot_path.hpp
+#ifndef __MSTD__DEBUGGING__HOT_PATH_HPP__
+#define __MSTD__DEBUGGING__HOT_PATH_HPP__
+
 #include "mstd/exceptions.hpp"
 
 #if defined(MSTD_DEBUG) && !defined(MSTD_PERF_CHECKS)
@@ -102,3 +104,5 @@ namespace mstd
 
 #endif
 }   // namespace mstd
+
+#endif   // __MSTD__DEBUGGING__HOT_PATH_HPP__
