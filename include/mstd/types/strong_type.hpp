@@ -96,7 +96,6 @@ namespace mstd
         //
 
         [[nodiscard]]
-        // cppcheck-suppress functionConst
         // (already const; cppcheck misparses the trailing requires-clause)
         constexpr explicit operator bool() const noexcept
         requires(
