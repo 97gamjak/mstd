@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+<!-- insertion marker -->
+## [0.7.0](https://github.com/repo/owner/releases/tag/0.7.0) - 2026-10-16
+
 ### Types
 
 - add `mstd::Cache<T, Sources...>`, a lazily-computed cache that recomputes its value only when a domain of one of its `Source` sources has advanced since the last computation; add `mstd::BoundCache<T, Sources...>`, a non-copyable, non-movable variant that binds its sources by address at construction and is itself a `Source`
@@ -20,7 +23,6 @@ All notable changes to this project will be documented in this file.
 
 - add `mstd::BaseException<ExceptionType>` and the `ExceptionType` enum (currently `RuntimeError`) as the foundation for the library's typed exceptions, used by `PerformanceError`
 
-<!-- insertion marker -->
 ## [0.6.0](https://github.com/repo/owner/releases/tag/0.6.0) - 2026-10-03
 
 ### Types
@@ -235,6 +237,7 @@ All notable changes to this project will be documented in this file.
 ### Bug Fix
 
 - add permissions to create tag workflow
+
 
 
 
