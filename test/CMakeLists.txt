@@ -14,7 +14,7 @@ if(NOT TARGET mstd)
         INTERFACE
         "${MSTD_ROOT_DIR}/include"
     )
-    target_compile_features(mstd INTERFACE cxx_std_20)
+    target_compile_features(mstd INTERFACE cxx_std_23)
 endif()
 
 if(NOT TARGET Catch2::Catch2WithMain)

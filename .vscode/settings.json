@@ -33,7 +33,7 @@
         "-i ${workspaceFolder}/external/Catch2/src" // adjust path as needed
     ],
     "files.associations": {
-        "*.tpp": "c++",
+        "*.tpp": "cpp",
         "type_traits": "cpp",
         "functional": "cpp",
         "array": "cpp",

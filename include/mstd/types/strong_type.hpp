@@ -44,7 +44,7 @@ namespace mstd
     X(BOOLEAN, 1U << 5)
 
     // NOLINTNEXTLINE(hicpp-signed-bitwise)
-    MSTD_ENUM_BITFLAG(StrongTypeTrait, unsigned, STRONG_TYPE_TRAIT_LIST);   // cppcheck-suppress syntaxError
+    MSTD_ENUM_BITFLAG(StrongTypeTrait, unsigned, STRONG_TYPE_TRAIT_LIST);
 
     /**
      * @brief A generalized strong type wrapper.
@@ -96,7 +96,6 @@ namespace mstd
         //
 
         [[nodiscard]]
-        // cppcheck-suppress functionConst
         // (already const; cppcheck misparses the trailing requires-clause)
         constexpr explicit operator bool() const noexcept
         requires(
