@@ -47,6 +47,7 @@ namespace mstd
      * @return The cached value.
      */
     template <typename T, Source... Sources>
+    // cppcheck-suppress constParameterReference ; variadic pack, already const&
     const T& Cache<T, Sources...>::get(const Sources&... sources) const
     {
         if (_value && domains::isCurrent(_epochs))
