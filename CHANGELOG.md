@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### Types
+
+- add `mstd::Cache<T, Sources...>`, a lazily-computed cache that recomputes its value only when a domain of one of its `Source` sources has advanced since the last computation; add `mstd::BoundCache<T, Sources...>`, a non-copyable, non-movable variant that binds its sources by address at construction and is itself a `Source`
+- add `mstd::MemberCache<T, Owner, Members...>`, a cache that lives as a member of an owner class and names its sources as pointers to other data members of that owner (`Property`/`CacheProperty` or other `MemberCache`s), so the owner keeps its defaulted copy/move/assignment; add `mstd::SyncCache<T, Owner, Members...>`, its thread-safe counterpart, where concurrent `get()` calls recompute a stale value exactly once and a hit is lock-free
+- add `mstd::GlobalEpoch<Domain>`, a static atomic epoch counter per domain used to detect when a cache's sources have advanced
+- add `mstd::Property<T>` and `mstd::CacheProperty<T, Domain>`, the latter tracking a version/epoch of its value so dependent caches can detect changes
+- add `mstd::Id<T, Tag>`, `mstd::Stamp<T>` (an `Id`/`Version` pair) and `mstd::Version` (a `StrongSizeT`), plus the `StrongSizeT<Tag>` alias of `StrongType` for ordered, hashable, incrementable, arithmetic size-based strong types
+
+### Debugging
+
+- add `MSTD_HOT_PATH`/`MSTD_HOT_PATH_STRICT` scope macros and `MSTD_ASSERT_NOT_HOT`/`MSTD_ASSERT_NOT_STRICT`, which throw `PerformanceError` when a write/recompute (or, in strict scopes, a cache hit) happens inside a marked hot path; compiled out entirely unless `MSTD_DEBUG` or `MSTD_PERF_CHECKS` is defined
+
+### Error Handling
+
+- add `mstd::BaseException<ExceptionType>` and the `ExceptionType` enum (currently `RuntimeError`) as the foundation for the library's typed exceptions, used by `PerformanceError`
+
 <!-- insertion marker -->
 ## [0.6.0](https://github.com/repo/owner/releases/tag/0.6.0) - 2026-10-03
 
