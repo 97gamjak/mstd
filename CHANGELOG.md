@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### Utils
+
+- add `__CONST_GETTER__(name)`, a helper macro that generates a `const`, `noexcept` getter member function returning a reference to the matching `_name` data member
+
 <!-- insertion marker -->
 ## [0.7.0](https://github.com/repo/owner/releases/tag/0.7.0) - 2026-10-16
 
