@@ -23,10 +23,32 @@
 #ifndef __MSTD__UTILS__MEMBERS_HPP__
 #define __MSTD__UTILS__MEMBERS_HPP__
 
+#include <type_traits>
+
+/**
+ * Determines if a type should be passed by value.
+ */
+template <typename T>
+inline constexpr bool pass_by_value_v =
+    std::is_trivially_copyable_v<T> && sizeof(T) <= 2 * sizeof(void *);
+
+/**
+ * Returns the value of a member, either by value or by const reference,
+ * depending on the type.
+ */
+template <typename T>
+[[nodiscard]] constexpr decltype(auto) getter_value(const T &v) noexcept
+{
+    if constexpr (pass_by_value_v<T>)
+        return T{v};   // returns T (by value)
+    else
+        return (v);   // returns const T&
+}
+
 #define __CONST_GETTER__(name)                                \
     [[nodiscard]] constexpr const auto &name() const noexcept \
     {                                                         \
-        return _##name;                                       \
+        return getter_value(_##name);                         \
     }
 
 #endif   // __MSTD__UTILS__MEMBERS_HPP__
