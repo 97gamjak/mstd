@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### Utils
+
+- rename `__CONST_GETTER__`/`__CONST_PROPERTY_GETTER__`/`__SETTER__`/`__PROPERTY_SETTER__` to `CONST_GETTER`/`CONST_PROPERTY_GETTER`/`SETTER`/`PROPERTY_SETTER`, and add `INTERNAL_CONST_GETTER`/`INTERNAL_CONST_PROPERTY_GETTER`/`INTERNAL_SETTER`/`INTERNAL_PROPERTY_SETTER` counterparts that generate `_name_()`/`_name_(value)` member functions instead of `name()`/`name(value)`, for exposing the same accessors under protected/private scope without colliding with the public name
+
 <!-- insertion marker -->
 ## [0.8.1](https://github.com/repo/owner/releases/tag/0.8.1) - 2026-10-18
 
