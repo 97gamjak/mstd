@@ -23,6 +23,7 @@
 #ifndef __MSTD__TYPES__PROPERTY_HPP__
 #define __MSTD__TYPES__PROPERTY_HPP__
 
+#include "mstd/shared/traits/getter.hpp"
 #include "mstd/types/global_epoch.hpp"
 namespace mstd
 {
@@ -41,8 +42,8 @@ namespace mstd
         explicit Property(const T& value);
         virtual ~Property() = default;
 
-        const T&     get() const;
-        virtual void set(const T& value);
+        mstd::detail::getter_t<T> get() const;
+        virtual void              set(const T& value);
     };
 
     /**

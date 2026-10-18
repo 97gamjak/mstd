@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### Utils
+
+- add `__SETTER__(name)`, a helper macro that generates a `constexpr`, conditionally `noexcept` setter member function assigning its by-value/by-reference `getter_t`-typed argument to the matching `_name` data member, for plain data members
+- add `__PROPERTY_SETTER__(name)`, the `Property`/`CacheProperty` counterpart of `__SETTER__`, forwarding its argument to `_name.set(value)`
+- add `__CONST_PROPERTY_GETTER__(name)`, a helper macro that generates a `const`, conditionally `noexcept` getter member function forwarding to `_name.get()`, for wrapping a `Property`/`CacheProperty` data member the same way `__CONST_GETTER__` wraps a plain one
+- move the `pass_by_value_v`/`getter_value` helpers behind `__CONST_GETTER__` into `mstd::detail` in the new `mstd/shared/traits/getter.hpp`, and add `mstd::detail::getter_t<T>`, the type alias (`T` or `const T&`) matching `getter_value`'s by-value/by-reference choice
+
+### Types
+
+- change `mstd::Property<T>::get()` to return `mstd::detail::getter_t<T>` instead of always `const T&`, so small trivially-copyable `T` are now returned by value like `__CONST_GETTER__`-generated getters
+- relax the `Source` concept's `get()` requirement from `std::same_as<const typename S::value_type&>` to `std::convertible_to<const typename S::value_type&>`, so sources (e.g. `Property`) that return their value by value for small types still satisfy it
+
 <!-- insertion marker -->
 ## [0.8.0](https://github.com/repo/owner/releases/tag/0.8.0) - 2026-10-18
 
