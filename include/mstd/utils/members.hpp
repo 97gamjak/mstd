@@ -38,4 +38,23 @@
         return _##name.get();                   \
     }
 
+#define __SETTER__(name)                                                   \
+    constexpr void                                                         \
+    name(getter_t<std::remove_cvref_t<decltype(_##name)>> value) noexcept( \
+        std::is_nothrow_copy_assignable_v<                                 \
+            std::remove_cvref_t<decltype(_##name)>>                        \
+    )                                                                      \
+    {                                                                      \
+        _##name = value;                                                   \
+    }
+
+#define __PROPERTY_SETTER__(name)                                             \
+    void name(                                                                \
+        getter_t<typename std::remove_cvref_t<decltype(_##name)>::value_type> \
+            value                                                             \
+    )                                                                         \
+    {                                                                         \
+        _##name.set(value);                                                   \
+    }
+
 #endif   // __MSTD__UTILS__MEMBERS_HPP__
