@@ -20,9 +20,9 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD_UTILS_HPP__
-#define __MSTD_UTILS_HPP__
+#ifndef __MSTD__UTILS_HPP__
+#define __MSTD__UTILS_HPP__
 
 #include "utils/members.hpp"   // IWYU pragma: export
 
-#endif   // __MSTD_UTILS_HPP__
+#endif   // __MSTD__UTILS_HPP__
