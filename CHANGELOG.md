@@ -6,8 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Utils
 
-- add `__CONST_GETTER__(name)`, a helper macro that generates a `const`, `noexcept` getter member function returning a reference to the matching `_name` data member
-- change `__CONST_GETTER__(name)` to return small, trivially-copyable members (`sizeof(T) <= 2 * sizeof(void*)`) by value instead of by `const&`, via the new `getter_value`/`pass_by_value_v` helpers, avoiding an unnecessary indirection for cheap-to-copy types like `int` or small `struct`s
+- add `__CONST_GETTER__(name)`, a helper macro that generates a `const`, `noexcept` getter member function returning the matching `_name` data member, by value for small trivially-copyable types (`sizeof(T) <= 2 * sizeof(void*)`) or by `const&` otherwise, as decided by the new `getter_value`/`pass_by_value_v` helpers; the member function's return type is `decltype(auto)` so it actually reflects `getter_value`'s by-value/by-reference choice instead of forcing a `const&` return that would dangle for the by-value case
 
 <!-- insertion marker -->
 ## [0.7.0](https://github.com/repo/owner/releases/tag/0.7.0) - 2026-10-16
