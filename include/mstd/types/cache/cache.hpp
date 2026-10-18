@@ -43,7 +43,7 @@ namespace mstd
          requires { typename S::domain; }) &&
         requires { typename S::value_type; } &&
         requires(const S& source) {
-            { source.get() } -> std::same_as<const typename S::value_type&>;
+            { source.get() } -> std::convertible_to<const typename S::value_type&>;
         };
 
     /**
