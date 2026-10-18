@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+<!-- insertion marker -->
+## [0.8.1](https://github.com/repo/owner/releases/tag/0.8.1) - 2026-10-18
+
 ### Utils
 
 - add `__SETTER__(name)`, a helper macro that generates a `constexpr`, conditionally `noexcept` setter member function assigning its by-value/by-reference `getter_t`-typed argument to the matching `_name` data member, for plain data members
@@ -16,7 +19,6 @@ All notable changes to this project will be documented in this file.
 - change `mstd::Property<T>::get()` to return `mstd::detail::getter_t<T>` instead of always `const T&`, so small trivially-copyable `T` are now returned by value like `__CONST_GETTER__`-generated getters
 - relax the `Source` concept's `get()` requirement from `std::same_as<const typename S::value_type&>` to `std::convertible_to<const typename S::value_type&>`, so sources (e.g. `Property`) that return their value by value for small types still satisfy it
 
-<!-- insertion marker -->
 ## [0.8.0](https://github.com/repo/owner/releases/tag/0.8.0) - 2026-10-18
 
 ### Utils
@@ -255,6 +257,7 @@ All notable changes to this project will be documented in this file.
 ### Bug Fix
 
 - add permissions to create tag workflow
+
 
 
 
