@@ -58,19 +58,19 @@
 
 // ---- public scope: name() / name(value) ----
 
-#define CONST_GETTER(name) MSTD_DETAIL_CONST_GETTER(name, name)
+#define CONST_GETTER(name) MSTD_DETAIL_CONST_GETTER(get##name, name)
 #define CONST_PROPERTY_GETTER(name) \
-    MSTD_DETAIL_CONST_PROPERTY_GETTER(name, name)
-#define SETTER(name)          MSTD_DETAIL_SETTER(name, name)
-#define PROPERTY_SETTER(name) MSTD_DETAIL_PROPERTY_SETTER(name, name)
+    MSTD_DETAIL_CONST_PROPERTY_GETTER(get##name, name)
+#define SETTER(name)          MSTD_DETAIL_SETTER(set##name, name)
+#define PROPERTY_SETTER(name) MSTD_DETAIL_PROPERTY_SETTER(set##name, name)
 
 // ---- protected / private scope: _name_() / _name_(value) ----
 
-#define INTERNAL_CONST_GETTER(name) MSTD_DETAIL_CONST_GETTER(_##name##_, name)
+#define INTERNAL_CONST_GETTER(name) MSTD_DETAIL_CONST_GETTER(_get##name, name)
 #define INTERNAL_CONST_PROPERTY_GETTER(name) \
-    MSTD_DETAIL_CONST_PROPERTY_GETTER(_##name##_, name)
-#define INTERNAL_SETTER(name) MSTD_DETAIL_SETTER(_##name##_, name)
+    MSTD_DETAIL_CONST_PROPERTY_GETTER(_get##name, name)
+#define INTERNAL_SETTER(name) MSTD_DETAIL_SETTER(_set##name, name)
 #define INTERNAL_PROPERTY_SETTER(name) \
-    MSTD_DETAIL_PROPERTY_SETTER(_##name##_, name)
+    MSTD_DETAIL_PROPERTY_SETTER(_set##name, name)
 
 #endif   // __MSTD__UTILS__MEMBERS_HPP__
