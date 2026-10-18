@@ -4,11 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+<!-- insertion marker -->
+## [0.8.0](https://github.com/repo/owner/releases/tag/0.8.0) - 2026-10-18
+
 ### Utils
 
 - add `__CONST_GETTER__(name)`, a helper macro that generates a `const`, `noexcept` getter member function returning the matching `_name` data member, by value for small trivially-copyable types (`sizeof(T) <= 2 * sizeof(void*)`) or by `const&` otherwise, as decided by the new `getter_value`/`pass_by_value_v` helpers; the member function's return type is `decltype(auto)` so it actually reflects `getter_value`'s by-value/by-reference choice instead of forcing a `const&` return that would dangle for the by-value case
 
-<!-- insertion marker -->
 ## [0.7.0](https://github.com/repo/owner/releases/tag/0.7.0) - 2026-10-16
 
 ### Types
@@ -241,6 +243,7 @@ All notable changes to this project will be documented in this file.
 ### Bug Fix
 
 - add permissions to create tag workflow
+
 
 
 
