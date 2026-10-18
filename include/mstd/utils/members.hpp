@@ -45,10 +45,10 @@ template <typename T>
         return (v);   // returns const T&
 }
 
-#define __CONST_GETTER__(name)                                \
-    [[nodiscard]] constexpr const auto &name() const noexcept \
-    {                                                         \
-        return getter_value(_##name);                         \
+#define __CONST_GETTER__(name)                                   \
+    [[nodiscard]] constexpr decltype(auto) name() const noexcept \
+    {                                                            \
+        return getter_value(_##name);                            \
     }
 
 #endif   // __MSTD__UTILS__MEMBERS_HPP__
