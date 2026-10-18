@@ -25,36 +25,52 @@
 
 #include "mstd/shared/traits/getter.hpp"   // IWYU pragma: keep -- for mstd::detail::getter_value
 
-#define __CONST_GETTER__(name)                                   \
-    [[nodiscard]] constexpr decltype(auto) name() const noexcept \
-    {                                                            \
-        return mstd::detail::getter_value(_##name);              \
+#define MSTD_DETAIL_CONST_GETTER(fn, name)                     \
+    [[nodiscard]] constexpr decltype(auto) fn() const noexcept \
+    {                                                          \
+        return ::mstd::detail::getter_value(name);             \
     }
 
-#define __CONST_PROPERTY_GETTER__(name)         \
-    [[nodiscard]] decltype(auto) name()         \
-        const noexcept(noexcept(_##name.get())) \
-    {                                           \
-        return _##name.get();                   \
-    }
-
-#define __SETTER__(name)                                                   \
-    constexpr void                                                         \
-    name(getter_t<std::remove_cvref_t<decltype(_##name)>> value) noexcept( \
-        std::is_nothrow_copy_assignable_v<                                 \
-            std::remove_cvref_t<decltype(_##name)>>                        \
-    )                                                                      \
+#define MSTD_DETAIL_CONST_PROPERTY_GETTER(fn, name)                        \
+    [[nodiscard]] decltype(auto) fn() const noexcept(noexcept(name.get())) \
     {                                                                      \
-        _##name = value;                                                   \
+        return name.get();                                                 \
     }
 
-#define __PROPERTY_SETTER__(name)                                             \
-    void name(                                                                \
-        getter_t<typename std::remove_cvref_t<decltype(_##name)>::value_type> \
-            value                                                             \
-    )                                                                         \
-    {                                                                         \
-        _##name.set(value);                                                   \
+#define MSTD_DETAIL_SETTER(fn, name)                                        \
+    constexpr void fn(                                                      \
+        ::mstd::detail::getter_t<std::remove_cvref_t<decltype(name)>> value \
+    ) noexcept(std::                                                        \
+                   is_nothrow_copy_assignable_v<                            \
+                       std::remove_cvref_t<decltype(name)>>)                \
+    {                                                                       \
+        name = value;                                                       \
     }
+
+#define MSTD_DETAIL_PROPERTY_SETTER(fn, name)                               \
+    void fn(                                                                \
+        ::mstd::detail::getter_t<                                           \
+            typename std::remove_cvref_t<decltype(name)>::value_type> value \
+    )                                                                       \
+    {                                                                       \
+        name.set(value);                                                    \
+    }
+
+// ---- public scope: name() / name(value) ----
+
+#define CONST_GETTER(name) MSTD_DETAIL_CONST_GETTER(get##name, name)
+#define CONST_PROPERTY_GETTER(name) \
+    MSTD_DETAIL_CONST_PROPERTY_GETTER(get##name, name)
+#define SETTER(name)          MSTD_DETAIL_SETTER(set##name, name)
+#define PROPERTY_SETTER(name) MSTD_DETAIL_PROPERTY_SETTER(set##name, name)
+
+// ---- protected / private scope: _name_() / _name_(value) ----
+
+#define INTERNAL_CONST_GETTER(name) MSTD_DETAIL_CONST_GETTER(_get##name, name)
+#define INTERNAL_CONST_PROPERTY_GETTER(name) \
+    MSTD_DETAIL_CONST_PROPERTY_GETTER(_get##name, name)
+#define INTERNAL_SETTER(name) MSTD_DETAIL_SETTER(_set##name, name)
+#define INTERNAL_PROPERTY_SETTER(name) \
+    MSTD_DETAIL_PROPERTY_SETTER(_set##name, name)
 
 #endif   // __MSTD__UTILS__MEMBERS_HPP__
