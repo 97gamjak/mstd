@@ -85,22 +85,42 @@ if(MSTD_USE_MP_UNITS)
     if(CMAKE_VERSION VERSION_LESS "3.25")
         message(FATAL_ERROR "MSTD_USE_MP_UNITS requires CMake 3.25 or newer")
     endif()
+
+    set(_mp_units_dir "${CMAKE_CURRENT_SOURCE_DIR}/external/mp-units")
+
+    # Fetch the submodule on demand
+    if(NOT EXISTS "${_mp_units_dir}/src/CMakeLists.txt")
+        find_package(Git QUIET)
+        if(GIT_FOUND AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.git")
+            message(STATUS "Initializing mp-units submodule...")
+            execute_process(
+                COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive -- external/mp-units
+                WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+                RESULT_VARIABLE _git_result
+                ERROR_VARIABLE  _git_error
+            )
+            if(NOT _git_result EQUAL 0)
+                message(FATAL_ERROR "git submodule update failed (${_git_result}):\n${_git_error}")
+            endif()
+        endif()
+    endif()
+
     set(MP_UNITS_API_CONTRACTS ${MSTD_MP_UNITS_CONTRACTS} CACHE STRING "Enable contract checking" FORCE)
-    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/external/mp-units/src/CMakeLists.txt")
-        add_subdirectory(
-            "${CMAKE_CURRENT_SOURCE_DIR}/external/mp-units/src"
-            "${CMAKE_CURRENT_BINARY_DIR}/external/mp-units"
-        )
+
+    if(EXISTS "${_mp_units_dir}/src/CMakeLists.txt")
+        add_subdirectory("${_mp_units_dir}/src" "${CMAKE_CURRENT_BINARY_DIR}/external/mp-units")
         if(TARGET mp-units)
             add_library(mstd::mp-units ALIAS mp-units)
         elseif(TARGET mp-units::mp-units)
-            get_target_property(_mp_units_target mp-units::mp-units ALIAS_TARGET)
+            get_target_property(_mp_units_target mp-units::mp-units ALIASED_TARGET)
             add_library(mstd::mp-units ALIAS ${_mp_units_target})
         else()
             message(FATAL_ERROR "Could not find an mp-units target to alias")
         endif()
+        target_link_libraries(mstd INTERFACE mstd::mp-units)
     else()
-        message(FATAL_ERROR "Vendored mp-units source not found in external/mp-units/src")
+        message(FATAL_ERROR "Vendored mp-units source not found in external/mp-units/src "
+                            "(git unavailable or not a git checkout?)")
     endif()
 endif()
 
