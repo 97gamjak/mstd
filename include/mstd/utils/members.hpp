@@ -37,19 +37,19 @@
         return _##name.get();                                                 \
     }
 
-#define MSTD_DETAIL_SETTER(fn, name)                                   \
-    constexpr void fn(                                                 \
-        ::mstd::getter_t<std::remove_cvref_t<decltype(_##name)>> value \
-    ) noexcept(std::                                                   \
-                   is_nothrow_copy_assignable_v<                       \
-                       std::remove_cvref_t<decltype(_##name)>>)        \
-    {                                                                  \
-        _##name = value;                                               \
+#define MSTD_DETAIL_SETTER(fn, name)                                           \
+    constexpr void fn(                                                         \
+        ::mstd::detail::getter_t<std::remove_cvref_t<decltype(_##name)>> value \
+    ) noexcept(std::                                                           \
+                   is_nothrow_copy_assignable_v<                               \
+                       std::remove_cvref_t<decltype(_##name)>>)                \
+    {                                                                          \
+        _##name = value;                                                       \
     }
 
 #define MSTD_DETAIL_PROPERTY_SETTER(fn, name)                                  \
     void fn(                                                                   \
-        ::mstd::getter_t<                                                      \
+        ::mstd::detail::getter_t<                                              \
             typename std::remove_cvref_t<decltype(_##name)>::value_type> value \
     )                                                                          \
     {                                                                          \
