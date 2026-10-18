@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 
 ### Utils
 
+- add `__SETTER__(name)`, a helper macro that generates a `constexpr`, conditionally `noexcept` setter member function assigning its by-value/by-reference `getter_t`-typed argument to the matching `_name` data member, for plain data members
+- add `__PROPERTY_SETTER__(name)`, the `Property`/`CacheProperty` counterpart of `__SETTER__`, forwarding its argument to `_name.set(value)`
 - add `__CONST_PROPERTY_GETTER__(name)`, a helper macro that generates a `const`, conditionally `noexcept` getter member function forwarding to `_name.get()`, for wrapping a `Property`/`CacheProperty` data member the same way `__CONST_GETTER__` wraps a plain one
 - move the `pass_by_value_v`/`getter_value` helpers behind `__CONST_GETTER__` into `mstd::detail` in the new `mstd/shared/traits/getter.hpp`, and add `mstd::detail::getter_t<T>`, the type alias (`T` or `const T&`) matching `getter_value`'s by-value/by-reference choice
 
