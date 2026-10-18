@@ -41,7 +41,7 @@ namespace mstd
      * @brief Retrieves the value of the Property.
      */
     template <typename T>
-    const T& Property<T>::get() const
+    mstd::detail::getter_t<T> Property<T>::get() const
     {
         return _value;
     }
