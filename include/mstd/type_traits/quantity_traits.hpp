@@ -23,12 +23,6 @@
 #ifndef __MSTD__TYPE_TRAITS__QUANTITY_TRAITS_HPP__
 #define __MSTD__TYPE_TRAITS__QUANTITY_TRAITS_HPP__
 
-#include <concepts>
-#include <type_traits>
-
-#include "pack_traits.hpp"
-#include "ratio_traits.hpp"
-
 /**
  * @file quantity_traits.hpp
  * @brief Concepts for quantity, unit, dimension, and dimension ratio types.
