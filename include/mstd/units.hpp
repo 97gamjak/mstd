@@ -5,8 +5,9 @@
 
 namespace mstd::units
 {
-    using ::mp_units::si::unit_symbols::deg;
-    using ::mp_units::si::unit_symbols::rad;
+    using namespace mp_units;
+    using namespace mp_units::isq;
+    using namespace mp_units::si::unit_symbols;
 }   // namespace mstd::units
 
 namespace mstd
