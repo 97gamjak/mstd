@@ -59,14 +59,14 @@ namespace mstd
     static constexpr bool is_quantity_like_v = QuantityLike<T>;
 
     /**
-     * @brief Concept to check if a type is a non-arithmetic scaler for a
+     * @brief Concept to check if a type is a non-arithmetic scalar for a
      * quantity.
      *
      * A type `R` satisfies this concept with respect to a type `T` if `R` is
      * not an arithmetic type and `T` can be multiplied by `R`.
      */
     template <typename T, typename R>
-    concept NonArithmeticScaler =
+    concept NonArithmeticScalar =
         !std::is_arithmetic_v<R> && requires(const T &t, const R &r) { t * r; };
 
 }   // namespace mstd
