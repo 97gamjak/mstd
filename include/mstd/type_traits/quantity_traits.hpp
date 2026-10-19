@@ -31,6 +31,7 @@
  * of quantity types, unit types, dimension types, and dimension ratio types.
  */
 
+#include <type_traits>
 namespace mstd
 {
     /**
@@ -56,6 +57,17 @@ namespace mstd
      */
     template <typename T>
     static constexpr bool is_quantity_like_v = QuantityLike<T>;
+
+    /**
+     * @brief Concept to check if a type is a non-arithmetic scaler for a
+     * quantity.
+     *
+     * A type `R` satisfies this concept with respect to a type `T` if `R` is
+     * not an arithmetic type and `T` can be multiplied by `R`.
+     */
+    template <typename T, typename R>
+    concept NonArithmeticScaler =
+        !std::is_arithmetic_v<R> && requires(const T &t, const R &r) { t * r; };
 
 }   // namespace mstd
 
