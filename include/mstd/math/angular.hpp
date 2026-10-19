@@ -16,16 +16,19 @@ namespace mstd::detail
 
     // fallback for arithmetic types
     template <typename T>
+    requires std::is_arithmetic_v<T>
     constexpr auto sin_impl(const T &x, adl_tag)
     {
         return sin(x);
     }
     template <typename T>
+    requires std::is_arithmetic_v<T>
     constexpr auto cos_impl(const T &x, adl_tag)
     {
         return cos(x);
     }
     template <typename T>
+    requires std::is_arithmetic_v<T>
     constexpr auto tan_impl(const T &x, adl_tag)
     {
         return tan(x);
