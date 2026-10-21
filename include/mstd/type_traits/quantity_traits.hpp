@@ -58,6 +58,12 @@ namespace mstd
     template <typename T>
     static constexpr bool is_quantity_like_v = QuantityLike<T>;
 
+    template <typename T>
+    concept UnitLike =
+        !std::is_arithmetic_v<T> && requires(double v, const T &u) {
+            { v * u } -> QuantityLike;
+        };
+
     /**
      * @brief Concept to check if a type is a non-arithmetic scalar for a
      * quantity.
