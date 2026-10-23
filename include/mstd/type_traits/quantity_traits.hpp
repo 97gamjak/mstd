@@ -23,12 +23,6 @@
 #ifndef __MSTD__TYPE_TRAITS__QUANTITY_TRAITS_HPP__
 #define __MSTD__TYPE_TRAITS__QUANTITY_TRAITS_HPP__
 
-#include <concepts>
-#include <type_traits>
-
-#include "pack_traits.hpp"
-#include "ratio_traits.hpp"
-
 /**
  * @file quantity_traits.hpp
  * @brief Concepts for quantity, unit, dimension, and dimension ratio types.
@@ -37,94 +31,54 @@
  * of quantity types, unit types, dimension types, and dimension ratio types.
  */
 
+#include <type_traits>
 namespace mstd
 {
     /**
-     * @brief Concept for dimension types.
+     * @brief Concept to check if a type is Quantity-like.
      *
-     * @details A dimension type must provide two nested types `si` and `ex`
-     * which are both integer packs.
+     * A type satisfies this concept if it has the nested types `rep`, `unit`,
+     * and `reference`, and provides a member function `numerical_value_in` that
+     * accepts its `unit` type.
      */
     template <typename T>
-    concept DimType =
-        IntegerPackType<typename T::si> && IntegerPackType<typename T::ex>;
-
-    template <typename T>
-    constexpr bool is_dim_v = DimType<T>;
+    concept QuantityLike = requires(const T &q) {
+        typename T::rep;
+        T::unit;
+        T::reference;
+        q.numerical_value_in(T::unit);
+    };
 
     /**
-     * @brief Concept for dimension ratio types.
+     * @brief Variable template to check if a type is Quantity-like.
      *
-     * @details A dimension ratio type must provide two nested types `si` and
-     * `ex` which are both ratio packs.
+     * Evaluates to `true` if the type satisfies the `QuantityLike` concept,
+     * otherwise evaluates to `false`.
      */
     template <typename T>
-    concept DimRatioType =
-        RatioPackType<typename T::si> && RatioPackType<typename T::ex>;
-
-    template <typename T>
-    constexpr bool is_dim_ratio_v = DimRatioType<T>;
-
-    template <typename T>
-    concept UnitType =
-        DimType<typename T::dim> && DimRatioType<typename T::ratio> &&
-        RatioType<typename T::global> && requires {
-            { T::factor_v } -> std::convertible_to<long double>;
-        } && (T::factor_v != 0.0L);
-
-    template <typename T>
-    constexpr bool is_unit_v = UnitType<T>;
+    static constexpr bool is_quantity_like_v = QuantityLike<T>;
 
     /**
-     * @brief Concept for quantity types.
+     * @brief Concept to check if a type is Unit-like.
      *
-     * @details A quantity type must provide a nested type `unit` which is a
-     * unit type and a nested type `rep` which is the representation type.
+     * @tparam T
      */
     template <typename T>
-    concept QuantityType =
-        UnitType<typename T::unit> && requires { typename T::rep; };
-
-    template <typename T>
-    constexpr bool is_quantity_v = QuantityType<T>;
-
-    /**
-     * @brief Checks if two units have the same dimension
-     *
-     * @tparam Unit1 First unit
-     * @tparam Unit2 Second unit
-     * @return true if both units have the same dimension, false otherwise
-     */
-    template <UnitType U1, UnitType U2>
-    inline constexpr bool same_dimension_v =
-        std::is_same_v<typename U1::dim, typename U2::dim>;
-
-    // default case false see below specializations
-    template <typename T, typename U>
-    inline constexpr bool has_dim_v = false;
+    concept UnitLike =
+        !std::is_arithmetic_v<T> && requires(double v, const T &u) {
+            { v * u } -> QuantityLike;
+        };
 
     /**
-     * @brief Check if a unit has a specific dimension.
+     * @brief Concept to check if a type is a non-arithmetic scalar for a
+     * quantity.
      *
-     * @tparam Unit The unit type.
-     * @tparam Dim The dimension type to check against.
-     * @return true if the unit has the specified dimension, false otherwise.
+     * A type `R` satisfies this concept with respect to a type `T` if `R` is
+     * not an arithmetic type and `T` can be multiplied by `R`.
      */
-    template <UnitType Unit, DimType Dim>
-    inline constexpr bool has_dim_v<Unit, Dim> =
-        std::is_same_v<typename Unit::dim, Dim>;
-
-    /**
-     * @brief Check if a quantity has a specific dimension.
-     *
-     * @tparam Q The quantity type.
-     * @tparam U The unit type to check against.
-     * @return true if the quantity has the specified dimension, false
-     * otherwise.
-     */
-    template <QuantityType Q, DimType Dim>
-    inline constexpr bool has_dim_v<Q, Dim> =
-        std::is_same_v<typename Q::unit::dim, Dim>;
+    template <typename T, typename R>
+    concept NonArithmeticScalar =
+        !std::is_arithmetic_v<R> && requires(const T &t, const R &r) { t * r; };
 
 }   // namespace mstd
 
