@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### Breaking Changes
+
+- replace the custom `mstd::Quantity`/`mstd::Dim`/`mstd::Unit` stack with a thin `mstd/units.hpp` facade over [mp-units](https://github.com/mpusz/mp-units); `mstd::quantity` is now an alias for `mp_units::quantity`, and all SI unit symbols are available via `using namespace mstd::units`
+- simplify `mstd/type_traits/quantity_traits.hpp`: the old `UnitType`/`DimType`/`DimRatioType` concepts are removed and replaced by `mstd::QuantityLike`, `mstd::UnitLike`, and `mstd::NonArithmeticScalar` concepts that match the mp-units interface
+
+### Math
+
+- add `mstd/math/angular.hpp` (included by `mstd/math.hpp`) providing `mstd::sin`, `mstd::cos`, and `mstd::tan` that dispatch to `std::sin/cos/tan` for arithmetic types and to `mp_units::si::sin/cos/tan` for `mp_units::quantity` angular quantities via an ADL hook (`*_impl` + `mstd::detail::adl_tag`), so downstream code can call `mstd::sin(angle)` uniformly regardless of whether `angle` is a `double` or an `mp_units::quantity`
+
 <!-- insertion marker -->
 ## [0.8.2](https://github.com/repo/owner/releases/tag/0.8.2) - 2026-10-18
 
