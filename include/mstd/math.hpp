@@ -23,6 +23,7 @@
 #ifndef __MSTD__MATH_HPP__
 #define __MSTD__MATH_HPP__
 
-#include "math/power.hpp"   // IWYU pragma: export
+#include "math/angular.hpp"   // IWYU pragma: export
+#include "math/power.hpp"     // IWYU pragma: export
 
 #endif   // __MSTD__MATH_HPP__
