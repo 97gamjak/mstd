@@ -13,7 +13,7 @@ namespace mstd
      * @tparam N
      */
     template <std::size_t N>
-    class Tag
+    struct Tag
     {
         char value[N]{};
 
