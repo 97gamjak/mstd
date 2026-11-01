@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### Types
+
+- add `mstd::Tag<N>`, a compile-time, trivially-copyable string wrapper that can be deduced from a string literal and used as a non-type template parameter, with `view()`/`to_string()` accessors
+
 <!-- insertion marker -->
 ## [0.9.0](https://github.com/repo/owner/releases/tag/0.9.0) - 2026-10-23
 
