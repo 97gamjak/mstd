@@ -17,14 +17,10 @@ jobs:
         with:
           submodules: recursive
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: 3.13
-          cache: 'pip'
-
       - name: Install cppcheck
         run: |
-          pip install --break-system-packages cppcheck
+          sudo apt-get update
+          sudo apt-get install -y cppcheck
 
       - name: Run cppcheck
         run: |
@@ -38,6 +34,7 @@ jobs:
               --suppress=missingIncludeSystem \
               --inline-suppr \
               --inconclusive \
+              --std=c++23 \
               -I include \
               include test
 
