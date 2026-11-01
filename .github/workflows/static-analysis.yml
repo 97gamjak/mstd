@@ -24,7 +24,7 @@ jobs:
 
       - name: Install cppcheck
         run: |
-          pip install --break-system-packages cppcheck
+          pip install --break-system-packages cppcheck==2.13.0
 
       - name: Run cppcheck
         run: |
