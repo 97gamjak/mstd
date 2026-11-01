@@ -51,6 +51,7 @@ add_executable(mstd_tests_types
     test_cache.cpp
     test_member_cache.cpp
     test_sync_cache.cpp
+    test_tag.cpp
 )
 
 target_link_libraries(mstd_tests_types

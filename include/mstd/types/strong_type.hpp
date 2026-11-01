@@ -96,7 +96,8 @@ namespace mstd
         //
 
         [[nodiscard]]
-        // (already const; cppcheck misparses the trailing requires-clause)
+        // already const; cppcheck misparses the trailing requires-clause
+        // cppcheck-suppress functionConst
         constexpr explicit operator bool() const noexcept
         requires(
             (Traits & StrongTypeTrait::BOOLEAN) && std::convertible_to<T, bool>
