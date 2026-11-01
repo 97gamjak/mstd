@@ -4,11 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+<!-- insertion marker -->
+## [0.10.0](https://github.com/repo/owner/releases/tag/0.10.0) - 2026-11-01
+
 ### Types
 
 - add `mstd::Tag<N>`, a compile-time, trivially-copyable string wrapper that can be deduced from a string literal and used as a non-type template parameter, with `view()`/`to_string()` accessors
 
-<!-- insertion marker -->
 ## [0.9.0](https://github.com/repo/owner/releases/tag/0.9.0) - 2026-10-23
 
 ### Breaking Changes
@@ -278,6 +280,7 @@ All notable changes to this project will be documented in this file.
 ### Bug Fix
 
 - add permissions to create tag workflow
+
 
 
 
