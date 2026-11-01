@@ -20,8 +20,8 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD__TYPES__TAG_HPP_
-#define __MSTD__TYPES__TAG_HPP_
+#ifndef __MSTD__TYPES__TAG_HPP__
+#define __MSTD__TYPES__TAG_HPP__
 
 #include <cstddef>
 #include <string>
@@ -54,4 +54,4 @@ namespace mstd
 #include "tag.tpp"
 #endif
 
-#endif   // __MSTD__TYPES__TAG_HPP_
+#endif   // __MSTD__TYPES__TAG_HPP__
