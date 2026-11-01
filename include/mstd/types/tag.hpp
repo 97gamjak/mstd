@@ -15,10 +15,8 @@ namespace mstd
     template <std::size_t N>
     class Tag
     {
-       private:
-        char _value[N]{};
+        char value[N]{};
 
-       public:
         constexpr Tag(const char (&str)[N]);
 
         [[nodiscard]]

@@ -16,7 +16,7 @@ namespace mstd
     template <size_t N>
     constexpr Tag<N>::Tag(const char (&str)[N])
     {
-        std::copy_n(str, N, _value);
+        std::copy_n(str, N, value);
     }
 
     /**
@@ -27,7 +27,7 @@ namespace mstd
     template <size_t N>
     constexpr std::string_view Tag<N>::view() const
     {
-        return {_value, N - 1};
+        return {value, N - 1};
     }
 
     /**
@@ -38,7 +38,7 @@ namespace mstd
     template <size_t N>
     std::string Tag<N>::to_string() const
     {
-        return std::string(_value, N - 1);
+        return std::string(value, N - 1);
     }
 }   // namespace mstd
 
