@@ -1,4 +1,3 @@
 unusedFunction
 useStlAlgorithm
-normalCheckLevelMaxBranches
 knownConditionTrueFalse:test/*
