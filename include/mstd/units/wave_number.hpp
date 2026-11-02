@@ -4,7 +4,6 @@
 #include <mp-units/systems/isq.h>
 #include <mp-units/systems/si.h>
 
-#include "mp-units/systems/isq/electromagnetism.h"
 #include "namespace.hpp"   // IWYU pragma: keep -- for mstd namespace usage
 
 namespace mstd
@@ -21,7 +20,7 @@ namespace mstd
     constexpr auto toFreq(units::QuantityOf<units::wavenumber> auto waveNumber)
     {
         return units::quantity_cast<units::frequency>(
-                   waveNumber * units::speed_of_light_in_vacuum
+                   waveNumber * mp_units::si::speed_of_light_in_vacuum
         )
             .in(units::Hz);
     }
@@ -40,7 +39,7 @@ namespace mstd
     )
     {
         return units::quantity_cast<units::wavenumber>(
-                   frequency / units::speed_of_light_in_vacuum
+                   frequency / mp_units::si::speed_of_light_in_vacuum
         )
             .in(units::one / units::cm);
     }
