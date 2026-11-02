@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### Types
+
+- add `mstd::units::relaxation_time`, an `isq::duration`-based quantity spec for the SI system
+- add `mstd::units::per_cm` unit alias (`one / cm`)
+
+### Units
+
+- add `mstd::toFreq`, converting a wave number quantity to its corresponding frequency in Hz using the speed of light in vacuum
+- add `mstd::toWavenumber`, converting a frequency quantity to its corresponding wave number in cm⁻¹ using the speed of light in vacuum
+- split `mstd::units`'s `using namespace`/alias declarations out of `mstd/units.hpp` into the new `mstd/units/namespace.hpp`, included and exported by `mstd/units.hpp` as before
+
 <!-- insertion marker -->
 ## [0.10.0](https://github.com/repo/owner/releases/tag/0.10.0) - 2026-11-01
 
