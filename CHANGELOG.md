@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+<!-- insertion marker -->
+## [0.11.0](https://github.com/repo/owner/releases/tag/0.11.0) - 2026-11-02
+
 ### Types
 
 - add `mstd::units::relaxation_time`, an `isq::duration`-based quantity spec for the SI system
@@ -15,7 +18,6 @@ All notable changes to this project will be documented in this file.
 - add `mstd::toWavenumber`, converting a frequency quantity to its corresponding wave number in cm⁻¹ using the speed of light in vacuum
 - split `mstd::units`'s `using namespace`/alias declarations out of `mstd/units.hpp` into the new `mstd/units/namespace.hpp`, included and exported by `mstd/units.hpp` as before
 
-<!-- insertion marker -->
 ## [0.10.0](https://github.com/repo/owner/releases/tag/0.10.0) - 2026-11-01
 
 ### Types
@@ -291,6 +293,7 @@ All notable changes to this project will be documented in this file.
 ### Bug Fix
 
 - add permissions to create tag workflow
+
 
 
 
