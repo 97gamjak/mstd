@@ -23,10 +23,12 @@
 #ifndef __MSTD__UNITS_HPP__
 #define __MSTD__UNITS_HPP__
 
-#include <mp-units/systems/si.h>
 #include <mp-units/systems/si/math.h>   // adjust to where your grep found sin/cos
 
-#include "mstd/math.hpp"   // needed for mstd::detail::adl_tag
+#include "mstd/math.hpp"               // needed for mstd::detail::adl_tag
+#include "units/namespace.hpp"         // IWYU pragma: export
+#include "units/relaxation_time.hpp"   // IWYU pragma: export
+#include "units/wave_number.hpp"       // IWYU pragma: export
 
 namespace mstd::detail
 {
@@ -44,17 +46,5 @@ namespace mstd::detail
     MSTD_UNITS_TRIG_HOOK(tan)
 #undef MSTD_UNITS_TRIG_HOOK
 }   // namespace mstd::detail
-
-namespace mstd::units
-{
-    using namespace mp_units;
-    using namespace mp_units::isq;
-    using namespace mp_units::si::unit_symbols;
-}   // namespace mstd::units
-
-namespace mstd
-{
-    using mp_units::quantity;
-}   // namespace mstd
 
 #endif   // __MSTD__UNITS_HPP__
