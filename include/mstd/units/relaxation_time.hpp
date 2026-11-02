@@ -3,7 +3,7 @@
 
 #include <mp-units/systems/si.h>
 
-namespace mstd
+namespace mstd::units
 {
     /**
      * @brief Specifies the relaxation time quantity in the SI system.
@@ -13,6 +13,6 @@ namespace mstd
     {
     } relaxation_time;
 
-}   // namespace mstd
+}   // namespace mstd::units
 
 #endif   // __MSTD__UNITS__RELAXATION_TIME_HPP__
