@@ -26,7 +26,6 @@
 #include <mp-units/framework.h>
 #include <mp-units/systems/si/units.h>
 
-#include "mp-units/systems/si/unit_symbols.h"
 #include "namespace.hpp"   // IWYU pragma: keep
 
 namespace mstd::units
