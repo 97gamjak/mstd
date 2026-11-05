@@ -48,6 +48,7 @@ endif()
 
 add_executable(mstd_tests_units
     test_namespace.cpp
+    test_new_units.cpp
     test_relaxation_time.cpp
     test_wave_number.cpp
     test_trig_hook.cpp
