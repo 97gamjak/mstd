@@ -4,11 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+<!-- insertion marker -->
+## [0.12.0](https://github.com/repo/owner/releases/tag/0.12.0) - 2026-11-05
+
 ### Units
 
 - add unit tests for `mstd::units::bar` and the `mstd::units::per_cm`/`mstd::units::per_bar` inverse units
 
-<!-- insertion marker -->
 ## [0.11.0](https://github.com/repo/owner/releases/tag/0.11.0) - 2026-11-02
 
 ### Types
@@ -297,6 +299,7 @@ All notable changes to this project will be documented in this file.
 ### Bug Fix
 
 - add permissions to create tag workflow
+
 
 
 
