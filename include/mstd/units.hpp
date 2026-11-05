@@ -27,6 +27,7 @@
 
 #include "mstd/math.hpp"               // needed for mstd::detail::adl_tag
 #include "units/namespace.hpp"         // IWYU pragma: export
+#include "units/new_units.hpp"         // IWYU pragma: export
 #include "units/relaxation_time.hpp"   // IWYU pragma: export
 #include "units/wave_number.hpp"       // IWYU pragma: export
 

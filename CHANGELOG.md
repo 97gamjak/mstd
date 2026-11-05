@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### Units
+
+- add unit tests for `mstd::units::bar` and the `mstd::units::per_cm`/`mstd::units::per_bar` inverse units
+
 <!-- insertion marker -->
 ## [0.11.0](https://github.com/repo/owner/releases/tag/0.11.0) - 2026-11-02
 

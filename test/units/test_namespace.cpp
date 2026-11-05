@@ -24,6 +24,7 @@
 #include <type_traits>
 
 #include "mstd/units/namespace.hpp"
+#include "mstd/units/new_units.hpp"
 
 namespace
 {

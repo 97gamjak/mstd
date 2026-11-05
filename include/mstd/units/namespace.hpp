@@ -31,7 +31,6 @@ namespace mstd::units
     using namespace mp_units::isq;
     using namespace mp_units::si::unit_symbols;
 
-    inline constexpr auto per_cm = one / cm;
 }   // namespace mstd::units
 
 namespace mstd
