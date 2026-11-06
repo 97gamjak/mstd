@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### Units
+
+- add unit `per_Pa`
+
 <!-- insertion marker -->
 ## [0.12.0](https://github.com/repo/owner/releases/tag/0.12.0) - 2026-11-05
 
