@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### Feature
+
+- add static Vector3d with mp-units support
+
 <!-- insertion marker -->
 ## [0.12.1](https://github.com/repo/owner/releases/tag/0.12.1) - 2026-11-06
 
