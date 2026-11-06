@@ -33,13 +33,15 @@ namespace
     static_assert(mstd::units::per_bar == mstd::units::one / mstd::units::bar);
 }   // namespace
 
-TEST_CASE("bar converts to pascal using the 1 bar = 100000 Pa definition", "[units][new_units]")
+TEST_CASE(
+    "bar converts to pascal using the 1 bar = 100000 Pa definition",
+    "[units][new_units]"
+)
 {
     const auto pressure = 1.0 * mstd::units::bar;
 
     REQUIRE(
-        pressure.numerical_value_in(mstd::units::Pa) ==
-        Catch::Approx(100'000.0)
+        pressure.numerical_value_in(mstd::units::Pa) == Catch::Approx(100'000.0)
     );
 
     const auto pressure2 = 2.5 * mstd::units::bar;
@@ -54,7 +56,7 @@ TEST_CASE("bar round-trips through pascal", "[units][new_units]")
 {
     const auto original = 3.14 * mstd::units::bar;
     const auto inPa     = original.in(mstd::units::Pa);
-    const auto back      = inPa.in(mstd::units::bar);
+    const auto back     = inPa.in(mstd::units::bar);
 
     REQUIRE(
         back.numerical_value_in(mstd::units::bar) ==
@@ -86,11 +88,22 @@ TEST_CASE("mstd::units::per_bar behaves like one / bar", "[units][new_units]")
 
 TEST_CASE("mstd::units::per_bar is the reciprocal of bar", "[units][new_units]")
 {
-    const auto pressure  = 4.0 * mstd::units::bar;
+    const auto pressure   = 4.0 * mstd::units::bar;
     const auto reciprocal = 1.0 * mstd::units::per_bar;
 
     REQUIRE(
         (pressure * reciprocal).numerical_value_in(mstd::units::one) ==
         Catch::Approx(4.0)
+    );
+}
+
+TEST_CASE("mstd::units::per_Pa behaves like one / Pa", "[units][new_units]")
+{
+    const auto viaPerPa = 5.0 * mstd::units::per_Pa;
+    const auto viaOnePa = 5.0 * (mstd::units::one / mstd::units::Pa);
+
+    REQUIRE(
+        viaPerPa.numerical_value_in(mstd::units::per_Pa) ==
+        viaOnePa.numerical_value_in(mstd::units::one / mstd::units::Pa)
     );
 }
