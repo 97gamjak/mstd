@@ -39,6 +39,7 @@ namespace mstd::units
 
     inline constexpr auto per_cm  = one / cm;
     inline constexpr auto per_bar = one / bar;
+    inline constexpr auto per_Pa  = one / Pa;
 
 }   // namespace mstd::units
 
