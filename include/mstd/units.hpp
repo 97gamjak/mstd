@@ -57,6 +57,38 @@ namespace mstd::detail
         q.numerical_value_in(::mp_units::one);
     };
 
+    // exp/log are only defined for dimensionless arguments -> plain number
+    template <auto R, typename Rep>
+    requires dimensionless_quantity<::mp_units::quantity<R, Rep>>
+    constexpr auto exp_impl(const ::mp_units::quantity<R, Rep> &q, adl_tag)
+    {
+        return std::exp(q.numerical_value_in(::mp_units::one));
+    }
+    template <auto R, typename Rep>
+    requires dimensionless_quantity<::mp_units::quantity<R, Rep>>
+    constexpr auto log_impl(const ::mp_units::quantity<R, Rep> &q, adl_tag)
+    {
+        return std::log(q.numerical_value_in(::mp_units::one));
+    }
+
+    /// arithmetic type or dimensionless quantity
+    template <typename T>
+    concept number_like = std::is_arithmetic_v<T> || dimensionless_quantity<T>;
+
+    template <auto R, typename Rep>
+    inline constexpr bool
+        is_dimensionless_quantity_v<::mp_units::quantity<R, Rep>> =
+            dimensionless_quantity<::mp_units::quantity<R, Rep>>;
+
+    template <typename T>
+    constexpr auto to_number(const T &x)
+    {
+        if constexpr (std::is_arithmetic_v<T>)
+            return x;
+        else
+            return x.numerical_value_in(::mp_units::one);
+    }
+
     // sqrt/cbrt/pow: a dimensioned quantity stays a quantity (the dimension
     // changes). A dimensionless one collapses to a plain number: mp_units
     // would otherwise return e.g. quantity<sqrt(compressibility * pressure)>,
@@ -102,6 +134,30 @@ namespace mstd
     constexpr auto pow(const ::mp_units::quantity<R, Rep> &base, const U &exponent)
     {
         return std::pow(base.numerical_value_in(::mp_units::one), exponent);
+    }
+
+    /// max/min involving a dimensionless quantity: both arguments collapse to
+    /// plain numbers (a double mixed with e.g. compressibility * pressure has
+    /// no usable common type otherwise)
+    template <typename A, typename B>
+    requires(
+        detail::number_like<A> && detail::number_like<B> &&
+        (detail::is_dimensionless_quantity_v<A> ||
+         detail::is_dimensionless_quantity_v<B>)
+    )
+    constexpr auto max(const A &a, const B &b)
+    {
+        return mstd::max(detail::to_number(a), detail::to_number(b));
+    }
+    template <typename A, typename B>
+    requires(
+        detail::number_like<A> && detail::number_like<B> &&
+        (detail::is_dimensionless_quantity_v<A> ||
+         detail::is_dimensionless_quantity_v<B>)
+    )
+    constexpr auto min(const A &a, const B &b)
+    {
+        return mstd::min(detail::to_number(a), detail::to_number(b));
     }
 }   // namespace mstd
 

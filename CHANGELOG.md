@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
 
 - add `mstd::pow<Num, Den = 1>(x)`, `mstd::sqrt(x)` and `mstd::cbrt(x)`; dispatch to `std::` for arithmetic types and to `mp_units` for quantities (dimensioned quantities keep their quantity type, dimensionless ones return a plain number)
 - add runtime-exponent overload `mstd::pow(base, exponent)` for arithmetic types and dimensionless quantities (returns a plain number)
+- add `mstd::exp(x)` and `mstd::log(x)` for arithmetic types and dimensionless quantities (plain number result)
+- add `mstd::max(a, b)` and `mstd::min(a, b)`: return the common type by value, so mixed arithmetic types and quantities with different units work; dimensionless quantities collapse to plain numbers
 - move `mstd::detail::adl_tag` to `mstd/math/adl.hpp`
 
 <!-- insertion marker -->
