@@ -6,7 +6,13 @@ All notable changes to this project will be documented in this file.
 
 ### Utils
 
-- add `MSTD_RAII_CLASS(className)` macro in `mstd/utils/constructors.hpp`, deleting the copy constructor/assignment and defaulting the move constructor/assignment of a class
+- add helper macros in `mstd/utils/constructors.hpp` to delete or default a class's special member functions:
+  - `MSTD_NO_COPY(className)` / `MSTD_DEFAULT_COPY(className)`: delete / default the copy constructor and copy assignment
+  - `MSTD_NO_MOVE(className)` / `MSTD_DEFAULT_MOVE(className)`: delete / default the move constructor and move assignment
+  - `MSTD_DEFAULT_DESTRUCTORS(className)`: default the destructor
+  - `MSTD_DEFAULT_CONSTRUCTORS(className)`: default copy, move and destructor
+  - `MSTD_RAII_DEFAULT_MOVE(className)`: non-copyable, defaulted move
+  - `MSTD_RAII_NO_MOVE(className)`: non-copyable, non-movable
 
 <!-- insertion marker -->
 ## [0.12.1](https://github.com/repo/owner/releases/tag/0.12.1) - 2026-11-06
