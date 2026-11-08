@@ -35,11 +35,19 @@ namespace mstd::units
     {
     } bar;
 
+    // thermochemical kilocalorie: 1 kcal = 4184 J
+    inline constexpr struct kcal final
+        : mp_units::named_unit<"kcal", mp_units::mag<4184> * J>
+    {
+    } kcal;
+
     // here starting only aliases
 
     inline constexpr auto per_cm  = one / cm;
     inline constexpr auto per_bar = one / bar;
     inline constexpr auto per_Pa  = one / Pa;
+
+    inline constexpr auto kcal_per_mol = kcal / mol;
 
 }   // namespace mstd::units
 

@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### Units
+
+- add units `kcal` (thermochemical, 1 kcal = 4184 J) and `kcal_per_mol`
+
 <!-- insertion marker -->
 ## [0.14.0](https://github.com/repo/owner/releases/tag/0.14.0) - 2026-11-08
 

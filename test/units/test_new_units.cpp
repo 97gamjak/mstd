@@ -107,3 +107,29 @@ TEST_CASE("mstd::units::per_Pa behaves like one / Pa", "[units][new_units]")
         viaOnePa.numerical_value_in(mstd::units::one / mstd::units::Pa)
     );
 }
+
+TEST_CASE("kcal converts to joule using 1 kcal = 4184 J", "[units][new_units]")
+{
+    const auto energy = 1.0 * mstd::units::kcal;
+
+    REQUIRE(
+        energy.numerical_value_in(mstd::units::J) == Catch::Approx(4184.0)
+    );
+}
+
+TEST_CASE(
+    "kcal_per_mol converts to J/mol using 1 kcal/mol = 4184 J/mol",
+    "[units][new_units]"
+)
+{
+    const auto energy = 2.0 * mstd::units::kcal_per_mol;
+
+    REQUIRE(
+        energy.numerical_value_in(mstd::units::J / mstd::units::mol) ==
+        Catch::Approx(8368.0)
+    );
+    REQUIRE(
+        energy.numerical_value_in(mstd::units::kJ / mstd::units::mol) ==
+        Catch::Approx(8.368)
+    );
+}
