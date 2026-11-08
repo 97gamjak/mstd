@@ -24,6 +24,8 @@
 #define __MSTD__MATH_HPP__
 
 #include "math/angular.hpp"   // IWYU pragma: export
+#include "math/exponential.hpp"   // IWYU pragma: export
+#include "math/minmax.hpp"        // IWYU pragma: export
 #include "math/power.hpp"     // IWYU pragma: export
 
 #endif   // __MSTD__MATH_HPP__

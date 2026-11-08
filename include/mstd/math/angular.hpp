@@ -24,14 +24,12 @@
 #define __MSTD__MATH__ANGULAR_HPP__
 
 #include <cmath>
+#include <type_traits>
+
+#include "adl.hpp"
 
 namespace mstd::detail
 {
-    // Tag type: makes ADL search mstd::detail, where the *_impl hooks live
-    struct adl_tag
-    {
-    };
-
     using std::cos;
     using std::sin;
     using std::tan;
@@ -77,7 +75,5 @@ namespace mstd
         return tan_impl(x, detail::adl_tag{});
     }
 }   // namespace mstd
-
-#undef MSTD_MATH_UNARY
 
 #endif   // __MSTD__MATH__ANGULAR_HPP__

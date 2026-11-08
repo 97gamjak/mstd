@@ -52,6 +52,8 @@ add_executable(mstd_tests_units
     test_relaxation_time.cpp
     test_wave_number.cpp
     test_trig_hook.cpp
+    test_pow_hook.cpp
+    test_minmax_exp_hook.cpp
 )
 
 target_link_libraries(mstd_tests_units
