@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### Utils
+
+- add `MSTD_RAII_CLASS(className)` macro in `mstd/utils/constructors.hpp`, deleting the copy constructor/assignment and defaulting the move constructor/assignment of a class
+
 <!-- insertion marker -->
 ## [0.12.1](https://github.com/repo/owner/releases/tag/0.12.1) - 2026-11-06
 
