@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### Math
+
+- add `mstd::abs(x)` and `mstd::fabs(x)` for arithmetic types and quantities (dimensioned quantities keep their quantity type, dimensionless ones return a plain number)
+
 ### Units
 
 - add unit `angstrom` (1 Å = 1e-10 m)

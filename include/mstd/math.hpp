@@ -23,6 +23,7 @@
 #ifndef __MSTD__MATH_HPP__
 #define __MSTD__MATH_HPP__
 
+#include "math/absolute.hpp"   // IWYU pragma: export
 #include "math/angular.hpp"   // IWYU pragma: export
 #include "math/exponential.hpp"   // IWYU pragma: export
 #include "math/minmax.hpp"        // IWYU pragma: export

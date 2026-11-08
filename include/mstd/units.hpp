@@ -71,6 +71,22 @@ namespace mstd::detail
         return std::log(q.numerical_value_in(::mp_units::one));
     }
 
+    // abs/fabs keep the quantity type, except dimensionless ones which
+    // collapse to a plain number like the other math functions
+#define MSTD_UNITS_ABS_HOOK(fn)                                              \
+    template <auto R, typename Rep>                                          \
+    constexpr auto fn##_impl(const ::mp_units::quantity<R, Rep> &q, adl_tag) \
+    {                                                                        \
+        if constexpr (dimensionless_quantity<::mp_units::quantity<R, Rep>>)  \
+            return std::fn(q.numerical_value_in(::mp_units::one));           \
+        else                                                                 \
+            return ::mp_units::abs(q);                                       \
+    }
+
+    MSTD_UNITS_ABS_HOOK(abs)
+    MSTD_UNITS_ABS_HOOK(fabs)
+#undef MSTD_UNITS_ABS_HOOK
+
     /// arithmetic type or dimensionless quantity
     template <typename T>
     concept number_like = std::is_arithmetic_v<T> || dimensionless_quantity<T>;
