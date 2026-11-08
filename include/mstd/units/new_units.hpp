@@ -35,6 +35,14 @@ namespace mstd::units
     {
     } bar;
 
+    // angstrom: 1 Å = 1e-10 m
+    inline constexpr struct angstrom final
+        : mp_units::named_unit<
+              mp_units::symbol_text{u8"Å", "A"},
+              mp_units::mag_power<10, -10> * m>
+    {
+    } angstrom;
+
     // thermochemical kilocalorie: 1 kcal = 4184 J
     inline constexpr struct kcal final
         : mp_units::named_unit<"kcal", mp_units::mag<4184> * J>

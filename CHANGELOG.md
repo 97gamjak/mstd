@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Units
 
+- add unit `angstrom` (1 Å = 1e-10 m)
 - add units `kcal` (thermochemical, 1 kcal = 4184 J) and `kcal_per_mol`
 
 <!-- insertion marker -->

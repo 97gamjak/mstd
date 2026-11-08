@@ -133,3 +133,15 @@ TEST_CASE(
         Catch::Approx(8.368)
     );
 }
+
+TEST_CASE("angstrom converts to metre using 1 A = 1e-10 m", "[units][new_units]")
+{
+    const auto length = 3.0 * mstd::units::angstrom;
+
+    REQUIRE(
+        length.numerical_value_in(mstd::units::m) == Catch::Approx(3.0e-10)
+    );
+    REQUIRE(
+        length.numerical_value_in(mstd::units::nm) == Catch::Approx(0.3)
+    );
+}
