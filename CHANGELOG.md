@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### Math
+
+- add `mstd::pow<Num, Den = 1>(x)`, `mstd::sqrt(x)` and `mstd::cbrt(x)`; dispatch to `std::` for arithmetic types and to `mp_units` for quantities (result keeps its quantity type)
+- move `mstd::detail::adl_tag` to `mstd/math/adl.hpp`
+
 <!-- insertion marker -->
 ## [0.13.0](https://github.com/repo/owner/releases/tag/0.13.0) - 2026-11-08
 

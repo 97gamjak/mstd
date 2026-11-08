@@ -23,7 +23,12 @@
 #ifndef __MSTD__MATH__POWER_HPP__
 #define __MSTD__MATH__POWER_HPP__
 
+#include <cmath>
+#include <cstdint>
 #include <ratio>
+#include <type_traits>
+
+#include "adl.hpp"
 
 namespace mstd
 {
@@ -78,6 +83,60 @@ namespace mstd
         return result;
     }
 
+}   // namespace mstd
+
+namespace mstd::detail
+{
+    using std::cbrt;
+    using std::sqrt;
+
+    // fallbacks for arithmetic types
+    template <typename T>
+    requires std::is_arithmetic_v<T>
+    constexpr auto sqrt_impl(const T &x, adl_tag)
+    {
+        return sqrt(x);
+    }
+    template <typename T>
+    requires std::is_arithmetic_v<T>
+    constexpr auto cbrt_impl(const T &x, adl_tag)
+    {
+        return cbrt(x);
+    }
+    template <std::intmax_t Num, std::intmax_t Den = 1, typename T>
+    requires std::is_arithmetic_v<T>
+    constexpr auto pow_impl(const T &x, adl_tag)
+    {
+        if constexpr (Den == 1)
+            return cpow<Num>(static_cast<std::common_type_t<T, double>>(x));
+        else
+            return std::pow(
+                static_cast<std::common_type_t<T, double>>(x),
+                static_cast<double>(Num) / static_cast<double>(Den)
+            );
+    }
+}   // namespace mstd::detail
+
+namespace mstd
+{
+    // unqualified calls: ADL (through adl_tag) finds the hooks, including
+    // the quantity overloads units.hpp adds later
+    template <typename T>
+    constexpr auto sqrt(const T &x)
+    {
+        return sqrt_impl(x, detail::adl_tag{});
+    }
+    template <typename T>
+    constexpr auto cbrt(const T &x)
+    {
+        return cbrt_impl(x, detail::adl_tag{});
+    }
+    /// x raised to the compile-time power Num/Den
+    template <std::intmax_t Num, std::intmax_t Den = 1, typename T>
+    constexpr auto pow(const T &x)
+    {
+        return pow_impl<Num, Den>(x, detail::adl_tag{});
+    }
 }   // namespace mstd
 
 #endif   // __MSTD__MATH__POWER_HPP__

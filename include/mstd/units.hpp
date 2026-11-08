@@ -23,7 +23,9 @@
 #ifndef __MSTD__UNITS_HPP__
 #define __MSTD__UNITS_HPP__
 
-#include <mp-units/systems/si/math.h>   // adjust to where your grep found sin/cos
+#include <cstdint>
+#include <mp-units/math.h>
+#include <mp-units/systems/si/math.h>
 
 #include "mstd/math.hpp"               // needed for mstd::detail::adl_tag
 #include "units/namespace.hpp"         // IWYU pragma: export
@@ -46,6 +48,23 @@ namespace mstd::detail
     MSTD_UNITS_TRIG_HOOK(cos)
     MSTD_UNITS_TRIG_HOOK(tan)
 #undef MSTD_UNITS_TRIG_HOOK
+
+    // dimension-changing functions: the result stays a quantity
+    template <auto R, typename Rep>
+    constexpr auto sqrt_impl(const ::mp_units::quantity<R, Rep> &q, adl_tag)
+    {
+        return ::mp_units::sqrt(q);
+    }
+    template <auto R, typename Rep>
+    constexpr auto cbrt_impl(const ::mp_units::quantity<R, Rep> &q, adl_tag)
+    {
+        return ::mp_units::cbrt(q);
+    }
+    template <std::intmax_t Num, std::intmax_t Den = 1, auto R, typename Rep>
+    constexpr auto pow_impl(const ::mp_units::quantity<R, Rep> &q, adl_tag)
+    {
+        return ::mp_units::pow<Num, Den>(q);
+    }
 }   // namespace mstd::detail
 
 #endif   // __MSTD__UNITS_HPP__
