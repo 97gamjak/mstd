@@ -74,3 +74,21 @@ TEST_CASE(
     REQUIRE(mstd::pow(ratio, 0.5) == Catch::Approx(0.5));
     REQUIRE(mstd::pow(ratio, 2) == Catch::Approx(0.0625));
 }
+
+TEST_CASE(
+    "mstd::sqrt/cbrt/pow collapse dimensionless quantities to numbers",
+    "[units][pow_hook]"
+)
+{
+    using namespace mp_units;
+    using namespace mp_units::si::unit_symbols;
+
+    const auto ratio = (2.0 * m) / (8.0 * m);
+    const double s   = mstd::sqrt(ratio);
+    const double c   = mstd::cbrt(ratio);
+    const double p   = mstd::pow<2>(ratio);
+
+    REQUIRE(s == Catch::Approx(0.5));
+    REQUIRE(c == Catch::Approx(std::cbrt(0.25)));
+    REQUIRE(p == Catch::Approx(0.0625));
+}

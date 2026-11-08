@@ -51,21 +51,42 @@ namespace mstd::detail
     MSTD_UNITS_TRIG_HOOK(tan)
 #undef MSTD_UNITS_TRIG_HOOK
 
-    // dimension-changing functions: the result stays a quantity
+    /// quantity that is implicitly convertible to a plain number
+    template <typename Q>
+    concept dimensionless_quantity = requires(const Q &q) {
+        q.numerical_value_in(::mp_units::one);
+    };
+
+    // sqrt/cbrt/pow: a dimensioned quantity stays a quantity (the dimension
+    // changes). A dimensionless one collapses to a plain number: mp_units
+    // would otherwise return e.g. quantity<sqrt(compressibility * pressure)>,
+    // which is a distinct quantity type that does not convert to double.
     template <auto R, typename Rep>
     constexpr auto sqrt_impl(const ::mp_units::quantity<R, Rep> &q, adl_tag)
     {
-        return ::mp_units::sqrt(q);
+        if constexpr (dimensionless_quantity<::mp_units::quantity<R, Rep>>)
+            return std::sqrt(q.numerical_value_in(::mp_units::one));
+        else
+            return ::mp_units::sqrt(q);
     }
     template <auto R, typename Rep>
     constexpr auto cbrt_impl(const ::mp_units::quantity<R, Rep> &q, adl_tag)
     {
-        return ::mp_units::cbrt(q);
+        if constexpr (dimensionless_quantity<::mp_units::quantity<R, Rep>>)
+            return std::cbrt(q.numerical_value_in(::mp_units::one));
+        else
+            return ::mp_units::cbrt(q);
     }
     template <std::intmax_t Num, std::intmax_t Den = 1, auto R, typename Rep>
     constexpr auto pow_impl(const ::mp_units::quantity<R, Rep> &q, adl_tag)
     {
-        return ::mp_units::pow<Num, Den>(q);
+        if constexpr (dimensionless_quantity<::mp_units::quantity<R, Rep>>)
+            return pow_impl<Num, Den>(
+                q.numerical_value_in(::mp_units::one),
+                adl_tag{}
+            );
+        else
+            return ::mp_units::pow<Num, Den>(q);
     }
 }   // namespace mstd::detail
 
@@ -76,9 +97,7 @@ namespace mstd
     template <auto R, typename Rep, typename U>
     requires(
         std::is_arithmetic_v<U> &&
-        requires(const ::mp_units::quantity<R, Rep> &q) {
-            q.numerical_value_in(::mp_units::one);
-        }
+        detail::dimensionless_quantity<::mp_units::quantity<R, Rep>>
     )
     constexpr auto pow(const ::mp_units::quantity<R, Rep> &base, const U &exponent)
     {
