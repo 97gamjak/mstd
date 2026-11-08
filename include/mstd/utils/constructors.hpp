@@ -23,10 +23,35 @@
 #ifndef __MSTD__UTILS__CONSTRUCTORS_HPP__
 #define __MSTD__UTILS__CONSTRUCTORS_HPP__
 
-#define MSTD_RAII_CLASS(className)                    \
-    className(const className&)            = delete;  \
-    className& operator=(const className&) = delete;  \
-    className(className&&)                 = default; \
-    className& operator=(className&&)      = default;
+#define MSTD_NO_COPY(className)                      \
+    className(const className&)            = delete; \
+    className& operator=(const className&) = delete;
+
+#define MSTD_DEFAULT_COPY(className)                  \
+    className(const className&)            = default; \
+    className& operator=(const className&) = default;
+
+#define MSTD_NO_MOVE(className)                 \
+    className(className&&)            = delete; \
+    className& operator=(className&&) = delete;
+
+#define MSTD_DEFAULT_MOVE(className)             \
+    className(className&&)            = default; \
+    className& operator=(className&&) = default;
+
+#define MSTD_DEFAULT_DESTRUCTORS(className) ~className() = default;
+
+#define MSTD_DEFAULT_CONSTRUCTORS(className) \
+    MSTD_DEFAULT_COPY(className)             \
+    MSTD_DEFAULT_MOVE(className)             \
+    MSTD_DEFAULT_DESTRUCTORS(className)
+
+#define MSTD_RAII_DEFAULT_MOVE(className) \
+    MSTD_NO_COPY(className)               \
+    MSTD_DEFAULT_MOVE(className)
+
+#define MSTD_RAII_NO_MOVE(className) \
+    MSTD_NO_COPY(className)          \
+    MSTD_NO_MOVE(className)
 
 #endif   // __MSTD__UTILS__CONSTRUCTORS_HPP__
