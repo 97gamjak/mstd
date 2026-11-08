@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+<!-- insertion marker -->
+## [0.13.0](https://github.com/repo/owner/releases/tag/0.13.0) - 2026-11-08
+
 ### Utils
 
 - add helper macros in `mstd/utils/constructors.hpp` to delete or default a class's special member functions:
@@ -14,7 +17,6 @@ All notable changes to this project will be documented in this file.
   - `MSTD_RAII_DEFAULT_MOVE(className)`: non-copyable, defaulted move
   - `MSTD_RAII_NO_MOVE(className)`: non-copyable, non-movable
 
-<!-- insertion marker -->
 ## [0.12.1](https://github.com/repo/owner/releases/tag/0.12.1) - 2026-11-06
 
 ### Units
@@ -315,6 +317,7 @@ All notable changes to this project will be documented in this file.
 ### Bug Fix
 
 - add permissions to create tag workflow
+
 
 
 
