@@ -71,16 +71,14 @@ namespace mstd::detail
         return std::log(q.numerical_value_in(::mp_units::one));
     }
 
-    // abs/fabs keep the quantity type, except dimensionless ones which
-    // collapse to a plain number like the other math functions
+    // abs/fabs always keep the quantity type (also for dimensionless ones such
+    // as angles): collapsing e.g. radians to a double would break comparisons
+    // like `fabs(a - b) < std::numeric_limits<decltype(a)>::epsilon()`
 #define MSTD_UNITS_ABS_HOOK(fn)                                              \
     template <auto R, typename Rep>                                          \
     constexpr auto fn##_impl(const ::mp_units::quantity<R, Rep> &q, adl_tag) \
     {                                                                        \
-        if constexpr (dimensionless_quantity<::mp_units::quantity<R, Rep>>)  \
-            return std::fn(q.numerical_value_in(::mp_units::one));           \
-        else                                                                 \
-            return ::mp_units::abs(q);                                       \
+        return ::mp_units::abs(q);                                           \
     }
 
     MSTD_UNITS_ABS_HOOK(abs)

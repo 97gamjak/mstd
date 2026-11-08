@@ -23,6 +23,7 @@
 #include <catch2/catch_approx.hpp>
 #include <catch2/catch_test_macros.hpp>
 #include <cmath>
+#include <limits>
 #include <type_traits>
 
 #include "mstd/units.hpp"
@@ -91,8 +92,14 @@ TEST_CASE("mstd::abs/fabs", "[units][abs]")
     REQUIRE(mstd::fabs(len).numerical_value_in(m) == Catch::Approx(1.5));
 
     const auto ratio = (2.0 * m) / (-8.0 * m);
-    const double a   = mstd::abs(ratio);
-    const double f   = mstd::fabs(ratio);
+    const double a   = mstd::abs(ratio).numerical_value_in(one);
+    const double f   = mstd::fabs(ratio).numerical_value_in(one);
     REQUIRE(a == Catch::Approx(0.25));
     REQUIRE(f == Catch::Approx(0.25));
+
+    // angles stay quantities, so they compare against numeric_limits<Q>
+    using Angle      = decltype(1.0 * si::radian);
+    const Angle diff = -1.0 * si::radian;
+    static_assert(std::is_same_v<decltype(mstd::fabs(diff)), Angle>);
+    REQUIRE(!(mstd::fabs(diff) < std::numeric_limits<Angle>::epsilon()));
 }

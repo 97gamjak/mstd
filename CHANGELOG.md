@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Math
 
-- add `mstd::abs(x)` and `mstd::fabs(x)` for arithmetic types and quantities (dimensioned quantities keep their quantity type, dimensionless ones return a plain number)
+- add `mstd::abs(x)` and `mstd::fabs(x)` for arithmetic types and quantities (quantities always keep their quantity type)
 
 ### Units
 
