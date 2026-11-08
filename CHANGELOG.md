@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+<!-- insertion marker -->
+## [0.14.0](https://github.com/repo/owner/releases/tag/0.14.0) - 2026-11-08
+
 ### Math
 
 - add `mstd::pow<Num, Den = 1>(x)`, `mstd::sqrt(x)` and `mstd::cbrt(x)`; dispatch to `std::` for arithmetic types and to `mp_units` for quantities (dimensioned quantities keep their quantity type, dimensionless ones return a plain number)
@@ -12,7 +15,6 @@ All notable changes to this project will be documented in this file.
 - add `mstd::max(a, b)` and `mstd::min(a, b)`: return the common type by value, so mixed arithmetic types and quantities with different units work; dimensionless quantities collapse to plain numbers
 - move `mstd::detail::adl_tag` to `mstd/math/adl.hpp`
 
-<!-- insertion marker -->
 ## [0.13.0](https://github.com/repo/owner/releases/tag/0.13.0) - 2026-11-08
 
 ### Utils
@@ -325,6 +327,7 @@ All notable changes to this project will be documented in this file.
 ### Bug Fix
 
 - add permissions to create tag workflow
+
 
 
 
