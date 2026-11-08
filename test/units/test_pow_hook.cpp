@@ -35,6 +35,8 @@ TEST_CASE(
     REQUIRE(mstd::pow<3>(2.0) == Catch::Approx(8.0));
     REQUIRE(mstd::pow<-2>(2.0) == Catch::Approx(0.25));
     REQUIRE(mstd::pow<1, 2>(9.0) == Catch::Approx(3.0));
+    REQUIRE(mstd::pow(2.0, 0.5) == Catch::Approx(std::sqrt(2.0)));
+    REQUIRE(mstd::pow(2, 3) == Catch::Approx(8.0));
     REQUIRE(mstd::sqrt(9.0) == Catch::Approx(std::sqrt(9.0)));
     REQUIRE(mstd::cbrt(27.0) == Catch::Approx(std::cbrt(27.0)));
 }

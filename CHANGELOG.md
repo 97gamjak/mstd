@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Math
 
 - add `mstd::pow<Num, Den = 1>(x)`, `mstd::sqrt(x)` and `mstd::cbrt(x)`; dispatch to `std::` for arithmetic types and to `mp_units` for quantities (result keeps its quantity type)
+- add runtime-exponent overload `mstd::pow(base, exponent)` for arithmetic types
 - move `mstd::detail::adl_tag` to `mstd/math/adl.hpp`
 
 <!-- insertion marker -->

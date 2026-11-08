@@ -137,6 +137,15 @@ namespace mstd
     {
         return pow_impl<Num, Den>(x, detail::adl_tag{});
     }
+
+    /// runtime exponent: arithmetic types only (a quantity's dimension would
+    /// depend on the exponent, so use pow<Num, Den>(q) there)
+    template <typename T, typename U>
+    requires(std::is_arithmetic_v<T> && std::is_arithmetic_v<U>)
+    constexpr auto pow(const T &base, const U &exponent)
+    {
+        return std::pow(base, exponent);
+    }
 }   // namespace mstd
 
 #endif   // __MSTD__MATH__POWER_HPP__
