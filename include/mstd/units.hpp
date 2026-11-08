@@ -23,7 +23,9 @@
 #ifndef __MSTD__UNITS_HPP__
 #define __MSTD__UNITS_HPP__
 
+#include <cmath>
 #include <cstdint>
+#include <type_traits>
 #include <mp-units/math.h>
 #include <mp-units/systems/si/math.h>
 
@@ -66,5 +68,22 @@ namespace mstd::detail
         return ::mp_units::pow<Num, Den>(q);
     }
 }   // namespace mstd::detail
+
+namespace mstd
+{
+    /// runtime exponent on a dimensionless quantity (e.g. compressibility *
+    /// pressure): the result is a plain number, like the trig functions
+    template <auto R, typename Rep, typename U>
+    requires(
+        std::is_arithmetic_v<U> &&
+        requires(const ::mp_units::quantity<R, Rep> &q) {
+            q.numerical_value_in(::mp_units::one);
+        }
+    )
+    constexpr auto pow(const ::mp_units::quantity<R, Rep> &base, const U &exponent)
+    {
+        return std::pow(base.numerical_value_in(::mp_units::one), exponent);
+    }
+}   // namespace mstd
 
 #endif   // __MSTD__UNITS_HPP__

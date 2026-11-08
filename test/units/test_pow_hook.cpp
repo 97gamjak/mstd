@@ -61,3 +61,16 @@ TEST_CASE(
     REQUIRE(mstd::cbrt(volume).numerical_value_in(m) == Catch::Approx(3.0));
     REQUIRE(mstd::pow<1, 2>(area).numerical_value_in(m) == Catch::Approx(3.0));
 }
+
+TEST_CASE(
+    "mstd::pow with runtime exponent accepts dimensionless quantities",
+    "[units][pow_hook]"
+)
+{
+    using namespace mp_units;
+    using namespace mp_units::si::unit_symbols;
+
+    const auto ratio = (2.0 * m) / (8.0 * m);
+    REQUIRE(mstd::pow(ratio, 0.5) == Catch::Approx(0.5));
+    REQUIRE(mstd::pow(ratio, 2) == Catch::Approx(0.0625));
+}
