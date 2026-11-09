@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### Math
+
+- add `mstd::abs(x)` and `mstd::fabs(x)` for arithmetic types and quantities (quantities always keep their quantity type)
+
+### Units
+
+- add unit `angstrom` (1 Å = 1e-10 m)
+- add units `kcal` (thermochemical, 1 kcal = 4184 J) and `kcal_per_mol`
+
 <!-- insertion marker -->
 ## [0.14.0](https://github.com/repo/owner/releases/tag/0.14.0) - 2026-11-08
 
