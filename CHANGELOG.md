@@ -4,9 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+<!-- insertion marker -->
+## [0.16.0](https://github.com/repo/owner/releases/tag/0.16.0) - 2026-11-10
+
 - add unit `bohr` (1a0 = 5.29177210544e-11 m)
 
-<!-- insertion marker -->
 ## [0.15.0](https://github.com/repo/owner/releases/tag/0.15.0) - 2026-11-09
 
 ### Math
@@ -340,6 +342,7 @@ All notable changes to this project will be documented in this file.
 ### Bug Fix
 
 - add permissions to create tag workflow
+
 
 
 
