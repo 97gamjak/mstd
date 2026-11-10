@@ -43,6 +43,15 @@ namespace mstd::units
     {
     } angstrom;
 
+    // bohr radius CODATA 2022: a0 = 5.29177210544e-11 m
+    inline constexpr struct bohr final
+        : mp_units::named_unit<
+              "a0",
+              mp_units::mag<529177210544> * mp_units::mag_power<10, -12> *
+                  angstrom>
+    {
+    } bohr;
+
     // thermochemical kilocalorie: 1 kcal = 4184 J
     inline constexpr struct kcal final
         : mp_units::named_unit<"kcal", mp_units::mag<4184> * J>
