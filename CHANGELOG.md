@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### Utils
+
+- add helper macros in `mstd/utils/members.hpp`:
+  - `CONST_GETTER_SETTER(name)`: generate `get##name()` and `set##name(value)` in one go
+  - `STATIC_GETTER(name)` / `STATIC_SETTER(name)` / `STATIC_GETTER_SETTER(name)`: static variants of the getter and setter
+
 <!-- insertion marker -->
 ## [0.16.0](https://github.com/repo/owner/releases/tag/0.16.0) - 2026-11-10
 
