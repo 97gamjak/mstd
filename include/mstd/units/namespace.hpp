@@ -24,11 +24,13 @@
 #define __MSTD__UNITS__NAMESPACE_HPP__
 
 #include <mp-units/systems/si.h>
+#include <mp-units/systems/si/constants.h>
 
 namespace mstd::units
 {
     using namespace mp_units;
     using namespace mp_units::isq;
+    using namespace mp_units::si;
     using namespace mp_units::si::unit_symbols;
 
 }   // namespace mstd::units
