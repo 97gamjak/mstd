@@ -40,6 +40,7 @@ namespace mstd::units
     inline constexpr auto compressibility = mp_units::isq::compressibility;
     inline constexpr auto mass            = mp_units::isq::mass;
     inline constexpr auto length          = mp_units::isq::length;
+    inline constexpr auto volume          = mp_units::isq::volume;
     inline constexpr auto time            = mp_units::isq::time;
     inline constexpr auto temperature =
         mp_units::isq::thermodynamic_temperature;
