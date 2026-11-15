@@ -29,7 +29,6 @@
 namespace mstd::units
 {
     using namespace mp_units;
-    using namespace mp_units::isq;
     using namespace mp_units::si;
     using namespace mp_units::si::unit_symbols;
 
