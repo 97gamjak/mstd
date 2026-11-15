@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### Units
+
+- add unit `amu` (1 amu = 1.66053906892e-27 kg)
+
 ### Utils
 
 - add helper macros in `mstd/utils/members.hpp`:

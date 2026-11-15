@@ -52,6 +52,14 @@ namespace mstd::units
     {
     } bohr;
 
+    // atomic mass unit CODATA 2022: 1 amu = 1.66053906892e-27 kg
+    inline constexpr struct amu final
+        : mp_units::named_unit<
+              "amu",
+              mp_units::mag<166053906892> * mp_units::mag_power<10, -38> * kg>
+    {
+    } amu;
+
     // thermochemical kilocalorie: 1 kcal = 4184 J
     inline constexpr struct kcal final
         : mp_units::named_unit<"kcal", mp_units::mag<4184> * J>
