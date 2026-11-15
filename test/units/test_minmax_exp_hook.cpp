@@ -77,6 +77,18 @@ TEST_CASE("mstd::exp/log", "[units][exp_log]")
     REQUIRE(l == Catch::Approx(std::log(0.25)));
 }
 
+TEST_CASE("mstd::erfc", "[units][erfc]")
+{
+    using namespace mp_units;
+    using namespace mp_units::si::unit_symbols;
+
+    REQUIRE(mstd::erfc(0.5) == Catch::Approx(std::erfc(0.5)));
+
+    const auto ratio = (2.0 * m) / (8.0 * m);
+    const double r   = mstd::erfc(ratio);
+    REQUIRE(r == Catch::Approx(std::erfc(0.25)));
+}
+
 TEST_CASE("mstd::abs/fabs", "[units][abs]")
 {
     using namespace mp_units;

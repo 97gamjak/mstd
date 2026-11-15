@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### Math
+
+- add `mstd::erfc(x)` for arithmetic types and dimensionless quantities (plain number result)
+
 ### Units
 
 - add unit `amu` (1 amu = 1.66053906892e-27 kg)
