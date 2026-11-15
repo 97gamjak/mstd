@@ -36,12 +36,6 @@ namespace mstd::units
     using namespace mp_units::si;
     using namespace mp_units::si::unit_symbols;
 
-}   // namespace mstd::units
-
-namespace mstd
-{
-    using mp_units::quantity;
-
     inline constexpr auto pressure        = mp_units::isq::pressure;
     inline constexpr auto compressibility = mp_units::isq::compressibility;
     inline constexpr auto mass            = mp_units::isq::mass;
@@ -53,6 +47,13 @@ namespace mstd
     inline constexpr auto frequency       = mp_units::isq::frequency;
     inline constexpr auto wavenumber      = mp_units::isq::wavenumber;
     inline constexpr auto electric_charge = mp_units::isq::electric_charge;
+
+}   // namespace mstd::units
+
+namespace mstd
+{
+    using mp_units::quantity;
+
 }   // namespace mstd
 
 #endif   // __MSTD__UNITS__NAMESPACE_HPP__
