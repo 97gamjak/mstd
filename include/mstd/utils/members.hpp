@@ -56,6 +56,22 @@
         name.set(value);                                                    \
     }
 
+#define MSTD_DETAIL_STATIC_GETTER(fn, name)                     \
+    [[nodiscard]] static constexpr decltype(auto) fn() noexcept \
+    {                                                           \
+        return ::mstd::detail::getter_value(name);              \
+    }
+
+#define MSTD_DETAIL_STATIC_SETTER(fn, name)                                 \
+    static constexpr void fn(                                               \
+        ::mstd::detail::getter_t<std::remove_cvref_t<decltype(name)>> value \
+    ) noexcept(std::                                                        \
+                   is_nothrow_copy_assignable_v<                            \
+                       std::remove_cvref_t<decltype(name)>>)                \
+    {                                                                       \
+        name = value;                                                       \
+    }
+
 // ---- public scope: name() / name(value) ----
 
 #define CONST_GETTER(name) MSTD_DETAIL_CONST_GETTER(get##name, name)
@@ -63,6 +79,20 @@
     MSTD_DETAIL_CONST_PROPERTY_GETTER(get##name, name)
 #define SETTER(name)          MSTD_DETAIL_SETTER(set##name, name)
 #define PROPERTY_SETTER(name) MSTD_DETAIL_PROPERTY_SETTER(set##name, name)
+
+// ---- public scope: get##name() / set##name(value) ----
+
+#define CONST_GETTER_SETTER(name)             \
+    MSTD_DETAIL_CONST_GETTER(get##name, name) \
+    MSTD_DETAIL_SETTER(set##name, name)
+
+// ---- public scope: static get##name() / static set##name(value) ----
+
+#define STATIC_GETTER(name) MSTD_DETAIL_STATIC_GETTER(get##name, name)
+#define STATIC_SETTER(name) MSTD_DETAIL_STATIC_SETTER(set##name, name)
+#define STATIC_GETTER_SETTER(name) \
+    STATIC_GETTER(name)            \
+    STATIC_SETTER(name)
 
 // ---- protected / private scope: _name_() / _name_(value) ----
 
