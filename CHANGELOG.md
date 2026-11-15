@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Units
 
 - add unit `amu` (1 amu = 1.66053906892e-27 kg)
+- add unit `hartree` (1 Eh = 4.3597447222060e-18 J)
 
 ### Utils
 

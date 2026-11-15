@@ -60,6 +60,14 @@ namespace mstd::units
     {
     } amu;
 
+    // hartree CODATA 2022: 1 Eh = 4.3597447222060e-18 J
+    inline constexpr struct hartree final
+        : mp_units::named_unit<
+              "Eh",
+              mp_units::mag<43597447222060> * mp_units::mag_power<10, -31> * J>
+    {
+    } hartree;
+
     // thermochemical kilocalorie: 1 kcal = 4184 J
     inline constexpr struct kcal final
         : mp_units::named_unit<"kcal", mp_units::mag<4184> * J>

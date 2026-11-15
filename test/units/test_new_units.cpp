@@ -155,3 +155,13 @@ TEST_CASE("amu converts to kilogram", "[units][new_units]")
         Catch::Approx(1.66053906892e-27)
     );
 }
+
+TEST_CASE("hartree converts to joule", "[units][new_units]")
+{
+    const auto energy = 1.0 * mstd::units::hartree;
+
+    REQUIRE(
+        energy.numerical_value_in(mstd::units::J) ==
+        Catch::Approx(4.3597447222060e-18)
+    );
+}
