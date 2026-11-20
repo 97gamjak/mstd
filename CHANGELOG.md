@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### String
+
+- add `mstd::split(str, delim)` and `mstd::split<T>(str, delim, transform)` in `mstd/string/split.hpp` as the counterpart of `mstd::join`
+
 <!-- insertion marker -->
 ## [1.0.0](https://github.com/repo/owner/releases/tag/1.0.0) - 2026-11-20
 
