@@ -30,6 +30,7 @@
 
 namespace mstd::detail
 {
+    using std::erfc;
     using std::exp;
     using std::log;
 
@@ -46,6 +47,12 @@ namespace mstd::detail
     {
         return log(x);
     }
+    template <typename T>
+    requires std::is_arithmetic_v<T>
+    constexpr auto erfc_impl(const T &x, adl_tag)
+    {
+        return erfc(x);
+    }
 }   // namespace mstd::detail
 
 namespace mstd
@@ -61,6 +68,11 @@ namespace mstd
     constexpr auto log(const T &x)
     {
         return log_impl(x, detail::adl_tag{});
+    }
+    template <typename T>
+    constexpr auto erfc(const T &x)
+    {
+        return erfc_impl(x, detail::adl_tag{});
     }
 }   // namespace mstd
 

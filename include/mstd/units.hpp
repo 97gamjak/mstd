@@ -57,7 +57,7 @@ namespace mstd::detail
         q.numerical_value_in(::mp_units::one);
     };
 
-    // exp/log are only defined for dimensionless arguments -> plain number
+    // exp/log/erfc are only defined for dimensionless arguments -> plain number
     template <auto R, typename Rep>
     requires dimensionless_quantity<::mp_units::quantity<R, Rep>>
     constexpr auto exp_impl(const ::mp_units::quantity<R, Rep> &q, adl_tag)
@@ -69,6 +69,13 @@ namespace mstd::detail
     constexpr auto log_impl(const ::mp_units::quantity<R, Rep> &q, adl_tag)
     {
         return std::log(q.numerical_value_in(::mp_units::one));
+    }
+
+    template <auto R, typename Rep>
+    requires dimensionless_quantity<::mp_units::quantity<R, Rep>>
+    constexpr auto erfc_impl(const ::mp_units::quantity<R, Rep> &q, adl_tag)
+    {
+        return std::erfc(q.numerical_value_in(::mp_units::one));
     }
 
     // abs/fabs always keep the quantity type (also for dimensionless ones such
