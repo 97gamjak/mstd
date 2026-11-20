@@ -23,6 +23,7 @@
 #ifndef __MSTD__STRING_HPP__
 #define __MSTD__STRING_HPP__
 
-#include "string/join.hpp"   // IWYU pragma: export
+#include "string/join.hpp"    // IWYU pragma: export
+#include "string/split.hpp"   // IWYU pragma: export
 
 #endif   // __MSTD__STRING_HPP__
