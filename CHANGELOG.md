@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### Math
+
+- add `mstd::erfc(x)` for arithmetic types and dimensionless quantities (plain number result)
+
+### Units
+
+- add unit `amu` (1 amu = 1.66053906892e-27 kg)
+- add unit `hartree` (1 Eh = 4.3597447222060e-18 J)
+
+### Utils
+
+- add helper macros in `mstd/utils/members.hpp`:
+  - `CONST_GETTER_SETTER(name)`: generate `get##name()` and `set##name(value)` in one go
+  - `STATIC_GETTER(name)` / `STATIC_SETTER(name)` / `STATIC_GETTER_SETTER(name)`: static variants of the getter and setter
+
 <!-- insertion marker -->
 ## [0.16.0](https://github.com/repo/owner/releases/tag/0.16.0) - 2026-11-10
 

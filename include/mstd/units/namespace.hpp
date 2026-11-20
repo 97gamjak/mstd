@@ -24,18 +24,37 @@
 #define __MSTD__UNITS__NAMESPACE_HPP__
 
 #include <mp-units/systems/si.h>
+#include <mp-units/systems/si/constants.h>
+
+#include <mp-units/systems/isq/base_quantities.h>
+#include <mp-units/systems/isq/electromagnetism.h>
+#include <mp-units/systems/isq/mechanics.h>
 
 namespace mstd::units
 {
     using namespace mp_units;
-    using namespace mp_units::isq;
+    using namespace mp_units::si;
     using namespace mp_units::si::unit_symbols;
+
+    inline constexpr auto pressure        = mp_units::isq::pressure;
+    inline constexpr auto compressibility = mp_units::isq::compressibility;
+    inline constexpr auto mass            = mp_units::isq::mass;
+    inline constexpr auto length          = mp_units::isq::length;
+    inline constexpr auto volume          = mp_units::isq::volume;
+    inline constexpr auto time            = mp_units::isq::time;
+    inline constexpr auto temperature =
+        mp_units::isq::thermodynamic_temperature;
+    inline constexpr auto distance        = mp_units::isq::distance;
+    inline constexpr auto frequency       = mp_units::isq::frequency;
+    inline constexpr auto wavenumber      = mp_units::isq::wavenumber;
+    inline constexpr auto electric_charge = mp_units::isq::electric_charge;
 
 }   // namespace mstd::units
 
 namespace mstd
 {
     using mp_units::quantity;
+
 }   // namespace mstd
 
 #endif   // __MSTD__UNITS__NAMESPACE_HPP__

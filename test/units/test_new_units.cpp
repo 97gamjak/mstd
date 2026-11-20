@@ -145,3 +145,23 @@ TEST_CASE("angstrom converts to metre using 1 A = 1e-10 m", "[units][new_units]"
         length.numerical_value_in(mstd::units::nm) == Catch::Approx(0.3)
     );
 }
+
+TEST_CASE("amu converts to kilogram", "[units][new_units]")
+{
+    const auto mass = 1.0 * mstd::units::amu;
+
+    REQUIRE(
+        mass.numerical_value_in(mstd::units::kg) ==
+        Catch::Approx(1.66053906892e-27)
+    );
+}
+
+TEST_CASE("hartree converts to joule", "[units][new_units]")
+{
+    const auto energy = 1.0 * mstd::units::hartree;
+
+    REQUIRE(
+        energy.numerical_value_in(mstd::units::J) ==
+        Catch::Approx(4.3597447222060e-18)
+    );
+}
