@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+<!-- insertion marker -->
+## [1.0.0](https://github.com/repo/owner/releases/tag/1.0.0) - 2026-11-20
+
 ### Math
 
 - add `mstd::erfc(x)` for arithmetic types and dimensionless quantities (plain number result)
@@ -19,7 +22,6 @@ All notable changes to this project will be documented in this file.
   - `CONST_GETTER_SETTER(name)`: generate `get##name()` and `set##name(value)` in one go
   - `STATIC_GETTER(name)` / `STATIC_SETTER(name)` / `STATIC_GETTER_SETTER(name)`: static variants of the getter and setter
 
-<!-- insertion marker -->
 ## [0.16.0](https://github.com/repo/owner/releases/tag/0.16.0) - 2026-11-10
 
 - add unit `bohr` (1a0 = 5.29177210544e-11 m)
@@ -357,6 +359,7 @@ All notable changes to this project will be documented in this file.
 ### Bug Fix
 
 - add permissions to create tag workflow
+
 
 
 
