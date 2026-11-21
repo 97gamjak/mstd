@@ -69,7 +69,7 @@ namespace mstd
      *
      * @tparam HasPrefix Whether the string form carries a leading 'v'.
      */
-    template <bool HasPrefix>
+    template <bool HasPrefix = true>
     class SemVer
     {
        public:
