@@ -25,6 +25,12 @@
 
 #include "mstd/shared/traits/getter.hpp"   // IWYU pragma: keep -- for mstd::detail::getter_value
 
+#define MSTD_DETAIL_GETTER(fn, name)                      \
+    [[nodiscard]] constexpr decltype(auto)& fn() noexcept \
+    {                                                     \
+        return ::mstd::detail::getter_value(name);        \
+    }
+
 #define MSTD_DETAIL_CONST_GETTER(fn, name)                     \
     [[nodiscard]] constexpr decltype(auto) fn() const noexcept \
     {                                                          \
@@ -75,8 +81,11 @@
 // ---- public scope: name() / name(value) ----
 
 #define CONST_GETTER(name) MSTD_DETAIL_CONST_GETTER(get##name, name)
+#define GETTER(name)       MSTD_DETAIL_GETTER(get##name, name) CONST_GETTER(name)
+
 #define CONST_PROPERTY_GETTER(name) \
     MSTD_DETAIL_CONST_PROPERTY_GETTER(get##name, name)
+
 #define SETTER(name)          MSTD_DETAIL_SETTER(set##name, name)
 #define PROPERTY_SETTER(name) MSTD_DETAIL_PROPERTY_SETTER(set##name, name)
 
