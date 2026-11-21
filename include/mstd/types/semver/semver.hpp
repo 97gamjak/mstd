@@ -82,22 +82,8 @@ namespace mstd
         size_t                          _hashLength = 0;   // 0 => no hash
 
        public:
-        /**
-         * @brief Constructs a version from its components.
-         *
-         * @param base Major, minor and patch numbers.
-         * @param hash Hash / build metadata without the '+'; empty for none.
-         * @throws InvalidArgument if the hash is too long or malformed.
-         */
         constexpr explicit SemVer(SemVerBase base, std::string_view hash = {});
 
-        /**
-         * @brief Strictly parses "[v]major.minor.patch[+hash]".
-         *
-         * @throws InvalidArgument on any deviation (wrong/missing prefix,
-         * missing or non-numeric components, trailing characters, empty,
-         * malformed or too long hash).
-         */
         [[nodiscard]]
         static constexpr SemVer from_string(std::string_view str);
 

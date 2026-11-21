@@ -55,6 +55,14 @@ namespace mstd::detail
         return true;
     }
 
+    /**
+     * @brief Consumes a single character `c` from the front of `str` if
+     * present.
+     *
+     * @param str The string view to consume from.
+     * @param c The character to consume.
+     * @return true if the character was present and consumed, false otherwise.
+     */
     constexpr bool consume_char(std::string_view& str, char c)
     {
         if (str.empty() || str.front() != c)
@@ -86,6 +94,13 @@ namespace mstd::detail
 
 namespace mstd
 {
+    /**
+     * @brief Constructs a semantic version from its base and optional hash.
+     *
+     * @param base Major, minor and patch numbers.
+     * @param hash Hash / build metadata without the '+'; empty for none.
+     * @throws InvalidArgument if the hash is too long or malformed.
+     */
     template <bool HasPrefix>
     constexpr SemVer<HasPrefix>::SemVer(SemVerBase base, std::string_view hash)
         : _base(base)
@@ -104,6 +119,13 @@ namespace mstd
         _hashLength = hash.size();
     }
 
+    /**
+     * @brief Strictly parses "[v]major.minor.patch[+hash]".
+     *
+     * @throws InvalidArgument on any deviation (wrong/missing prefix,
+     * missing or non-numeric components, trailing characters, empty,
+     * malformed or too long hash).
+     */
     template <bool HasPrefix>
     constexpr SemVer<HasPrefix> SemVer<HasPrefix>::from_string(
         std::string_view str
