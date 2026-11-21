@@ -20,14 +20,14 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD__TYPES__VERSION__VERSION_TPP__
-#define __MSTD__TYPES__VERSION__VERSION_TPP__
+#ifndef __MSTD__TYPES__SEMVER__SEMVER_TPP__
+#define __MSTD__TYPES__SEMVER__SEMVER_TPP__
 
 #include <charconv>
 #include <utility>
 
 #include "mstd/exceptions.hpp"
-#include "version.hpp"
+#include "semver.hpp"
 
 namespace mstd::detail
 {
@@ -87,7 +87,7 @@ namespace mstd
      */
     template <bool HasPrefix>
     inline SemVer<HasPrefix>::SemVer(
-        VersionBase                base,
+        SemVerBase                 base,
         std::optional<std::string> hashExtension
     )
         : _base(base), _hashExtension(std::move(hashExtension))
@@ -95,10 +95,12 @@ namespace mstd
     }
 
     template <bool HasPrefix>
-    inline SemVer<HasPrefix> SemVer<HasPrefix>::from_string(std::string_view str)
+    inline SemVer<HasPrefix> SemVer<HasPrefix>::from_string(
+        std::string_view str
+    )
     {
         const std::string_view original = str;
-        const auto fail = [&original](const char* reason)
+        const auto             fail     = [&original](const char* reason)
         {
             return InvalidArgument(
                 std::string("Invalid version string '") +
@@ -114,7 +116,7 @@ namespace mstd
             );
         }
 
-        VersionBase base{};
+        SemVerBase base{};
         if (!detail::consume_number(str, base.major) ||
             !detail::consume_char(str, '.') ||
             !detail::consume_number(str, base.minor) ||
@@ -174,4 +176,4 @@ namespace mstd
     }
 }   // namespace mstd
 
-#endif   // __MSTD__TYPES__VERSION__VERSION_TPP__
+#endif   // __MSTD__TYPES__SEMVER__SEMVER_TPP__

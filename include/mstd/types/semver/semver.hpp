@@ -20,8 +20,8 @@
 <GPL_HEADER>
 ******************************************************************************/
 
-#ifndef __MSTD__TYPES__VERSION__VERSION_HPP__
-#define __MSTD__TYPES__VERSION__VERSION_HPP__
+#ifndef __MSTD__TYPES__SEMVER__SEMVER_HPP__
+#define __MSTD__TYPES__SEMVER__SEMVER_HPP__
 
 #include <compare>
 #include <cstddef>
@@ -36,16 +36,16 @@ namespace mstd
      *
      * Totally ordered; lexicographic by major, minor, patch.
      */
-    struct VersionBase
+    struct SemVerBase
     {
         size_t major;
         size_t minor;
         size_t patch;
 
         [[nodiscard]]
-        constexpr auto operator<=>(const VersionBase&) const = default;
+        constexpr auto operator<=>(const SemVerBase&) const = default;
         [[nodiscard]]
-        constexpr bool operator==(const VersionBase&) const = default;
+        constexpr bool operator==(const SemVerBase&) const = default;
     };
 
     /**
@@ -67,14 +67,14 @@ namespace mstd
     template <bool HasPrefix>
     class SemVer
     {
-        VersionBase                _base;
+        SemVerBase                 _base;
         std::optional<std::string> _hashExtension;
 
        public:
         static constexpr bool hasPrefix = HasPrefix;
 
         explicit SemVer(
-            VersionBase                base,
+            SemVerBase                 base,
             std::optional<std::string> hashExtension = std::nullopt
         );
 
@@ -92,7 +92,7 @@ namespace mstd
         std::string to_string() const;
 
         [[nodiscard]]
-        const VersionBase& base() const noexcept
+        const SemVerBase& base() const noexcept
         {
             return _base;
         }
@@ -115,8 +115,8 @@ namespace mstd
 
 }   // namespace mstd
 
-#ifndef __MSTD__TYPES__VERSION__VERSION_TPP__
-#include "version.tpp"   // IWYU pragma: export
+#ifndef __MSTD__TYPES__SEMVER__SEMVER_TPP__
+#include "semver.tpp"   // IWYU pragma: export
 #endif
 
-#endif   // __MSTD__TYPES__VERSION__VERSION_HPP__
+#endif   // __MSTD__TYPES__SEMVER__VERSION_HPP__
