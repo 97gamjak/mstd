@@ -23,9 +23,9 @@
 #ifndef __MSTD__TYPES__SEMVER__SEMVER_HPP__
 #define __MSTD__TYPES__SEMVER__SEMVER_HPP__
 
+#include <array>
 #include <compare>
 #include <cstddef>
-#include <optional>
 #include <string>
 #include <string_view>
 
@@ -53,6 +53,11 @@ namespace mstd
      * "+<hash>" extension (e.g. a git commit hash) and an optional 'v' prefix
      * that is fixed at compile time.
      *
+     * Fully usable in constant expressions: the hash is stored inline in a
+     * fixed-capacity buffer (`maxHashLength` characters, enough for SHA-256)
+     * instead of a `std::string`. Invalid input in a constant expression is a
+     * compile error. Only `to_string()` needs the runtime.
+     *
      * The hash is an identifier, not an ordinal, so it never takes part in
      * ordering:
      *  - `==` is true iff base and hash are equal.
@@ -67,47 +72,66 @@ namespace mstd
     template <bool HasPrefix>
     class SemVer
     {
-        SemVerBase                 _base;
-        std::optional<std::string> _hashExtension;
+       public:
+        static constexpr bool   hasPrefix     = HasPrefix;
+        static constexpr size_t maxHashLength = 64;
+
+       private:
+        SemVerBase                      _base;
+        std::array<char, maxHashLength> _hash{};
+        size_t                          _hashLength = 0;   // 0 => no hash
 
        public:
-        static constexpr bool hasPrefix = HasPrefix;
-
-        explicit SemVer(
-            SemVerBase                 base,
-            std::optional<std::string> hashExtension = std::nullopt
-        );
+        /**
+         * @brief Constructs a version from its components.
+         *
+         * @param base Major, minor and patch numbers.
+         * @param hash Hash / build metadata without the '+'; empty for none.
+         * @throws InvalidArgument if the hash is too long or malformed.
+         */
+        constexpr explicit SemVer(SemVerBase base, std::string_view hash = {});
 
         /**
          * @brief Strictly parses "[v]major.minor.patch[+hash]".
          *
          * @throws InvalidArgument on any deviation (wrong/missing prefix,
-         * missing or non-numeric components, trailing characters, empty or
-         * malformed hash).
+         * missing or non-numeric components, trailing characters, empty,
+         * malformed or too long hash).
          */
         [[nodiscard]]
-        static SemVer from_string(std::string_view str);
+        static constexpr SemVer from_string(std::string_view str);
 
         [[nodiscard]]
         std::string to_string() const;
 
         [[nodiscard]]
-        const SemVerBase& base() const noexcept
+        constexpr const SemVerBase& base() const noexcept
         {
             return _base;
         }
 
         [[nodiscard]]
-        const std::optional<std::string>& hash_extension() const noexcept
+        constexpr bool has_hash() const noexcept
         {
-            return _hashExtension;
+            return _hashLength != 0;
+        }
+
+        /// The hash (without '+'), or an empty view if there is none.
+        [[nodiscard]]
+        constexpr std::string_view hash() const noexcept
+        {
+            return {_hash.data(), _hashLength};
         }
 
         [[nodiscard]]
-        bool operator==(const SemVer& other) const = default;
+        constexpr bool operator==(const SemVer& other) const noexcept
+        {
+            return _base == other._base && hash() == other.hash();
+        }
 
         [[nodiscard]]
-        std::partial_ordering operator<=>(const SemVer& other) const;
+        constexpr std::partial_ordering operator<=>(const SemVer& other
+        ) const noexcept;
     };
 
     using SemVerWithPrefix    = SemVer<true>;
@@ -119,4 +143,4 @@ namespace mstd
 #include "semver.tpp"   // IWYU pragma: export
 #endif
 
-#endif   // __MSTD__TYPES__SEMVER__VERSION_HPP__
+#endif   // __MSTD__TYPES__SEMVER__SEMVER_HPP__

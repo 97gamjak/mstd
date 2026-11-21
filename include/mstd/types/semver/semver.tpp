@@ -23,9 +23,6 @@
 #ifndef __MSTD__TYPES__SEMVER__SEMVER_TPP__
 #define __MSTD__TYPES__SEMVER__SEMVER_TPP__
 
-#include <charconv>
-#include <utility>
-
 #include "mstd/exceptions.hpp"
 #include "semver.hpp"
 
@@ -33,22 +30,32 @@ namespace mstd::detail
 {
     /**
      * @brief Parses an unsigned decimal number from the front of `str` and
-     * removes it from `str`. Rejects empty input, signs and overflow.
+     * removes it from `str`. Rejects empty input and overflow.
      */
-    inline bool consume_number(std::string_view& str, size_t& out)
+    constexpr bool consume_number(std::string_view& str, size_t& out)
     {
-        const char* first = str.data();
-        const char* last  = first + str.size();
+        constexpr size_t max = static_cast<size_t>(-1);
 
-        const auto [ptr, ec] = std::from_chars(first, last, out);
-        if (ec != std::errc{} || ptr == first)
+        size_t value  = 0;
+        size_t digits = 0;
+        while (digits < str.size() && str[digits] >= '0' && str[digits] <= '9')
+        {
+            const size_t d = static_cast<size_t>(str[digits] - '0');
+            if (value > (max - d) / 10)
+                return false;   // overflow
+            value = value * 10 + d;
+            ++digits;
+        }
+
+        if (digits == 0)
             return false;
 
-        str.remove_prefix(static_cast<size_t>(ptr - first));
+        out = value;
+        str.remove_prefix(digits);
         return true;
     }
 
-    inline bool consume_char(std::string_view& str, char c)
+    constexpr bool consume_char(std::string_view& str, char c)
     {
         if (str.empty() || str.front() != c)
             return false;
@@ -61,7 +68,7 @@ namespace mstd::detail
      * @brief Hash extension: non-empty, [0-9A-Za-z.-] only (SemVer build
      * metadata alphabet).
      */
-    inline bool is_valid_hash_extension(std::string_view str)
+    constexpr bool is_valid_hash_extension(std::string_view str)
     {
         if (str.empty())
             return false;
@@ -79,40 +86,35 @@ namespace mstd::detail
 
 namespace mstd
 {
-    /**
-     * @brief Constructs a version from its components.
-     *
-     * @param base          Major, minor and patch numbers.
-     * @param hashExtension Optional hash / build metadata (without the '+').
-     */
     template <bool HasPrefix>
-    inline SemVer<HasPrefix>::SemVer(
-        SemVerBase                 base,
-        std::optional<std::string> hashExtension
-    )
-        : _base(base), _hashExtension(std::move(hashExtension))
+    constexpr SemVer<HasPrefix>::SemVer(SemVerBase base, std::string_view hash)
+        : _base(base)
     {
+        if (hash.empty())
+            return;
+
+        if (hash.size() > maxHashLength)
+            throw InvalidArgument("Hash extension is too long");
+
+        if (!detail::is_valid_hash_extension(hash))
+            throw InvalidArgument("Malformed hash extension");
+
+        for (size_t i = 0; i < hash.size(); ++i)
+            _hash[i] = hash[i];
+        _hashLength = hash.size();
     }
 
     template <bool HasPrefix>
-    inline SemVer<HasPrefix> SemVer<HasPrefix>::from_string(
+    constexpr SemVer<HasPrefix> SemVer<HasPrefix>::from_string(
         std::string_view str
     )
     {
-        const std::string_view original = str;
-        const auto             fail     = [&original](const char* reason)
-        {
-            return InvalidArgument(
-                std::string("Invalid version string '") +
-                std::string(original) + "': " + reason
-            );
-        };
-
         const bool prefixed = detail::consume_char(str, 'v');
         if (prefixed != HasPrefix)
         {
-            throw fail(
-                HasPrefix ? "expected prefix 'v'" : "unexpected prefix 'v'"
+            throw InvalidArgument(
+                HasPrefix ? "Invalid version string: expected prefix 'v'"
+                          : "Invalid version string: unexpected prefix 'v'"
             );
         }
 
@@ -123,19 +125,29 @@ namespace mstd
             !detail::consume_char(str, '.') ||
             !detail::consume_number(str, base.patch))
         {
-            throw fail("expected 'major.minor.patch'");
+            throw InvalidArgument(
+                "Invalid version string: expected 'major.minor.patch'"
+            );
         }
 
         if (str.empty())
             return SemVer(base);
 
         if (!detail::consume_char(str, '+'))
-            throw fail("unexpected trailing characters");
+        {
+            throw InvalidArgument(
+                "Invalid version string: unexpected trailing characters"
+            );
+        }
 
-        if (!detail::is_valid_hash_extension(str))
-            throw fail("malformed hash extension");
+        // "1.2.3+" is malformed, whereas the constructor treats an empty hash
+        // as "no hash"; the constructor checks alphabet and length.
+        if (str.empty())
+            throw InvalidArgument(
+                "Invalid version string: empty hash extension"
+            );
 
-        return SemVer(base, std::string(str));
+        return SemVer(base, str);
     }
 
     /**
@@ -152,8 +164,8 @@ namespace mstd
                   std::to_string(_base.minor) + "." +
                   std::to_string(_base.patch);
 
-        if (_hashExtension.has_value())
-            result += "+" + *_hashExtension;
+        if (has_hash())
+            result += "+" + std::string(hash());
 
         return result;
     }
@@ -163,16 +175,15 @@ namespace mstd
      * orders versions, it can only make them `unordered`.
      */
     template <bool HasPrefix>
-    inline std::partial_ordering SemVer<HasPrefix>::operator<=>(
+    constexpr std::partial_ordering SemVer<HasPrefix>::operator<=>(
         const SemVer& other
-    ) const
+    ) const noexcept
     {
         if (const auto cmp = _base <=> other._base; cmp != 0)
             return cmp;
 
-        return _hashExtension == other._hashExtension
-                   ? std::partial_ordering::equivalent
-                   : std::partial_ordering::unordered;
+        return hash() == other.hash() ? std::partial_ordering::equivalent
+                                      : std::partial_ordering::unordered;
     }
 }   // namespace mstd
 

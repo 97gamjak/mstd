@@ -3,14 +3,14 @@
 #include <vector>
 
 #include "mstd/exceptions.hpp"
-#include "mstd/types/version/version.hpp"
+#include "mstd/types/semver/semver.hpp"
 
 using mstd::InvalidArgument;
 using mstd::SemVerWithoutPrefix;
 using mstd::SemVerWithPrefix;
-using mstd::VersionBase;
+using mstd::SemVerBase;
 
-TEST_CASE("SemVer parses and round-trips", "[types][version]")
+TEST_CASE("SemVer parses and round-trips", "[types][semver]")
 {
     REQUIRE(SemVerWithPrefix::from_string("v1.2.3").to_string() == "v1.2.3");
     REQUIRE(SemVerWithoutPrefix::from_string("1.2.3").to_string() == "1.2.3");
@@ -20,11 +20,11 @@ TEST_CASE("SemVer parses and round-trips", "[types][version]")
     );
 
     const auto v = SemVerWithoutPrefix::from_string("10.20.30+deadbeef");
-    REQUIRE(v.base() == VersionBase{10, 20, 30});
-    REQUIRE(v.hash_extension() == "deadbeef");
+    REQUIRE(v.base() == SemVerBase{10, 20, 30});
+    REQUIRE(v.hash() == "deadbeef");
 }
 
-TEST_CASE("SemVer rejects malformed input", "[types][version]")
+TEST_CASE("SemVer rejects malformed input", "[types][semver]")
 {
     for (const char* s :
          {"1.2.3", "V1.2.3", "v1.2", "v1.2.3.4", "v1.2.3abc", "v-1.2.3",
@@ -37,7 +37,7 @@ TEST_CASE("SemVer rejects malformed input", "[types][version]")
     REQUIRE_THROWS_AS(SemVerWithoutPrefix::from_string("v1.2.3"), InvalidArgument);
 }
 
-TEST_CASE("SemVer ordering ignores the hash", "[types][version]")
+TEST_CASE("SemVer ordering ignores the hash", "[types][semver]")
 {
     using V = SemVerWithoutPrefix;
     const auto a = V::from_string("1.2.3");
@@ -63,10 +63,40 @@ TEST_CASE("SemVer ordering ignores the hash", "[types][version]")
     REQUIRE(h1 <= V::from_string("1.2.3+aaa"));
 }
 
-TEST_CASE("SemVer bases can be sorted regardless of hash", "[types][version]")
+TEST_CASE("SemVer bases can be sorted regardless of hash", "[types][semver]")
 {
-    std::vector<VersionBase> bases{{1, 2, 4}, {0, 9, 9}, {1, 2, 3}};
+    std::vector<SemVerBase> bases{{1, 2, 4}, {0, 9, 9}, {1, 2, 3}};
     std::sort(bases.begin(), bases.end());
-    REQUIRE(bases.front() == VersionBase{0, 9, 9});
-    REQUIRE(bases.back() == VersionBase{1, 2, 4});
+    REQUIRE(bases.front() == SemVerBase{0, 9, 9});
+    REQUIRE(bases.back() == SemVerBase{1, 2, 4});
+}
+
+TEST_CASE("SemVer is usable in constant expressions", "[types][semver]")
+{
+    constexpr auto a = SemVerWithPrefix::from_string("v1.2.3+abc123");
+    constexpr auto b = SemVerWithPrefix(SemVerBase{1, 2, 3}, "abc123");
+    constexpr auto c = SemVerWithPrefix::from_string("v1.3.0");
+
+    static_assert(a == b);
+    static_assert(a < c);
+    static_assert(a.base() == SemVerBase{1, 2, 3});
+    static_assert(a.hash() == "abc123");
+    static_assert(!c.has_hash());
+    static_assert(
+        std::is_eq(a <=> b) && (a <=> SemVerWithPrefix::from_string("v1.2.3")) ==
+                                   std::partial_ordering::unordered
+    );
+
+    REQUIRE(a.to_string() == "v1.2.3+abc123");
+}
+
+TEST_CASE("SemVer enforces the hash capacity", "[types][semver]")
+{
+    const std::string ok(SemVerWithoutPrefix::maxHashLength, 'a');
+    const std::string tooLong = ok + "a";
+
+    REQUIRE(SemVerWithoutPrefix::from_string("1.0.0+" + ok).hash() == ok);
+    REQUIRE_THROWS_AS(
+        SemVerWithoutPrefix::from_string("1.0.0+" + tooLong), InvalidArgument
+    );
 }
