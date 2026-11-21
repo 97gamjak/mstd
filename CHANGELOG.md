@@ -4,11 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+<!-- insertion marker -->
+## [1.2.0](https://github.com/repo/owner/releases/tag/1.2.0) - 2026-11-21
+
 ### Utils
 
 - add `GETTER(name)` macro in `mstd/utils/members.hpp`: generates both a non-const `get##name()` returning a mutable reference and a const `get##name() const` (by value for small trivially copyable types, otherwise by const reference)
 
-<!-- insertion marker -->
 ## [1.1.0](https://github.com/repo/owner/releases/tag/1.1.0) - 2026-11-20
 
 ### String
@@ -369,6 +371,7 @@ All notable changes to this project will be documented in this file.
 ### Bug Fix
 
 - add permissions to create tag workflow
+
 
 
 
