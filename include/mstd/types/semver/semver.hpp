@@ -82,7 +82,10 @@ namespace mstd
         size_t                          _hashLength = 0;   // 0 => no hash
 
        public:
-        constexpr explicit SemVer(SemVerBase base, std::string_view hash = {});
+        constexpr explicit SemVer(
+            const SemVerBase& base,
+            std::string_view  hash = {}
+        );
 
         [[nodiscard]]
         static constexpr SemVer from_string(std::string_view str);

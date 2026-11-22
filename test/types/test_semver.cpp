@@ -65,6 +65,7 @@ TEST_CASE("SemVer ordering ignores the hash", "[types][semver]")
 
 TEST_CASE("SemVer bases can be sorted regardless of hash", "[types][semver]")
 {
+    // NOLINTNEXTLINE(cppcoreguidelines-avoid-magic-numbers)
     std::vector<SemVerBase> bases{{1, 2, 4}, {0, 9, 9}, {1, 2, 3}};
     std::sort(bases.begin(), bases.end());
     REQUIRE(bases.front() == SemVerBase{0, 9, 9});

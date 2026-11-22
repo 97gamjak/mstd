@@ -102,7 +102,10 @@ namespace mstd
      * @throws InvalidArgument if the hash is too long or malformed.
      */
     template <bool HasPrefix>
-    constexpr SemVer<HasPrefix>::SemVer(SemVerBase base, std::string_view hash)
+    constexpr SemVer<HasPrefix>::SemVer(
+        const SemVerBase& base,
+        std::string_view  hash
+    )
         : _base(base)
     {
         if (hash.empty())
@@ -140,12 +143,12 @@ namespace mstd
             );
         }
 
-        SemVerBase base{};
-        if (!detail::consume_number(str, base.major) ||
+        SemVerBase parsed{};
+        if (!detail::consume_number(str, parsed.major) ||
             !detail::consume_char(str, '.') ||
-            !detail::consume_number(str, base.minor) ||
+            !detail::consume_number(str, parsed.minor) ||
             !detail::consume_char(str, '.') ||
-            !detail::consume_number(str, base.patch))
+            !detail::consume_number(str, parsed.patch))
         {
             throw InvalidArgument(
                 "Invalid version string: expected 'major.minor.patch'"
@@ -153,7 +156,7 @@ namespace mstd
         }
 
         if (str.empty())
-            return SemVer(base);
+            return SemVer(parsed);
 
         if (!detail::consume_char(str, '+'))
         {
@@ -169,7 +172,7 @@ namespace mstd
                 "Invalid version string: empty hash extension"
             );
 
-        return SemVer(base, str);
+        return SemVer(parsed, str);
     }
 
     /**
