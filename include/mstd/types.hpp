@@ -27,6 +27,7 @@
 #include "types/cache/member_cache.hpp"    // IWYU pragma: export
 #include "types/property.hpp"              // IWYU pragma: export
 #include "types/ref.hpp"                   // IWYU pragma: export
+#include "types/semver/semver.hpp"         // IWYU pragma: export
 #include "types/strong_type.hpp"           // IWYU pragma: export
 #include "types/strong_type_aliases.hpp"   // IWYU pragma: export
 #include "types/tag.hpp"                   // IWYU pragma: export

@@ -28,6 +28,8 @@
 namespace mstd
 {
     using RuntimeError = BaseException<ExceptionType::RuntimeError>;
+
+    using InvalidArgument = BaseException<ExceptionType::InvalidArgument>;
 }   // namespace mstd
 
 #endif   // __MSTD__EXCEPTIONS__EXCEPTIONS_HPP__

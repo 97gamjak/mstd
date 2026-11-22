@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### Types
+
+- add `mstd::SemVer<HasPrefix>` (aliases `SemVerWithPrefix` / `SemVerWithoutPrefix`) and `mstd::SemVerBase` in `mstd/types/semver/semver.hpp`: a semantic version `[v]major.minor.patch[+hash]` that is fully usable in constant expressions (the optional hash, e.g. a git commit hash, is stored inline with a capacity of 64 characters)
+  - `from_string(std::string_view)` parses strictly and throws `InvalidArgument` (a compile error in a constant expression) on malformed input such as a missing/unexpected `v` prefix, trailing characters, or an empty, too long or invalid hash
+  - the hash never takes part in ordering: `==` compares base and hash, while `<=>` is a `std::partial_ordering` that is `unordered` for equal bases with different hashes; compare `base()` to order versions regardless of their hash
+  - `to_string()`, `base()`, `hash()` and `has_hash()` accessors
+
 <!-- insertion marker -->
 ## [1.2.0](https://github.com/repo/owner/releases/tag/1.2.0) - 2026-11-21
 
