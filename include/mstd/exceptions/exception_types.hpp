@@ -29,7 +29,7 @@
 
 namespace mstd
 {
-#define EXCEPTION_TYPE_LIST(X) X(RuntimeError)
+#define EXCEPTION_TYPE_LIST(X) X(RuntimeError) X(InvalidArgument)
 
     MSTD_ENUM(ExceptionType, std::uint8_t, EXCEPTION_TYPE_LIST)
 
