@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+<!-- insertion marker -->
+## [1.4.0](https://github.com/repo/owner/releases/tag/1.4.0) - 2026-11-23
+
 ### Utils
 
 - add `INTERNAL_GETTER(name)` macro in `mstd/utils/members.hpp`: generates both a non-const `_get##name()` returning a mutable reference and a const `_get##name() const` for protected/private scope
@@ -11,7 +14,6 @@ All notable changes to this project will be documented in this file.
 - add `GETTER_SETTER(name)` macro in `mstd/utils/members.hpp`: generates the mutable and const `get##name()` together with `set##name(value)`
 - add `INTERNAL_CONST_GETTER_FROM_PTR(name)` and `INTERNAL_GETTER_FROM_PTR(name)` macros in `mstd/utils/members.hpp`: generate `_get##name()` accessors that dereference a pointer member (`*name`)
 
-<!-- insertion marker -->
 ## [1.3.0](https://github.com/repo/owner/releases/tag/1.3.0) - 2026-11-22
 
 ### Types
@@ -387,6 +389,7 @@ All notable changes to this project will be documented in this file.
 ### Bug Fix
 
 - add permissions to create tag workflow
+
 
 
 
