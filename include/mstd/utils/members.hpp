@@ -26,7 +26,7 @@
 #include "mstd/shared/traits/getter.hpp"   // IWYU pragma: keep -- for mstd::detail::getter_value
 
 #define MSTD_DETAIL_GETTER(fn, name) \
-    [[nodiscard]] constexpr auto &fn() noexcept { return name; }
+    [[nodiscard]] constexpr auto& fn() noexcept { return name; }
 
 #define MSTD_DETAIL_CONST_GETTER(fn, name)                     \
     [[nodiscard]] constexpr decltype(auto) fn() const noexcept \
@@ -75,22 +75,39 @@
         name = value;                                                       \
     }
 
+#define MSTD_DETAIL_IMPL_CONST_GETTER(impl, fn, name)          \
+    [[nodiscard]] constexpr decltype(auto) fn() const noexcept \
+    {                                                          \
+        return impl->name;                                     \
+    }
+
+#define MSTD_DETAIL_IMPL_GETTER(impl, fn, name) \
+    [[nodiscard]] constexpr auto& fn() noexcept { return impl->name; }
+
 // ---- public scope: name() / name(value) ----
 
 #define CONST_GETTER(name) MSTD_DETAIL_CONST_GETTER(get##name, name)
 #define GETTER(name)       MSTD_DETAIL_GETTER(get##name, name) CONST_GETTER(name)
-
-#define CONST_PROPERTY_GETTER(name) \
-    MSTD_DETAIL_CONST_PROPERTY_GETTER(get##name, name)
-
-#define SETTER(name)          MSTD_DETAIL_SETTER(set##name, name)
-#define PROPERTY_SETTER(name) MSTD_DETAIL_PROPERTY_SETTER(set##name, name)
-
-// ---- public scope: get##name() / set##name(value) ----
-
+#define SETTER(name)       MSTD_DETAIL_SETTER(set##name, name)
 #define CONST_GETTER_SETTER(name)             \
     MSTD_DETAIL_CONST_GETTER(get##name, name) \
     MSTD_DETAIL_SETTER(set##name, name)
+#define GETTER_SETTER(name) \
+    GETTER(name)            \
+    SETTER(name)
+
+// ---- internal scope: _get##name() / _get##name() from pointer ----
+
+#define INTERNAL_CONST_GETTER_FROM_PTR(name) \
+    MSTD_DETAIL_CONST_GETTER(_get##name, *name)
+#define INTERNAL_GETTER_FROM_PTR(name) \
+    MSTD_DETAIL_GETTER(_get##name, *name) INTERNAL_CONST_GETTER(name)
+
+// ---- public scope: get##name() / set##name(value) ----
+
+#define CONST_PROPERTY_GETTER(name) \
+    MSTD_DETAIL_CONST_PROPERTY_GETTER(get##name, name)
+#define PROPERTY_SETTER(name) MSTD_DETAIL_PROPERTY_SETTER(set##name, name)
 
 // ---- public scope: static get##name() / static set##name(value) ----
 
@@ -100,12 +117,24 @@
     STATIC_GETTER(name)            \
     STATIC_SETTER(name)
 
+// ---- implementation scope: impl->name() / impl->name(value) ----
+
+#define IMPL_CONST_GETTER(impl, name) \
+    MSTD_DETAIL_IMPL_CONST_GETTER(impl, get##name, name)
+#define IMPL_GETTER(impl, name) \
+    MSTD_DETAIL_IMPL_GETTER(impl, get##name, name) IMPL_CONST_GETTER(impl, name)
+
 // ---- protected / private scope: _name_() / _name_(value) ----
 
 #define INTERNAL_CONST_GETTER(name) MSTD_DETAIL_CONST_GETTER(_get##name, name)
+#define INTERNAL_GETTER(name) \
+    MSTD_DETAIL_GETTER(_get##name, name) INTERNAL_CONST_GETTER(name)
+#define INTERNAL_SETTER(name) MSTD_DETAIL_SETTER(_set##name, name)
+
+// ---- protected / private scope: _get##name() / _set##name(value) ----
+
 #define INTERNAL_CONST_PROPERTY_GETTER(name) \
     MSTD_DETAIL_CONST_PROPERTY_GETTER(_get##name, name)
-#define INTERNAL_SETTER(name) MSTD_DETAIL_SETTER(_set##name, name)
 #define INTERNAL_PROPERTY_SETTER(name) \
     MSTD_DETAIL_PROPERTY_SETTER(_set##name, name)
 

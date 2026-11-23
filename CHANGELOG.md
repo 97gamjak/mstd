@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### Utils
+
+- add `INTERNAL_GETTER(name)` macro in `mstd/utils/members.hpp`: generates both a non-const `_get##name()` returning a mutable reference and a const `_get##name() const` for protected/private scope
+- add `IMPL_GETTER(impl, name)` and `IMPL_CONST_GETTER(impl, name)` macros in `mstd/utils/members.hpp`: generate `get##name()` accessors that forward to a member of an implementation object (`impl->name`), e.g. for pimpl-style classes
+- add `GETTER_SETTER(name)` macro in `mstd/utils/members.hpp`: generates the mutable and const `get##name()` together with `set##name(value)`
+- add `INTERNAL_CONST_GETTER_FROM_PTR(name)` and `INTERNAL_GETTER_FROM_PTR(name)` macros in `mstd/utils/members.hpp`: generate `_get##name()` accessors that dereference a pointer member (`*name`)
+
 <!-- insertion marker -->
 ## [1.3.0](https://github.com/repo/owner/releases/tag/1.3.0) - 2026-11-22
 
