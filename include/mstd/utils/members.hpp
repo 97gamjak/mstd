@@ -84,6 +84,9 @@
 #define MSTD_DETAIL_IMPL_GETTER(impl, fn, name) \
     [[nodiscard]] constexpr auto& fn() noexcept { return impl->name; }
 
+#define MSTD_DETAIL_CONST_REF_GETTER(fn, name) \
+    [[nodiscard]] constexpr auto& fn() const noexcept { return name.get(); }
+
 // ---- public scope: name() / name(value) ----
 
 #define CONST_GETTER(name) MSTD_DETAIL_CONST_GETTER(get##name, name)
@@ -108,6 +111,10 @@
 #define CONST_PROPERTY_GETTER(name) \
     MSTD_DETAIL_CONST_PROPERTY_GETTER(get##name, name)
 #define PROPERTY_SETTER(name) MSTD_DETAIL_PROPERTY_SETTER(set##name, name)
+
+// ---- public scope: get##name() returning a const reference to name.get() ----
+
+#define CONST_REF_GETTER(name) MSTD_DETAIL_CONST_REF_GETTER(get##name, name)
 
 // ---- public scope: static get##name() / static set##name(value) ----
 
