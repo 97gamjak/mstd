@@ -115,6 +115,8 @@
 // ---- public scope: get##name() returning a const reference to name.get() ----
 
 #define CONST_REF_GETTER(name) MSTD_DETAIL_CONST_REF_GETTER(get##name, name)
+#define INTERNAL_CONST_REF_GETTER(name) \
+    MSTD_DETAIL_CONST_REF_GETTER(_get##name, name)
 
 // ---- public scope: static get##name() / static set##name(value) ----
 
