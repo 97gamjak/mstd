@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Next Release
 
+### Utils
+
+- add `CONST_MSTD_CONST_REF_GETTER(name)` and `INTERNAL_CONST_MSTD_CONST_REF_GETTER(name)` macros in `mstd/utils/members.hpp`: generate a const `get##name()` / `_get##name()` accessor for `mstd::ConstRef` members, returning a reference to the referenced object (`name.get()`)
+
 <!-- insertion marker -->
 ## [1.4.0](https://github.com/repo/owner/releases/tag/1.4.0) - 2026-11-23
 
