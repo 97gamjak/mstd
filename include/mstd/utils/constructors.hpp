@@ -35,9 +35,9 @@
     className(className&&)            = delete; \
     className& operator=(className&&) = delete;
 
-#define MSTD_DEFAULT_MOVE(className)             \
-    className(className&&)            = default; \
-    className& operator=(className&&) = default;
+#define MSTD_DEFAULT_MOVE(className)                      \
+    className(className&&) noexcept            = default; \
+    className& operator=(className&&) noexcept = default;
 
 #define MSTD_DEFAULT_DESTRUCTORS(className) ~className() = default;
 
