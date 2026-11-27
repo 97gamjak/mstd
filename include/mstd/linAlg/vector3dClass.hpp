@@ -1,0 +1,147 @@
+/*****************************************************************************
+<GPL_HEADER>
+
+    mstd library
+    Copyright (C) 2025-now  Jakob Gamper
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+<GPL_HEADER>
+******************************************************************************/
+
+#ifndef __MSTD__LINALG__VECTOR3DCLASS_HPP__
+#define __MSTD__LINALG__VECTOR3DCLASS_HPP__
+
+#include <array>   // for std::array
+
+#include "concepts/vector3dConcepts.hpp"
+
+namespace mstd
+{
+    template <typename T>
+    class Vector3d
+    {
+       private:
+        std::array<T, 3> _xyz{};
+
+       public:
+        // clang-format off
+        [[nodiscard]] constexpr  Vector3d()                               = default;
+                      constexpr ~Vector3d()                               = default;
+        [[nodiscard]] constexpr  Vector3d(const Vector3d<T> &)            = default;
+                      constexpr  Vector3d &operator=(const Vector3d<T> &) = default;
+        [[nodiscard]] constexpr  Vector3d(Vector3d<T> &&)                 = default;
+                      constexpr  Vector3d &operator=(Vector3d<T> &&)      = default;
+                      
+        [[nodiscard]] constexpr explicit Vector3d(const T &xyz)                       : _xyz{xyz, xyz, xyz} {}
+        [[nodiscard]] constexpr          Vector3d(const T &x, const T &y, const T &z) : _xyz{x, y, z} {}
+        // clang-format on
+
+        using value_type = T;
+
+        /***********************
+         * unary +/- operators *
+         ***********************/
+
+        [[nodiscard]] constexpr Vector3d<T> operator+() const;
+        [[nodiscard]] constexpr Vector3d<T> operator-() const;
+
+        /*********************************
+         * compound assignment operators *
+         *********************************/
+
+        template <typename U>
+        requires requires(T &t, const U &u) { t += u; } &&
+                 (Vector3dDepthDifference_v<T, U> == 0)
+        constexpr Vector3d<T> &operator+=(const Vector3d<U> &rhs);
+
+        template <typename U>
+        requires requires(T &t, const U &u) { t += u; }
+        constexpr Vector3d<T> &operator+=(const U &rhs);
+
+        template <typename U>
+        requires requires(T &t, const U &u) { t -= u; } &&
+                 (Vector3dDepthDifference_v<T, U> == 0)
+        constexpr Vector3d<T> &operator-=(const Vector3d<U> &rhs);
+
+        template <typename U>
+        requires requires(T &t, const U &u) { t -= u; }
+        constexpr Vector3d<T> &operator-=(const U &rhs);
+
+        template <typename U>
+        requires requires(T &t, const U &u) { t *= u; } &&
+                 (Vector3dDepthDifference_v<T, U> == 0)
+        constexpr Vector3d<T> &operator*=(const Vector3d<U> &rhs);
+
+        template <typename U>
+        requires requires(T &t, const U &u) { t *= u; }
+        constexpr Vector3d<T> &operator*=(const U &rhs);
+
+        template <typename U>
+        requires requires(T &t, const U &u) { t /= u; } &&
+                 (Vector3dDepthDifference_v<T, U> == 0)
+        constexpr Vector3d<T> &operator/=(const Vector3d<U> &rhs);
+
+        template <typename U>
+        requires requires(T &t, const U &u) { t /= u; }
+        constexpr Vector3d<T> &operator/=(const U &rhs);
+
+        /********************
+         * unit conversions *
+         ********************/
+
+        template <typename U>
+        requires requires(const T &v, const U &unit) { v.in(unit); }
+        [[nodiscard]] constexpr auto in(const U &unit) const;
+
+        template <typename U>
+        requires requires(const T &v, const U &unit) { v.force_in(unit); }
+        [[nodiscard]] constexpr auto force_in(const U &unit) const;
+
+        template <typename U>
+        requires requires(const T &v, const U &unit) {
+            v.numerical_value_in(unit);
+        }
+        [[nodiscard]] constexpr auto numerical_value_in(const U &unit) const;
+
+        template <typename U>
+        requires requires(const T &v, const U &unit) {
+            v.force_numerical_value_in(unit);
+        }
+        [[nodiscard]] constexpr auto force_numerical_value_in(
+            const U &unit
+        ) const;
+
+        /**********************
+         * indexing operators *
+         **********************/
+
+        constexpr T                     &operator[](const std::size_t index);
+        [[nodiscard]] constexpr const T &operator[](const std::size_t index
+        ) const;
+
+        /***********
+         * casting *
+         ***********/
+
+        template <typename U>
+        requires requires(const T &value) { static_cast<U>(value); }
+        constexpr operator Vector3d<U>() const;
+    };
+
+}   // namespace mstd
+
+#include "vector3dClass.tpp"
+
+#endif   //  __MSTD__LINALG__VECTOR3DCLASS_HPP__
